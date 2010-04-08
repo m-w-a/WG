@@ -1,0 +1,25 @@
+#PreprocessorFool#
+
+####################
+#Preprocessor Flags.
+####################
+
+AM_CPPFLAGS = \
+    -I$(abs_top_srcdir)/src/../ \
+    -I/opt/local/include/boost/tr1 \
+    -I/opt/local/include
+
+###############
+#Compiler Flags
+###############
+
+AM_CXXFLAGS = \
+    -Wall 
+
+##############
+#Linker Flags.
+##############
+
+AM_LDFLAGS = \
+    -L/opt/local/lib
+
