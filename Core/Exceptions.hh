@@ -20,7 +20,7 @@ public:
 
 private:
     //Declared and purposefully not defined.
-    UninitalizedException & operator=(UninitalizedException const &);
+    StandardExceptionTemplate & operator=(StandardExceptionTemplate const &);
 };
 
 //
