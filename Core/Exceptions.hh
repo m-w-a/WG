@@ -33,13 +33,13 @@ namespace Requirements
 namespace Check
 {
 template <typename T>
-struct IsHeirarchyRootedAtBaseExceptionT;
-template <typename T>
 struct IsSuperClassExceptionT;
 template <typename T>
-struct IsSuperClassErrorExceptionTOrBaseExceptionT;
+struct IsHeirarchyRootedAtBaseExceptionT;
 template <typename T>
 struct IsSuperClassErrorExceptionT;
+template <typename T>
+struct IsAncestorClassBaseErrorExceptionT;
 }
 }
 
@@ -117,9 +117,9 @@ template <typename TAG, typename PARENT>
 class ErrorExceptionT<TAG, PARENT, false> : public PARENT
 {
     BOOST_CONCEPT_ASSERT((
-        Requirements::Check::IsHeirarchyRootedAtBaseExceptionT<PARENT>));
+        Requirements::Check::IsAncestorClassBaseErrorExceptionT<PARENT>));
     BOOST_CONCEPT_ASSERT((
-        Requirements::Check::IsSuperClassExceptionT<PARENT>));
+        Requirements::Check::IsSuperClassErrorExceptionT<PARENT>));
 public:
     //Inject enum constants into this class's scope.
     using PARENT::KIND;
@@ -196,12 +196,6 @@ template <typename TAG, typename PARENT>
 struct IsSuperClassExceptionT<ExceptionT<TAG, PARENT> > {};
 
 template <typename TAG, typename PARENT>
-struct IsSuperClassErrorExceptionTOrBaseExceptionT<
-    ErrorExceptionT<TAG, PARENT, false> > {};
-template <typename TAG>
-struct IsSuperClassErrorExceptionTOrBaseExceptionT<ExceptionT<TAG, void> > {};
-
-template <typename TAG, typename PARENT>
 struct IsSuperClassErrorExceptionT<ErrorExceptionT<TAG, PARENT, false> > {};
 
 template <typename TAG>
@@ -209,6 +203,14 @@ struct IsHeirarchyRootedAtBaseExceptionT<ExceptionT<TAG, void> > {};
 template <typename TAG, typename PARENT>
 struct IsHeirarchyRootedAtBaseExceptionT<ExceptionT<TAG, PARENT> > :
     public IsHeirarchyRootedAtBaseExceptionT<PARENT> {};
+
+template <typename TAG, typename PARENTTAG, typename GRANDPARENT>
+struct IsAncestorClassBaseErrorExceptionT<
+    ErrorExceptionT<TAG, ExceptionT<PARENTTAG, GRANDPARENT>, false> > {};
+template <typename TAG, typename PARENT, bool ISCONCRETE>
+struct IsAncestorClassBaseErrorExceptionT<
+    ErrorExceptionT<TAG, PARENT, ISCONCRETE> > :
+        public IsAncestorClassBaseErrorExceptionT<PARENT> {};
 }
 }
 
