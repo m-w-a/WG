@@ -16,7 +16,6 @@ namespace Core
 
 //Types.
 
---
 // If both x and y have valid pointees, returns the result of (*x == *y)
 // If only one has a valid pointee, returns false.
 // If none have valid pointees, returns true.
@@ -41,7 +40,6 @@ struct equal_pointees_t: std::binary_function<Pointer, Pointer, bool>
     PointeeEquals m_PointeeEquals;
 };
 
---
 template<class Pointer>
 inline
 bool less_pointees(Pointer const & x, Pointer const & y)
@@ -62,7 +60,6 @@ struct less_pointees_t : public std::binary_function<Pointer, Pointer, bool>
     PointeeLess m_PointeeLess;
 };
 
---
 template <typename T>
 struct StdContainerValueAccess
 {
@@ -75,7 +72,6 @@ struct StdContainerValueAccess<T const>
     typedef typename std::tr1::add_const<typename T::value_type>::type Type;
 };
 
---
 template <typename Iterator>
 struct TakeSecondIteratorAdaptor
 {
