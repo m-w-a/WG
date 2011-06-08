@@ -123,6 +123,7 @@ any_insert_iterator<VALUETYPE> &
     any_insert_iterator<VALUETYPE>::operator=(const_reference value)
 {
     dispatcher_(opaqued_cntr_, value);
+    return *this;
 }
 
 template <typename VALUETYPE>
