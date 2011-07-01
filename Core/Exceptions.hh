@@ -11,6 +11,13 @@
 #define WG_THROW_EX(OBJECT) \
     throw boost::enable_current_exception(OBJECT);
 
+//T =
+//  ErrorExceptT template instantiation
+//KIND =
+//  ErrorExceptionT::Kind, or, more conveniently
+//  (ErrorExceptT template instantiation)::Kind
+//MSG =
+//  std::string
 #define WG_THROW_ERROREX(TYPE, KIND, MSG) \
     throw boost::enable_current_exception( \
         TYPE( \
@@ -45,6 +52,10 @@ struct IsAncestorClassBaseErrorExceptionT;
 
 //Class Definitions.
 
+//----------
+//ExceptionT
+//----------
+
 template <typename TAG, typename PARENT = void>
 class ExceptionT;
 
@@ -76,6 +87,10 @@ private:
     //Disallowed.
     ExceptionT & operator=(ExceptionT const &);
 };
+
+//---------------
+//ErrorExceptionT
+//---------------
 
 template <
     typename TAG,
@@ -128,7 +143,7 @@ public:
 public:
     ErrorExceptionT() throw() {}
     ErrorExceptionT(ErrorExceptionT const &) throw() {}
-    virtual ~ErrorExceptionT() throw();
+    virtual ~ErrorExceptionT() throw() {}
 
     virtual Kind kind() const throw() = 0;
     virtual std::string const & what() const throw() = 0;
@@ -287,6 +302,13 @@ ErrorExceptionT<TAG, PARENT, true>::ErrorExceptionT(
 template <typename TAG, typename PARENT>
 ErrorExceptionT<TAG, PARENT, true>::~ErrorExceptionT() throw()
 {
+}
+
+template <typename TAG, typename PARENT>
+typename ErrorExceptionT<TAG, PARENT, true>::Kind 
+	ErrorExceptionT<TAG, PARENT, true>::kind() const throw()
+{
+	return m_Kind;
 }
 
 template <typename TAG, typename PARENT>
