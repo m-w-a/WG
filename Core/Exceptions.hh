@@ -44,7 +44,7 @@ struct IsSuperClassExceptionT;
 template <typename T>
 struct IsHeirarchyRootedAtBaseExceptionT;
 template <typename T>
-struct IsSuperClassErrorExceptionT;
+struct IsSuperClassAbstractErrorExceptionT;
 template <typename T>
 struct IsAncestorClassBaseErrorExceptionT;
 }
@@ -55,11 +55,41 @@ struct IsAncestorClassBaseErrorExceptionT;
 //----------
 //ExceptionT
 //----------
+//
+//************
+//Description:
+//************
+// ExceptionT specializations are all pure virtual classes.
+// ExceptionT all have the following interface:
+// IDTAG is a unique id identifying the template instantiation.
+// PARENT must be an ExceptionT or omitted from the template parameter list.
+//
+//  template <typename IDTAG, typename PARENT = void>
+//	class ExceptionT<...>
+//	{
+//	  public:
+//    	ExceptionT() throw();
+//    	ExceptionT(ExceptionT const &) throw();
+//    	virtual ~ExceptionT() throw() = 0;
+//		...
+//	};
+//
+//******
+//Usage:
+//******
+//	struct RootExTag;
+//	typedef ExceptionT<RootExTag> RootEx;
+//
+//	//SomeProgenyEx will be derived from RootEx:
+//
+//	struct SomeProgenyExTax;
+//	typedef ExceptionT<SomeProgenyExTax, RootEx> SomeProgenyEx;
+//----------
 
 template <typename TAG, typename PARENT = void>
 class ExceptionT;
 
-//Base Specialization.
+//Base Template Specialization.
 template <typename TAG>
 class ExceptionT<TAG, void>
 {
@@ -91,6 +121,55 @@ private:
 //---------------
 //ErrorExceptionT
 //---------------
+//
+//***********
+//Description
+//***********
+// ErrorExceptionT all have the following interface:
+// IDTAG is a unique id identifying the template instantiation.
+// PARENT must be an ErrorExceptionT<..., ..., false> or an ExceptionT.
+// ISCONCRETE = true makes an instantiable class.
+//
+//  template <
+//    typename IDTAG,
+//    typename PARENT,
+//    bool ISCONCRETE = false>
+//	class ErrorExceptionT<...>
+//	{
+//	public:
+//    typedef enum KIND
+//    {
+//        LogicError,
+//        RuntimeError,
+//        InvalidArgumentError,
+//        DomainError
+//    } Kind;
+//
+//    ErrorExceptionT() throw() {}
+//    ErrorExceptionT(ErrorExceptionT const &) throw() {}
+//    virtual ~ErrorExceptionT() throw() {}
+//
+//    virtual Kind kind() const throw() = 0;
+//    virtual std::string const & what() const throw() = 0;
+//    virtual std::string const & functionName() const throw() = 0;
+//    virtual std::string const & filename() const throw() = 0;
+//    virtual boost::uint16_t lineNumber() const throw() = 0;
+//	  ...
+//	};
+//
+//******
+//Usage:
+//******
+//	struct RootExceptionTag;
+//	typedef ExceptionT<RootExceptionTag> RootException;
+//
+//	struct ErrorExceptionTag;
+//	typedef ErrorExceptionT<
+//		ErrorExceptionTag,
+//		RootException,
+//		true
+//	> ErrorException;
+//---------------
 
 template <
     typename TAG,
@@ -99,11 +178,18 @@ template <
 class ErrorExceptionT;
 
 //Base Specialization.
+//Base specialization derives from ExceptionT.
+//Base specialization needed in order to define nested types.
+//Leaf specialization has class members and not this one so as to enable the
+// former to directly derive from ExceptionT.
 template <typename TAG, typename PARENTTAG, typename GRANDPARENT>
 class ErrorExceptionT<TAG, ExceptionT<PARENTTAG, GRANDPARENT>, false> :
     public ExceptionT<PARENTTAG, GRANDPARENT>
 {
 public:
+	//GCC WORKAROUND.
+	//typedef needed and has to be different from enum name because of
+    //using keyword bug, see "using ...::KIND" below.
     typedef enum KIND
     {
         LogicError,
@@ -128,13 +214,13 @@ private:
     ErrorExceptionT & operator=(ErrorExceptionT const &) throw();
 };
 
+//Intermediate Specialization.
+//Intermediate specializations derive from ErrorExceptionT.
 template <typename TAG, typename PARENT>
 class ErrorExceptionT<TAG, PARENT, false> : public PARENT
 {
     BOOST_CONCEPT_ASSERT((
-        Requirements::Check::IsAncestorClassBaseErrorExceptionT<PARENT>));
-    BOOST_CONCEPT_ASSERT((
-        Requirements::Check::IsSuperClassErrorExceptionT<PARENT>));
+        Requirements::Check::IsSuperClassAbstractErrorExceptionT<PARENT>));
 public:
     //Inject enum constants into this class's scope.
     using PARENT::KIND;
@@ -156,17 +242,50 @@ private:
     ErrorExceptionT & operator=(ErrorExceptionT const & ) throw();
 };
 
+namespace Internal
+{
+template <typename PARENT>
+struct ErrorExceptionSuperClassSelector;
+
+template <typename TAG, typename PARENT>
+struct ErrorExceptionSuperClassSelector<ExceptionT<TAG, PARENT> >
+{
+    struct ErrorExceptionSuperClassSelectorTag;
+    typedef ErrorExceptionT<
+        ErrorExceptionSuperClassSelectorTag,
+        ExceptionT<TAG, PARENT>
+    > Selection;
+};
+
+template <typename TAG, typename PARENTTAG, typename GRANDPARENT>
+struct ErrorExceptionSuperClassSelector<
+	ErrorExceptionT<TAG, ExceptionT<PARENTTAG, GRANDPARENT>, false> >
+{
+	typedef 
+    	ErrorExceptionT<TAG, ExceptionT<PARENTTAG, GRANDPARENT>, false>
+        	Selection;
+};
+
+template <typename TAG, typename PARENT>
+struct ErrorExceptionSuperClassSelector<
+	ErrorExceptionT<TAG, PARENT, false> >
+{
+	typedef ErrorExceptionT<TAG, PARENT, false> Selection;
+};
+}
+
 //Leaf Specialization.
 template <typename TAG, typename PARENT>
 class ErrorExceptionT<TAG, PARENT, true> :
-    public PARENT
+    public Internal::ErrorExceptionSuperClassSelector<PARENT>::Selection
 {
-    BOOST_CONCEPT_ASSERT((
-        Requirements::Check::IsSuperClassErrorExceptionT<PARENT>));
+	typedef 
+    	typename Internal::ErrorExceptionSuperClassSelector<PARENT>::Selection
+        	INTERNALPARENT;
 public:
     //Inject enum constants into this class's scope.
-    using PARENT::KIND;
-    typedef typename PARENT::Kind Kind;
+    using INTERNALPARENT::KIND;
+    typedef typename INTERNALPARENT::Kind Kind;
 
 public:
     ErrorExceptionT(
@@ -208,24 +327,21 @@ namespace Check
 {
 
 template <typename TAG, typename PARENT>
-struct IsSuperClassExceptionT<ExceptionT<TAG, PARENT> > {};
+struct IsSuperClassExceptionT<ExceptionT<TAG, PARENT> >
+{};
 
 template <typename TAG, typename PARENT>
-struct IsSuperClassErrorExceptionT<ErrorExceptionT<TAG, PARENT, false> > {};
+struct IsSuperClassAbstractErrorExceptionT<
+	ErrorExceptionT<TAG, PARENT, false> >
+{};
 
 template <typename TAG>
-struct IsHeirarchyRootedAtBaseExceptionT<ExceptionT<TAG, void> > {};
+struct IsHeirarchyRootedAtBaseExceptionT<ExceptionT<TAG, void> >
+{};
 template <typename TAG, typename PARENT>
 struct IsHeirarchyRootedAtBaseExceptionT<ExceptionT<TAG, PARENT> > :
-    public IsHeirarchyRootedAtBaseExceptionT<PARENT> {};
-
-template <typename TAG, typename PARENTTAG, typename GRANDPARENT>
-struct IsAncestorClassBaseErrorExceptionT<
-    ErrorExceptionT<TAG, ExceptionT<PARENTTAG, GRANDPARENT>, false> > {};
-template <typename TAG, typename PARENT, bool ISCONCRETE>
-struct IsAncestorClassBaseErrorExceptionT<
-    ErrorExceptionT<TAG, PARENT, ISCONCRETE> > :
-        public IsAncestorClassBaseErrorExceptionT<PARENT> {};
+    public IsHeirarchyRootedAtBaseExceptionT<PARENT>
+{};
 }
 }
 
@@ -278,7 +394,7 @@ ErrorExceptionT<TAG, PARENT, true>::ErrorExceptionT(
     std::string const & functionName,
     std::string const & filename,
     boost::uint16_t const lineNumber) throw()
-: PARENT(),
+: INTERNALPARENT(),
   m_Kind(errorKind),
   m_What(errMsg),
   m_FunctionName(functionName),
@@ -290,7 +406,7 @@ ErrorExceptionT<TAG, PARENT, true>::ErrorExceptionT(
 template <typename TAG, typename PARENT>
 ErrorExceptionT<TAG, PARENT, true>::ErrorExceptionT(
     ErrorExceptionT const & rhs) throw()
-: PARENT(rhs),
+: INTERNALPARENT(rhs),
   m_Kind(rhs.m_Kind),
   m_What(rhs.m_What),
   m_FunctionName(rhs.m_FunctionName),
