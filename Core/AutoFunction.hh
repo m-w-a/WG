@@ -1,17 +1,29 @@
-/*
-#define ... BOOST_PP_IF( \
-    ..., \
-    (x)BOOST_PP_COMMA, \
-    y)()
-*/
-
-
 #include <boost/preprocessor.hpp>
 #include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
 //#include <boost/type_traits/add_reference.hpp> //TODO
 //#include <boost/type_traits/add_const.hpp> //TODO
 //#include <boost/tuple/tuple.hpp> //TODO
 
+//-----------
+//Public APIs
+//-----------
+    
+#define WG_AUTOFUNCTION(function_name, bound_param_seq) \
+  BOOST_PP_ASSERT_MSG( \
+    WG_INTERNAL_IS_SEQ_COUNT_EVEN(bound_param_seq), \
+    "Error: 2nd parameter to WG_AUTOFUNCTION should be even numbered sequence.") \
+  { \
+    WG_INTERNAL_BPSEQ_TO_PARAMPROXYDCLN(bound_param_seq) \
+    WG_INTERNAL_AUTOFUNCTOR_START(function_name, bound_param_seq)
+    
+#define WG_AUTOFUNCTION_END() \
+  WG_INTERNAL_AUTOFUNCTOR_END() \
+  }
+
+//-----------
+//Impl Macros
+//-----------
+  
 #define WG_INTERNAL_IDENTITY(x) x
 
 #define WG_INTERNAL_FORMAT_NAME(name) \
@@ -24,6 +36,8 @@
 
 #define WG_INTERNAL_IS_SEQ_COUNT_EVEN(seq) \
   BOOST_PP_NOT(BOOST_PP_MOD(BOOST_PP_SEQ_SIZE(seq), 2))
+#define WG_INTERNAL_IS_SEQ_COUNT_ODD(seq) \
+  BOOST_PP_NOT(WG_INTERNAL_IS_SEQ_COUNT_EVEN(seq))
 
 #define WG_INTERNAL_IS_INDEX_ODD(indx) BOOST_PP_MOD(indx,2)
 #define WG_INTERNAL_IS_INDEX_EVEN(indx) \
@@ -157,19 +171,6 @@
     BOOST_PP_LPAREN() \
       WG_INTERNAL_PARAMPROXYOBJ() \
     BOOST_PP_RPAREN() WG_INTERNAL_IDENTITY(;)
-
-//-----------
-//Public APIs
-//-----------
-    
-#define WG_AUTOFUNCTION(function_name, bound_param_seq) \
-  { \
-    WG_INTERNAL_BPSEQ_TO_PARAMPROXYDCLN(bound_param_seq) \
-    WG_INTERNAL_AUTOFUNCTOR_START(function_name, bound_param_seq)
-    
-#define WG_AUTOFUNCTION_END() \
-  WG_INTERNAL_AUTOFUNCTOR_END() \
-  }
     
 
 //TESTS Begin
