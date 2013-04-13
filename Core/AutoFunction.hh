@@ -1,8 +1,8 @@
 #include <boost/preprocessor.hpp>
 #include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
-//#include <boost/type_traits/add_reference.hpp> //TODO
-//#include <boost/type_traits/add_const.hpp> //TODO
-//#include <boost/tuple/tuple.hpp> //TODO
+#include <boost/type_traits/add_reference.hpp> //TODO
+#include <boost/type_traits/add_const.hpp> //TODO
+#include <boost/tuple/tuple.hpp> //TODO
 
 //-----------
 //Public APIs
@@ -174,32 +174,11 @@
     
 
 //TESTS Begin
-    
+/*    
 #define TEST_SEQ (w)(x)(y)(z)(a)(b)(c)(d)(class)(this_)
 
 WG_AUTOFUNCTION(foo, TEST_SEQ)
 {
 }
 WG_AUTOFUNCTION_END()
-
-//TODO
-//1) Add ASSERT_MSG for even sized sequences.
-
-//#define MACRO(z, n, text) z n text - 
-//BOOST_PP_REPEAT(3, MACRO, class)
-
-/*
-#define EVEN_INDEX(indx) BOOST_PP_MOD(BOOST_PP_DEC(indx),2)
-#define WRAP(r, data, elem) \
-  BOOST_PP_LPAREN_IF(EVEN_INDEX(r)) \
-  elem \
-  BOOST_PP_COMMA_IF(EVEN_INDEX(r)) \
-  BOOST_PP_RPAREN_IF(BOOST_PP_NOT(EVEN_INDEX(r)))
-
-BOOST_PP_SEQ_FOR_EACH(WRAP, ~, SEQ)
 */
-
-int main()
-{  
-  return 0;
-}
