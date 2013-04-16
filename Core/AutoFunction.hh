@@ -1,13 +1,23 @@
-#include <boost/preprocessor.hpp>
-#include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
-#include <boost/type_traits/add_reference.hpp> //TODO
-#include <boost/type_traits/add_const.hpp> //TODO
-#include <boost/tuple/tuple.hpp> //TODO
+ #include <boost/preprocessor.hpp>
+ #include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
+// #include <boost/type_traits/add_reference.hpp> //TODO
+// #include <boost/type_traits/add_const.hpp> //TODO
+// #include <boost/tuple/tuple.hpp> //TODO
 
 //-----------
 //Public APIs
 //-----------
-    
+
+///@brief bound_param_seq
+///@brief   an even-numbered sequence of visible unqualified variable names and
+///@brief   their associated types that will automatically be bound via 
+///@brief   reference as parameters to function_name. If said variables should
+///@brief   be constant, then their associated types should be declared as 
+///@brief   such.
+///@brief   Note: variable named "this_" is reserved and is used to auto-bind
+///@brief     "this" variable.
+///@brief   This param should be specified in the following format:
+///@brief     (type1)(var1) (type2)(var2) ... (typeN)(varN)
 #define WG_AUTOFUNCTION(function_name, bound_param_seq) \
   BOOST_PP_ASSERT_MSG( \
     WG_INTERNAL_IS_SEQ_COUNT_EVEN(bound_param_seq), \
@@ -30,7 +40,7 @@
   BOOST_PP_CAT(WG_INTERNAL_IDENTITY(pgcllXXXautofunctionXXX), name)
 
 #define WG_INTERNAL_TOKEN_MATCHES_this_ (1) /* unary */
-#define WG_INTERNAL_TOKEN_IS_THISU(tokens) \
+#define WG_INTERNAL_TOKENS_STARTS_WITH_THISU(tokens) \
     BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT(tokens, \
             WG_INTERNAL_TOKEN_MATCHES_)
 
@@ -39,34 +49,34 @@
 #define WG_INTERNAL_IS_SEQ_COUNT_ODD(seq) \
   BOOST_PP_NOT(WG_INTERNAL_IS_SEQ_COUNT_EVEN(seq))
 
-#define WG_INTERNAL_IS_INDEX_ODD(indx) BOOST_PP_MOD(indx,2)
-#define WG_INTERNAL_IS_INDEX_EVEN(indx) \
-  BOOST_PP_NOT(WG_INTERNAL_IS_INDEX_ODD(indx))
+#define WG_INTERNAL_IS_ODD(num) BOOST_PP_MOD(num,2)
+#define WG_INTERNAL_IS_EVEN(num) \
+  BOOST_PP_NOT(WG_INTERNAL_IS_ODD(num))
 
 #define WG_INTERNAL_IS_SEQ_INDEX_LAST(seq_count, indx) \
   BOOST_PP_EQUAL(seq_count, BOOST_PP_INC(indx))
 
 // BOOST_PP_SEQ_FOR_EACH_I functor.
-#define WG_INTERNAL_SEQUENCE_IF_EVEN(r, data, indx, elem) \
+#define WG_INTERNAL_SEQUENCE_IF_INDEX_EVEN(r, data, indx, elem) \
   BOOST_PP_IF( \
-    WG_INTERNAL_IS_INDEX_EVEN(indx), \
+    WG_INTERNAL_IS_EVEN(indx), \
     BOOST_PP_LPAREN() elem BOOST_PP_RPAREN(), \
     BOOST_PP_EMPTY())
 
 // BOOST_PP_SEQ_FOR_EACH_I functor.
-#define WG_INTERNAL_SEQUENCE_IF_ODD(r, data, indx, elem) \
+#define WG_INTERNAL_SEQUENCE_IF_INDEX_ODD(r, data, indx, elem) \
   BOOST_PP_IF( \
-    WG_INTERNAL_IS_INDEX_ODD(indx), \
+    WG_INTERNAL_IS_ODD(indx), \
     BOOST_PP_LPAREN() elem BOOST_PP_RPAREN(), \
     BOOST_PP_EMPTY())
     
 #define \
   WG_INTERNAL_BPSEQ_TO_TYPESEQ(bp_seq) \
-    BOOST_PP_SEQ_FOR_EACH_I(WG_INTERNAL_SEQUENCE_IF_EVEN, ~, bp_seq)
+    BOOST_PP_SEQ_FOR_EACH_I(WG_INTERNAL_SEQUENCE_IF_INDEX_EVEN, ~, bp_seq)
     
 #define \
   WG_INTERNAL_BPSEQ_TO_OBJSEQ(bp_seq) \
-    BOOST_PP_SEQ_FOR_EACH_I(WG_INTERNAL_SEQUENCE_IF_ODD, ~, bp_seq)
+    BOOST_PP_SEQ_FOR_EACH_I(WG_INTERNAL_SEQUENCE_IF_INDEX_ODD, ~, bp_seq)
 
 #define WG_INTERNAL_ADDREFERENCE(sometype) \
   boost::add_reference<WG_INTERNAL_IDENTITY(sometype)>::type
@@ -78,9 +88,9 @@
   WG_INTERNAL_FORM_PARAM_ENTRY( \
     r, obj_seq, indx, elem) \
       BOOST_PP_IF( \
-        WG_INTERNAL_TOKEN_IS_THISU(BOOST_PP_SEQ_ELEM(indx, obj_seq)), \
-        WG_INTERNAL_ADDCONST(elem), \
-        WG_INTERNAL_IDENTITY(elem)) \
+        WG_INTERNAL_TOKENS_STARTS_WITH_THISU(BOOST_PP_SEQ_ELEM(indx, obj_seq)), \
+        WG_INTERNAL_ADDREFERENCE(WG_INTERNAL_ADDCONST(elem)), \
+        WG_INTERNAL_ADDREFERENCE(elem)) \
       BOOST_PP_SEQ_ELEM(indx, obj_seq) \
       BOOST_PP_COMMA_IF( \
         BOOST_PP_NOT(WG_INTERNAL_IS_SEQ_INDEX_LAST( \
@@ -99,7 +109,7 @@
 #define \
   WG_INTERNAL_QUALIFY_TYPE(r, obj_seq, indx, elem) \
     BOOST_PP_IF( \
-      WG_INTERNAL_TOKEN_IS_THISU(BOOST_PP_SEQ_ELEM(indx, obj_seq)), \
+      WG_INTERNAL_TOKENS_STARTS_WITH_THISU(BOOST_PP_SEQ_ELEM(indx, obj_seq)), \
       WG_INTERNAL_ADDREFERENCE(WG_INTERNAL_ADDCONST(elem)), \
       WG_INTERNAL_ADDREFERENCE(elem)) \
     BOOST_PP_COMMA_IF( \
@@ -110,7 +120,7 @@
 #define \
   WG_INTERNAL_APPEND_COMMA_AND_REPLACE_KEYWORDS(r, seq_count, indx, elem) \
     BOOST_PP_IF( \
-      WG_INTERNAL_TOKEN_IS_THISU(elem), \
+      WG_INTERNAL_TOKENS_STARTS_WITH_THISU(elem), \
       WG_INTERNAL_IDENTITY(this), \
       elem) \
     BOOST_PP_COMMA_IF( \
@@ -174,11 +184,10 @@
     
 
 //TESTS Begin
-/*    
+
 #define TEST_SEQ (w)(x)(y)(z)(a)(b)(c)(d)(class)(this_)
 
 WG_AUTOFUNCTION(foo, TEST_SEQ)
 {
 }
 WG_AUTOFUNCTION_END()
-*/
