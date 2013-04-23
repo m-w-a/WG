@@ -413,7 +413,7 @@
       WG_PP_PSEQ_BOUNDTYPES(pseq)WG_PP_PSEQ_ASSIGNEDTYPES(pseq)))
 
 #define WG_PP_PARAMPROXY_OBJ_INITLIST( \
-  bound_objs_seq, assigned_objs_seq, thisu_marker) \
+  bound_objs_seq, assigned_values_seq, thisu_marker) \
     WG_PP_SEQ_ENUM( \
       BOOST_PP_IF( \
         BOOST_PP_NOT(BOOST_PP_LIST_IS_NIL(thisu_marker)), \
@@ -422,7 +422,7 @@
           BOOST_PP_LIST_FIRST(thisu_marker), \
           this), \
         bound_objs_seq) \
-      assigned_objs_seq)
+      assigned_values_seq)
 
 #define WG_PP_PARAMPROXY_TYPE_NAME() \
   WG_PP_FORMAT_NAME(param_proxy_type)
@@ -437,7 +437,7 @@
       BOOST_PP_LPAREN() \
         WG_PP_PARAMPROXY_OBJ_INITLIST( \
           WG_PP_PSEQ_BOUNDOBJECTS(pseq), \
-          WG_PP_PSEQ_ASSIGNEDOBJECTS(pseq), \
+          WG_INERNAL_PSEQ_ASSIGNEDVALUES(pseq), \
           WG_PP_PSEQ_BOUNDOBJECTS_THISU_MARKER(pseq)) \
       BOOST_PP_RPAREN() WG_PP_IDENTITY(;)
     
