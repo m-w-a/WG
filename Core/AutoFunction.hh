@@ -38,7 +38,7 @@
 #define WG_AUTOFUNCTION_END() \
   WG_PP_AUTOFUNCTION_END()
 
-//##########
+//###########
 //Impl Macros
 //###########
   
@@ -55,6 +55,12 @@
 
 #define WG_PP_TOKEN_MATCHES_WG_PP_TRUE (1) /* unary */
 #define WG_PP_TOKENS_START_WITH_WG_PP_TRUE(tokens) \
+  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
+    tokens, \
+    WG_PP_TOKEN_MATCHES_)
+
+#define WG_PP_TOKEN_MATCHES_void (1) /* unary */
+#define WG_PP_TOKENS_STARTS_WITH_VOID(tokens) \
   BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
     tokens, \
     WG_PP_TOKEN_MATCHES_)
@@ -80,6 +86,23 @@
   BOOST_PP_EQUAL(BOOST_PP_MOD(num,3), 1)
 #define WG_PP_IS_MOD3_R2(num) \
   BOOST_PP_EQUAL(BOOST_PP_MOD(num,3), 2)
+
+#define WG_PP_EXISTS_1TUPLE_IMPL(x) \
+  WG_PP_TRUE
+#define WG_PP_EXISTS_2TUPLE_IMPL(x, y) \
+  WG_PP_TRUE
+
+#define WG_PP_EXISTS_1TUPLE(tuple_seq) \
+  WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
+    BOOST_PP_EXPAND( \
+      WG_PP_EXISTS_1TUPLE_IMPL \
+      tuple_seq))
+
+#define WG_PP_EXISTS_2TUPLE(tuple_seq) \
+  WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
+    BOOST_PP_EXPAND( \
+      WG_PP_EXISTS_2TUPLE_IMPL \
+      tuple_seq))
 
 #define WG_PP_SEQ_IS_NOT_NIL_IMPL(seq) WG_PP_TRUE
 #define WG_PP_SEQ_IS_NOT_NIL(seq) \
@@ -110,6 +133,133 @@
   
 #define WG_PP_IS_SEQ_INDEX_LAST(seq_count, indx) \
   BOOST_PP_EQUAL(seq_count, BOOST_PP_INC(indx))
+
+#define WG_PP_TUPLIZE(x) (x)
+#define WG_PP_TUPLIZE_1(x) WG_PP_TUPLIZE(x)
+#define WG_PP_TUPLIZE_2(x, y) (x, y)
+
+#define WG_PP_1TUPLIZE(x) (x)
+#define WG_PP_1TUPLIZE_1(x) WG_PP_1TUPLIZE(x)
+#define WG_PP_1TUPLIZE_2(x, y) (x)(y)
+
+//------
+//ALTSEQ
+//------
+
+//----------------
+//ALTSEQ Transform
+//----------------
+
+#define WG_PP_ALTSEQ_APPEND_COMMA_TO_HEAD_1(x) \
+  WG_PP_TUPLIZE_1(x) BOOST_PP_COMMA()
+
+#define WG_PP_ALTSEQ_APPEND_COMMA_TO_HEAD_2(x, y) \
+  WG_PP_TUPLIZE_2(x, y) BOOST_PP_COMMA()
+
+#define WG_PP_ALTSEQ_TRANSFORM_HEAD_IMPL( \
+  head_tuple, \
+  tuple_seq_rest, \
+  TRANSFORM, \
+  TRANSFORM_REST) \
+    WG_PP_IDENTITY(TRANSFORM head_tuple)TRANSFORM_REST(tuple_seq_rest)
+///@brief head_tuple_kind
+///@brief   an unsigned integer representing the kind of tuple the head tuple
+///@brief   is, i.e., 1-tuple, 2-tuple, etc.
+///@brief TRANSFORM
+///@brief   the name of a one or two parameter macro to apply to
+///@brief   the head of tuple_seq
+///@brief TRANSFORM_REST
+///@brief   the name of a single parameter macro to apply to the rest of
+///@brief   tuple_seq.
+#define WG_PP_ALTSEQ_TRANSFORM( \
+  head_tuple_kind, \
+  tuple_seq, \
+  TRANSFORM, \
+  TRANSFORM_REST) \
+    BOOST_PP_EXPAND( \
+      WG_PP_ALTSEQ_TRANSFORM_HEAD_IMPL \
+        BOOST_PP_LPAREN() \
+          BOOST_PP_CAT( \
+            WG_PP_ALTSEQ_APPEND_COMMA_TO_HEAD_, head_tuple_kind) \
+          tuple_seq BOOST_PP_COMMA() \
+          TRANSFORM BOOST_PP_COMMA() \
+          TRANSFORM_REST \
+        BOOST_PP_RPAREN() )
+
+//---------------
+//ALTSEQ_EAT_HEAD
+//---------------
+
+///@brief head_tuple_kind
+///@brief   an unsigned integer representing the arity of the head tuple
+#define WG_PP_ALTSEQ_EAT_HEAD(head_tuple_kind, tuple_seq) \
+  WG_PP_ALTSEQ_TRANSFORM( \
+    head_tuple_kind, \
+    tuple_seq, \
+    BOOST_PP_TUPLE_EAT(head_tuple_kind), \
+    WG_PP_IDENTITY)
+
+//--------------------
+//ALTSEQ_1TUPLIZE_HEAD
+//--------------------
+
+///@brief head_tuple_kind
+///@brief   an unsigned integer representing the arity of the head tuple
+///@brief 1-tuplizes the head of tuple_seq, and discards the rest.
+#define WG_PP_ALTSEQ_1TUPLIZE_HEAD(head_tuple_kind, tuple_seq) \
+  WG_PP_ALTSEQ_TRANSFORM( \
+    head_tuple_kind, \
+    tuple_seq, \
+    BOOST_PP_CAT(WG_PP_1TUPLIZE_, head_tuple_kind), \
+    BOOST_PP_TUPLE_EAT(1))
+
+//----------------
+//ALTSEQ_LINEARIZE
+//----------------
+
+#define WG_PP_ALTSEQ_LINEARIZE_MAKE_INITIAL_STATE(tuple_seq) \
+  (0, tuple_seq)
+#define WG_PP_ALTSEQ_LINEARIZE_GET_HEAD_INDEX(state) \
+  BOOST_PP_TUPLE_ELEM(2, 0, state)
+#define WG_PP_ALTSEQ_LINEARIZE_GET_HEAD_ARITY(state) \
+  BOOST_PP_INC( \
+    BOOST_PP_MOD( \
+      WG_PP_ALTSEQ_LINEARIZE_GET_HEAD_INDEX(state), \
+      2))
+#define WG_PP_ALTSEQ_LINEARIZE_GET_SEQ(state) \
+  BOOST_PP_TUPLE_ELEM(2, 1, state)
+
+#define WG_PP_ALTSEQ_LINEARIZE_PRED_1(state) \
+  WG_PP_EXISTS_1TUPLE( \
+    WG_PP_ALTSEQ_LINEARIZE_GET_SEQ(state))
+#define WG_PP_ALTSEQ_LINEARIZE_PRED_2(state) \
+  WG_PP_EXISTS_2TUPLE( \
+    WG_PP_ALTSEQ_LINEARIZE_GET_SEQ(state))
+
+#define WG_PP_ALTSEQ_LINEARIZE_PRED(r, state) \
+  BOOST_PP_CAT( \
+    WG_PP_ALTSEQ_LINEARIZE_PRED_, \
+    WG_PP_ALTSEQ_LINEARIZE_GET_HEAD_ARITY(state)) (state)
+
+#define WG_PP_ALTSEQ_LINEARIZE_INC_OP(r, state) \
+  ( \
+    BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(2, 0, state)), \
+    WG_PP_ALTSEQ_EAT_HEAD( \
+      WG_PP_ALTSEQ_LINEARIZE_GET_HEAD_ARITY(state), \
+      WG_PP_ALTSEQ_LINEARIZE_GET_SEQ(state)) \
+  )
+
+#define WG_PP_ALTSEQ_LINEARIZE_HEAD(r, state) \
+    WG_PP_ALTSEQ_1TUPLIZE_HEAD( \
+      WG_PP_ALTSEQ_LINEARIZE_GET_HEAD_ARITY(state), \
+      WG_PP_ALTSEQ_LINEARIZE_GET_SEQ(state))
+
+#define WG_PP_ALTSEQ_LINEARIZE(tuple_seq) \
+  BOOST_PP_FOR( \
+    WG_PP_ALTSEQ_LINEARIZE_MAKE_INITIAL_STATE(tuple_seq), \
+    WG_PP_ALTSEQ_LINEARIZE_PRED, \
+    WG_PP_ALTSEQ_LINEARIZE_INC_OP, \
+    WG_PP_ALTSEQ_LINEARIZE_HEAD)
 
 //------------------------
 //AssignedPSeq & BoundPSeq
@@ -183,33 +333,55 @@
     WG_PP_ASSIGNEDPSEQ_TO_OBJSEQ(ap_seq), \
     WG_PP_ASSIGNEDPSEQ_TO_VALUESEQ(ap_seq))
 
+#define WG_PP_BOUND_PSEQ_IS_VOID(bp_seq) \
+  BOOST_PP_IF( \
+    WG_PP_EXISTS_1TUPLE(BOOST_PP_TUPLE_EAT(1) bp_seq), \
+    0, \
+    BOOST_PP_IF( \
+      WG_PP_TOKENS_STARTS_WITH_VOID(BOOST_PP_SEQ_ELEM(0, bp_seq)), \
+      1, \
+      0))
+
+#define WG_PP_ASSIGNED_PSEQ_IS_VOID(ap_alt_seq) \
+  BOOST_PP_IF( \
+    WG_PP_EXISTS_2TUPLE(BOOST_PP_TUPLE_EAT(1) ap_alt_seq), \
+    0, \
+    BOOST_PP_IF( \
+      BOOST_PP_EXPAND( \
+        WG_PP_TOKENS_STARTS_WITH_VOID WG_PP_ALTSEQ_1TUPLIZE_HEAD( \
+          1, ap_alt_seq)), \
+      1, \
+      0))
+
+//TODO
+//BOOST_PP_EXPR_IF( \
+//  BOOST_PP_AND( \
+//    BOOST_PP_NOT(WG_PP_BOUND_PSEQ_IS_VOID(bp_seq)), \
+//    BOOST_PP_NOT(WG_PP_IS_EVEN(BOOST_PP_SEQ_SIZE(bp_seq)))), \
+//  BOOST_PP_ASSERT_MSG( \
+//    0, "The second parameter to WG_SCOPEFUNCTION is malformed.")) \
+//\
+//BOOST_PP_EXPR_IF( \
+//  BOOST_PP_AND( \
+//    BOOST_PP_NOT(WG_PP_ASSIGNED_PSEQ_IS_VOID(ap_alt_seq)), \
+//    BOOST_PP_NOT(WG_PP_IS_MOD3_R0(BOOST_PP_SEQ_SIZE(ap_alt_seq)))), \
+//  BOOST_PP_ASSERT_MSG( \
+//    0, "The third parameter to WG_SCOPEFUNCTION is malformed.")) \
+//\
+
 //PSEQ:
 //  is a PP_ARRAY of following types:
 //  (8, (PP_SEQ, PP_SEQ, INT, BPSEQ_THISU_MARKER, PP_SEQ, PP_SEQ, PP_SEQ, INT))
 //  BPSEQ_THISU_MARKER:
 //    is a PP_LIST of size at most 1.
-#define WG_PP_MAKE_PSEQ(bp_seq, ap_seq) \
-  BOOST_PP_EXPR_IF( \
-    BOOST_PP_AND( \
-      BOOST_PP_NOT(BOOST_PP_EQUAL(BOOST_PP_SEQ_SIZE(bp_seq), 1)), \
-      BOOST_PP_NOT(WG_PP_IS_EVEN(BOOST_PP_SEQ_SIZE(bp_seq)))), \
-    BOOST_PP_ASSERT_MSG( \
-      0, "The second parameter to WG_SCOPEFUNCTION is malformed.")) \
-  \
-  BOOST_PP_EXPR_IF( \
-    BOOST_PP_AND( \
-      BOOST_PP_NOT(BOOST_PP_EQUAL(BOOST_PP_SEQ_SIZE(ap_seq), 1)), \
-      BOOST_PP_NOT(WG_PP_IS_MOD3_R0(BOOST_PP_SEQ_SIZE(ap_seq)))), \
-    BOOST_PP_ASSERT_MSG( \
-      0, "The third parameter to WG_SCOPEFUNCTION is malformed.")) \
-  \
+#define WG_PP_MAKE_PSEQ(bp_seq, ap_alt_seq) \
   WG_PP_MAKE_PSEQ_IMPL1( \
     BOOST_PP_EXPR_IF( \
-      BOOST_PP_NOT(BOOST_PP_EQUAL(BOOST_PP_SEQ_SIZE(bp_seq), 1)), \
+      BOOST_PP_NOT(WG_PP_BOUND_PSEQ_IS_VOID(bp_seq)), \
       bp_seq), \
     BOOST_PP_EXPR_IF( \
-      BOOST_PP_NOT(BOOST_PP_EQUAL(BOOST_PP_SEQ_SIZE(ap_seq), 1)), \
-      ap_seq))
+      BOOST_PP_NOT(WG_PP_ASSIGNED_PSEQ_IS_VOID(ap_alt_seq)), \
+      WG_PP_ALTSEQ_LINEARIZE(ap_alt_seq)))
 
 #define WG_PP_PSEQ_BOUNDTYPES(pseq) \
   BOOST_PP_ARRAY_ELEM(0, pseq)
@@ -274,12 +446,12 @@
   WG_PP_IDENTITY(obj_name).get<WG_PP_IDENTITY(n)>()
 
 #define WG_PP_PARAMPROXY_OBJ_ELEMACCESSLIST(pseq, obj_name) \
-    BOOST_PP_ENUM( \
-      BOOST_PP_ADD( \
-        WG_PP_PSEQ_BOUNDXXX_SIZE(pseq), \
-        WG_PP_PSEQ_ASSIGNEDXXX_SIZE(pseq)), \
-      WG_PP_PARAMPROXY_OBJ_ELEMACCESS, \
-      obj_name)
+  BOOST_PP_ENUM( \
+    BOOST_PP_ADD( \
+      WG_PP_PSEQ_BOUNDXXX_SIZE(pseq), \
+      WG_PP_PSEQ_ASSIGNEDXXX_SIZE(pseq)), \
+    WG_PP_PARAMPROXY_OBJ_ELEMACCESS, \
+    obj_name)
     
 // BOOST_PP_SEQ_FOR_EACH_I functor.
 #define \
@@ -335,19 +507,14 @@
 
 //TESTS Begin
 
-#define TEST_SEQ (w)(x)(y)(z)(a)(b)(c)(d)(class)(this_)
-#define ASEQ (T1)(T2)(T3)
-
-//WG_PP_BOUNDPSEQ_TO_TYPESEQ(TEST_SEQ)
-//WG_PP_BOUNDPSEQ_TO_OBJSEQ(TEST_SEQ)
-//WG_PP_ASSIGNEDPSEQ_TO_TYPESEQ(ASEQ)
-//WG_PP_ASSIGNEDPSEQ_TO_OBJSEQ(ASEQ)
-//WG_PP_ASSIGNEDPSEQ_TO_VALUESEQ(ASEQ)
-//BOOST_PP_SEQ_FOR_EACH_I(WG_PP_MARK_THISU_INDX, ~, (x)(z)(b)(d)(this_))
-
+#define TEST_SEQ (w)(x) (y)(z) (a)(b) (c)(d) (class)(this_)
+#define ASEQ (T1)(t, foo.bar) (T2)(q, this->foo())
 
 WG_AUTOFUNCTION(foo, TEST_SEQ, ASEQ)
-//WG_AUTOFUNCTION(foo, (void), (void))
 {
 }
-WG_AUTOFUNCTION_END()
+//WG_AUTOFUNCTION_END()
+WG_AUTOFUNCTION(foo, (void), (void))
+{
+}
+//WG_AUTOFUNCTION_END()
