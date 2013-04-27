@@ -1,9 +1,11 @@
- #include <boost/preprocessor.hpp>
- #include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
-//TODO
-// #include <boost/type_traits/add_const.hpp>
-// #include <boost/type_traits/add_reference.hpp>
-// #include <boost/tuple/tuple.hpp>
+#ifndef WG_SCOPE_FUNCTION_HH_
+#define WG_SCOPE_FUNCTION_HH_
+
+#include <boost/preprocessor.hpp>
+#include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
+#include <boost/type_traits/add_const.hpp>
+#include <boost/type_traits/add_reference.hpp>
+#include <boost/tuple/tuple.hpp>
 
 //###########
 //Public APIs
@@ -505,16 +507,18 @@
   WG_PP_AUTOFUNCTOR_END() \
   }
 
-//TESTS Begin
+////TESTS Begin
+//
+//#define TEST_SEQ (w)(x) (y)(z) (a)(b) (c)(d) (class)(this_)
+//#define ASEQ (T1)(t, foo.bar) (T2)(q, this->foo())
+//
+//WG_AUTOFUNCTION(foo, TEST_SEQ, ASEQ)
+//{
+//}
+////WG_AUTOFUNCTION_END()
+//WG_AUTOFUNCTION(foo, (void), (void))
+//{
+//}
+////WG_AUTOFUNCTION_END()
 
-#define TEST_SEQ (w)(x) (y)(z) (a)(b) (c)(d) (class)(this_)
-#define ASEQ (T1)(t, foo.bar) (T2)(q, this->foo())
-
-WG_AUTOFUNCTION(foo, TEST_SEQ, ASEQ)
-{
-}
-//WG_AUTOFUNCTION_END()
-WG_AUTOFUNCTION(foo, (void), (void))
-{
-}
-//WG_AUTOFUNCTION_END()
+#endif //WG_SCOPE_FUNCTION_HH_
