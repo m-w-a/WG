@@ -1,2 +1,3 @@
-SUBDIRS = \
-    src/CommandLine/build_autotools/ 
+include $(top_srcdir)/TopLevelDist.am
+
+SUBDIRS = 

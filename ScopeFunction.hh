@@ -1,5 +1,5 @@
-#ifndef WG_SCOPE_FUNCTION_HH_
-#define WG_SCOPE_FUNCTION_HH_
+#ifndef WG_SCOPEFUNCTION_HH_
+#define WG_SCOPEFUNCTION_HH_
 
 #include <boost/preprocessor.hpp>
 #include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
@@ -32,13 +32,13 @@
 ///@brief     (type1)(var1, assigned_val1) (type2)(var2, assigned_val2) ...
 ///@brief   2) or, the token: "(void)", to signify the absence of any additional
 ///@brief   variables.
-#define WG_AUTOFUNCTION(function_name, bound_param_seq, assigned_param_seq) \
-  WG_PP_AUTOFUNCTION( \
+#define WG_SCOPEFUNCTION(function_name, bound_param_seq, assigned_param_seq) \
+  WG_PP_SCOPEFUNCTION( \
     function_name, \
     WG_PP_MAKE_PSEQ(bound_param_seq, assigned_param_seq))
     
-#define WG_AUTOFUNCTION_END() \
-  WG_PP_AUTOFUNCTION_END()
+#define WG_SCOPEFUNCTION_END() \
+  WG_PP_SCOPEFUNCTION_END()
 
 //###########
 //Impl Macros
@@ -498,27 +498,13 @@
       WG_PP_PARAMPROXY_OBJ_NAME() \
     BOOST_PP_RPAREN() WG_PP_IDENTITY(;)
 
-#define WG_PP_AUTOFUNCTION(function_name, pseq) \
+#define WG_PP_SCOPEFUNCTION(function_name, pseq) \
   { \
     WG_PP_PSEQ_TO_PARAMPROXYDCLN(pseq) \
     WG_PP_AUTOFUNCTOR_START(function_name, pseq)
 
-#define WG_PP_AUTOFUNCTION_END() \
+#define WG_PP_SCOPEFUNCTION_END() \
   WG_PP_AUTOFUNCTOR_END() \
   }
 
-////TESTS Begin
-//
-//#define TEST_SEQ (w)(x) (y)(z) (a)(b) (c)(d) (class)(this_)
-//#define ASEQ (T1)(t, foo.bar) (T2)(q, this->foo())
-//
-//WG_AUTOFUNCTION(foo, TEST_SEQ, ASEQ)
-//{
-//}
-////WG_AUTOFUNCTION_END()
-//WG_AUTOFUNCTION(foo, (void), (void))
-//{
-//}
-////WG_AUTOFUNCTION_END()
-
-#endif //WG_SCOPE_FUNCTION_HH_
+#endif //WG_SCOPEFUNCTION_HH_

@@ -4,10 +4,7 @@
 #Preprocessor Flags.
 ####################
 
-AM_CPPFLAGS = \
-    -I$(abs_top_srcdir)/src/../ \
-    -I/opt/local/include/boost/tr1 \
-    -I/opt/local/include
+AM_CPPFLAGS = 
 
 ###############
 #Compiler Flags
@@ -20,6 +17,5 @@ AM_CXXFLAGS = \
 #Linker Flags.
 ##############
 
-AM_LDFLAGS = \
-    -L/opt/local/lib
+AM_LDFLAGS = 
 

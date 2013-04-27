@@ -1,1 +1,1 @@
-src/../Autotools/autogen.sh
+Autotools/autogen.sh
