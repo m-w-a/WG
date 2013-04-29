@@ -42,17 +42,20 @@ AC_PROG_LN_S  #To use $(LN_S)
 # Checks for typedefs, structures, and compiler characteristics.
 ################################################################
 
-AC_HEADER_STDBOOL
-AC_TYPE_INT64_T
-AC_TYPE_SIZE_T
+################################
+#configure command line options.
+################################
+
+m4_include([m4/wg.m4])
 
 ###############################
 # Checks for library functions.
 ###############################
 
+#WG/Tests/build_autotools/Makefile
 AC_CONFIG_FILES([
     Makefile
-    WG/Tests/build_autotools/Makefile
+    WG/Utils/Tests/ClassMethodDisablers/test_runner.sh
     ])
 
 AC_OUTPUT
