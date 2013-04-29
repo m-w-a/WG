@@ -1,9 +1,9 @@
-#                                               -*- Autoconf -*-
+#                         -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.64])
 AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
-AC_CONFIG_SRCDIR([src/Core])
+AC_CONFIG_SRCDIR([WG/Core])
 AC_CONFIG_HEADERS([config.h])
 
 #Options to automake
@@ -52,7 +52,7 @@ AC_TYPE_SIZE_T
 
 AC_CONFIG_FILES([
     Makefile
-    src/CommandLine/build_autotools/Makefile
+    WG/Tests/build_autotools/Makefile
     ])
 
 AC_OUTPUT
