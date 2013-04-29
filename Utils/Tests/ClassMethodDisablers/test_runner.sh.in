@@ -19,7 +19,7 @@ function runTests()
 {
   for file in "${testFiles[@]}"
   do
-    result="$(g++ -I/home/HPC/Working/Projects/cpp "${file}" >& /dev/null || echo "SUCCESS")"
+    result="$(@CXX@ @AM_CPPFLAGS@ "${file}" >& /dev/null || echo "SUCCESS")"
 
     if [ "${result}" != SUCCESS ]
     then
