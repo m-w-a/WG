@@ -54,8 +54,11 @@ m4_include([m4/wg.m4])
 
 #WG/Tests/build_autotools/Makefile
 AC_CONFIG_FILES([
-    Makefile
-    WG/Utils/Tests/ClassMethodDisablers/test_runner.sh
-    ])
+    Makefile 
+    WG/ExternalLibsPkg/build_autotools/Makefile
+    WG/Utils/build_autotools/Makefile
+    WG/Utils/build_autotools/src/Tests/build_autotools/Makefile
+    WG/Utils/build_autotools/src/Tests/build_autotools/src/ClassMethodDisablers/test_classmethoddisablers.sh
+  ])
 
 AC_OUTPUT

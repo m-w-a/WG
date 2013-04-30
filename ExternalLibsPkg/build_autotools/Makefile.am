@@ -1,6 +1,7 @@
 #Note: Don't quote "make" variables because they might eventually end up as 
 # "make" targets, and if their supposed to represent filesystem locations, then
 # the quotes will throw make off.
+
 EXTERNALLIBSNOINSTALL_LOCATION = $(srcdir)/../../ExternalLibsNoInstall/
 EXTERNALLIBSNOINSTALLSRC_LOCATION = \
     $(EXTERNALLIBSNOINSTALL_LOCATION)/build_autotools/src/
@@ -14,14 +15,16 @@ if ENABLED_GTEST
 endif
 
 all-local : \
+    $(EXTERNALLIBSNOINSTALL_LOCATION) \
     $(EXTERNALLIBS_UNPACKAGED_LOG) \
     $(GTESTRULE)
 
-$(EXTERNALLIBS_UNPACKAGED_LOG) :
-	$(MKDIR_P) "$(EXTERNALLIBSNOINSTALL_LOCATION)"
-	$(MKDIR_P) "$(EXTERNALLIBSNOINSTALLSRC_LOCATION)"
+$(EXTERNALLIBSNOINSTALL_LOCATION) :
 	chmod u+w "$(EXTERNALLIBSNOINSTALL_LOCATION)"
 	chmod u+w "$(EXTERNALLIBSNOINSTALLSRC_LOCATION)"
+    
+$(EXTERNALLIBS_UNPACKAGED_LOG) :
+	chmod u+w "$(EXTERNALLIBS_UNPACKAGED_LOG)"/..
 	$(MKDIR_P) "$(EXTERNALLIBS_UNPACKAGED_LOG)"
 
 GTEST_FOLDER = gtest-1.6.0

@@ -4,4 +4,5 @@ include $(top_srcdir)/TopLevelDist.am
 ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = \
-    ./WG/ExternalLibsPkg/build_autotools
+    ./WG/ExternalLibsPkg/build_autotools \
+    ./WG/Utils/build_autotools
