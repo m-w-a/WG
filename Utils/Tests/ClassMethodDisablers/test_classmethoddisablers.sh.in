@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 testFiles=(
   CopyAssignmentUnitTest.cc 
@@ -17,9 +17,11 @@ didAllTestsPass=true
   
 function runTests()
 {
+  pushd "@abs_srcdir@" >& /dev/null
+
   for file in "${testFiles[@]}"
   do
-    result="$(@CXX@ @AM_CPPFLAGS@ "${file}" >& /dev/null || echo "SUCCESS")"
+    result="$(@CXX@ -I@abs_top_srcdir@ "${file}" >& /dev/null || echo "SUCCESS")"
 
     if [ "${result}" != SUCCESS ]
     then
@@ -28,6 +30,8 @@ function runTests()
     fi
     
   done
+  
+  popd >& /dev/null
 }
 
 function displayResults()
