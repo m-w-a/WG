@@ -4,7 +4,10 @@
 #Preprocessor Flags.
 ####################
 
-AM_CPPFLAGS = 
+AM_CPPFLAGS = \
+    -I$(abs_top_srcdir)/ \
+    -I$(BOOST_INCLUDES_PATH)/boost/tr1 \
+    -I$(BOOST_INCLUDES_PATH)
 
 ###############
 #Compiler Flags

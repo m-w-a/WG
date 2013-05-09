@@ -12,6 +12,9 @@ AM_INIT_AUTOMAKE([-Wall -Werror -Woverride foreign subdir-objects])
 #Was recommended by autoreconf
 AC_CONFIG_MACRO_DIR([m4])
 
+#Automake: suggested as of version 1.12
+m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
+
 #Libtool support
 LT_INIT
 AC_SUBST([LIBTOOL_DEPS])
@@ -56,6 +59,7 @@ m4_include([m4/wg.m4])
 AC_CONFIG_FILES([
     Makefile 
     WG/ExternalLibsPkg/build_autotools/Makefile
+    WG/ExternalLibsNoInstall/build_autotools/Makefile
     WG/Utils/build_autotools/Makefile
     WG/Utils/build_autotools/src/Tests/build_autotools/Makefile
     WG/Utils/build_autotools/src/Tests/build_autotools/src/ClassMethodDisablers/test_classmethoddisablers.sh
