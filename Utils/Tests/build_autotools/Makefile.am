@@ -76,11 +76,9 @@ TESTS = \
 ########
 
 test_scopefunction_SOURCES = \
-    ../../../ExternalLibsNoInstall/gtest/src/gtest-all.cc \
     ../ScopeFunction/tmp.cc
 
 test_scopestdstreamredirector_SOURCES = \
-    ../../../ExternalLibsNoInstall/gtest/src/gtest-all.cc \
     ../ScopeStdStreamRedirector/TestMain.cc \
     ../ScopeStdStreamRedirector/ScopeStdStreamRedirectUnitTest.cc
 
@@ -88,13 +86,15 @@ test_scopestdstreamredirector_SOURCES = \
 #Preprocessor Flags.
 ####################
 
-AM_CPPFLAGS += $(GTEST_CPPFLAGS)
+AM_CPPFLAGS += \
+    $(GTEST_CPPFLAGS)
 
 ##############
 #Linker Flags.
 ##############
 
-AM_LDFLAGS +=
+AM_LDFLAGS += \
+    $(top_builddir)/WG/ExternalLibsNoInstall/build_autotools/libgtest.la
 
 test_scopestdstreamredirector_LDADD = \
     $(top_builddir)/WG/Utils/build_autotools/libwgutils.la

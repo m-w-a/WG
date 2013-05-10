@@ -61,6 +61,7 @@ m4_include([m4/wg.m4])
 AC_CONFIG_FILES([
     Makefile 
     WG/ExternalLibsPkg/build_autotools/Makefile
+    WG/ExternalLibsNoInstall/build_autotools/Makefile
     WG/Utils/build_autotools/Makefile
     WG/Utils/Tests/build_autotools/Makefile
     WG/Utils/Tests/ClassMethodDisablers/test_classmethoddisablers.sh
