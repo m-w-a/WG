@@ -94,8 +94,7 @@ AM_CPPFLAGS += $(GTEST_CPPFLAGS)
 #Linker Flags.
 ##############
 
-AM_LDFLAGS += \
-    -ldl
+AM_LDFLAGS +=
 
 test_scopestdstreamredirector_LDADD = \
     $(top_builddir)/WG/Utils/build_autotools/libwgutils.la
