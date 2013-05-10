@@ -1,6 +1,12 @@
 #include <WG/Utils/ScopeStdStreamRedirector.hh>
 #include <boost/iostreams/stream_buffer.hpp>
 #include <boost/iostreams/device/null.hpp>
+#include <ios>
+
+namespace WG
+{
+namespace Utils
+{
 
 std::streambuf & getNullStreambuf()
 {
@@ -10,13 +16,8 @@ std::streambuf & getNullStreambuf()
   return nullStreambuf;
 }
 
-namespace WG
-{
-namespace Utils
-{
-
 ScopeStdStreamRedirector::ScopeStdStreamRedirector(
-  std::iostream & streamToRedirect,
+  std::ios & streamToRedirect,
   std::streambuf & newStrmbuf)
 : m_StreamToRedirect(streamToRedirect),
   m_NewStrmbuf(newStrmbuf),

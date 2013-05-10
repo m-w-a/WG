@@ -15,7 +15,7 @@ TEST_WG_CLASSMETHODDISABLERS_APPNAME = test_classmethoddisablers.sh
 TEST_WG_CLASSMETHODDISABLERS_APPALTPATH = \
     $(TEST_BIN_DIR)/$(TEST_WG_CLASSMETHODDISABLERS_APPNAME)
 TEST_WG_CLASSMETHODDISABLERS_APPBUILDLOC = \
-    $(abs_builddir)/src/ClassMethodDisablers/$(TEST_WG_CLASSMETHODDISABLERS_APPNAME)
+    $(abs_builddir)/../ClassMethodDisablers/$(TEST_WG_CLASSMETHODDISABLERS_APPNAME)
 
 TEST_WG_SCOPEFUNCTION_APPNAME = test_scopefunction$(EXEEXT)
 TEST_WG_SCOPEFUNCTION_APPALTPATH = \
@@ -32,8 +32,9 @@ TEST_WG_SCOPESTDSTRMREDIRECTOR_APPBUILDLOC = \
 #Custom init.
 all-local : \
     $(TEST_BIN_DIR) \
-    $(TEST_WG_SCOPEFUNCTION_APPALTPATH) \
-    $(TEST_WG_CLASSMETHODDISABLERS_APPALTPATH)
+    $(TEST_WG_CLASSMETHODDISABLERS_APPALTPATH) \
+    $(TEST_WG_SCOPESTDSTRMREDIRECTOR_APPALTPATH) \
+    $(TEST_WG_SCOPEFUNCTION_APPALTPATH)
 
 $(TEST_BIN_DIR) :
 	$(MKDIR_P) $(TEST_BIN_DIR)
@@ -75,11 +76,13 @@ TESTS = \
 ########
 
 test_scopefunction_SOURCES = \
-    ./src/ScopeFunction/tmp.cc
+    ../../../ExternalLibsNoInstall/gtest/src/gtest-all.cc \
+    ../ScopeFunction/tmp.cc
 
 test_scopestdstreamredirector_SOURCES = \
-    $(top_srcdir)/WG/ExternalLibsNoInstall/build_autotools/src/gtest/src/gtest-all.cc \
-    ./src/ScopeStdStreamRedirector/ScopeStdStreamRedirectorUnitTest.cc
+    ../../../ExternalLibsNoInstall/gtest/src/gtest-all.cc \
+    ../ScopeStdStreamRedirector/TestMain.cc \
+    ../ScopeStdStreamRedirector/ScopeStdStreamRedirectUnitTest.cc
 
 ####################
 #Preprocessor Flags.
@@ -93,3 +96,6 @@ AM_CPPFLAGS += $(GTEST_CPPFLAGS)
 
 AM_LDFLAGS += \
     -ldl
+
+test_scopestdstreamredirector_LDADD = \
+    $(top_builddir)/WG/Utils/build_autotools/libwgutils.la

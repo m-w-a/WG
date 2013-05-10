@@ -2,15 +2,18 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.64])
-AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
-AC_CONFIG_SRCDIR([WG/Core])
+AC_INIT([wg], [1.0], [BUG-REPORT-ADDRESS])
+AC_CONFIG_SRCDIR([WG])
 AC_CONFIG_HEADERS([config.h])
+
+#Redirect misc. auto-generated build scripts here.
+AC_CONFIG_AUX_DIR([build-aux])
+
+#Redirect auto-generated m4 scripts here.
+AC_CONFIG_MACRO_DIR([build-m4])
 
 #Options to automake
 AM_INIT_AUTOMAKE([-Wall -Werror -Woverride foreign subdir-objects])
-
-#Was recommended by autoreconf
-AC_CONFIG_MACRO_DIR([m4])
 
 #Automake: suggested as of version 1.12
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
@@ -55,14 +58,12 @@ m4_include([m4/wg.m4])
 # Checks for library functions.
 ###############################
 
-#WG/Tests/build_autotools/Makefile
 AC_CONFIG_FILES([
     Makefile 
     WG/ExternalLibsPkg/build_autotools/Makefile
-    WG/ExternalLibsNoInstall/build_autotools/Makefile
     WG/Utils/build_autotools/Makefile
-    WG/Utils/build_autotools/src/Tests/build_autotools/Makefile
-    WG/Utils/build_autotools/src/Tests/build_autotools/src/ClassMethodDisablers/test_classmethoddisablers.sh
-  ])
+    WG/Utils/Tests/build_autotools/Makefile
+    WG/Utils/Tests/ClassMethodDisablers/test_classmethoddisablers.sh
+])
 
 AC_OUTPUT

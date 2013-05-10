@@ -2,8 +2,6 @@
 #define WG_UTILS_SCOPESTDSTREAMREDIRECTOR_HH_
 
 #include <iosfwd>
-#include <boost/scoped_ptr.hpp>
-#include <memory.hpp>
 #include <WG/Utils/ClassMethodDisablers.hh>
 
 namespace WG
@@ -17,7 +15,7 @@ class ScopeStdStreamRedirector
 {
 public:
   ScopeStdStreamRedirector(
-    std::iostream & streamToRedirect,
+    std::ios & streamToRedirect,
     std::streambuf & newStrmbuf);
   ~ScopeStdStreamRedirector();
 
@@ -27,7 +25,7 @@ public:
   WG_DISABLE_HEAP_ALLOCATION();
   
 private:
-  std::iostream & m_StreamToRedirect;
+  std::ios & m_StreamToRedirect;
   std::streambuf & m_NewStrmbuf;
   std::streambuf * const m_pOriginalStreambuf;
 };
