@@ -23,7 +23,7 @@ TEST_WG_SCOPEFUNCTION_APPALTPATH = \
 TEST_WG_SCOPEFUNCTION_APPBUILDLOC = \
     $(abs_builddir)/$(TEST_WG_SCOPEFUNCTION_APPNAME)
 
-TEST_WG_SCOPESTDSTRMREDIRECTOR_APPNAME = test_scopestdstreamredirector$(EXEEXT)
+TEST_WG_SCOPESTDSTRMREDIRECTOR_APPNAME = test_scopedstdstreamredirector$(EXEEXT)
 TEST_WG_SCOPESTDSTRMREDIRECTOR_APPALTPATH = \
     $(TEST_BIN_DIR)/$(TEST_WG_SCOPESTDSTRMREDIRECTOR_APPNAME)
 TEST_WG_SCOPESTDSTRMREDIRECTOR_APPBUILDLOC = \
@@ -78,7 +78,7 @@ TESTS = \
 test_scopefunction_SOURCES = \
     ../ScopeFunction/tmp.cc
 
-test_scopestdstreamredirector_SOURCES = \
+test_scopedstdstreamredirector_SOURCES = \
     ../ScopedStdStreamRedirector/TestMain.cc \
     ../ScopedStdStreamRedirector/ScopedStdStreamRedirectUnitTest.cc
 
@@ -96,5 +96,6 @@ AM_CPPFLAGS += \
 AM_LDFLAGS += \
     $(top_builddir)/WG/ExternalLibsNoInstall/build_autotools/libgtest.la
 
-test_scopestdstreamredirector_LDADD = \
+test_scopedstdstreamredirector_LDADD = \
+	$(AM_LDFLAGS) \
     $(top_builddir)/WG/Utils/build_autotools/libwgutils.la
