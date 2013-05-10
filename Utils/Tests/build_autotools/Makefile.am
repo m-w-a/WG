@@ -7,7 +7,7 @@ include $(top_srcdir)/WG/ExternalLibsNoInstall/build_autotools/GTestFlags.am
 
 noinst_PROGRAMS = \
     test_scopefunction \
-    test_scopestdstreamredirector
+    test_scopedstdstreamredirector
     
 TEST_BIN_DIR = $(abs_top_builddir)/bin/
 
@@ -70,7 +70,7 @@ TESTS = \
     $(TEST_WG_CLASSMETHODDISABLERS_APPNAME) \
     $(TEST_WG_SCOPEFUNCTION_APPALTPATH) \
     $(TEST_WG_SCOPESTDSTRMREDIRECTOR_APPNAME)
-    
+
 ########
 #Sources
 ########
@@ -79,8 +79,8 @@ test_scopefunction_SOURCES = \
     ../ScopeFunction/tmp.cc
 
 test_scopestdstreamredirector_SOURCES = \
-    ../ScopeStdStreamRedirector/TestMain.cc \
-    ../ScopeStdStreamRedirector/ScopeStdStreamRedirectUnitTest.cc
+    ../ScopedStdStreamRedirector/TestMain.cc \
+    ../ScopedStdStreamRedirector/ScopedStdStreamRedirectUnitTest.cc
 
 ####################
 #Preprocessor Flags.

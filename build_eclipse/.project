@@ -82,7 +82,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1367443041383</id>
+			<id>1368211525761</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -91,21 +91,21 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1367443041397</id>
+			<id>1368211525769</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-name-matches-true-false-build_eclipse</arguments>
+				<arguments>1.0-name-matches-false-false-gtest</arguments>
 			</matcher>
 		</filter>
 		<filter>
-			<id>1367443041431</id>
+			<id>1368211525776</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-name-matches-true-false-build_eclipse</arguments>
+				<arguments>1.0-name-matches-false-false-builds</arguments>
 			</matcher>
 		</filter>
 	</filteredResources>

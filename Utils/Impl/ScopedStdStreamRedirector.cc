@@ -1,4 +1,4 @@
-#include <WG/Utils/ScopeStdStreamRedirector.hh>
+#include <WG/Utils/ScopedStdStreamRedirector.hh>
 #include <boost/iostreams/stream_buffer.hpp>
 #include <boost/iostreams/device/null.hpp>
 #include <ios>
@@ -16,7 +16,7 @@ std::streambuf & getNullStreambuf()
   return nullStreambuf;
 }
 
-ScopeStdStreamRedirector::ScopeStdStreamRedirector(
+ScopedStdStreamRedirector::ScopedStdStreamRedirector(
   std::ios & streamToRedirect,
   std::streambuf & newStrmbuf)
 : m_StreamToRedirect(streamToRedirect),
@@ -25,7 +25,7 @@ ScopeStdStreamRedirector::ScopeStdStreamRedirector(
 {
 }
 
-ScopeStdStreamRedirector::~ScopeStdStreamRedirector()
+ScopedStdStreamRedirector::~ScopedStdStreamRedirector()
 {
   m_StreamToRedirect.rdbuf(m_pOriginalStreambuf);
 }

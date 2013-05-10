@@ -24,10 +24,10 @@ installheadersdir = $(includedir)/WG/Utils/
 installheaders_HEADERS = \
     ../ClassMethodDisablers.hh \
     ../ScopeFunction.hh \
-    ../ScopeStdStreamRedirector.hh
+    ../ScopedStdStreamRedirector.hh
 
 libwgutils_la_SOURCES = \
-    ../Impl/ScopeStdStreamRedirector.cc
+    ../Impl/ScopedStdStreamRedirector.cc
 
 ####################
 #Preprocessor Flags.
