@@ -1,5 +1,5 @@
-#ifndef WG_SCOPEFUNCTION_HH_
-#define WG_SCOPEFUNCTION_HH_
+#ifndef WG_AUTOFUNCTION_HH_
+#define WG_AUTOFUNCTION_HH_
 
 #include <boost/preprocessor.hpp>
 #include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
@@ -32,13 +32,13 @@
 ///@brief     (type1)(var1, assigned_val1) (type2)(var2, assigned_val2) ...
 ///@brief   2) or, the token: "(void)", to signify the absence of any additional
 ///@brief   variables.
-#define WG_SCOPEFUNCTION(function_name, bound_param_seq, assigned_param_seq) \
-  WG_PP_SCOPEFUNCTION( \
+#define WG_AUTOFUNCTION(function_name, bound_param_seq, assigned_param_seq) \
+  WG_PP_AUTOFUNCTION( \
     function_name, \
     WG_PP_MAKE_PSEQ(bound_param_seq, assigned_param_seq))
     
-#define WG_SCOPEFUNCTION_END() \
-  WG_PP_SCOPEFUNCTION_END()
+#define WG_AUTOFUNCTION_END() \
+  WG_PP_AUTOFUNCTION_END()
 
 //###########
 //Impl Macros
@@ -361,14 +361,14 @@
 //    BOOST_PP_NOT(WG_PP_BOUND_PSEQ_IS_VOID(bp_seq)), \
 //    BOOST_PP_NOT(WG_PP_IS_EVEN(BOOST_PP_SEQ_SIZE(bp_seq)))), \
 //  BOOST_PP_ASSERT_MSG( \
-//    0, "The second parameter to WG_SCOPEFUNCTION is malformed.")) \
+//    0, "The second parameter to WG_AUTOFUNCTION is malformed.")) \
 //\
 //BOOST_PP_EXPR_IF( \
 //  BOOST_PP_AND( \
 //    BOOST_PP_NOT(WG_PP_ASSIGNED_PSEQ_IS_VOID(ap_alt_seq)), \
 //    BOOST_PP_NOT(WG_PP_IS_MOD3_R0(BOOST_PP_SEQ_SIZE(ap_alt_seq)))), \
 //  BOOST_PP_ASSERT_MSG( \
-//    0, "The third parameter to WG_SCOPEFUNCTION is malformed.")) \
+//    0, "The third parameter to WG_AUTOFUNCTION is malformed.")) \
 //\
 
 //PSEQ:
@@ -498,13 +498,13 @@
       WG_PP_PARAMPROXY_OBJ_NAME() \
     BOOST_PP_RPAREN() WG_PP_IDENTITY(;)
 
-#define WG_PP_SCOPEFUNCTION(function_name, pseq) \
+#define WG_PP_AUTOFUNCTION(function_name, pseq) \
   { \
     WG_PP_PSEQ_TO_PARAMPROXYDCLN(pseq) \
     WG_PP_AUTOFUNCTOR_START(function_name, pseq)
 
-#define WG_PP_SCOPEFUNCTION_END() \
+#define WG_PP_AUTOFUNCTION_END() \
   WG_PP_AUTOFUNCTOR_END() \
   }
 
-#endif //WG_SCOPEFUNCTION_HH_
+#endif //WG_AUTOFUNCTION_HH_

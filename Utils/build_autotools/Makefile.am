@@ -22,7 +22,7 @@ lib_LTLIBRARIES = \
 installheadersdir = $(includedir)/WG/Utils/
 installheaders_HEADERS = \
     ../ClassMethodDisablers.hh \
-    ../ScopeFunction.hh \
+    ../AutoFunction.hh \
     ../ScopedStdStreamRedirector.hh
 
 libwgutils_la_SOURCES = \
