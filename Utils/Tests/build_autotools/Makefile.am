@@ -93,9 +93,7 @@ AM_CPPFLAGS += \
 #Linker Flags.
 ##############
 
-AM_LDFLAGS += \
-    $(top_builddir)/WG/ExternalLibsNoInstall/build_autotools/libgtest.la
-
-test_scopedstdstreamredirector_LDADD = \
-	$(AM_LDFLAGS) \
+LDADD = \
+    $(top_builddir)/WG/ExternalLibsNoInstall/build_autotools/libgtest.la \
     $(top_builddir)/WG/Utils/build_autotools/libwgutils.la
+    

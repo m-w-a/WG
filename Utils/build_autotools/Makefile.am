@@ -1,4 +1,3 @@
-include $(top_srcdir)/TopLevelDist.am
 include $(top_srcdir)/StandardCppFlags.am
 
 if ENABLED_GTEST
