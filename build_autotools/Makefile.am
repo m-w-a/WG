@@ -15,6 +15,9 @@ ACLOCAL_AMFLAGS = -I build-m4
 #Must appear only in the top-leve Makefile.am
 DISTCHECK_CONFIGURE_FLAGS=$(SELECTED_CONFIG_FLAGS)
 
+EXTRA_DIST = \
+    autogen.sh
+
 SUBDIRS = \
     WG/ExternalLibsPkg/build_autotools \
     WG/ExternalLibsNoInstall/build_autotools \

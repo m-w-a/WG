@@ -5,3 +5,11 @@ endif
 SUBDIRS = \
     . \
     $(TESTDIR)
+
+########
+#Sources
+########
+
+installheadersdir = $(includedir)/WG/GTest
+installheaders_HEADERS = \
+    ../Exceptions.hh

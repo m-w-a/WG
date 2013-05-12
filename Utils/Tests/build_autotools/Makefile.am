@@ -40,11 +40,14 @@ $(TEST_BIN_DIR) :
 	$(MKDIR_P) $(TEST_BIN_DIR)
     
 $(TEST_WG_CLASSMETHODDISABLERS_APPALTPATH) : $(TEST_WG_CLASSMETHODDISABLERS_APPBUILDLOC)
+	( cd ./$(build_dir); \
+      cp -f $(TEST_WG_CLASSMETHODDISABLERS_APPBUILDLOC) ./; \
+      chmod u+x $(TEST_WG_CLASSMETHODDISABLERS_APPNAME); )
 	( cd $(TEST_BIN_DIR); \
       $(LN_S) -f \
-      $(TEST_WG_CLASSMETHODDISABLERS_APPBUILDLOC) \
-      $(TEST_WG_CLASSMETHODDISABLERS_APPNAME); )
-    
+          $(abs_builddir)/$(TEST_WG_CLASSMETHODDISABLERS_APPNAME) \
+          $(TEST_WG_CLASSMETHODDISABLERS_APPNAME); )
+
 $(TEST_WG_AUTOFUNCTION_APPALTPATH) : $(TEST_WG_AUTOFUNCTION_APPBUILDLOC)
 	( cd $(TEST_BIN_DIR); \
       $(LN_S) -f \
@@ -60,6 +63,7 @@ $(TEST_WG_SCOPESTDSTRMREDIRECTOR_APPALTPATH) : $(TEST_WG_SCOPESTDSTRMREDIRECTOR_
 #Custom finalize.
 clean-local:
 	rm -rf $(TEST_BIN_DIR)/$(TEST_WG_CLASSMETHODDISABLERS_APPNAME)
+	rm -rf $(abs_builddir)/$(TEST_WG_CLASSMETHODDISABLERS_APPNAME)
 	rm -rf $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTION_APPNAME)
 	rm -rf $(TEST_BIN_DIR)/$(TEST_WG_SCOPESTDSTRMREDIRECTOR_APPNAME)
 
@@ -68,7 +72,7 @@ clean-local:
 ##############################
 TESTS = \
     $(TEST_WG_CLASSMETHODDISABLERS_APPNAME) \
-    $(TEST_WG_AUTOFUNCTION_APPALTPATH) \
+    $(TEST_WG_AUTOFUNCTION_APPNAME) \
     $(TEST_WG_SCOPESTDSTRMREDIRECTOR_APPNAME)
 
 ########
@@ -76,11 +80,26 @@ TESTS = \
 ########
 
 test_autofunction_SOURCES = \
-    ../AutoFunction/tmp.cc
+    ../AutoFunction/TestMain.cc \
+    ../AutoFunction/AutoFunctionUnitTest.cc
 
 test_scopedstdstreamredirector_SOURCES = \
     ../ScopedStdStreamRedirector/TestMain.cc \
     ../ScopedStdStreamRedirector/ScopedStdStreamRedirectUnitTest.cc
+
+EXTRA_DIST = \
+    ../ClassMethodDisablers/CopyAssignmentUnitTest.cc \
+    ../ClassMethodDisablers/CopyCtorUnitTest.cc \
+    ../ClassMethodDisablers/DefaultCtorUnitTest.cc \
+    ../ClassMethodDisablers/DefaultCtorUnitTest.cc \
+    ../ClassMethodDisablers/DeleteArrayUnitTest.cc \
+    ../ClassMethodDisablers/DeleteNoThrowUnitTest.cc \
+    ../ClassMethodDisablers/DeleteUnitTest.cc \
+    ../ClassMethodDisablers/NewArrayNoThrowUnitTest.cc \
+    ../ClassMethodDisablers/NewArrayUnitTest.cc \
+    ../ClassMethodDisablers/NewNoThrowUnitTest.cc \
+    ../ClassMethodDisablers/NewUnitTest.cc \
+    ../AutoFunction/AutoFunctionPPTest.cc
 
 ####################
 #Preprocessor Flags.

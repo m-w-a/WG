@@ -37,12 +37,14 @@ clean-local:
 ##############################
 #Automatically executed tests.
 ##############################
+
 TESTS = \
     $(TEST_WG_GTEST_APPNAME)
 
 test_gtestutils_SOURCES = \
 	../TestMain.cc \
 	../RedirectEventListener.cc \
+	../RedirectEventListener.hh \
     ../ExceptionsUnitTest.cc
 
 ####################
