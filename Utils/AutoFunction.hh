@@ -37,8 +37,7 @@
     function_name, \
     WG_PP_MAKE_PSEQ(bound_param_seq, assigned_param_seq))
     
-#define WG_AUTOFUNCTION_END() \
-  WG_PP_AUTOFUNCTION_END()
+#define WG_AUTOFUNCTION_END WG_PP_AUTOFUNCTION_END()
 
 //###########
 //Impl Macros
@@ -107,25 +106,33 @@
       tuple_seq))
 
 #define WG_PP_SEQ_IS_NOT_NIL_IMPL(seq) WG_PP_TRUE
+// Nil sequences are defined to be empty tokens.
 #define WG_PP_SEQ_IS_NOT_NIL(seq) \
   WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
     BOOST_PP_EXPAND(WG_PP_SEQ_IS_NOT_NIL_IMPL seq))
 
 #define WG_PP_SEQ_ENUM_0(seq)
 #define WG_PP_SEQ_ENUM_1(seq) BOOST_PP_SEQ_ENUM(seq)
+// Handles empty sequences.
 #define WG_PP_SEQ_ENUM(seq) \
   BOOST_PP_EXPAND( \
     BOOST_PP_CAT(WG_PP_SEQ_ENUM_, WG_PP_SEQ_IS_NOT_NIL(seq)))(seq)
 
-#define WG_PP_SEQ_REPLACE_0(seq, indx, elem)
-#define WG_PP_SEQ_REPLACE_1(seq, indx, elem) \
-  BOOST_PP_SEQ_REPLACE(seq, indx, elem)
+#define WG_PP_SEQ_REPLACE_00(seq, indx, elem)
+#define WG_PP_SEQ_REPLACE_01(seq, indx, elem)
+#define WG_PP_SEQ_REPLACE_10(seq, indx, elem) seq
+#define WG_PP_SEQ_REPLACE_11(seq, indx, elem) \
+  BOOST_PP_SEQ_REPLACE(seq, BOOST_PP_SEQ_ELEM(0,indx), elem)
+// Handles empty sequences.
+// Handles empty token as indx.
 #define WG_PP_SEQ_REPLACE(seq, indx, elem) \
   BOOST_PP_EXPAND( \
     BOOST_PP_CAT( \
-      WG_PP_SEQ_REPLACE_, \
-      WG_PP_SEQ_IS_NOT_NIL(seq)) \
-    (seq, indx, elem))
+      BOOST_PP_CAT( \
+        WG_PP_SEQ_REPLACE_, \
+        WG_PP_SEQ_IS_NOT_NIL(seq)), \
+      WG_PP_SEQ_IS_NOT_NIL(indx))) \
+    (seq, indx, elem)
 
 #define WG_PP_IS_SEQ_COUNT_EVEN(seq) \
   BOOST_PP_NOT(BOOST_PP_MOD(BOOST_PP_SEQ_SIZE(seq), 2))
@@ -320,8 +327,7 @@
       (bp_type_seq, \
       bp_obj_seq, \
       BOOST_PP_SEQ_SIZE(bp_type_seq), \
-      BOOST_PP_SEQ_TO_LIST( \
-        BOOST_PP_SEQ_FOR_EACH_I(WG_PP_MARK_THISU_INDX, ~, bp_obj_seq)), \
+      BOOST_PP_SEQ_FOR_EACH_I(WG_PP_MARK_THISU_INDX, ~, bp_obj_seq), \
       ap_type_seq, \
       ap_obj_seq, \
       ap_value_seq, \
@@ -370,12 +376,12 @@
 //  BOOST_PP_ASSERT_MSG( \
 //    0, "The third parameter to WG_AUTOFUNCTION is malformed.")) \
 //\
-
+//
 //PSEQ:
 //  is a PP_ARRAY of following types:
 //  (8, (PP_SEQ, PP_SEQ, INT, BPSEQ_THISU_MARKER, PP_SEQ, PP_SEQ, PP_SEQ, INT))
 //  BPSEQ_THISU_MARKER:
-//    is a PP_LIST of size at most 1.
+//    is a PP_SEQ of size at most 1.
 #define WG_PP_MAKE_PSEQ(bp_seq, ap_alt_seq) \
   WG_PP_MAKE_PSEQ_IMPL1( \
     BOOST_PP_EXPR_IF( \
@@ -417,13 +423,10 @@
 #define WG_PP_PARAMPROXY_OBJ_INITLIST( \
   bound_objs_seq, assigned_values_seq, thisu_marker) \
     WG_PP_SEQ_ENUM( \
-      BOOST_PP_IF( \
-        BOOST_PP_NOT(BOOST_PP_LIST_IS_NIL(thisu_marker)), \
-        WG_PP_SEQ_REPLACE( \
-          bound_objs_seq, \
-          BOOST_PP_LIST_FIRST(thisu_marker), \
-          this), \
-        bound_objs_seq) \
+      WG_PP_SEQ_REPLACE( \
+        bound_objs_seq, \
+        thisu_marker, \
+        this) \
       assigned_values_seq)
 
 #define WG_PP_PARAMPROXY_TYPE_NAME() \
