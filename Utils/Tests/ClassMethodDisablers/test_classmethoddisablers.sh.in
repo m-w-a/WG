@@ -1,0 +1,50 @@
+#!/bin/bash
+
+testFiles=(
+  CopyAssignmentUnitTest.cc 
+  CopyCtorUnitTest.cc 
+  DefaultCtorUnitTest.cc 
+  DeleteArrayNoThrowUnitTest.cc 
+  DeleteArrayUnitTest.cc 
+  DeleteNoThrowUnitTest.cc 
+  DeleteUnitTest.cc 
+  NewArrayNoThrowUnitTest.cc
+  NewArrayUnitTest.cc 
+  NewNoThrowUnitTest.cc 
+  NewUnitTest.cc)
+
+didAllTestsPass=true
+  
+function runTests()
+{
+  pushd "@abs_srcdir@" >& /dev/null
+
+  for file in "${testFiles[@]}"
+  do
+    result="$(@CXX@ -I@abs_top_srcdir@ "${file}" >& /dev/null || echo "SUCCESS")"
+
+    if [ "${result}" != SUCCESS ]
+    then
+      echo "${file} ... test failed."
+      didAllTestsPass=false
+    fi
+    
+  done
+  
+  popd >& /dev/null
+}
+
+function displayResults()
+{
+  if [ "${didAllTestsPass}" = true ]
+  then
+    echo "ClassMethodDisablers ... all unit tests passed."
+    exit 0
+  else
+    echo "ClassMethodDisablers ... some unit tests failed."
+    exit -1;
+  fi
+}
+
+runTests
+displayResults
