@@ -435,16 +435,16 @@
   WG_PP_FORMAT_NAME(param_proxy)
 
 #define WG_PP_PSEQ_TO_PARAMPROXYDCLN(pseq) \
-    typedef boost::tuple< \
-      WG_PP_PARAMPROXY_TYPE_TEMPLATEPARAMLIST(pseq) \
-    > WG_PP_PARAMPROXY_TYPE_NAME() WG_PP_IDENTITY(;) \
-    WG_PP_PARAMPROXY_TYPE_NAME() WG_PP_PARAMPROXY_OBJ_NAME() \
-      BOOST_PP_LPAREN() \
-        WG_PP_PARAMPROXY_OBJ_INITLIST( \
-          WG_PP_PSEQ_BOUNDOBJECTS(pseq), \
-          WG_INERNAL_PSEQ_ASSIGNEDVALUES(pseq), \
-          WG_PP_PSEQ_BOUNDOBJECTS_THISU_MARKER(pseq)) \
-      BOOST_PP_RPAREN() WG_PP_IDENTITY(;)
+  typedef boost::tuple< \
+    WG_PP_PARAMPROXY_TYPE_TEMPLATEPARAMLIST(pseq) \
+  > WG_PP_PARAMPROXY_TYPE_NAME() WG_PP_IDENTITY(;) \
+  WG_PP_PARAMPROXY_TYPE_NAME() const & WG_PP_PARAMPROXY_OBJ_NAME() = \
+    WG_PP_PARAMPROXY_TYPE_NAME()BOOST_PP_LPAREN() \
+      WG_PP_PARAMPROXY_OBJ_INITLIST( \
+        WG_PP_PSEQ_BOUNDOBJECTS(pseq), \
+        WG_INERNAL_PSEQ_ASSIGNEDVALUES(pseq), \
+        WG_PP_PSEQ_BOUNDOBJECTS_THISU_MARKER(pseq)) \
+    BOOST_PP_RPAREN() WG_PP_IDENTITY(;)
     
 // BOOST_PP_ENUM functor.
 #define WG_PP_PARAMPROXY_OBJ_ELEMACCESS(z, n, obj_name) \
@@ -488,7 +488,7 @@
 #define WG_PP_AUTOFUNCTOR_START(function_name, pseq) \
   struct WG_PP_IDENTITY(function_name) \
   { \
-    void operator()(WG_PP_PARAMPROXY_TYPE_NAME() & param_proxy) \
+    void operator()(WG_PP_PARAMPROXY_TYPE_NAME() const & param_proxy) \
     { \
       static_cast<void>(param_proxy); \
       this->call(WG_PP_PARAMPROXY_OBJ_ELEMACCESSLIST(pseq, param_proxy)); \
@@ -496,7 +496,8 @@
     void WG_PP_IDENTITY(call) WG_PP_CALL_PARAMLIST(pseq)
     
 #define WG_PP_AUTOFUNCTOR_END() \
-  } WG_PP_FORMAT_NAME(auto_functor)() \
+  } WG_PP_FORMAT_NAME(auto_functor); \
+  WG_PP_FORMAT_NAME(auto_functor) \
     BOOST_PP_LPAREN() \
       WG_PP_PARAMPROXY_OBJ_NAME() \
     BOOST_PP_RPAREN() WG_PP_IDENTITY(;)
