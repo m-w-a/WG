@@ -47,6 +47,8 @@
 //Basic Tools.
 //------------
   
+#define WG_PP_IS_NIL_TOKEN(x) BOOST_PP_LiST_IS_NIL(x)
+  
 #define WG_PP_IDENTITY(x) x
 #define WG_PP_IDENTITY_1(x) WG_PP_IDENTITY(x)
 #define WG_PP_IDENTITY_2(x, y) x y
