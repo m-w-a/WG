@@ -84,9 +84,10 @@
       BOOST_PP_CAT(WG_PP_CAPTUREDTYPE_,capturedtype)))
 
 #define WG_PP_CAPTUREDTYPE_VALUE(capturedtype) \
-  BOOST_PP_EXPRIF( \
+  BOOST_PP_IF( \
     WG_PP_IS_CAPTUREDTYPE_LOCAL(capturedtype), \
-    WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype))
+    WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype), \
+    capturedtype)
     
 #define WG_PP_CAPTUREDTYPE_ADDCONST(capturedtype) \
   BOOST_PP_IIF( \
@@ -546,7 +547,7 @@
         WG_PP_TOKENS_STARTS_WITH_THISU( \
           BOOST_PP_SEQ_ELEM(indx, obj_seq)), \
         WG_PP_CAPTUREDTYPE_ADDCONST(elem), \
-        elem) \
+        WG_PP_CAPTUREDTYPE_VALUE(elem)) \
       BOOST_PP_SEQ_ELEM(indx, obj_seq) \
       BOOST_PP_COMMA_IF( \
         BOOST_PP_NOT(WG_PP_IS_SEQ_INDEX_LAST( \

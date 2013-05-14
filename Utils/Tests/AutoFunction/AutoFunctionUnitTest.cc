@@ -63,24 +63,6 @@ TEST(wg_utils_autofunction, bound_params)
       EXPECT_EQ(force, 20);
     }
 
-    //test_okWhenKeywordLocalBound
-    {
-//      struct SomeLocalClass
-//      {
-//        int value;
-//      } localObj = {0};
-//
-//      WG_AUTOFUNCTION(
-//        useLocalKeyword,
-//        (local(SomeLocalClass &))(localObj),
-//        (void))
-//      {
-//        localObj.value = 10;
-//      }WG_AUTOFUNCTION_END;
-//
-//      EXPECT_EQ(localObj.value, 10);
-    }
-
     //test_okWhenKeywordThisUBound
     {
       struct SomeLocalClass
@@ -148,6 +130,28 @@ TEST(wg_utils_autofunction, assigned_params)
 
       EXPECT_EQ(cylinder.radius * cylinder.height, cylinder.volume);
     }
+  }
+  WG_GTEST_CATCH
+}
+
+TEST(wg_utils_autofunction, local_keyword)
+{
+  try
+  {
+    struct SomeLocalClass
+    {
+      int value;
+    } localObj = {0};
+
+    WG_AUTOFUNCTION(
+      useLocalKeyword,
+      (local(SomeLocalClass &))(localObj),
+      (void))
+    {
+      localObj.value = 10;
+    }WG_AUTOFUNCTION_END;
+
+    EXPECT_EQ(localObj.value, 10);
   }
   WG_GTEST_CATCH
 }
