@@ -62,6 +62,46 @@ TEST(wg_utils_autofunction, bound_params)
 
       EXPECT_EQ(force, 20);
     }
+
+    //test_okWhenKeywordLocalBound
+    {
+//      struct SomeLocalClass
+//      {
+//        int value;
+//      } localObj = {0};
+//
+//      WG_AUTOFUNCTION(
+//        useLocalKeyword,
+//        (local(SomeLocalClass &))(localObj),
+//        (void))
+//      {
+//        localObj.value = 10;
+//      }WG_AUTOFUNCTION_END;
+//
+//      EXPECT_EQ(localObj.value, 10);
+    }
+
+    //test_okWhenKeywordThisUBound
+    {
+      struct SomeLocalClass
+      {
+        bool didBindThis;
+
+        SomeLocalClass()
+        : didBindThis(false)
+        {
+          WG_AUTOFUNCTION(
+            bindThisU,
+            (local(SomeLocalClass * const))(this_),
+            (void))
+          {
+            this_->didBindThis = true;
+          }WG_AUTOFUNCTION_END;
+        }
+      } someLocalObj;
+
+      EXPECT_TRUE(someLocalObj.didBindThis);
+    }
   }
   WG_GTEST_CATCH
 }

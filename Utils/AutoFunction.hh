@@ -5,7 +5,6 @@
 #include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
-#include <boost/tuple/tuple.hpp>
 
 //###########
 //Public APIs
@@ -74,10 +73,32 @@
     tokens, \
     WG_PP_TOKEN_MATCHES_)
 
-#define WG_PP_ADDCONST(sometype) \
-  boost::add_const<WG_PP_IDENTITY(sometype)>::type
-#define WG_PP_ADDREFERENCE(sometype) \
-  boost::add_reference<WG_PP_IDENTITY(sometype)>::type
+#define WG_PP_CAPTUREDTYPE_local(capturedtype) WG_PP_TRUE
+#define WG_PP_CAPTUREDTYPE_VALUE_local(value) value
+#define WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype) \
+  BOOST_PP_EXPAND( \
+    BOOST_PP_CAT(WG_PP_CAPTUREDTYPE_VALUE_, capturedtype))
+#define WG_PP_IS_CAPTUREDTYPE_LOCAL(capturedtype) \
+  WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
+    BOOST_PP_EXPAND( \
+      BOOST_PP_CAT(WG_PP_CAPTUREDTYPE_,capturedtype)))
+
+#define WG_PP_CAPTUREDTYPE_VALUE(capturedtype) \
+  BOOST_PP_EXPRIF( \
+    WG_PP_IS_CAPTUREDTYPE_LOCAL(capturedtype), \
+    WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype))
+    
+#define WG_PP_CAPTUREDTYPE_ADDCONST(capturedtype) \
+  BOOST_PP_IIF( \
+    WG_PP_IS_CAPTUREDTYPE_LOCAL(capturedtype), \
+    WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype), \
+    boost::add_const<WG_PP_IDENTITY(capturedtype)>::type)
+
+#define WG_PP_CAPTUREDTYPE_ADDREFERENCE(capturedtype) \
+  BOOST_PP_IIF( \
+    WG_PP_IS_CAPTUREDTYPE_LOCAL(capturedtype), \
+    WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype), \
+    boost::add_reference<WG_PP_IDENTITY(capturedtype)>::type)
   
 #define WG_PP_IS_ODD(num) BOOST_PP_MOD(num,2)
 #define WG_PP_IS_EVEN(num) \
@@ -323,17 +344,26 @@
     WG_PP_TOKENS_STARTS_WITH_THISU(elem), \
     (indx))
 
+#define WG_PP_MAKE_PSEQ_IMPL3(wiparray) \
+  BOOST_PP_ARRAY_PUSH_BACK( \
+    wiparray, \
+    BOOST_PP_ADD( \
+      WG_PP_PSEQ_BOUNDXXX_SIZE(wiparray), \
+      WG_PP_PSEQ_ASSIGNEDXXX_SIZE(wiparray)))
+    
 #define WG_PP_MAKE_PSEQ_IMPL2( \
   bp_type_seq, bp_obj_seq, ap_type_seq, ap_obj_seq, ap_value_seq) \
-    (8, \
-      (bp_type_seq, \
-      bp_obj_seq, \
-      BOOST_PP_SEQ_SIZE(bp_type_seq), \
-      BOOST_PP_SEQ_FOR_EACH_I(WG_PP_MARK_THISU_INDX, ~, bp_obj_seq), \
-      ap_type_seq, \
-      ap_obj_seq, \
-      ap_value_seq, \
-      BOOST_PP_SEQ_SIZE(ap_type_seq)))
+    WG_PP_MAKE_PSEQ_IMPL3( \
+      (8, \
+        (bp_type_seq, \
+        bp_obj_seq, \
+        BOOST_PP_SEQ_SIZE(bp_type_seq), \
+        BOOST_PP_SEQ_FOR_EACH_I(WG_PP_MARK_THISU_INDX, ~, bp_obj_seq), \
+        ap_type_seq, \
+        ap_obj_seq, \
+        ap_value_seq, \
+        BOOST_PP_SEQ_SIZE(ap_type_seq))) \
+    )
 
 #define WG_PP_MAKE_PSEQ_IMPL1(bp_seq, ap_seq) \
   WG_PP_MAKE_PSEQ_IMPL2( \
@@ -381,7 +411,7 @@
 //
 //PSEQ:
 //  is a PP_ARRAY of following types:
-//  (8, (PP_SEQ, PP_SEQ, INT, BPSEQ_THISU_MARKER, PP_SEQ, PP_SEQ, PP_SEQ, INT))
+//  (9, (PP_SEQ, PP_SEQ, INT, BPSEQ_THISU_MARKER, PP_SEQ, PP_SEQ, PP_SEQ, INT, INT))
 //  BPSEQ_THISU_MARKER:
 //    is a PP_SEQ of size at most 1.
 #define WG_PP_MAKE_PSEQ(bp_seq, ap_alt_seq) \
@@ -409,19 +439,65 @@
   BOOST_PP_ARRAY_ELEM(6, pseq)
 #define WG_PP_PSEQ_ASSIGNEDXXX_SIZE(pseq) \
   BOOST_PP_ARRAY_ELEM(7, pseq)
+#define WG_PP_PSEQ_TOTALXXX_SiZE(pseq) \
+  BOOST_PP_ARRAY_ELEM(8, pseq)
 
 // BOOST_PP_SEQ_FOR_EACH_I functor.
-#define \
-  WG_PP_PARAMPROXY_SEQUENCETYPE(r, data, indx, elem) \
-    BOOST_PP_LPAREN() WG_PP_ADDREFERENCE(elem) BOOST_PP_RPAREN()
+#define WG_PP_PARAMPROXY_TYPE_MEMBER(r, data, indx, elem) \
+    WG_PP_CAPTUREDTYPE_ADDREFERENCE(elem) \
+      BOOST_PP_CAT(m, indx) WG_PP_IDENTITY(;)
 
-#define WG_PP_PARAMPROXY_TYPE_TEMPLATEPARAMLIST(pseq) \
+#define WG_PP_PARAMPROXY_TYPE_MEMBERDECLNS(pseq) \
+  BOOST_PP_SEQ_FOR_EACH_I( \
+    WG_PP_PARAMPROXY_TYPE_MEMBER, \
+    ~, \
+    WG_PP_PSEQ_BOUNDTYPES(pseq)WG_PP_PSEQ_ASSIGNEDTYPES(pseq))
+
+// BOOST_PP_SEQ_FOR_EACH_I functor.
+#define WG_PP_PARAMPROXY_TYPE_CTORPARAM(r, data, indx, elem) \
+  BOOST_PP_LPAREN() \
+    WG_PP_CAPTUREDTYPE_ADDREFERENCE(elem) BOOST_PP_CAT(p, indx) \
+  BOOST_PP_RPAREN()
+
+#define WG_PP_PARAMPROXY_TYPE_CTORPARAMLIST(pseq) \
   WG_PP_SEQ_ENUM( \
     BOOST_PP_SEQ_FOR_EACH_I( \
-      WG_PP_PARAMPROXY_SEQUENCETYPE, \
+      WG_PP_PARAMPROXY_TYPE_CTORPARAM, \
       ~, \
       WG_PP_PSEQ_BOUNDTYPES(pseq)WG_PP_PSEQ_ASSIGNEDTYPES(pseq)))
+  
+// BOOST_PP_ENUM functor.
+#define WG_PP_PARAMPROXY_TYPE_CTORINITENTRY(z, indx, data) \
+  BOOST_PP_CAT(m, indx)BOOST_PP_LPAREN()BOOST_PP_CAT(p, indx)BOOST_PP_RPAREN()
+  
+#define WG_PP_PARAMPROXY_TYPE_CTORINITLIST(pseq) \
+  BOOST_PP_ENUM( \
+    WG_PP_PSEQ_TOTALXXX_SiZE(pseq), \
+    WG_PP_PARAMPROXY_TYPE_CTORINITENTRY, \
+    ~)
+  
+#define WG_PP_PARAMPROxY_TYPE_CTORDCNL(pseq) \
+  WG_PP_PARAMPROXY_TYPE_NAME() \
+    BOOST_PP_LPAREN() \
+      WG_PP_PARAMPROXY_TYPE_CTORPARAMLIST(pseq) \
+    BOOST_PP_RPAREN() \
+      BOOST_PP_EXPR_IF(WG_PP_PSEQ_TOTALXXX_SiZE(pseq), WG_PP_IDENTITY(:)) \
+      WG_PP_PARAMPROXY_TYPE_CTORINITLIST(pseq) \
+    {}
 
+// BOOST_PP_ENUM functor.
+#define WG_PP_PARAMPROXY_TYPE_ACCESSORDCLN(r, data, indx, elem) \
+  WG_PP_CAPTUREDTYPE_ADDREFERENCE(elem) BOOST_PP_CAT(get, indx) () const \
+  { \
+    return BOOST_PP_CAT(m, indx); \
+  }
+    
+#define WG_PP_PARAMPROXY_TYPE_ACCESSORS(pseq) \
+  BOOST_PP_SEQ_FOR_EACH_I( \
+    WG_PP_PARAMPROXY_TYPE_ACCESSORDCLN, \
+    ~, \
+    WG_PP_PSEQ_BOUNDTYPES(pseq)WG_PP_PSEQ_ASSIGNEDTYPES(pseq))
+    
 #define WG_PP_PARAMPROXY_OBJ_INITLIST( \
   bound_objs_seq, assigned_values_seq, thisu_marker) \
     WG_PP_SEQ_ENUM( \
@@ -436,12 +512,16 @@
 #define WG_PP_PARAMPROXY_OBJ_NAME() \
   WG_PP_FORMAT_NAME(param_proxy)
 
-#define WG_PP_PSEQ_TO_PARAMPROXYDCLN(pseq) \
-  typedef boost::tuple< \
-    WG_PP_PARAMPROXY_TYPE_TEMPLATEPARAMLIST(pseq) \
-  > WG_PP_PARAMPROXY_TYPE_NAME() WG_PP_IDENTITY(;) \
+#define WG_PP_PARAMPROXY_DCLN(pseq) \
+  struct WG_PP_PARAMPROXY_TYPE_NAME() \
+  { \
+    WG_PP_PARAMPROXY_TYPE_MEMBERDECLNS(pseq) \
+    WG_PP_PARAMPROxY_TYPE_CTORDCNL(pseq) \
+    WG_PP_PARAMPROXY_TYPE_ACCESSORS(pseq) \
+  } WG_PP_IDENTITY(;) \
   WG_PP_PARAMPROXY_TYPE_NAME() const & WG_PP_PARAMPROXY_OBJ_NAME() = \
-    WG_PP_PARAMPROXY_TYPE_NAME()BOOST_PP_LPAREN() \
+    WG_PP_PARAMPROXY_TYPE_NAME() \
+    BOOST_PP_LPAREN() \
       WG_PP_PARAMPROXY_OBJ_INITLIST( \
         WG_PP_PSEQ_BOUNDOBJECTS(pseq), \
         WG_INERNAL_PSEQ_ASSIGNEDVALUES(pseq), \
@@ -450,13 +530,11 @@
     
 // BOOST_PP_ENUM functor.
 #define WG_PP_PARAMPROXY_OBJ_ELEMACCESS(z, n, obj_name) \
-  WG_PP_IDENTITY(obj_name).get<WG_PP_IDENTITY(n)>()
+  WG_PP_IDENTITY(obj_name).BOOST_PP_CAT(get,n)()
 
 #define WG_PP_PARAMPROXY_OBJ_ELEMACCESSLIST(pseq, obj_name) \
   BOOST_PP_ENUM( \
-    BOOST_PP_ADD( \
-      WG_PP_PSEQ_BOUNDXXX_SIZE(pseq), \
-      WG_PP_PSEQ_ASSIGNEDXXX_SIZE(pseq)), \
+    WG_PP_PSEQ_TOTALXXX_SiZE(pseq), \
     WG_PP_PARAMPROXY_OBJ_ELEMACCESS, \
     obj_name)
     
@@ -467,7 +545,7 @@
       BOOST_PP_IF( \
         WG_PP_TOKENS_STARTS_WITH_THISU( \
           BOOST_PP_SEQ_ELEM(indx, obj_seq)), \
-        WG_PP_ADDCONST(elem), \
+        WG_PP_CAPTUREDTYPE_ADDCONST(elem), \
         elem) \
       BOOST_PP_SEQ_ELEM(indx, obj_seq) \
       BOOST_PP_COMMA_IF( \
@@ -506,7 +584,7 @@
 
 #define WG_PP_AUTOFUNCTION(function_name, pseq) \
   { \
-    WG_PP_PSEQ_TO_PARAMPROXYDCLN(pseq) \
+    WG_PP_PARAMPROXY_DCLN(pseq) \
     WG_PP_AUTOFUNCTOR_START(function_name, pseq)
 
 #define WG_PP_AUTOFUNCTION_END() \
