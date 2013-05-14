@@ -14,22 +14,6 @@ wg_utils_autofunction
   bound_and_assigned_params
 */
 
-TEST(wg_utils_autofunction, void_params)
-{
-  try
-  {
-    static bool autoFunctionCalled = false;
-
-    WG_AUTOFUNCTION(noParamsAutoFunction, (void), (void))
-    {
-      autoFunctionCalled = true;
-    }WG_AUTOFUNCTION_END;
-
-    EXPECT_TRUE(autoFunctionCalled);
-  }
-  WG_GTEST_CATCH
-}
-
 TEST(wg_utils_autofunction, bound_params)
 {
   try
@@ -38,7 +22,7 @@ TEST(wg_utils_autofunction, bound_params)
     {
       bool didArgumentBind = false;
 
-      WG_AUTOFUNCTION(oneArgAutoFunction, (bool &)(didArgumentBind), (void))
+      WG_AUTOFUNCTION_BIND(oneArgAutoFunction, (bool &)(didArgumentBind))
       {
         didArgumentBind = true;
       }WG_AUTOFUNCTION_END;
@@ -52,10 +36,9 @@ TEST(wg_utils_autofunction, bound_params)
       int const mass = 10;
       int const velocity = 2;
 
-      WG_AUTOFUNCTION(
+      WG_AUTOFUNCTION_BIND(
         calculateForce,
-        (int &)(force) (int const)(mass) (int const)(velocity),
-        (void))
+        (int &)(force) (int const)(mass) (int const)(velocity))
       {
         force = mass * velocity;
       }WG_AUTOFUNCTION_END;
@@ -72,10 +55,9 @@ TEST(wg_utils_autofunction, bound_params)
         SomeLocalClass()
         : didBindThis(false)
         {
-          WG_AUTOFUNCTION(
+          WG_AUTOFUNCTION_BIND(
             bindThisU,
-            (local(SomeLocalClass * const))(this_),
-            (void))
+            (local(SomeLocalClass * const))(this_))
           {
             this_->didBindThis = true;
           }WG_AUTOFUNCTION_END;
@@ -99,8 +81,9 @@ TEST(wg_utils_autofunction, assigned_params)
         bool didAssign;
       } proxy = {false};
 
-      WG_AUTOFUNCTION(
-        oneArgAutoFunction, (void), (bool &)(didAssign, proxy.didAssign))
+      WG_AUTOFUNCTION_ASSIGN(
+        oneArgAutoFunction,
+        (bool &)(didAssign, proxy.didAssign))
       {
         didAssign = true;
       }WG_AUTOFUNCTION_END;
@@ -117,9 +100,8 @@ TEST(wg_utils_autofunction, assigned_params)
         int volume;
       } cylinder = {2, 10, -1};
 
-      WG_AUTOFUNCTION(
+      WG_AUTOFUNCTION_ASSIGN(
         calculateVolume,
-        (void),
         (int const)(radius, cylinder.radius)
         (int const)(height, cylinder.height)
         (int &)(volume, cylinder.volume)
@@ -143,15 +125,57 @@ TEST(wg_utils_autofunction, local_keyword)
       int value;
     } localObj = {0};
 
-    WG_AUTOFUNCTION(
+    WG_AUTOFUNCTION_BIND(
       useLocalKeyword,
-      (local(SomeLocalClass &))(localObj),
-      (void))
+      (local(SomeLocalClass &))(localObj))
     {
       localObj.value = 10;
     }WG_AUTOFUNCTION_END;
 
     EXPECT_EQ(localObj.value, 10);
+  }
+  WG_GTEST_CATCH
+}
+
+TEST(wg_utils_autofunction, void_params)
+{
+  try
+  {
+    static bool autoFunctionCalled = false;
+
+    WG_AUTOFUNCTION(noParamsAutoFunction, (void), (void))
+    {
+      autoFunctionCalled = true;
+    }WG_AUTOFUNCTION_END;
+
+    EXPECT_TRUE(autoFunctionCalled);
+  }
+  WG_GTEST_CATCH
+}
+
+TEST(wg_utils_autofunction, mixed_params)
+{
+  try
+  {
+    //test_okIf21Combo
+    {
+      int volume = -1;
+      int const pressure = 2;
+      int const numMoles = 3;
+      int const R = 5;
+      int const temp = 4;
+
+      WG_AUTOFUNCTION(
+        calculateVolume,
+        (int &)(volume)
+        (int const)(pressure),
+        (int const)(numerator, numMoles * R * temp))
+      {
+        volume = numerator / pressure;
+      }WG_AUTOFUNCTION_END;
+
+      EXPECT_EQ(volume, 30);
+    }
   }
   WG_GTEST_CATCH
 }

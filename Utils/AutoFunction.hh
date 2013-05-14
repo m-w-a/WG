@@ -10,6 +10,12 @@
 //Public APIs
 //###########
 
+#define WG_AUTOFUNCTION_BIND(function_name, bound_param_seq) \
+  WG_AUTOFUNCTION(function_name, bound_param_seq, (void))
+
+#define WG_AUTOFUNCTION_ASSIGN(function_name, assigned_param_seq) \
+  WG_AUTOFUNCTION(function_name, (void), assigned_param_seq)
+  
 ///@brief bound_param_seq
 ///@brief   1) an even-numbered sequence of visible unqualified variable names
 ///@brief   and their associated types that will automatically be bound
