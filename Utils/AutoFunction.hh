@@ -3,6 +3,9 @@
 
 #include <boost/preprocessor.hpp>
 #include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
+#include <WG/Utils/PP.hh>
+#include <WG/Utils/PP_Seq.hh>
+#include <WG/Utils/PP_AltSeq.hh>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
 
@@ -67,46 +70,33 @@
 //------------
 //Basic Tools.
 //------------
-  
-#define WG_PP_IS_NIL_TOKEN(x) BOOST_PP_LiST_IS_NIL(x)
-
-#define WG_PP_IDENTITY(x) x
-#define WG_PP_IDENTITY_1(x) WG_PP_IDENTITY(x)
-#define WG_PP_IDENTITY_2(x, y) x y
-#define WG_PP_IDENTITY_3(x, y, z) x y z
 
 #define WG_PP_FORMAT_NAME(name) \
   BOOST_PP_CAT(WG_PP_IDENTITY(pgcllXXXautofunctionXXX), name)
 
-#define WG_PP_TOKEN_MATCHES1_WG_PP_TRUE (1) /* unary */
-#define WG_PP_TOKENS_START_WITH_WG_PP_TRUE(tokens) \
-  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
-    tokens, \
-    WG_PP_TOKEN_MATCHES1_)
-
-#define WG_PP_TOKEN_MATCHES2_void (1) /* unary */
+#define WG_PP_AUTOFUNCTION_TOKEN_MATCHES2_void (1) /* unary */
 #define WG_PP_TOKENS_STARTS_WITH_VOID(tokens) \
   BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
     tokens, \
-    WG_PP_TOKEN_MATCHES2_)
+    WG_PP_AUTOFUNCTION_TOKEN_MATCHES2_)
 
-#define WG_PP_TOKEN_MATCHES3_this_ (1) /* unary */
+#define WG_PP_AUTOFUNCTION_TOKEN_MATCHES3_this_ (1) /* unary */
 #define WG_PP_TOKENS_STARTS_WITH_THISU(tokens) \
   BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
     tokens, \
-    WG_PP_TOKEN_MATCHES3_)
+    WG_PP_AUTOFUNCTION_TOKEN_MATCHES3_)
 
-#define WG_PP_TOKEN_MATCHES4_local (1) /* unary */
+#define WG_PP_AUTOFUNCTION_TOKEN_MATCHES4_local (1) /* unary */
 #define WG_PP_TOKENS_STARTS_WITH_LOCAL(tokens) \
   BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
     tokens, \
-    WG_PP_TOKEN_MATCHES4_)
+    WG_PP_AUTOFUNCTION_TOKEN_MATCHES4_)
 
-#define WG_PP_TOKEN_MATCHES5_localref (1) /* unary */
+#define WG_PP_AUTOFUNCTION_TOKEN_MATCHES5_localref (1) /* unary */
 #define WG_PP_TOKENS_STARTS_WITH_LOCALREF(tokens) \
   BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
     tokens, \
-    WG_PP_TOKEN_MATCHES5_)
+    WG_PP_AUTOFUNCTION_TOKEN_MATCHES5_)
     
 #define WG_PP_SPECIFIEDTYPE_local(specifiedtype) local
 #define WG_PP_SPECIFIEDTYPE_VALUE_local(value) value
@@ -165,72 +155,6 @@
       boost::add_reference< \
         boost::add_const<WG_PP_IDENTITY(specifiedtype)>::type \
       >::type))
-  
-#define WG_PP_IS_ODD(num) BOOST_PP_MOD(num,2)
-#define WG_PP_IS_EVEN(num) \
-  BOOST_PP_NOT(WG_PP_IS_ODD(num))
-
-#define WG_PP_IS_MOD3_R0(num) \
-  BOOST_PP_EQUAL(BOOST_PP_MOD(num,3), 0)
-#define WG_PP_IS_MOD3_R1(num) \
-  BOOST_PP_EQUAL(BOOST_PP_MOD(num,3), 1)
-#define WG_PP_IS_MOD3_R2(num) \
-  BOOST_PP_EQUAL(BOOST_PP_MOD(num,3), 2)
-
-#define WG_PP_EXISTS_1TUPLE_IMPL(x) \
-  WG_PP_TRUE
-#define WG_PP_EXISTS_2TUPLE_IMPL(x, y) \
-  WG_PP_TRUE
-
-#define WG_PP_EXISTS_1TUPLE(tuple_seq) \
-  WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
-    BOOST_PP_EXPAND( \
-      WG_PP_EXISTS_1TUPLE_IMPL \
-      tuple_seq))
-
-#define WG_PP_EXISTS_2TUPLE(tuple_seq) \
-  WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
-    BOOST_PP_EXPAND( \
-      WG_PP_EXISTS_2TUPLE_IMPL \
-      tuple_seq))
-
-#define WG_PP_SEQ_IS_NOT_NIL_IMPL(seq) WG_PP_TRUE
-// Nil sequences are defined to be empty tokens.
-#define WG_PP_SEQ_IS_NOT_NIL(seq) \
-  WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
-    BOOST_PP_EXPAND(WG_PP_SEQ_IS_NOT_NIL_IMPL seq))
-
-#define WG_PP_SEQ_ENUM_0(seq)
-#define WG_PP_SEQ_ENUM_1(seq) BOOST_PP_SEQ_ENUM(seq)
-// Handles empty sequences.
-#define WG_PP_SEQ_ENUM(seq) \
-  BOOST_PP_EXPAND( \
-    BOOST_PP_CAT(WG_PP_SEQ_ENUM_, WG_PP_SEQ_IS_NOT_NIL(seq)))(seq)
-
-#define WG_PP_SEQ_REPLACE_00(seq, indx, elem)
-#define WG_PP_SEQ_REPLACE_01(seq, indx, elem)
-#define WG_PP_SEQ_REPLACE_10(seq, indx, elem) seq
-#define WG_PP_SEQ_REPLACE_11(seq, indx, elem) \
-  BOOST_PP_SEQ_REPLACE(seq, BOOST_PP_SEQ_ELEM(0,indx), elem)
-// Handles empty sequences.
-// Handles empty token as indx.
-#define WG_PP_SEQ_REPLACE(seq, indx, elem) \
-  BOOST_PP_EXPAND( \
-    BOOST_PP_CAT( \
-      BOOST_PP_CAT( \
-        WG_PP_SEQ_REPLACE_, \
-        WG_PP_SEQ_IS_NOT_NIL(seq)), \
-      WG_PP_SEQ_IS_NOT_NIL(indx))) \
-    (seq, indx, elem)
-
-#define WG_PP_IS_SEQ_COUNT_EVEN(seq) \
-  BOOST_PP_NOT(BOOST_PP_MOD(BOOST_PP_SEQ_SIZE(seq), 2))
-
-#define WG_PP_IS_SEQ_COUNT_ODD(seq) \
-  BOOST_PP_NOT(WG_PP_IS_SEQ_COUNT_EVEN(seq))
-  
-#define WG_PP_IS_SEQ_INDEX_LAST(seq_count, indx) \
-  BOOST_PP_EQUAL(seq_count, BOOST_PP_INC(indx))
 
 #define WG_PP_TUPLIZE(x) (x)
 #define WG_PP_TUPLIZE_1(x) WG_PP_TUPLIZE(x)
@@ -247,12 +171,6 @@
 //----------------
 //ALTSEQ Transform
 //----------------
-
-#define WG_PP_ALTSEQ_APPEND_COMMA_TO_HEAD_1(x) \
-  WG_PP_TUPLIZE_1(x) BOOST_PP_COMMA()
-
-#define WG_PP_ALTSEQ_APPEND_COMMA_TO_HEAD_2(x, y) \
-  WG_PP_TUPLIZE_2(x, y) BOOST_PP_COMMA()
 
 #define WG_PP_ALTSEQ_TRANSFORM_HEAD_IMPL( \
   head_tuple, \
@@ -328,10 +246,10 @@
   BOOST_PP_TUPLE_ELEM(2, 1, state)
 
 #define WG_PP_ALTSEQ_LINEARIZE_PRED_1(state) \
-  WG_PP_EXISTS_1TUPLE( \
+  WG_PP_SEQ_ISHEAD_1TUPLE( \
     WG_PP_ALTSEQ_LINEARIZE_GET_SEQ(state))
 #define WG_PP_ALTSEQ_LINEARIZE_PRED_2(state) \
-  WG_PP_EXISTS_2TUPLE( \
+  WG_PP_SEQ_ISHEAD_2TUPLE( \
     WG_PP_ALTSEQ_LINEARIZE_GET_SEQ(state))
 
 #define WG_PP_ALTSEQ_LINEARIZE_PRED(r, state) \
@@ -453,7 +371,7 @@
 
 #define WG_PP_BOUND_PSEQ_IS_VOID(bp_seq) \
   BOOST_PP_IF( \
-    WG_PP_EXISTS_1TUPLE(BOOST_PP_TUPLE_EAT(1) bp_seq), \
+    WG_PP_SEQ_ISHEAD_1TUPLE(BOOST_PP_TUPLE_EAT(1) bp_seq), \
     0, \
     BOOST_PP_IF( \
       WG_PP_TOKENS_STARTS_WITH_VOID(BOOST_PP_SEQ_ELEM(0, bp_seq)), \
@@ -462,7 +380,7 @@
 
 #define WG_PP_ASSIGNED_PSEQ_IS_VOID(ap_alt_seq) \
   BOOST_PP_IF( \
-    WG_PP_EXISTS_2TUPLE(BOOST_PP_TUPLE_EAT(1) ap_alt_seq), \
+    WG_PP_SEQ_ISHEAD_2TUPLE(BOOST_PP_TUPLE_EAT(1) ap_alt_seq), \
     0, \
     BOOST_PP_IF( \
       BOOST_PP_EXPAND( \
