@@ -210,7 +210,7 @@ TEST(wg_utils_autofunction, mixed_params)
   WG_GTEST_CATCH
 }
 
-TEST(wg_utils_autofunction, recursive)
+TEST(wg_utils_autofunction, nonvoidret_assignedresult_recursive)
 {
   try
   {
