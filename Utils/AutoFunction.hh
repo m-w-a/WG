@@ -61,51 +61,82 @@
 #define WG_PP_FORMAT_NAME(name) \
   BOOST_PP_CAT(WG_PP_IDENTITY(pgcllXXXautofunctionXXX), name)
 
-#define WG_PP_TOKEN_MATCHES_WG_PP_TRUE (1) /* unary */
+#define WG_PP_TOKEN_MATCHES1_WG_PP_TRUE (1) /* unary */
 #define WG_PP_TOKENS_START_WITH_WG_PP_TRUE(tokens) \
   BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
     tokens, \
-    WG_PP_TOKEN_MATCHES_)
+    WG_PP_TOKEN_MATCHES1_)
 
-#define WG_PP_TOKEN_MATCHES_void (1) /* unary */
+#define WG_PP_TOKEN_MATCHES2_void (1) /* unary */
 #define WG_PP_TOKENS_STARTS_WITH_VOID(tokens) \
   BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
     tokens, \
-    WG_PP_TOKEN_MATCHES_)
+    WG_PP_TOKEN_MATCHES2_)
 
-#define WG_PP_TOKEN_MATCHES_this_ (1) /* unary */
+#define WG_PP_TOKEN_MATCHES3_this_ (1) /* unary */
 #define WG_PP_TOKENS_STARTS_WITH_THISU(tokens) \
   BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
     tokens, \
-    WG_PP_TOKEN_MATCHES_)
+    WG_PP_TOKEN_MATCHES3_)
 
-#define WG_PP_CAPTUREDTYPE_local(capturedtype) WG_PP_TRUE
+#define WG_PP_TOKEN_MATCHES4_local (1) /* unary */
+#define WG_PP_TOKENS_STARTS_WITH_LOCAL(tokens) \
+  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
+    tokens, \
+    WG_PP_TOKEN_MATCHES4_)
+
+#define WG_PP_TOKEN_MATCHES5_localref (1) /* unary */
+#define WG_PP_TOKENS_STARTS_WITH_LOCALREF(tokens) \
+  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
+    tokens, \
+    WG_PP_TOKEN_MATCHES5_)
+    
+#define WG_PP_CAPTUREDTYPE_local(capturedtype) local
 #define WG_PP_CAPTUREDTYPE_VALUE_local(value) value
 #define WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype) \
   BOOST_PP_EXPAND( \
     BOOST_PP_CAT(WG_PP_CAPTUREDTYPE_VALUE_, capturedtype))
 #define WG_PP_IS_CAPTUREDTYPE_LOCAL(capturedtype) \
-  WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
+  WG_PP_TOKENS_STARTS_WITH_LOCAL( \
     BOOST_PP_EXPAND( \
       BOOST_PP_CAT(WG_PP_CAPTUREDTYPE_,capturedtype)))
 
+#define WG_PP_CAPTUREDTYPE_localref(capturedtype) localref
+#define WG_PP_CAPTUREDTYPE_VALUE_localref(value) value
+#define WG_PP_CAPTUREDTYPE_LOCALREF_VALUE(capturedtype) \
+  BOOST_PP_EXPAND( \
+    BOOST_PP_CAT(WG_PP_CAPTUREDTYPE_VALUE_, capturedtype))
+#define WG_PP_IS_CAPTUREDTYPE_LOCALREF(capturedtype) \
+  WG_PP_TOKENS_STARTS_WITH_LOCALREF( \
+    BOOST_PP_EXPAND( \
+      BOOST_PP_CAT(WG_PP_CAPTUREDTYPE_,capturedtype)))
+      
 #define WG_PP_CAPTUREDTYPE_VALUE(capturedtype) \
-  BOOST_PP_IF( \
+  BOOST_PP_IIF( \
     WG_PP_IS_CAPTUREDTYPE_LOCAL(capturedtype), \
     WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype), \
-    capturedtype)
+    BOOST_PP_IIF( \
+      WG_PP_IS_CAPTUREDTYPE_LOCALREF(capturedtype), \
+      WG_PP_CAPTUREDTYPE_LOCALREF_VALUE(capturedtype), \
+      capturedtype))
     
 #define WG_PP_CAPTUREDTYPE_ADDCONST(capturedtype) \
   BOOST_PP_IIF( \
-    WG_PP_IS_CAPTUREDTYPE_LOCAL(capturedtype), \
-    WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype), \
-    boost::add_const<WG_PP_IDENTITY(capturedtype)>::type)
+    WG_PP_IS_CAPTUREDTYPE_LOCALREF(capturedtype), \
+    WG_PP_CAPTUREDTYPE_LOCALREF_VALUE(capturedtype), \
+    BOOST_PP_IIF( \
+      WG_PP_IS_CAPTUREDTYPE_LOCAL(capturedtype), \
+      WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype), \
+      boost::const_reference<WG_PP_IDENTITY(capturedtype)>::type))
 
 #define WG_PP_CAPTUREDTYPE_ADDREFERENCE(capturedtype) \
   BOOST_PP_IIF( \
-    WG_PP_IS_CAPTUREDTYPE_LOCAL(capturedtype), \
-    WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype), \
-    boost::add_reference<WG_PP_IDENTITY(capturedtype)>::type)
+    WG_PP_IS_CAPTUREDTYPE_LOCALREF(capturedtype), \
+    WG_PP_CAPTUREDTYPE_LOCALREF_VALUE(capturedtype), \
+    BOOST_PP_IIF( \
+      WG_PP_IS_CAPTUREDTYPE_LOCAL(capturedtype), \
+      WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype) &, \
+      boost::add_reference<WG_PP_IDENTITY(capturedtype)>::type))
   
 #define WG_PP_IS_ODD(num) BOOST_PP_MOD(num,2)
 #define WG_PP_IS_EVEN(num) \
@@ -573,14 +604,15 @@
   BOOST_PP_RPAREN()
 
 #define WG_PP_AUTOFUNCTOR_START(function_name, pseq) \
-  struct WG_PP_IDENTITY(function_name) \
+  struct BOOST_PP_CAT(function_name, XXXwgautofunctor) \
   { \
     void operator()(WG_PP_PARAMPROXY_TYPE_NAME() const & param_proxy) \
     { \
       static_cast<void>(param_proxy); \
-      this->call(WG_PP_PARAMPROXY_OBJ_ELEMACCESSLIST(pseq, param_proxy)); \
+      this->function_name( \
+        WG_PP_PARAMPROXY_OBJ_ELEMACCESSLIST(pseq, param_proxy)); \
     } \
-    void WG_PP_IDENTITY(call) WG_PP_CALL_PARAMLIST(pseq)
+    void WG_PP_IDENTITY(function_name) WG_PP_CALL_PARAMLIST(pseq)
     
 #define WG_PP_AUTOFUNCTOR_END() \
   } WG_PP_FORMAT_NAME(auto_functor); \

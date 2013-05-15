@@ -123,11 +123,33 @@ TEST(wg_utils_autofunction, local_keyword)
     struct SomeLocalClass
     {
       int value;
+    } localObj = {10};
+
+    static int newValue = 0;
+    WG_AUTOFUNCTION_BIND(useLocalKeyword, (local(SomeLocalClass))(localObj))
+    {
+      localObj.value += 1;
+      newValue = localObj.value;
+    }WG_AUTOFUNCTION_END;
+
+    EXPECT_EQ(localObj.value, 10);
+    EXPECT_EQ(newValue, 11);
+  }
+  WG_GTEST_CATCH
+}
+
+TEST(wg_utils_autofunction, localref_keyword)
+{
+  try
+  {
+    struct SomeLocalClass
+    {
+      int value;
     } localObj = {0};
 
     WG_AUTOFUNCTION_BIND(
       useLocalKeyword,
-      (local(SomeLocalClass &))(localObj))
+      (localref(SomeLocalClass &))(localObj))
     {
       localObj.value = 10;
     }WG_AUTOFUNCTION_END;
@@ -176,6 +198,26 @@ TEST(wg_utils_autofunction, mixed_params)
 
       EXPECT_EQ(volume, 30);
     }
+  }
+  WG_GTEST_CATCH
+}
+
+TEST(wg_utils_autofunction, recursive)
+{
+  try
+  {
+//    int fib = 0;
+//
+//    WG_AUTOFUNCTION(
+//      calculateFibonacci,
+//      (int &)(fib),
+//      (int)(input, 4))
+//    {
+//      if(input > 1)
+//      {
+//        calculateFibonacci(fib, input - 1) + calculateFibonacci(fib, input - 2);
+//      }
+//    }
   }
   WG_GTEST_CATCH
 }
