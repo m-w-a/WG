@@ -22,7 +22,8 @@ TEST(wg_utils_autofunction, bound_params)
     {
       bool didArgumentBind = false;
 
-      WG_AUTOFUNCTION_BIND(oneArgAutoFunction, (bool &)(didArgumentBind))
+      WG_AUTOFUNCTION_BIND(
+        (void), (void), oneArgAutoFunction, (bool &)(didArgumentBind))
       {
         didArgumentBind = true;
       }WG_AUTOFUNCTION_END;
@@ -37,6 +38,7 @@ TEST(wg_utils_autofunction, bound_params)
       int const velocity = 2;
 
       WG_AUTOFUNCTION_BIND(
+        (void), (void),
         calculateForce,
         (int &)(force) (int const)(mass) (int const)(velocity))
       {
@@ -56,6 +58,7 @@ TEST(wg_utils_autofunction, bound_params)
         : didBindThis(false)
         {
           WG_AUTOFUNCTION_BIND(
+            (void), (void),
             bindThisU,
             (local(SomeLocalClass * const))(this_))
           {
@@ -82,6 +85,7 @@ TEST(wg_utils_autofunction, assigned_params)
       } proxy = {false};
 
       WG_AUTOFUNCTION_ASSIGN(
+        (void), (void),
         oneArgAutoFunction,
         (bool &)(didAssign, proxy.didAssign))
       {
@@ -101,6 +105,7 @@ TEST(wg_utils_autofunction, assigned_params)
       } cylinder = {2, 10, -1};
 
       WG_AUTOFUNCTION_ASSIGN(
+        (void), (void),
         calculateVolume,
         (int const)(radius, cylinder.radius)
         (int const)(height, cylinder.height)
@@ -126,7 +131,8 @@ TEST(wg_utils_autofunction, local_keyword)
     } localObj = {10};
 
     static int newValue = 0;
-    WG_AUTOFUNCTION_BIND(useLocalKeyword, (local(SomeLocalClass))(localObj))
+    WG_AUTOFUNCTION_BIND(
+      (void), (void), useLocalKeyword, (local(SomeLocalClass))(localObj))
     {
       localObj.value += 1;
       newValue = localObj.value;
@@ -148,6 +154,7 @@ TEST(wg_utils_autofunction, localref_keyword)
     } localObj = {0};
 
     WG_AUTOFUNCTION_BIND(
+      (void), (void),
       useLocalKeyword,
       (localref(SomeLocalClass &))(localObj))
     {
@@ -165,7 +172,7 @@ TEST(wg_utils_autofunction, void_params)
   {
     static bool autoFunctionCalled = false;
 
-    WG_AUTOFUNCTION(noParamsAutoFunction, (void), (void))
+    WG_AUTOFUNCTION((void), (void), noParamsAutoFunction, (void), (void))
     {
       autoFunctionCalled = true;
     }WG_AUTOFUNCTION_END;
@@ -188,6 +195,7 @@ TEST(wg_utils_autofunction, mixed_params)
       int const temp = 4;
 
       WG_AUTOFUNCTION(
+        (void), (void),
         calculateVolume,
         (int &)(volume)
         (int const)(pressure),

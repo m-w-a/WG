@@ -10,11 +10,21 @@
 //Public APIs
 //###########
 
-#define WG_AUTOFUNCTION_BIND(function_name, bound_param_seq) \
-  WG_AUTOFUNCTION(function_name, bound_param_seq, (void))
+#define WG_AUTOFUNCTION_BIND( \
+  bound_result_seq, \
+  ret_type, \
+  function_name, \
+  bound_param_seq) \
+    WG_AUTOFUNCTION( \
+      bound_result_seq, ret_type, function_name, bound_param_seq, (void))
 
-#define WG_AUTOFUNCTION_ASSIGN(function_name, assigned_param_seq) \
-  WG_AUTOFUNCTION(function_name, (void), assigned_param_seq)
+#define WG_AUTOFUNCTION_ASSIGN( \
+  bound_result_seq, \
+  ret_type, \
+  function_name, \
+  assigned_param_seq) \
+    WG_AUTOFUNCTION( \
+      bound_result_seq, ret_type, function_name, (void), assigned_param_seq)
   
 ///@brief bound_param_seq
 ///@brief   1) an even-numbered sequence of visible unqualified variable names
@@ -37,10 +47,16 @@
 ///@brief     (type1)(var1, assigned_val1) (type2)(var2, assigned_val2) ...
 ///@brief   2) or, the token: "(void)", to signify the absence of any additional
 ///@brief   variables.
-#define WG_AUTOFUNCTION(function_name, bound_param_seq, assigned_param_seq) \
-  WG_PP_AUTOFUNCTION( \
-    function_name, \
-    WG_PP_MAKE_PSEQ(bound_param_seq, assigned_param_seq))
+#define WG_AUTOFUNCTION( \
+  bound_result_seq, \
+  ret_type, \
+  function_name, \
+  bound_param_seq, \
+  assigned_param_seq) \
+    WG_PP_AUTOFUNCTION( \
+      function_name, \
+      WG_PP_MAKE_PSEQ( \
+        bound_result_seq, ret_type, bound_param_seq, assigned_param_seq))
     
 #define WG_AUTOFUNCTION_END WG_PP_AUTOFUNCTION_END()
 
@@ -57,6 +73,7 @@
 #define WG_PP_IDENTITY(x) x
 #define WG_PP_IDENTITY_1(x) WG_PP_IDENTITY(x)
 #define WG_PP_IDENTITY_2(x, y) x y
+#define WG_PP_IDENTITY_3(x, y, z) x y z
 
 #define WG_PP_FORMAT_NAME(name) \
   BOOST_PP_CAT(WG_PP_IDENTITY(pgcllXXXautofunctionXXX), name)
@@ -386,14 +403,23 @@
   BOOST_PP_ARRAY_PUSH_BACK( \
     wiparray, \
     BOOST_PP_ADD( \
-      WG_PP_PSEQ_BOUNDXXX_SIZE(wiparray), \
-      WG_PP_PSEQ_ASSIGNEDXXX_SIZE(wiparray)))
+      BOOST_PP_ADD( \
+        WG_PP_PSEQ_BOUNDXXX_SIZE(wiparray), \
+        WG_PP_PSEQ_ASSIGNEDXXX_SIZE(wiparray)), \
+        WG_PP_PSEQ_BOUNDRESULTEXISTS(wiparray)))
     
 #define WG_PP_MAKE_PSEQ_IMPL2( \
-  bp_type_seq, bp_obj_seq, ap_type_seq, ap_obj_seq, ap_value_seq) \
+  bresult_type_seq, bresult_obj_seq, \
+  ret_type, \
+  bp_type_seq, bp_obj_seq, \
+  ap_type_seq, ap_obj_seq, ap_value_seq) \
     WG_PP_MAKE_PSEQ_IMPL3( \
-      (8, \
-        (bp_type_seq, \
+      (12, \
+        (bresult_type_seq, \
+        bresult_obj_seq, \
+        BOOST_PP_SEQ_SIZE(bresult_type_seq), \
+        ret_type, \
+        bp_type_seq, \
         bp_obj_seq, \
         BOOST_PP_SEQ_SIZE(bp_type_seq), \
         BOOST_PP_SEQ_FOR_EACH_I(WG_PP_MARK_THISU_INDX, ~, bp_obj_seq), \
@@ -403,8 +429,11 @@
         BOOST_PP_SEQ_SIZE(ap_type_seq))) \
     )
 
-#define WG_PP_MAKE_PSEQ_IMPL1(bp_seq, ap_seq) \
+#define WG_PP_MAKE_PSEQ_IMPL1(bresult_seq, ret_type, bp_seq, ap_seq) \
   WG_PP_MAKE_PSEQ_IMPL2( \
+    WG_PP_BOUNDPSEQ_TO_TYPESEQ(bresult_seq), \
+    WG_PP_BOUNDPSEQ_TO_OBJSEQ(bresult_seq), \
+    ret_type, \
     WG_PP_BOUNDPSEQ_TO_TYPESEQ(bp_seq), \
     WG_PP_BOUNDPSEQ_TO_OBJSEQ(bp_seq), \
     WG_PP_ASSIGNEDPSEQ_TO_TYPESEQ(ap_seq), \
@@ -452,8 +481,12 @@
 //  (9, (PP_SEQ, PP_SEQ, INT, BPSEQ_THISU_MARKER, PP_SEQ, PP_SEQ, PP_SEQ, INT, INT))
 //  BPSEQ_THISU_MARKER:
 //    is a PP_SEQ of size at most 1.
-#define WG_PP_MAKE_PSEQ(bp_seq, ap_alt_seq) \
+#define WG_PP_MAKE_PSEQ(bresult_seq, ret_type, bp_seq, ap_alt_seq) \
   WG_PP_MAKE_PSEQ_IMPL1( \
+    BOOST_PP_EXPR_IF( \
+      BOOST_PP_NOT(WG_PP_BOUND_PSEQ_IS_VOID(bresult_seq)), \
+      bresult_seq), \
+    ret_type, \
     BOOST_PP_EXPR_IF( \
       BOOST_PP_NOT(WG_PP_BOUND_PSEQ_IS_VOID(bp_seq)), \
       bp_seq), \
@@ -461,35 +494,46 @@
       BOOST_PP_NOT(WG_PP_ASSIGNED_PSEQ_IS_VOID(ap_alt_seq)), \
       WG_PP_ALTSEQ_LINEARIZE(ap_alt_seq)))
 
-#define WG_PP_PSEQ_BOUNDTYPES(pseq) \
+#define WG_PP_PSEQ_BOUNDRESULTTYPE(pseq) \
   BOOST_PP_ARRAY_ELEM(0, pseq)
-#define WG_PP_PSEQ_BOUNDOBJECTS(pseq) \
+#define WG_PP_PSEQ_BOUNDRESULTOBJECT(pseq) \
   BOOST_PP_ARRAY_ELEM(1, pseq)
-#define WG_PP_PSEQ_BOUNDXXX_SIZE(pseq) \
+#define WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq) \
   BOOST_PP_ARRAY_ELEM(2, pseq)
-#define WG_PP_PSEQ_BOUNDOBJECTS_THISU_MARKER(pseq) \
+#define WG_PP_PSEQ_RETTYPE(pseq) \
   BOOST_PP_ARRAY_ELEM(3, pseq)
-#define WG_PP_PSEQ_ASSIGNEDTYPES(pseq) \
+#define WG_PP_PSEQ_BOUNDTYPES(pseq) \
   BOOST_PP_ARRAY_ELEM(4, pseq)
-#define WG_PP_PSEQ_ASSIGNEDOBJECTS(pseq) \
+#define WG_PP_PSEQ_BOUNDOBJECTS(pseq) \
   BOOST_PP_ARRAY_ELEM(5, pseq)
-#define WG_INERNAL_PSEQ_ASSIGNEDVALUES(pseq) \
+#define WG_PP_PSEQ_BOUNDXXX_SIZE(pseq) \
   BOOST_PP_ARRAY_ELEM(6, pseq)
-#define WG_PP_PSEQ_ASSIGNEDXXX_SIZE(pseq) \
+#define WG_PP_PSEQ_BOUNDOBJECTS_THISU_MARKER(pseq) \
   BOOST_PP_ARRAY_ELEM(7, pseq)
-#define WG_PP_PSEQ_TOTALXXX_SiZE(pseq) \
+#define WG_PP_PSEQ_ASSIGNEDTYPES(pseq) \
   BOOST_PP_ARRAY_ELEM(8, pseq)
+#define WG_PP_PSEQ_ASSIGNEDOBJECTS(pseq) \
+  BOOST_PP_ARRAY_ELEM(9, pseq)
+#define WG_INERNAL_PSEQ_ASSIGNEDVALUES(pseq) \
+  BOOST_PP_ARRAY_ELEM(10, pseq)
+#define WG_PP_PSEQ_ASSIGNEDXXX_SIZE(pseq) \
+  BOOST_PP_ARRAY_ELEM(11, pseq)
+#define WG_PP_PSEQ_TOTALXXX_SiZE(pseq) \
+  BOOST_PP_ARRAY_ELEM(12, pseq)
 
 // BOOST_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_PARAMPROXY_TYPE_MEMBER(r, data, indx, elem) \
-    WG_PP_CAPTUREDTYPE_ADDREFERENCE(elem) \
-      BOOST_PP_CAT(m, indx) WG_PP_IDENTITY(;)
+  WG_PP_CAPTUREDTYPE_ADDREFERENCE(elem) \
+    BOOST_PP_CAT(m, indx) WG_PP_IDENTITY(;)
 
 #define WG_PP_PARAMPROXY_TYPE_MEMBERDECLNS(pseq) \
   BOOST_PP_SEQ_FOR_EACH_I( \
     WG_PP_PARAMPROXY_TYPE_MEMBER, \
     ~, \
-    WG_PP_PSEQ_BOUNDTYPES(pseq)WG_PP_PSEQ_ASSIGNEDTYPES(pseq))
+    WG_PP_IDENTITY_3( \
+      WG_PP_PSEQ_BOUNDRESULTTYPE(pseq), \
+      WG_PP_PSEQ_BOUNDTYPES(pseq), \
+      WG_PP_PSEQ_ASSIGNEDTYPES(pseq)))
 
 // BOOST_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_PARAMPROXY_TYPE_CTORPARAM(r, data, indx, elem) \
@@ -502,7 +546,10 @@
     BOOST_PP_SEQ_FOR_EACH_I( \
       WG_PP_PARAMPROXY_TYPE_CTORPARAM, \
       ~, \
-      WG_PP_PSEQ_BOUNDTYPES(pseq)WG_PP_PSEQ_ASSIGNEDTYPES(pseq)))
+      WG_PP_IDENTITY_3( \
+        WG_PP_PSEQ_BOUNDRESULTTYPE(pseq), \
+        WG_PP_PSEQ_BOUNDTYPES(pseq), \
+        WG_PP_PSEQ_ASSIGNEDTYPES(pseq))))
   
 // BOOST_PP_ENUM functor.
 #define WG_PP_PARAMPROXY_TYPE_CTORINITENTRY(z, indx, data) \
@@ -534,7 +581,10 @@
   BOOST_PP_SEQ_FOR_EACH_I( \
     WG_PP_PARAMPROXY_TYPE_ACCESSORDCLN, \
     ~, \
-    WG_PP_PSEQ_BOUNDTYPES(pseq)WG_PP_PSEQ_ASSIGNEDTYPES(pseq))
+    WG_PP_IDENTITY_3( \
+      WG_PP_PSEQ_BOUNDRESULTTYPE(pseq), \
+      WG_PP_PSEQ_BOUNDTYPES(pseq), \
+      WG_PP_PSEQ_ASSIGNEDTYPES(pseq)))
     
 #define WG_PP_PARAMPROXY_OBJ_INITLIST( \
   bound_objs_seq, assigned_values_seq, thisu_marker) \
@@ -561,7 +611,7 @@
     WG_PP_PARAMPROXY_TYPE_NAME() \
     BOOST_PP_LPAREN() \
       WG_PP_PARAMPROXY_OBJ_INITLIST( \
-        WG_PP_PSEQ_BOUNDOBJECTS(pseq), \
+        WG_PP_PSEQ_BOUNDRESULTOBJECT(pseq)WG_PP_PSEQ_BOUNDOBJECTS(pseq), \
         WG_INERNAL_PSEQ_ASSIGNEDVALUES(pseq), \
         WG_PP_PSEQ_BOUNDOBJECTS_THISU_MARKER(pseq)) \
     BOOST_PP_RPAREN() WG_PP_IDENTITY(;)
@@ -609,10 +659,14 @@
     void operator()(WG_PP_PARAMPROXY_TYPE_NAME() const & param_proxy) \
     { \
       static_cast<void>(param_proxy); \
+      BOOST_PP_EXPR_IIF( \
+        WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
+        param_proxy.get0() = ) \
       this->function_name( \
         WG_PP_PARAMPROXY_OBJ_ELEMACCESSLIST(pseq, param_proxy)); \
     } \
-    void WG_PP_IDENTITY(function_name) WG_PP_CALL_PARAMLIST(pseq)
+    BOOST_PP_SEQ_HEAD(WG_PP_PSEQ_RETTYPE(pseq)) \
+      WG_PP_IDENTITY(function_name) WG_PP_CALL_PARAMLIST(pseq)
     
 #define WG_PP_AUTOFUNCTOR_END() \
   } WG_PP_FORMAT_NAME(auto_functor); \
