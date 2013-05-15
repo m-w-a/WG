@@ -144,8 +144,35 @@
     BOOST_PP_IIF( \
       WG_PP_IS_CAPTUREDTYPE_LOCAL(capturedtype), \
       WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype), \
-      boost::const_reference<WG_PP_IDENTITY(capturedtype)>::type))
+      boost::add_const<WG_PP_IDENTITY(capturedtype)>::type))
+/*
+namespace WG
+{
+namespace AutoFunctor
+{
+namespace Internal
+{
 
+template <typename T>
+struct AddConstIfNotReference
+{
+  template <bool> struct AddConst;
+  template <> struct AddConst<true>
+  { 
+    typedef boost::add_const<T>::type type;
+  };
+  template <> struct AddConst<false>
+  {
+    typedef T type;
+  };
+  
+  typedef typename AddConst< boost::is_reference<T>::value >::type type;
+};
+
+}
+}
+}
+*/
 #define WG_PP_CAPTUREDTYPE_ADDREFERENCE(capturedtype) \
   BOOST_PP_IIF( \
     WG_PP_IS_CAPTUREDTYPE_LOCALREF(capturedtype), \
@@ -522,32 +549,46 @@
   BOOST_PP_ARRAY_ELEM(12, pseq)
 
 // BOOST_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_PARAMPROXY_TYPE_MEMBER(r, data, indx, elem) \
-  WG_PP_CAPTUREDTYPE_ADDREFERENCE(elem) \
-    BOOST_PP_CAT(m, indx) WG_PP_IDENTITY(;)
+#define WG_PP_PARAMPROXY_TYPE_MEMBER(r, offset, indx, elem) \
+  WG_PP_CAPTUREDTYPE_ADDREFERENCE( \
+    WG_PP_CAPTUREDTYPE_ADDCONST(elem)) \
+      BOOST_PP_CAT(m, BOOST_PP_ADD(indx,offset)) WG_PP_IDENTITY(;)
 
 #define WG_PP_PARAMPROXY_TYPE_MEMBERDECLNS(pseq) \
+  BOOST_PP_EXPR_IIF( \
+    WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
+    WG_PP_CAPTUREDTYPE_ADDREFERENCE( \
+      BOOST_PP_SEQ_HEAD(WG_PP_PSEQ_BOUNDRESULTTYPE(pseq))) \
+    m0;) \
   BOOST_PP_SEQ_FOR_EACH_I( \
     WG_PP_PARAMPROXY_TYPE_MEMBER, \
-    ~, \
-    WG_PP_IDENTITY_3( \
-      WG_PP_PSEQ_BOUNDRESULTTYPE(pseq), \
+    WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
+    WG_PP_IDENTITY_2( \
       WG_PP_PSEQ_BOUNDTYPES(pseq), \
       WG_PP_PSEQ_ASSIGNEDTYPES(pseq)))
 
 // BOOST_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_PARAMPROXY_TYPE_CTORPARAM(r, data, indx, elem) \
+#define WG_PP_PARAMPROXY_TYPE_CTORPARAM(r, offset, indx, elem) \
   BOOST_PP_LPAREN() \
-    WG_PP_CAPTUREDTYPE_ADDREFERENCE(elem) BOOST_PP_CAT(p, indx) \
+    WG_PP_CAPTUREDTYPE_ADDREFERENCE(WG_PP_CAPTUREDTYPE_ADDCONST(elem)) \
+      BOOST_PP_CAT(p, BOOST_PP_ADD(indx,offset)) \
   BOOST_PP_RPAREN()
 
 #define WG_PP_PARAMPROXY_TYPE_CTORPARAMLIST(pseq) \
+  BOOST_PP_EXPR_IIF( \
+    WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
+    WG_PP_CAPTUREDTYPE_ADDREFERENCE( \
+      BOOST_PP_SEQ_HEAD(WG_PP_PSEQ_BOUNDRESULTTYPE(pseq))) \
+    p0 \
+    BOOST_PP_IIF( \
+      BOOST_PP_GREATER(WG_PP_PSEQ_TOTALXXX_SiZE(pseq), 1), \
+      BOOST_PP_COMMA, \
+      BOOST_PP_EMPTY))() \
   WG_PP_SEQ_ENUM( \
     BOOST_PP_SEQ_FOR_EACH_I( \
       WG_PP_PARAMPROXY_TYPE_CTORPARAM, \
-      ~, \
-      WG_PP_IDENTITY_3( \
-        WG_PP_PSEQ_BOUNDRESULTTYPE(pseq), \
+      WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
+      WG_PP_IDENTITY_2( \
         WG_PP_PSEQ_BOUNDTYPES(pseq), \
         WG_PP_PSEQ_ASSIGNEDTYPES(pseq))))
   
@@ -571,18 +612,23 @@
     {}
 
 // BOOST_PP_ENUM functor.
-#define WG_PP_PARAMPROXY_TYPE_ACCESSORDCLN(r, data, indx, elem) \
-  WG_PP_CAPTUREDTYPE_ADDREFERENCE(elem) BOOST_PP_CAT(get, indx) () const \
+#define WG_PP_PARAMPROXY_TYPE_ACCESSORDCLN(r, offset, indx, elem) \
+  WG_PP_CAPTUREDTYPE_ADDREFERENCE(WG_PP_CAPTUREDTYPE_ADDCONST(elem)) \
+    BOOST_PP_CAT(get, BOOST_PP_ADD(indx,offset)) () const \
   { \
-    return BOOST_PP_CAT(m, indx); \
+    return BOOST_PP_CAT(m, BOOST_PP_ADD(indx,offset)); \
   }
     
 #define WG_PP_PARAMPROXY_TYPE_ACCESSORS(pseq) \
+  BOOST_PP_EXPR_IIF( \
+    WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
+    WG_PP_CAPTUREDTYPE_ADDREFERENCE( \
+      BOOST_PP_SEQ_HEAD(WG_PP_PSEQ_BOUNDRESULTTYPE(pseq)))) \
+    get0() const { return m0; } \
   BOOST_PP_SEQ_FOR_EACH_I( \
     WG_PP_PARAMPROXY_TYPE_ACCESSORDCLN, \
-    ~, \
-    WG_PP_IDENTITY_3( \
-      WG_PP_PSEQ_BOUNDRESULTTYPE(pseq), \
+    WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
+    WG_PP_IDENTITY_2( \
       WG_PP_PSEQ_BOUNDTYPES(pseq), \
       WG_PP_PSEQ_ASSIGNEDTYPES(pseq)))
     
@@ -621,10 +667,15 @@
   WG_PP_IDENTITY(obj_name).BOOST_PP_CAT(get,n)()
 
 #define WG_PP_PARAMPROXY_OBJ_ELEMACCESSLIST(pseq, obj_name) \
-  BOOST_PP_ENUM( \
-    WG_PP_PSEQ_TOTALXXX_SiZE(pseq), \
-    WG_PP_PARAMPROXY_OBJ_ELEMACCESS, \
-    obj_name)
+  BOOST_PP_IIF( \
+    WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
+    BOOST_PP_ENUM_SHIFTED, \
+    BOOST_PP_ENUM) \
+    ( \
+      WG_PP_PSEQ_TOTALXXX_SiZE(pseq), \
+      WG_PP_PARAMPROXY_OBJ_ELEMACCESS, \
+      obj_name \
+    )
     
 // BOOST_PP_SEQ_FOR_EACH_I functor.
 #define \
