@@ -214,18 +214,21 @@ TEST(wg_utils_autofunction, recursive)
 {
   try
   {
-//    int fib = 0;
-//
-//    WG_AUTOFUNCTION(
-//      calculateFibonacci,
-//      (int &)(fib),
-//      (int)(input, 4))
-//    {
-//      if(input > 1)
-//      {
-//        calculateFibonacci(fib, input - 1) + calculateFibonacci(fib, input - 2);
-//      }
-//    }
+    int fib = 0;
+
+    WG_AUTOFUNCTION_ASSIGN(
+      (int)(fib), (int),
+      calculateFibonacci,
+      (int)(input, 4))
+    {
+      if(input > 1)
+      {
+        return calculateFibonacci(input - 1) + calculateFibonacci(input - 2);
+      }
+      else return input;
+    }WG_AUTOFUNCTION_END;
+
+    EXPECT_EQ(fib, 3);
   }
   WG_GTEST_CATCH
 }

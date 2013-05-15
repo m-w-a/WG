@@ -69,7 +69,7 @@
 //------------
   
 #define WG_PP_IS_NIL_TOKEN(x) BOOST_PP_LiST_IS_NIL(x)
-  
+
 #define WG_PP_IDENTITY(x) x
 #define WG_PP_IDENTITY_1(x) WG_PP_IDENTITY(x)
 #define WG_PP_IDENTITY_2(x, y) x y
@@ -108,79 +108,63 @@
     tokens, \
     WG_PP_TOKEN_MATCHES5_)
     
-#define WG_PP_CAPTUREDTYPE_local(capturedtype) local
-#define WG_PP_CAPTUREDTYPE_VALUE_local(value) value
-#define WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype) \
+#define WG_PP_SPECIFIEDTYPE_local(specifiedtype) local
+#define WG_PP_SPECIFIEDTYPE_VALUE_local(value) value
+#define WG_PP_SPECIFIEDTYPE_LOCAL_VALUE(specifiedtype) \
   BOOST_PP_EXPAND( \
-    BOOST_PP_CAT(WG_PP_CAPTUREDTYPE_VALUE_, capturedtype))
-#define WG_PP_IS_CAPTUREDTYPE_LOCAL(capturedtype) \
+    BOOST_PP_CAT(WG_PP_SPECIFIEDTYPE_VALUE_, specifiedtype))
+#define WG_PP_IS_SPECIFIEDTYPE_LOCAL(specifiedtype) \
   WG_PP_TOKENS_STARTS_WITH_LOCAL( \
     BOOST_PP_EXPAND( \
-      BOOST_PP_CAT(WG_PP_CAPTUREDTYPE_,capturedtype)))
+      BOOST_PP_CAT(WG_PP_SPECIFIEDTYPE_,specifiedtype)))
 
-#define WG_PP_CAPTUREDTYPE_localref(capturedtype) localref
-#define WG_PP_CAPTUREDTYPE_VALUE_localref(value) value
-#define WG_PP_CAPTUREDTYPE_LOCALREF_VALUE(capturedtype) \
+#define WG_PP_SPECIFIEDTYPE_localref(specifiedtype) localref
+#define WG_PP_SPECIFIEDTYPE_VALUE_localref(value) value
+#define WG_PP_SPECIFIEDTYPE_LOCALREF_VALUE(specifiedtype) \
   BOOST_PP_EXPAND( \
-    BOOST_PP_CAT(WG_PP_CAPTUREDTYPE_VALUE_, capturedtype))
-#define WG_PP_IS_CAPTUREDTYPE_LOCALREF(capturedtype) \
+    BOOST_PP_CAT(WG_PP_SPECIFIEDTYPE_VALUE_, specifiedtype))
+#define WG_PP_IS_SPECIFIEDTYPE_LOCALREF(specifiedtype) \
   WG_PP_TOKENS_STARTS_WITH_LOCALREF( \
     BOOST_PP_EXPAND( \
-      BOOST_PP_CAT(WG_PP_CAPTUREDTYPE_,capturedtype)))
+      BOOST_PP_CAT(WG_PP_SPECIFIEDTYPE_,specifiedtype)))
       
-#define WG_PP_CAPTUREDTYPE_VALUE(capturedtype) \
+#define WG_PP_SPECIFIEDTYPE_VALUE(specifiedtype) \
   BOOST_PP_IIF( \
-    WG_PP_IS_CAPTUREDTYPE_LOCAL(capturedtype), \
-    WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype), \
+    WG_PP_IS_SPECIFIEDTYPE_LOCAL(specifiedtype), \
+    WG_PP_SPECIFIEDTYPE_LOCAL_VALUE(specifiedtype), \
     BOOST_PP_IIF( \
-      WG_PP_IS_CAPTUREDTYPE_LOCALREF(capturedtype), \
-      WG_PP_CAPTUREDTYPE_LOCALREF_VALUE(capturedtype), \
-      capturedtype))
+      WG_PP_IS_SPECIFIEDTYPE_LOCALREF(specifiedtype), \
+      WG_PP_SPECIFIEDTYPE_LOCALREF_VALUE(specifiedtype), \
+      specifiedtype))
     
-#define WG_PP_CAPTUREDTYPE_ADDCONST(capturedtype) \
+#define WG_PP_SPECIFIEDTYPE_ADDCONST(specifiedtype) \
   BOOST_PP_IIF( \
-    WG_PP_IS_CAPTUREDTYPE_LOCALREF(capturedtype), \
-    WG_PP_CAPTUREDTYPE_LOCALREF_VALUE(capturedtype), \
+    WG_PP_IS_SPECIFIEDTYPE_LOCALREF(specifiedtype), \
+    WG_PP_SPECIFIEDTYPE_LOCALREF_VALUE(specifiedtype), \
     BOOST_PP_IIF( \
-      WG_PP_IS_CAPTUREDTYPE_LOCAL(capturedtype), \
-      WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype), \
-      boost::add_const<WG_PP_IDENTITY(capturedtype)>::type))
-/*
-namespace WG
-{
-namespace AutoFunctor
-{
-namespace Internal
-{
+      WG_PP_IS_SPECIFIEDTYPE_LOCAL(specifiedtype), \
+      WG_PP_SPECIFIEDTYPE_LOCAL_VALUE(specifiedtype), \
+      boost::add_const<WG_PP_IDENTITY(specifiedtype)>::type))
 
-template <typename T>
-struct AddConstIfNotReference
-{
-  template <bool> struct AddConst;
-  template <> struct AddConst<true>
-  { 
-    typedef boost::add_const<T>::type type;
-  };
-  template <> struct AddConst<false>
-  {
-    typedef T type;
-  };
-  
-  typedef typename AddConst< boost::is_reference<T>::value >::type type;
-};
-
-}
-}
-}
-*/
-#define WG_PP_CAPTUREDTYPE_ADDREFERENCE(capturedtype) \
+#define WG_PP_SPECIFIEDTYPE_ADDREFERENCE(specifiedtype) \
   BOOST_PP_IIF( \
-    WG_PP_IS_CAPTUREDTYPE_LOCALREF(capturedtype), \
-    WG_PP_CAPTUREDTYPE_LOCALREF_VALUE(capturedtype), \
+    WG_PP_IS_SPECIFIEDTYPE_LOCALREF(specifiedtype), \
+    WG_PP_SPECIFIEDTYPE_LOCALREF_VALUE(specifiedtype), \
     BOOST_PP_IIF( \
-      WG_PP_IS_CAPTUREDTYPE_LOCAL(capturedtype), \
-      WG_PP_CAPTUREDTYPE_LOCAL_VALUE(capturedtype) &, \
-      boost::add_reference<WG_PP_IDENTITY(capturedtype)>::type))
+      WG_PP_IS_SPECIFIEDTYPE_LOCAL(specifiedtype), \
+      WG_PP_SPECIFIEDTYPE_LOCAL_VALUE(specifiedtype) &, \
+      boost::add_reference<WG_PP_IDENTITY(specifiedtype)>::type))
+      
+#define WG_PP_SPECIFIEDTYPE_ADDCONST_ADDREF(specifiedtype) \
+  BOOST_PP_IIF( \
+    WG_PP_IS_SPECIFIEDTYPE_LOCALREF(specifiedtype), \
+    WG_PP_SPECIFIEDTYPE_LOCALREF_VALUE(specifiedtype), \
+    BOOST_PP_IIF( \
+      WG_PP_IS_SPECIFIEDTYPE_LOCAL(specifiedtype), \
+      WG_PP_SPECIFIEDTYPE_LOCAL_VALUE(specifiedtype), \
+      boost::add_reference< \
+        boost::add_const<WG_PP_IDENTITY(specifiedtype)>::type \
+      >::type))
   
 #define WG_PP_IS_ODD(num) BOOST_PP_MOD(num,2)
 #define WG_PP_IS_EVEN(num) \
@@ -550,15 +534,14 @@ struct AddConstIfNotReference
 
 // BOOST_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_PARAMPROXY_TYPE_MEMBER(r, offset, indx, elem) \
-  WG_PP_CAPTUREDTYPE_ADDREFERENCE( \
-    WG_PP_CAPTUREDTYPE_ADDCONST(elem)) \
+  WG_PP_SPECIFIEDTYPE_ADDCONST_ADDREF(elem) \
       BOOST_PP_CAT(m, BOOST_PP_ADD(indx,offset)) WG_PP_IDENTITY(;)
 
 #define WG_PP_PARAMPROXY_TYPE_MEMBERDECLNS(pseq) \
   BOOST_PP_EXPR_IIF( \
     WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
-    WG_PP_CAPTUREDTYPE_ADDREFERENCE( \
-      BOOST_PP_SEQ_HEAD(WG_PP_PSEQ_BOUNDRESULTTYPE(pseq))) \
+    WG_PP_SPECIFIEDTYPE_ADDREFERENCE( \
+      BOOST_PP_EXPAND(WG_PP_IDENTITY WG_PP_PSEQ_BOUNDRESULTTYPE(pseq))) \
     m0;) \
   BOOST_PP_SEQ_FOR_EACH_I( \
     WG_PP_PARAMPROXY_TYPE_MEMBER, \
@@ -570,20 +553,21 @@ struct AddConstIfNotReference
 // BOOST_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_PARAMPROXY_TYPE_CTORPARAM(r, offset, indx, elem) \
   BOOST_PP_LPAREN() \
-    WG_PP_CAPTUREDTYPE_ADDREFERENCE(WG_PP_CAPTUREDTYPE_ADDCONST(elem)) \
+    WG_PP_SPECIFIEDTYPE_ADDCONST_ADDREF(elem) \
       BOOST_PP_CAT(p, BOOST_PP_ADD(indx,offset)) \
   BOOST_PP_RPAREN()
 
 #define WG_PP_PARAMPROXY_TYPE_CTORPARAMLIST(pseq) \
-  BOOST_PP_EXPR_IIF( \
+  BOOST_PP_IIF( \
     WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
-    WG_PP_CAPTUREDTYPE_ADDREFERENCE( \
-      BOOST_PP_SEQ_HEAD(WG_PP_PSEQ_BOUNDRESULTTYPE(pseq))) \
+    WG_PP_SPECIFIEDTYPE_ADDREFERENCE( \
+      BOOST_PP_EXPAND(WG_PP_IDENTITY WG_PP_PSEQ_BOUNDRESULTTYPE(pseq))) \
     p0 \
     BOOST_PP_IIF( \
       BOOST_PP_GREATER(WG_PP_PSEQ_TOTALXXX_SiZE(pseq), 1), \
       BOOST_PP_COMMA, \
-      BOOST_PP_EMPTY))() \
+      BOOST_PP_EMPTY), \
+    BOOST_PP_EMPTY)() \
   WG_PP_SEQ_ENUM( \
     BOOST_PP_SEQ_FOR_EACH_I( \
       WG_PP_PARAMPROXY_TYPE_CTORPARAM, \
@@ -613,7 +597,7 @@ struct AddConstIfNotReference
 
 // BOOST_PP_ENUM functor.
 #define WG_PP_PARAMPROXY_TYPE_ACCESSORDCLN(r, offset, indx, elem) \
-  WG_PP_CAPTUREDTYPE_ADDREFERENCE(WG_PP_CAPTUREDTYPE_ADDCONST(elem)) \
+  WG_PP_SPECIFIEDTYPE_ADDCONST_ADDREF(elem) \
     BOOST_PP_CAT(get, BOOST_PP_ADD(indx,offset)) () const \
   { \
     return BOOST_PP_CAT(m, BOOST_PP_ADD(indx,offset)); \
@@ -622,9 +606,9 @@ struct AddConstIfNotReference
 #define WG_PP_PARAMPROXY_TYPE_ACCESSORS(pseq) \
   BOOST_PP_EXPR_IIF( \
     WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
-    WG_PP_CAPTUREDTYPE_ADDREFERENCE( \
-      BOOST_PP_SEQ_HEAD(WG_PP_PSEQ_BOUNDRESULTTYPE(pseq)))) \
-    get0() const { return m0; } \
+    WG_PP_SPECIFIEDTYPE_ADDREFERENCE( \
+      BOOST_PP_EXPAND(WG_PP_IDENTITY WG_PP_PSEQ_BOUNDRESULTTYPE(pseq))) \
+    get0() const { return m0; }) \
   BOOST_PP_SEQ_FOR_EACH_I( \
     WG_PP_PARAMPROXY_TYPE_ACCESSORDCLN, \
     WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
@@ -684,8 +668,8 @@ struct AddConstIfNotReference
       BOOST_PP_IF( \
         WG_PP_TOKENS_STARTS_WITH_THISU( \
           BOOST_PP_SEQ_ELEM(indx, obj_seq)), \
-        WG_PP_CAPTUREDTYPE_ADDCONST(elem), \
-        WG_PP_CAPTUREDTYPE_VALUE(elem)) \
+        WG_PP_SPECIFIEDTYPE_ADDCONST(elem), \
+        WG_PP_SPECIFIEDTYPE_VALUE(elem)) \
       BOOST_PP_SEQ_ELEM(indx, obj_seq) \
       BOOST_PP_COMMA_IF( \
         BOOST_PP_NOT(WG_PP_IS_SEQ_INDEX_LAST( \
@@ -716,8 +700,8 @@ struct AddConstIfNotReference
       this->function_name( \
         WG_PP_PARAMPROXY_OBJ_ELEMACCESSLIST(pseq, param_proxy)); \
     } \
-    BOOST_PP_SEQ_HEAD(WG_PP_PSEQ_RETTYPE(pseq)) \
-      WG_PP_IDENTITY(function_name) WG_PP_CALL_PARAMLIST(pseq)
+    BOOST_PP_EXPAND(WG_PP_IDENTITY WG_PP_PSEQ_RETTYPE(pseq)) \
+      function_name WG_PP_CALL_PARAMLIST(pseq)
     
 #define WG_PP_AUTOFUNCTOR_END() \
   } WG_PP_FORMAT_NAME(auto_functor); \
