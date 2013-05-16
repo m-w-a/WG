@@ -168,44 +168,71 @@
     
 #define \
   WG_PP_BOUNDPSEQ_TO_TYPESEQ(bp_seq) \
-    WG_PP_SEQ_FOR_EACH_I( \
-      WG_PP_SEQUENCE_IF_INDEX, \
-      WG_PP_IS_EVEN, \
-      bp_seq)
+    BOOST_PP_IIF( \
+      WG_PP_SEQ_IS_NEXTTOKEN_NOTNILSEQ(bp_seq), \
+      WG_PP_SEQ_FOR_EACH_I( \
+        WG_PP_SEQUENCE_IF_INDEX, \
+        WG_PP_IS_EVEN, \
+        bp_seq), \
+      BOOST_PP_NIL)
     
 #define \
   WG_PP_BOUNDPSEQ_TO_OBJSEQ(bp_seq) \
-    WG_PP_SEQ_FOR_EACH_I( \
-      WG_PP_SEQUENCE_IF_INDEX, \
-      WG_PP_IS_ODD, \
-      bp_seq)
+    BOOST_PP_IIF( \
+      WG_PP_SEQ_IS_NEXTTOKEN_NOTNILSEQ(bp_seq), \
+      WG_PP_SEQ_FOR_EACH_I( \
+        WG_PP_SEQUENCE_IF_INDEX, \
+        WG_PP_IS_ODD, \
+        bp_seq), \
+      BOOST_PP_NIL)
 
 #define \
   WG_PP_ASSIGNEDPSEQ_TO_TYPESEQ(ap_seq) \
-    WG_PP_SEQ_FOR_EACH_I( \
-      WG_PP_SEQUENCE_IF_INDEX, \
-      WG_PP_IS_MOD3_R0, \
-      ap_seq)
+    BOOST_PP_IIF( \
+      WG_PP_SEQ_IS_NEXTTOKEN_NOTNILSEQ(ap_seq), \
+      WG_PP_SEQ_FOR_EACH_I( \
+        WG_PP_SEQUENCE_IF_INDEX, \
+        WG_PP_IS_MOD3_R0, \
+        ap_seq), \
+      BOOST_PP_NIL)
       
 #define \
   WG_PP_ASSIGNEDPSEQ_TO_OBJSEQ(ap_seq) \
-    WG_PP_SEQ_FOR_EACH_I( \
-      WG_PP_SEQUENCE_IF_INDEX, \
-      WG_PP_IS_MOD3_R1, \
-      ap_seq)
+    BOOST_PP_IIF( \
+      WG_PP_SEQ_IS_NEXTTOKEN_NOTNILSEQ(ap_seq), \
+      WG_PP_SEQ_FOR_EACH_I( \
+        WG_PP_SEQUENCE_IF_INDEX, \
+        WG_PP_IS_MOD3_R1, \
+        ap_seq), \
+      BOOST_PP_NIL)
 
 #define \
   WG_PP_ASSIGNEDPSEQ_TO_VALUESEQ(ap_seq) \
-    WG_PP_SEQ_FOR_EACH_I( \
-      WG_PP_SEQUENCE_IF_INDEX, \
-      WG_PP_IS_MOD3_R2, \
-      ap_seq)
+    BOOST_PP_IIF( \
+      WG_PP_SEQ_IS_NEXTTOKEN_NOTNILSEQ(ap_seq), \
+      WG_PP_SEQ_FOR_EACH_I( \
+        WG_PP_SEQUENCE_IF_INDEX, \
+        WG_PP_IS_MOD3_R2, \
+        ap_seq), \
+      BOOST_PP_NIL)
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_MARK_THISU_INDX(r, data, indx, elem) \
   BOOST_PP_EXPR_IF( \
     WG_PP_TOKENS_STARTS_WITH_THISU(elem), \
     (indx))
+    
+#define WG_PP_THISU_INDX_IMPL_0 BOOST_PP_NIL
+#define WG_PP_THISU_INDX_IMPL_1(indx) indx
+#define WG_PP_THISU_INDX_IMPL(seq) \
+  BOOST_PP_CAT( \
+    WG_PP_THISU_INDX_IMPL_, \
+    WG_PP_SEQ_IS_NEXTTOKEN_NOTNILSEQ( \
+      BOOST_PP_TUPLE_EAT(1)seq BOOST_PP_NIL)) BOOST_PP_TUPLE_EAT(1)seq
+  
+#define WG_PP_THISU_INDX(bp_obj_seq) \
+  WG_PP_THISU_INDX_IMPL( \
+    (BOOST_PP_NIL) WG_PP_SEQ_FOR_EACH_I(WG_PP_MARK_THISU_INDX, ~, bp_obj_seq))
 
 #define WG_PP_MAKE_PSEQ_IMPL3(wiparray) \
   BOOST_PP_ARRAY_PUSH_BACK( \
@@ -230,7 +257,7 @@
         bp_type_seq, \
         bp_obj_seq, \
         WG_PP_SEQ_SIZE(bp_type_seq), \
-        WG_PP_SEQ_FOR_EACH_I(WG_PP_MARK_THISU_INDX, ~, bp_obj_seq), \
+        WG_PP_THISU_INDX(bp_obj_seq), \
         ap_type_seq, \
         ap_obj_seq, \
         ap_value_seq, \
@@ -250,7 +277,7 @@
 
 #define WG_PP_BOUND_PSEQ_IS_VOID(bp_seq) \
   BOOST_PP_IIF( \
-    WG_PP_SEQ_ISHEAD_1TUPLE(BOOST_PP_TUPLE_EAT(1) bp_seq), \
+    WG_PP_SEQ_ISHEAD_1TUPLE(BOOST_PP_TUPLE_EAT(1) bp_seq BOOST_PP_NIL), \
     0, \
     BOOST_PP_IIF( \
       WG_PP_TOKENS_STARTS_WITH_VOID(WG_PP_SEQ_ELEM(0, bp_seq)), \
@@ -259,7 +286,7 @@
 
 #define WG_PP_ASSIGNED_PSEQ_IS_VOID(ap_alt_seq) \
   BOOST_PP_IF( \
-    WG_PP_SEQ_ISHEAD_2TUPLE(BOOST_PP_TUPLE_EAT(1) ap_alt_seq), \
+    WG_PP_SEQ_ISHEAD_2TUPLE(BOOST_PP_TUPLE_EAT(1) ap_alt_seq BOOST_PP_NIL), \
     0, \
     BOOST_PP_IF( \
       BOOST_PP_EXPAND( \
@@ -288,15 +315,18 @@
 //  See below for detail of PSEQ structure access.
 #define WG_PP_MAKE_PSEQ(bresult_seq, ret_type, bp_seq, ap_alt_seq) \
   WG_PP_MAKE_PSEQ_IMPL1( \
-    BOOST_PP_EXPR_IF( \
-      BOOST_PP_NOT(WG_PP_BOUND_PSEQ_IS_VOID(bresult_seq)), \
+    BOOST_PP_IIF( \
+      WG_PP_BOUND_PSEQ_IS_VOID(bresult_seq), \
+      BOOST_PP_NIL, \
       bresult_seq), \
     ret_type, \
-    BOOST_PP_EXPR_IF( \
-      BOOST_PP_NOT(WG_PP_BOUND_PSEQ_IS_VOID(bp_seq)), \
+    BOOST_PP_IIF( \
+      WG_PP_BOUND_PSEQ_IS_VOID(bp_seq), \
+      BOOST_PP_NIL, \
       bp_seq), \
-    BOOST_PP_EXPR_IF( \
-      BOOST_PP_NOT(WG_PP_ASSIGNED_PSEQ_IS_VOID(ap_alt_seq)), \
+    BOOST_PP_IIF( \
+      WG_PP_ASSIGNED_PSEQ_IS_VOID(ap_alt_seq), \
+      BOOST_PP_NIL, \
       WG_PP_ALTSEQ_LINEARIZE(ap_alt_seq)))
 
 #define WG_PP_PSEQ_BOUNDRESULTTYPE(pseq) \
@@ -340,7 +370,7 @@
   WG_PP_SEQ_FOR_EACH_I( \
     WG_PP_PARAMPROXY_TYPE_MEMBER, \
     WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
-    WG_PP_IDENTITY_2( \
+    WG_PP_SEQ_CAT( \
       WG_PP_PSEQ_BOUNDTYPES(pseq), \
       WG_PP_PSEQ_ASSIGNEDTYPES(pseq)))
 
@@ -366,7 +396,7 @@
     WG_PP_SEQ_FOR_EACH_I( \
       WG_PP_PARAMPROXY_TYPE_CTORPARAM, \
       WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
-      WG_PP_IDENTITY_2( \
+      WG_PP_SEQ_CAT( \
         WG_PP_PSEQ_BOUNDTYPES(pseq), \
         WG_PP_PSEQ_ASSIGNEDTYPES(pseq))))
   
@@ -406,18 +436,19 @@
   WG_PP_SEQ_FOR_EACH_I( \
     WG_PP_PARAMPROXY_TYPE_ACCESSORDCLN, \
     WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
-    WG_PP_IDENTITY_2( \
+    WG_PP_SEQ_CAT( \
       WG_PP_PSEQ_BOUNDTYPES(pseq), \
       WG_PP_PSEQ_ASSIGNEDTYPES(pseq)))
     
 #define WG_PP_PARAMPROXY_OBJ_INITLIST( \
   bound_objs_seq, assigned_values_seq, thisu_marker) \
     WG_PP_SEQ_ENUM( \
-      WG_PP_SEQ_REPLACE( \
-        bound_objs_seq, \
-        thisu_marker, \
-        this) \
-      assigned_values_seq)
+      WG_PP_SEQ_CAT( \
+        WG_PP_SEQ_REPLACE( \
+          bound_objs_seq, \
+          thisu_marker, \
+          this), \
+        assigned_values_seq))
 
 #define WG_PP_PARAMPROXY_TYPE_NAME() \
   WG_PP_FORMAT_NAME(param_proxy_type)
@@ -435,7 +466,9 @@
     WG_PP_PARAMPROXY_TYPE_NAME() \
     BOOST_PP_LPAREN() \
       WG_PP_PARAMPROXY_OBJ_INITLIST( \
-        WG_PP_PSEQ_BOUNDRESULTOBJECT(pseq)WG_PP_PSEQ_BOUNDOBJECTS(pseq), \
+        WG_PP_SEQ_CAT( \
+          WG_PP_PSEQ_BOUNDRESULTOBJECT(pseq), \
+          WG_PP_PSEQ_BOUNDOBJECTS(pseq)), \
         WG_INERNAL_PSEQ_ASSIGNEDVALUES(pseq), \
         WG_PP_PSEQ_BOUNDOBJECTS_THISU_MARKER(pseq)) \
     BOOST_PP_RPAREN() WG_PP_IDENTITY(;)
@@ -474,10 +507,10 @@
   BOOST_PP_LPAREN() \
     WG_PP_SEQ_FOR_EACH_I( \
       WG_PP_CALL_PARAM_ENTRY, \
-      WG_PP_IDENTITY_2( \
+      WG_PP_SEQ_CAT( \
         WG_PP_PSEQ_BOUNDOBJECTS(pseq), \
         WG_PP_PSEQ_ASSIGNEDOBJECTS(pseq)), \
-      WG_PP_IDENTITY_2( \
+      WG_PP_SEQ_CAT( \
         WG_PP_PSEQ_BOUNDTYPES(pseq), \
         WG_PP_PSEQ_ASSIGNEDTYPES(pseq))) \
   BOOST_PP_RPAREN()
