@@ -12,6 +12,14 @@
 #define WG_PP_IDENTITY_2(x, y) x y
 #define WG_PP_IDENTITY_3(x, y, z) x y z
 
+#define WG_PP_TUPLIZE(x) (x)
+#define WG_PP_TUPLIZE_1(x) WG_PP_TUPLIZE(x)
+#define WG_PP_TUPLIZE_2(x, y) (x, y)
+
+#define WG_PP_1TUPLIZE(x) (x)
+#define WG_PP_1TUPLIZE_1(x) WG_PP_1TUPLIZE(x)
+#define WG_PP_1TUPLIZE_2(x, y) (x)(y)
+
 #define WG_PP_TOKENS_START_WITH_WG_PP_TRUE(tokens) \
   WG_PP_TOKENS_START_WITH_WG_PP_TRUE_IMPL(tokens)
 
