@@ -160,7 +160,7 @@
 //AssignedPSeq & BoundPSeq
 //------------------------
 
-// BOOST_PP_SEQ_FOR_EACH_I functor.
+// WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_SEQUENCE_IF_INDEX(r, CONDITION, indx, elem) \
   BOOST_PP_EXPR_IF( \
     CONDITION(indx), \
@@ -168,40 +168,40 @@
     
 #define \
   WG_PP_BOUNDPSEQ_TO_TYPESEQ(bp_seq) \
-    BOOST_PP_SEQ_FOR_EACH_I( \
+    WG_PP_SEQ_FOR_EACH_I( \
       WG_PP_SEQUENCE_IF_INDEX, \
       WG_PP_IS_EVEN, \
       bp_seq)
     
 #define \
   WG_PP_BOUNDPSEQ_TO_OBJSEQ(bp_seq) \
-    BOOST_PP_SEQ_FOR_EACH_I( \
+    WG_PP_SEQ_FOR_EACH_I( \
       WG_PP_SEQUENCE_IF_INDEX, \
       WG_PP_IS_ODD, \
       bp_seq)
 
 #define \
   WG_PP_ASSIGNEDPSEQ_TO_TYPESEQ(ap_seq) \
-    BOOST_PP_SEQ_FOR_EACH_I( \
+    WG_PP_SEQ_FOR_EACH_I( \
       WG_PP_SEQUENCE_IF_INDEX, \
       WG_PP_IS_MOD3_R0, \
       ap_seq)
       
 #define \
   WG_PP_ASSIGNEDPSEQ_TO_OBJSEQ(ap_seq) \
-    BOOST_PP_SEQ_FOR_EACH_I( \
+    WG_PP_SEQ_FOR_EACH_I( \
       WG_PP_SEQUENCE_IF_INDEX, \
       WG_PP_IS_MOD3_R1, \
       ap_seq)
 
 #define \
   WG_PP_ASSIGNEDPSEQ_TO_VALUESEQ(ap_seq) \
-    BOOST_PP_SEQ_FOR_EACH_I( \
+    WG_PP_SEQ_FOR_EACH_I( \
       WG_PP_SEQUENCE_IF_INDEX, \
       WG_PP_IS_MOD3_R2, \
       ap_seq)
 
-// BOOST_PP_SEQ_FOR_EACH_I functor.
+// WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_MARK_THISU_INDX(r, data, indx, elem) \
   BOOST_PP_EXPR_IF( \
     WG_PP_TOKENS_STARTS_WITH_THISU(elem), \
@@ -225,16 +225,16 @@
       (12, \
         (bresult_type_seq, \
         bresult_obj_seq, \
-        BOOST_PP_SEQ_SIZE(bresult_type_seq), \
+        WG_PP_SEQ_SIZE(bresult_type_seq), \
         ret_type, \
         bp_type_seq, \
         bp_obj_seq, \
-        BOOST_PP_SEQ_SIZE(bp_type_seq), \
-        BOOST_PP_SEQ_FOR_EACH_I(WG_PP_MARK_THISU_INDX, ~, bp_obj_seq), \
+        WG_PP_SEQ_SIZE(bp_type_seq), \
+        WG_PP_SEQ_FOR_EACH_I(WG_PP_MARK_THISU_INDX, ~, bp_obj_seq), \
         ap_type_seq, \
         ap_obj_seq, \
         ap_value_seq, \
-        BOOST_PP_SEQ_SIZE(ap_type_seq))) \
+        WG_PP_SEQ_SIZE(ap_type_seq))) \
     )
 
 #define WG_PP_MAKE_PSEQ_IMPL1(bresult_seq, ret_type, bp_seq, ap_seq) \
@@ -249,11 +249,11 @@
     WG_PP_ASSIGNEDPSEQ_TO_VALUESEQ(ap_seq))
 
 #define WG_PP_BOUND_PSEQ_IS_VOID(bp_seq) \
-  BOOST_PP_IF( \
+  BOOST_PP_IIF( \
     WG_PP_SEQ_ISHEAD_1TUPLE(BOOST_PP_TUPLE_EAT(1) bp_seq), \
     0, \
-    BOOST_PP_IF( \
-      WG_PP_TOKENS_STARTS_WITH_VOID(BOOST_PP_SEQ_ELEM(0, bp_seq)), \
+    BOOST_PP_IIF( \
+      WG_PP_TOKENS_STARTS_WITH_VOID(WG_PP_SEQ_ELEM(0, bp_seq)), \
       1, \
       0))
 
@@ -272,14 +272,14 @@
 //BOOST_PP_EXPR_IF( \
 //  BOOST_PP_AND( \
 //    BOOST_PP_NOT(WG_PP_BOUND_PSEQ_IS_VOID(bp_seq)), \
-//    BOOST_PP_NOT(WG_PP_IS_EVEN(BOOST_PP_SEQ_SIZE(bp_seq)))), \
+//    BOOST_PP_NOT(WG_PP_IS_EVEN(WG_PP_SEQ_SIZE(bp_seq)))), \
 //  BOOST_PP_ASSERT_MSG( \
 //    0, "The second parameter to WG_AUTOFUNCTION is malformed.")) \
 //\
 //BOOST_PP_EXPR_IF( \
 //  BOOST_PP_AND( \
 //    BOOST_PP_NOT(WG_PP_ASSIGNED_PSEQ_IS_VOID(ap_alt_seq)), \
-//    BOOST_PP_NOT(WG_PP_IS_MOD3_R0(BOOST_PP_SEQ_SIZE(ap_alt_seq)))), \
+//    BOOST_PP_NOT(WG_PP_IS_MOD3_R0(WG_PP_SEQ_SIZE(ap_alt_seq)))), \
 //  BOOST_PP_ASSERT_MSG( \
 //    0, "The third parameter to WG_AUTOFUNCTION is malformed.")) \
 //\
@@ -326,7 +326,7 @@
 #define WG_PP_PSEQ_TOTALXXX_SiZE(pseq) \
   BOOST_PP_ARRAY_ELEM(12, pseq)
 
-// BOOST_PP_SEQ_FOR_EACH_I functor.
+// WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_PARAMPROXY_TYPE_MEMBER(r, offset, indx, elem) \
   WG_PP_SPECIFIEDTYPE_ADDCONST_ADDREF(elem) \
       BOOST_PP_CAT(m, BOOST_PP_ADD(indx,offset)) WG_PP_IDENTITY(;)
@@ -337,14 +337,14 @@
     WG_PP_SPECIFIEDTYPE_ADDREFERENCE( \
       BOOST_PP_EXPAND(WG_PP_IDENTITY WG_PP_PSEQ_BOUNDRESULTTYPE(pseq))) \
     m0;) \
-  BOOST_PP_SEQ_FOR_EACH_I( \
+  WG_PP_SEQ_FOR_EACH_I( \
     WG_PP_PARAMPROXY_TYPE_MEMBER, \
     WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
     WG_PP_IDENTITY_2( \
       WG_PP_PSEQ_BOUNDTYPES(pseq), \
       WG_PP_PSEQ_ASSIGNEDTYPES(pseq)))
 
-// BOOST_PP_SEQ_FOR_EACH_I functor.
+// WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_PARAMPROXY_TYPE_CTORPARAM(r, offset, indx, elem) \
   BOOST_PP_LPAREN() \
     WG_PP_SPECIFIEDTYPE_ADDCONST_ADDREF(elem) \
@@ -363,7 +363,7 @@
       BOOST_PP_EMPTY), \
     BOOST_PP_EMPTY)() \
   WG_PP_SEQ_ENUM( \
-    BOOST_PP_SEQ_FOR_EACH_I( \
+    WG_PP_SEQ_FOR_EACH_I( \
       WG_PP_PARAMPROXY_TYPE_CTORPARAM, \
       WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
       WG_PP_IDENTITY_2( \
@@ -403,7 +403,7 @@
     WG_PP_SPECIFIEDTYPE_ADDREFERENCE( \
       BOOST_PP_EXPAND(WG_PP_IDENTITY WG_PP_PSEQ_BOUNDRESULTTYPE(pseq))) \
     get0() const { return m0; }) \
-  BOOST_PP_SEQ_FOR_EACH_I( \
+  WG_PP_SEQ_FOR_EACH_I( \
     WG_PP_PARAMPROXY_TYPE_ACCESSORDCLN, \
     WG_PP_PSEQ_BOUNDRESULTEXISTS(pseq), \
     WG_PP_IDENTITY_2( \
@@ -455,24 +455,24 @@
       obj_name \
     )
     
-// BOOST_PP_SEQ_FOR_EACH_I functor.
+// WG_PP_SEQ_FOR_EACH_I functor.
 #define \
   WG_PP_CALL_PARAM_ENTRY( \
     r, obj_seq, indx, elem) \
       BOOST_PP_IF( \
         WG_PP_TOKENS_STARTS_WITH_THISU( \
-          BOOST_PP_SEQ_ELEM(indx, obj_seq)), \
+          WG_PP_SEQ_ELEM(indx, obj_seq)), \
         WG_PP_SPECIFIEDTYPE_ADDCONST(elem), \
         WG_PP_SPECIFIEDTYPE_VALUE(elem)) \
-      BOOST_PP_SEQ_ELEM(indx, obj_seq) \
+      WG_PP_SEQ_ELEM(indx, obj_seq) \
       BOOST_PP_COMMA_IF( \
         BOOST_PP_NOT(WG_PP_IS_SEQ_INDEX_LAST( \
-          BOOST_PP_SEQ_SIZE(obj_seq), \
+          WG_PP_SEQ_SIZE(obj_seq), \
           indx)))
 
 #define WG_PP_CALL_PARAMLIST(pseq) \
   BOOST_PP_LPAREN() \
-    BOOST_PP_SEQ_FOR_EACH_I( \
+    WG_PP_SEQ_FOR_EACH_I( \
       WG_PP_CALL_PARAM_ENTRY, \
       WG_PP_IDENTITY_2( \
         WG_PP_PSEQ_BOUNDOBJECTS(pseq), \
