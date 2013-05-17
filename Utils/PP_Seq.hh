@@ -15,13 +15,13 @@
 #define WG_PP_SEQ_IFNIL_THENCLEAR(seq) \
   WG_PP_SEQ_IFNIL_THENCLEAR_IMPL(seq)
 
-#define WG_PP_IS_SEQ_COUNT_EVEN(seq) \
+#define WG_PP_SEQ_IS_COUNT_EVEN(seq) \
   BOOST_PP_NOT(BOOST_PP_MOD(BOOST_PP_SEQ_SIZE(seq), 2))
 
-#define WG_PP_IS_SEQ_COUNT_ODD(seq) \
-  BOOST_PP_NOT(WG_PP_IS_SEQ_COUNT_EVEN(seq))
+#define WG_PP_SEQ_IS_COUNT_ODD(seq) \
+  BOOST_PP_NOT(WG_PP_SEQ_IS_COUNT_EVEN(seq))
 
-#define WG_PP_IS_SEQ_INDEX_LAST(seq_count, indx) \
+#define WG_PP_SEQ_IS_INDEX_LAST(seq_count, indx) \
   BOOST_PP_EQUAL(seq_count, BOOST_PP_INC(indx))
 
 #define WG_PP_SEQ_SIZE(seq) \
