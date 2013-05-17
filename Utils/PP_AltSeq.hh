@@ -9,11 +9,17 @@
 //Public APIs
 //###########
 
+#define WG_PP_SEQ_ISHEAD_TUPLEARITY1(tuple_seq) \
+  WG_PP_SEQ_ISHEAD_TUPLEARITY1_IMPL(tuple_seq)
+
+#define WG_PP_SEQ_ISHEAD_TUPLEARITY2(tuple_seq) \
+  WG_PP_SEQ_ISHEAD_TUPLEARITY2_IMPL(tuple_seq)
+
 #define WG_PP_ALTSEQ_APPEND_COMMA_TO_HEAD_1(x) \
-  WG_PP_TUPLIZE_1(x) BOOST_PP_COMMA()
+  WG_PP_TUPLIZE_1(x) BOOST_PP_COMMA() 2
 
 #define WG_PP_ALTSEQ_APPEND_COMMA_TO_HEAD_2(x, y) \
-  WG_PP_TUPLIZE_2(x, y) BOOST_PP_COMMA()
+  WG_PP_TUPLIZE_2(x, y) BOOST_PP_COMMA() 1
 
 ///@brief head_tuple_kind
 ///@brief   an unsigned integer representing the kind of tuple the head tuple
@@ -62,6 +68,14 @@
 //Impl Macros
 //###########
 
+#define WG_PP_SEQ_ISHEAD_TUPLEARITY1_IMPL(tuple_seq) \
+  WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
+    BOOST_PP_EXPAND(WG_PP_MAP_TO_TRUETOKEN_ARG1 tuple_seq))
+
+#define WG_PP_SEQ_ISHEAD_TUPLEARITY2_IMPL(tuple_seq) \
+  WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
+    BOOST_PP_EXPAND(WG_PP_MAP_TO_TRUETOKEN_ARG2 tuple_seq))
+
 #define WG_PP_ALTSEQ_TRANSFORM_HEAD_IMPL1( \
   head_tuple_kind, \
   tuple_seq, \
@@ -82,7 +96,15 @@
   tuple_seq_rest, \
   TRANSFORM, \
   TRANSFORM_REST) \
-    WG_PP_IDENTITY(TRANSFORM head_tuple)TRANSFORM_REST(tuple_seq_rest)
+    TRANSFORM head_tuple \
+    BOOST_PP_IIF( \
+      WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
+        BOOST_PP_CAT(WG_PP_MAP_TO_TRUETOKEN_ARG, tuple_seq_rest)), \
+      TRANSFORM_REST( \
+        BOOST_PP_CAT( \
+          WG_PP_TUPLIZE_, \
+          tuple_seq_rest)) BOOST_PP_EMPTY, \
+       BOOST_PP_EMPTY) ()
 
 //----------------
 //ALTSEQ_LINEARIZE
@@ -101,10 +123,10 @@
   BOOST_PP_TUPLE_ELEM(2, 1, state)
 
 #define WG_PP_ALTSEQ_LINEARIZE_PRED_1(state) \
-  WG_PP_SEQ_ISHEAD_1TUPLE( \
+  WG_PP_SEQ_ISHEAD_TUPLEARITY1( \
     WG_PP_ALTSEQ_LINEARIZE_GET_SEQ(state))
 #define WG_PP_ALTSEQ_LINEARIZE_PRED_2(state) \
-  WG_PP_SEQ_ISHEAD_2TUPLE( \
+  WG_PP_SEQ_ISHEAD_TUPLEARITY2( \
     WG_PP_ALTSEQ_LINEARIZE_GET_SEQ(state))
 
 #define WG_PP_ALTSEQ_LINEARIZE_PRED(r, state) \
@@ -112,13 +134,21 @@
     WG_PP_ALTSEQ_LINEARIZE_PRED_, \
     WG_PP_ALTSEQ_LINEARIZE_GET_HEAD_ARITY(state)) (state)
 
+#define WG_PP_ALTSEQ_LINEARIZE_INC_OP_IMPL1(indx, seq) \
+  BOOST_PP_IIF( \
+    WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
+      BOOST_PP_CAT( \
+        WG_PP_MAP_TO_TRUETOKEN_ARG, \
+        WG_PP_ALTSEQ_LINEARIZE_GET_HEAD_ARITY((indx, seq))) seq), \
+    (indx, seq()), \
+    (indx, seq))
 #define WG_PP_ALTSEQ_LINEARIZE_INC_OP(r, state) \
-  ( \
+  WG_PP_ALTSEQ_LINEARIZE_INC_OP_IMPL1( \
     BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(2, 0, state)), \
     WG_PP_ALTSEQ_EAT_HEAD( \
       WG_PP_ALTSEQ_LINEARIZE_GET_HEAD_ARITY(state), \
       WG_PP_ALTSEQ_LINEARIZE_GET_SEQ(state)) \
-  )
+    BOOST_PP_EMPTY)
 
 #define WG_PP_ALTSEQ_LINEARIZE_HEAD(r, state) \
     WG_PP_ALTSEQ_1TUPLIZE_HEAD( \
