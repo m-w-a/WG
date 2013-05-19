@@ -80,6 +80,13 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>local_function</name>
+			<type>2</type>
+			<location>C:/cygwin/home/HPC/boost_installed/v1_53_0/include/boost/local_function</location>
+		</link>
+	</linkedResources>
 	<filteredResources>
 		<filter>
 			<id>1368215814226</id>
