@@ -6,7 +6,6 @@ include $(top_srcdir)/WG/ExternalLibsNoInstall/build_autotools/GTestFlags.am
 ###########################
 
 noinst_PROGRAMS = \
-    test_autofunction \
     test_scopedstdstreamredirector
     
 TEST_BIN_DIR = $(abs_top_builddir)/bin/
@@ -16,12 +15,6 @@ TEST_WG_CLASSMETHODDISABLERS_APPALTPATH = \
     $(TEST_BIN_DIR)/$(TEST_WG_CLASSMETHODDISABLERS_APPNAME)
 TEST_WG_CLASSMETHODDISABLERS_APPBUILDLOC = \
     $(abs_builddir)/../ClassMethodDisablers/$(TEST_WG_CLASSMETHODDISABLERS_APPNAME)
-
-TEST_WG_AUTOFUNCTION_APPNAME = test_autofunction$(EXEEXT)
-TEST_WG_AUTOFUNCTION_APPALTPATH = \
-    $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTION_APPNAME)
-TEST_WG_AUTOFUNCTION_APPBUILDLOC = \
-    $(abs_builddir)/$(TEST_WG_AUTOFUNCTION_APPNAME)
 
 TEST_WG_SCOPESTDSTRMREDIRECTOR_APPNAME = test_scopedstdstreamredirector$(EXEEXT)
 TEST_WG_SCOPESTDSTRMREDIRECTOR_APPALTPATH = \
@@ -33,8 +26,7 @@ TEST_WG_SCOPESTDSTRMREDIRECTOR_APPBUILDLOC = \
 all-local : \
     $(TEST_BIN_DIR) \
     $(TEST_WG_CLASSMETHODDISABLERS_APPALTPATH) \
-    $(TEST_WG_SCOPESTDSTRMREDIRECTOR_APPALTPATH) \
-    $(TEST_WG_AUTOFUNCTION_APPALTPATH)
+    $(TEST_WG_SCOPESTDSTRMREDIRECTOR_APPALTPATH)
 
 $(TEST_BIN_DIR) :
 	$(MKDIR_P) $(TEST_BIN_DIR)
@@ -48,12 +40,6 @@ $(TEST_WG_CLASSMETHODDISABLERS_APPALTPATH) : $(TEST_WG_CLASSMETHODDISABLERS_APPB
           $(abs_builddir)/$(TEST_WG_CLASSMETHODDISABLERS_APPNAME) \
           $(TEST_WG_CLASSMETHODDISABLERS_APPNAME); )
 
-$(TEST_WG_AUTOFUNCTION_APPALTPATH) : $(TEST_WG_AUTOFUNCTION_APPBUILDLOC)
-	( cd $(TEST_BIN_DIR); \
-      $(LN_S) -f \
-          $(TEST_WG_AUTOFUNCTION_APPBUILDLOC) \
-          $(TEST_WG_AUTOFUNCTION_APPNAME); )
-
 $(TEST_WG_SCOPESTDSTRMREDIRECTOR_APPALTPATH) : $(TEST_WG_SCOPESTDSTRMREDIRECTOR_APPBUILDLOC)
 	( cd $(TEST_BIN_DIR); \
       $(LN_S) -f \
@@ -61,27 +47,21 @@ $(TEST_WG_SCOPESTDSTRMREDIRECTOR_APPALTPATH) : $(TEST_WG_SCOPESTDSTRMREDIRECTOR_
           $(TEST_WG_SCOPESTDSTRMREDIRECTOR_APPNAME); )
 
 #Custom finalize.
-clean-local:
-	rm -rf $(TEST_BIN_DIR)/$(TEST_WG_CLASSMETHODDISABLERS_APPNAME)
-	rm -rf $(abs_builddir)/$(TEST_WG_CLASSMETHODDISABLERS_APPNAME)
-	rm -rf $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTION_APPNAME)
-	rm -rf $(TEST_BIN_DIR)/$(TEST_WG_SCOPESTDSTRMREDIRECTOR_APPNAME)
+clean-local : \
+    rm -rf $(TEST_BIN_DIR)/$(TEST_WG_CLASSMETHODDISABLERS_APPNAME) \
+    rm -rf $(abs_builddir)/$(TEST_WG_CLASSMETHODDISABLERS_APPNAME) \
+    rm -rf $(TEST_BIN_DIR)/$(TEST_WG_SCOPESTDSTRMREDIRECTOR_APPNAME)
 
 ##############################
 #Automatically executed tests.
 ##############################
 TESTS = \
     $(TEST_WG_CLASSMETHODDISABLERS_APPNAME) \
-    $(TEST_WG_AUTOFUNCTION_APPNAME) \
     $(TEST_WG_SCOPESTDSTRMREDIRECTOR_APPNAME)
 
 ########
 #Sources
 ########
-
-test_autofunction_SOURCES = \
-    ../AutoFunction/TestMain.cc \
-    ../AutoFunction/AutoFunctionUnitTest.cc
 
 test_scopedstdstreamredirector_SOURCES = \
     ../ScopedStdStreamRedirector/TestMain.cc \
@@ -98,8 +78,7 @@ EXTRA_DIST = \
     ../ClassMethodDisablers/NewArrayNoThrowUnitTest.cc \
     ../ClassMethodDisablers/NewArrayUnitTest.cc \
     ../ClassMethodDisablers/NewNoThrowUnitTest.cc \
-    ../ClassMethodDisablers/NewUnitTest.cc \
-    ../AutoFunction/AutoFunctionPPTest.cc
+    ../ClassMethodDisablers/NewUnitTest.cc
 
 ####################
 #Preprocessor Flags.

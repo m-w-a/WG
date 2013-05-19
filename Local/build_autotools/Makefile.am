@@ -12,20 +12,15 @@ SUBDIRS = \
 #Declare programs and libs.
 ###########################
 
-lib_LTLIBRARIES = \
-    libwgutils.la
+lib_LTLIBRARIES = 
 
 ########
 #Sources
 ########
 
-installheadersdir = $(includedir)/WG/Utils/
-installheaders_HEADERS = \
-    ../ClassMethodDisablers.hh \
-    ../ScopedStdStreamRedirector.hh
-
-libwgutils_la_SOURCES = \
-    ../Impl/ScopedStdStreamRedirector.cc
+installheadersdir = $(includedir)/WG/Local/
+#TODO
+installheaders_HEADERS = 
 
 ####################
 #Preprocessor Flags.

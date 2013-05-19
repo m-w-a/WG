@@ -2,8 +2,8 @@
 #define WG_UTIL_PP_ALTSEQ_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Utils/PP.hh>
-#include <WG/Utils/PP_Seq.hh>
+#include <WG/Local/PP.hh>
+#include <WG/Local/PP_Seq.hh>
 
 //###########
 //Public APIs

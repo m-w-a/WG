@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <WG/Utils/AutoFunction.hh>
+#include <WG/Local/AutoFunction.hh>
 #include <WG/GTest/Exceptions.hh>
 
 /*

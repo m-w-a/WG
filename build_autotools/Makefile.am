@@ -21,5 +21,6 @@ EXTRA_DIST = \
 SUBDIRS = \
     WG/ExternalLibsPkg/build_autotools \
     WG/ExternalLibsNoInstall/build_autotools \
-    WG/Utils/build_autotools \
-    WG/GTest/build_autotools
+    WG/GTest/build_autotools \
+    WG/Local/build_autotools \
+    WG/Utils/build_autotools

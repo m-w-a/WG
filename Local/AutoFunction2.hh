@@ -3,9 +3,9 @@
 
 #include <boost/preprocessor.hpp>
 #include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
-#include <WG/Utils/PP.hh>
-#include <WG/Utils/PP_Seq.hh>
-#include <WG/Utils/PP_AltSeq.hh>
+#include <WG/Local/PP.hh>
+#include <WG/Local/PP_Seq.hh>
+#include <WG/Local/PP_AltSeq.hh>
 
 #define WG_PP_AUTOFUNCTION_TOKEN_MATCHES6_assignto (1) /* unary */
 #define WG_PP_TOKENS_STARTS_WITH_ASSIGNTO(tokens) \

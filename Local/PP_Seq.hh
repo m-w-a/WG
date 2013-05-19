@@ -2,7 +2,7 @@
 #define WG_UTIL_PP_SEQ_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Utils/PP.hh>
+#include <WG/Local/PP.hh>
 
 //###########
 //Public APIs
