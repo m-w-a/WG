@@ -6,70 +6,101 @@
 #include <WG/Local/Detail/PP_Seq.hh>
 #include <WG/Local/Detail/PP_AltSeq.hh>
 #include <WG/Local/Detail/Keywords.hh>
+#include <WG/Local/Detail/ExpandN.hh>
 
-#define WG_PP_AUTOFUNCTION_TUPLIZE_assignto (assignto)
-#define WG_PP_AUTOFUNCTION_TUPLIZE_return (return)
-#define WG_PP_AUTOFUNCTION_TUPLIZE_parambind (return)
+#define WG_PP_AUTOFUNCTION_SPEC_PROCESS(spec) \
+  WG_PP_EXPANDN( \
+    WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_ASSIGNTO(spec BOOST_PP_NIL), \
+    4)
 
-////Don't forget trailing BOOST_PP_EMPTY add BOOST_PP_COMMA()
-////#define WG_PP_AUTOFUNCTION_PROCESS_ASSIGNTO_IMPL1
-//
-//#define WG_PP_AUTOFUNCTION_PROCESS_ASSIGNTO_0(spec) \
-//  BOOST_PP_EMPTY BOOST_PP_COMMA() WG_PP_AUTOFUNCTION_PROCESS_RETURN(spec)
-//#define WG_PP_AUTOFUNCTION_PROCESS_ASSIGNTO_1(spec) \
-//  WG_PP_AUTOFUNCTION_PROCESS_ASSIGNTO_IMPL1( \
-//    BOOST_PP_CAT(WG_PP_AUTOFUNCTION_TUPLIZE_, spec))
-//#define WG_PP_AUTOFUNCTION_PROCESS_ASSIGNTO(spec) \
-//  BOOST_PP_CAT( \
-//    WG_PP_AUTOFUNCTION_PROCESS_ASSIGNTO_, \
-//    WG_PP_TOKENS_STARTS_WITH_ASSIGNTO(spec)) (spec)
-//
-////Don't forget trailing BOOST_PP_EMPTY add BOOST_PP_COMMA()
-////#define WG_PP_AUTOFUNCTION_PROCESS_RETURN_IMPL1
-//
-//#define WG_PP_AUTOFUNCTION_PROCESS_RETURN_0(spec) \
-//  BOOST_PP_EMPTY BOOST_PP_COMMA() WG_PP_AUTOFUNCTION_PROCESS_PARAMBIND(spec)
-//#define WG_PP_AUTOFUNCTION_PROCESS_RETURN_1(spec) \
-//  WG_PP_AUTOFUNCTION_PROCESS_RETURN_IMPL1( \
-//    BOOST_PP_CAT(WG_PP_AUTOFUNCTION_TUPLIZE_, spec))
-//#define WG_PP_AUTOFUNCTION_PROCESS_RETURN(spec) \
-//  BOOST_PP_CAT( \
-//    WG_PP_AUTOFUNCTION_PROCESS_RETURN_, \
-//    WG_PP_TOKENS_STARTS_WITH_RETURN(spec)) (spec)
-//
-////Don't forget trailing BOOST_PP_EMPTY add BOOST_PP_COMMA()
-////#define WG_PP_AUTOFUNCTION_PROCESS_PARAMBIND_IMPL1
-//
-//#define WG_PP_AUTOFUNCTION_PROCESS_PARAMBIND_0(spec) \
-//  BOOST_PP_EMPTY BOOST_PP_COMMA() WG_PP_AUTOFUNCTION_PROCESS_PARAMSET(spec)
-//#define WG_PP_AUTOFUNCTION_PROCESS_PARAMBIND_1(spec) \
-//  WG_PP_AUTOFUNCTION_PROCESS_PARAMBIND_IMPL1( \
-//    BOOST_PP_CAT(WG_PP_AUTOFUNCTION_TUPLIZE_, spec))
-//#define WG_PP_AUTOFUNCTION_PROCESS_PARAMBIND(spec) \
-//  BOOST_PP_CAT( \
-//    WG_PP_AUTOFUNCTION_PROCESS_PARAMBIND_, \
-//    WG_PP_TOKENS_STARTS_WITH_PARAMBIND(spec)) (spec)
+// Recursive macro emulation.
+// This sets up a potentially recursive macro invocation without actually
+//  invoking it by using BOOST_PP_[L|R]PAREN instead of '(' and ')' tokens.
+//  The recursion is carried out when this macro is expand and reexpanded until
+//  it can expand no further. (See
+//  https://groups.google.com/group/comp.std.c/msg/8df0e3ae560adb3e?hl=en)
+// Process spec if it's head token matches currentkeyword by passing control to
+//  WG_PP_AUTOFUNCTION_PROCESS_<CURRENTKEYWORD>,
+//  else call WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_<NEXTKEYWORD>
+#define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_IMPL( \
+  spec, currentkeyword, nextkeyword) \
+    BOOST_PP_IIF( \
+      BOOST_PP_CAT(WG_PP_TOKENS_STARTS_WITH_, currentkeyword) (spec), \
+      BOOST_PP_CAT(WG_PP_AUTOFUNCTION_PROCESS_, currentkeyword), \
+      (BOOST_PP_NIL) \
+      BOOST_PP_CAT(WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_, nextkeyword)) \
+    BOOST_PP_LPAREN() \
+      BOOST_PP_SEQ_ENUM( \
+        BOOST_PP_IIF( \
+          BOOST_PP_CAT(WG_PP_TOKENS_STARTS_WITH_, currentkeyword) (spec), \
+          (spec) \
+          (BOOST_PP_CAT( \
+            WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_, \
+            nextkeyword)), \
+          (spec) )) \
+    BOOST_PP_RPAREN()
 
+#define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_ASSIGNTO(spec) \
+  WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_IMPL \
+  BOOST_PP_LPAREN() spec, ASSIGNTO, RETURN BOOST_PP_RPAREN()
+#define WG_PP_AUTOFUNCTION_PROCESS_ASSIGNTO(spec, nexttransform) \
+  (assignto) \
+  nexttransform \
+  BOOST_PP_LPAREN() \
+    WG_PP_TOKENS_EAT_HEADKEYWORD(spec) \
+  BOOST_PP_RPAREN()
 
+#define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_RETURN(spec) \
+  WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_IMPL \
+  BOOST_PP_LPAREN() spec, RETURN, PARAMBIND BOOST_PP_RPAREN()
+#define WG_PP_AUTOFUNCTION_PROCESS_RETURN(spec, nexttransform) \
+  (return) \
+  nexttransform \
+  BOOST_PP_LPAREN() \
+    WG_PP_TOKENS_EAT_HEADKEYWORD(spec) \
+  BOOST_PP_RPAREN()
 
+#define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_PARAMBIND(spec) \
+  WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_IMPL \
+  BOOST_PP_LPAREN() spec, PARAMBIND, PARAMSET BOOST_PP_RPAREN()
+#define WG_PP_AUTOFUNCTION_PROCESS_PARAMBIND(spec, nexttransform) \
+  (parambind) \
+  nexttransform \
+  BOOST_PP_LPAREN() \
+    WG_PP_TOKENS_EAT_HEADKEYWORD(spec) \
+  BOOST_PP_RPAREN()
 
-//#define WG_PP_AUTOFUNCTION_PROCESS_SPEC_IMPL(spec, currentkeyword, nextkeyword) \
-//  BOOST_PP_IIF( \
-//    BOOST_PP_CAT(WG_PP_TOKENS_STARTS_WITH_, currentkeyword) (spec), \
-//    BOOST_PP_CAT(WG_PP_AUTOFUNCTION_PROCESSIMPL_, currentkeyword) (spec) \
-//      WG_PP_AUTOFUNCTION_SPEC_TRAILINGTOKENS BOOST_PP_EMPTY, \
-//    WG_PP_AUTOFUNCTION_SPEC_LEADINGTOKENS \
-//      BOOST_PP_CAT( \
-//        WG_PP_AUTOFUNCTION_PROCESS_, \
-//        nextkeyword) BOOST_PP_EMPTY)() (spec)
-//
-//#define WG_PP_AUTOFUNCTION_PROCESSIMPL_ASSIGNTO(spec) (assignto)
-//#define WG_PP_AUTOFUNCTION_PROCESS_ASSIGNTO(spec) \
-//  WG_PP_AUTOFUNCTION_PROCESS_SPEC_IMPL(spec, ASSIGNTO, RETURN)
-//
-//#define WG_PP_AUTOFUNCTION_PROCESSIMPL_RETURN(spec) (return)
-//#define WG_PP_AUTOFUNCTION_PROCESS_RETURN(spec) \
-//  WG_PP_AUTOFUNCTION_PROCESS_SPEC_IMPL(spec, RETURN, PARAMBIND)
+#define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_PARAMSET(spec) \
+  WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_IMPL \
+  BOOST_PP_LPAREN() spec, PARAMSET, MEMBIND BOOST_PP_RPAREN()
+#define WG_PP_AUTOFUNCTION_PROCESS_PARAMSET(spec, nextransform) \
+  (paramset) \
+  nexttransform \
+  BOOST_PP_LPAREN() \
+    WG_PP_TOKENS_EAT_HEADKEYWORD(spec) \
+  BOOST_PP_RPAREN()
+
+#define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_MEMBIND(spec) \
+  WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_IMPL \
+  BOOST_PP_LPAREN() spec, MEMBIND, MEMSET BOOST_PP_RPAREN()
+#define WG_PP_AUTOFUNCTION_PROCESS_MEMBIND(spec, nexttransform) \
+  (membind) \
+  nexttransform \
+  BOOST_PP_LPAREN() \
+    WG_PP_TOKENS_EAT_HEADKEYWORD(spec) \
+  BOOST_PP_RPAREN()
+
+#define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_MEMSET(spec) \
+  WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_IMPL \
+  BOOST_PP_LPAREN() spec, MEMSET, ENDSPEC BOOST_PP_RPAREN()
+#define WG_PP_AUTOFUNCTION_PROCESS_MEMSET(spec, nexttransform) \
+  (memset) \
+  nexttransform \
+  BOOST_PP_LPAREN() \
+    WG_PP_TOKENS_EAT_HEADKEYWORD(spec) \
+  BOOST_PP_RPAREN()
+
+#define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_ENDSPEC(spec)
 
 
 #endif /* WG_AUTOFUNCTION2_HH_ */
