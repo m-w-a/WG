@@ -4,8 +4,8 @@
 //******************************************************************************
 
 #include <boost/preprocessor.hpp>
-//#include <WG/Utils/AutoFunction.hh>
-#include <WG/Utils/AutoFunction2.hh>
+//#include <WG/Local/AutoFunction.hh>
+#include <WG/Local/AutoFunction2.hh>
 //#include <boost/type_traits/add_const.hpp>
 //#include <boost/type_traits/add_reference.hpp>
 //#include <boost/local_function.hpp>

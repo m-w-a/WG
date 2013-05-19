@@ -2,46 +2,10 @@
 #define WG_AUTOFUNCTION2_HH_
 
 #include <boost/preprocessor.hpp>
-#include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
-#include <WG/Local/PP.hh>
-#include <WG/Local/PP_Seq.hh>
-#include <WG/Local/PP_AltSeq.hh>
-
-#define WG_PP_AUTOFUNCTION_TOKEN_MATCHES6_assignto (1) /* unary */
-#define WG_PP_TOKENS_STARTS_WITH_ASSIGNTO(tokens) \
-  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
-    tokens, \
-    WG_PP_AUTOFUNCTION_TOKEN_MATCHES6_)
-
-#define WG_PP_AUTOFUNCTION_TOKEN_MATCHES7_return (1) /* unary */
-#define WG_PP_TOKENS_STARTS_WITH_RETURN(tokens) \
-  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
-    tokens, \
-    WG_PP_AUTOFUNCTION_TOKEN_MATCHES7_)
-
-#define WG_PP_AUTOFUNCTION_TOKEN_MATCHES8_parambind (1) /* unary */
-#define WG_PP_TOKENS_STARTS_WITH_PARAMBIND(tokens) \
-    BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
-    tokens, \
-    WG_PP_AUTOFUNCTION_TOKEN_MATCHES8_)
-
-#define WG_PP_AUTOFUNCTION_TOKEN_MATCHES9_paramset (1) /* unary */
-#define WG_PP_TOKENS_STARTS_WITH_PARAMSET(tokens) \
-  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
-    tokens, \
-    WG_PP_AUTOFUNCTION_TOKEN_MATCHES9_)
-
-#define WG_PP_AUTOFUNCTION_TOKEN_MATCHES10_membind (1) /* unary */
-#define WG_PP_TOKENS_STARTS_WITH_MEMBIND(tokens) \
-  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
-    tokens, \
-    WG_PP_AUTOFUNCTION_TOKEN_MATCHES10_)
-
-#define WG_PP_AUTOFUNCTION_TOKEN_MATCHES11_memset (1) /* unary */
-#define WG_PP_TOKENS_STARTS_WITH_MEMSET(tokens) \
-  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
-    tokens, \
-    WG_PP_AUTOFUNCTION_TOKEN_MATCHES11_)
+#include <WG/Local/Detail/PP.hh>
+#include <WG/Local/Detail/PP_Seq.hh>
+#include <WG/Local/Detail/PP_AltSeq.hh>
+#include <WG/Local/Detail/Keywords.hh>
 
 #define WG_PP_AUTOFUNCTION_TUPLIZE_assignto (assignto)
 #define WG_PP_AUTOFUNCTION_TUPLIZE_return (return)

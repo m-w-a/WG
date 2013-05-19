@@ -2,10 +2,10 @@
 #define WG_AUTOFUNCTION_HH_
 
 #include <boost/preprocessor.hpp>
-#include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
 #include <WG/Local/Detail/PP.hh>
 #include <WG/Local/Detail/PP_Seq.hh>
 #include <WG/Local/Detail/PP_AltSeq.hh>
+#include <WG/Local/Detail/Keywords.hh>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
 
@@ -73,30 +73,6 @@
 
 #define WG_PP_FORMAT_NAME(name) \
   BOOST_PP_CAT(WG_PP_IDENTITY(pgcllXXXautofunctionXXX), name)
-
-#define WG_PP_AUTOFUNCTION_TOKEN_MATCHES2_void (1) /* unary */
-#define WG_PP_TOKENS_STARTS_WITH_VOID(tokens) \
-  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
-    tokens, \
-    WG_PP_AUTOFUNCTION_TOKEN_MATCHES2_)
-
-#define WG_PP_AUTOFUNCTION_TOKEN_MATCHES3_this_ (1) /* unary */
-#define WG_PP_TOKENS_STARTS_WITH_THISU(tokens) \
-  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
-    tokens, \
-    WG_PP_AUTOFUNCTION_TOKEN_MATCHES3_)
-
-#define WG_PP_AUTOFUNCTION_TOKEN_MATCHES4_local (1) /* unary */
-#define WG_PP_TOKENS_STARTS_WITH_LOCAL(tokens) \
-  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
-    tokens, \
-    WG_PP_AUTOFUNCTION_TOKEN_MATCHES4_)
-
-#define WG_PP_AUTOFUNCTION_TOKEN_MATCHES5_localref (1) /* unary */
-#define WG_PP_TOKENS_STARTS_WITH_LOCALREF(tokens) \
-  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
-    tokens, \
-    WG_PP_AUTOFUNCTION_TOKEN_MATCHES5_)
     
 #define WG_PP_SPECIFIEDTYPE_local(specifiedtype) local
 #define WG_PP_SPECIFIEDTYPE_VALUE_local(value) value
