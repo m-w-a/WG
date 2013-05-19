@@ -1,8 +1,8 @@
-#ifndef WG_UTIL_PP_SEQ_HH_
-#define WG_UTIL_PP_SEQ_HH_
+#ifndef WG_LOCAL_DETAIL_PP_SEQ_HH_
+#define WG_LOCAL_DETAIL_PP_SEQ_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/PP.hh>
+#include <WG/Local/Detail/PP.hh>
 
 //###########
 //Public APIs
@@ -127,4 +127,4 @@
         WG_PP_SEQ_IS_NEXTTOKEN_A_TUPLE(x), \
         WG_PP_SEQ_IS_NEXTTOKEN_A_TUPLE(y)))) (x, y)
   
-#endif /* WG_UTIL_PP_SEQ_HH_ */
+#endif /* WG_LOCAL_DETAIL_PP_SEQ_HH_ */

@@ -3,9 +3,9 @@
 
 #include <boost/preprocessor.hpp>
 #include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
-#include <WG/Local/PP.hh>
-#include <WG/Local/PP_Seq.hh>
-#include <WG/Local/PP_AltSeq.hh>
+#include <WG/Local/Detail/PP.hh>
+#include <WG/Local/Detail/PP_Seq.hh>
+#include <WG/Local/Detail/PP_AltSeq.hh>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
 

@@ -1,5 +1,5 @@
-#ifndef WG_UTIL_PP_HH_
-#define WG_UTIL_PP_HH_
+#ifndef WG_LOCAL_DETAIL_PP_HH_
+#define WG_LOCAL_DETAIL_PP_HH_
 
 //###########
 //Public APIs
@@ -56,4 +56,4 @@
     tokens, \
     WG_PP_TOKEN_MATCHES2_)
 
-#endif /* WG_UTIL_PP_HH_ */
+#endif /* WG_LOCAL_DETAIL_PP_HH_ */

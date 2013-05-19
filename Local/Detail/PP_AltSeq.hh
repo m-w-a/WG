@@ -1,9 +1,9 @@
-#ifndef WG_UTIL_PP_ALTSEQ_HH_
-#define WG_UTIL_PP_ALTSEQ_HH_
+#ifndef WG_LOCAL_DETAIL_PP_ALTSEQ_HH_
+#define WG_LOCAL_DETAIL_PP_ALTSEQ_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/PP.hh>
-#include <WG/Local/PP_Seq.hh>
+#include <WG/Local/Detail/PP.hh>
+#include <WG/Local/Detail/PP_Seq.hh>
 
 //###########
 //Public APIs
@@ -154,4 +154,4 @@
       WG_PP_ALTSEQ_LINEARIZE_GET_HEAD_ARITY(state), \
       WG_PP_ALTSEQ_LINEARIZE_GET_SEQ(state))
 
-#endif /* WG_UTIL_PP_ALTSEQ_HH_ */
+#endif /* WG_LOCAL_DETAIL_PP_ALTSEQ_HH_ */
