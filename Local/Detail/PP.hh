@@ -18,6 +18,9 @@
 #define WG_PP_1TUPLIZE_1(x) WG_PP_1TUPLIZE(x)
 #define WG_PP_1TUPLIZE_2(x, y) (x)(y)
 
+#define WG_PP_ISNEXTTOKEN_A_TUPLE(tuplearity, tokens) \
+  WG_PP_ISNEXTTOKEN_A_TUPLE_IMPL(tuplearity, tokens)
+
 #define WG_PP_ADDCOMMAAFTERTUPLE_1(x) (x) BOOST_PP_COMMA()
 #define WG_PP_ADDCOMMAAFTERTUPLE_2(x, y) (x, y) BOOST_PP_COMMA()
 
@@ -58,5 +61,9 @@
   BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
     tokens, \
     WG_PP_TOKEN_MATCHES2_)
+
+#define WG_PP_ISNEXTTOKEN_A_TUPLE_IMPL(tuplearity, tokens) \
+  WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
+    BOOST_PP_CAT(WG_PP_MAP_TO_TRUETOKEN_ARG, tuplearity) tokens)
 
 #endif /* WG_PP_HH_ */

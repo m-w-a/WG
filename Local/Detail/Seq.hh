@@ -8,9 +8,6 @@
 //Public APIs
 //###########
 
-#define WG_PP_SEQ_IS_NEXTTOKEN_A_TUPLE(seq) \
-  WG_PP_SEQ_IS_NEXTTOKEN_A_TUPLE_IMPL(seq)
-
 // Nil sequences are defined to be BOOST_PP_NIL.
 #define WG_PP_SEQ_IFNIL_THENCLEAR(seq) \
   WG_PP_SEQ_IFNIL_THENCLEAR_IMPL(seq)
@@ -52,11 +49,6 @@
 //Impl Macros
 //###########
 
-#define WG_PP_SEQ_MAP_TUPLE_TO_TRUETOKEN(seq) WG_PP_TRUE
-#define WG_PP_SEQ_IS_NEXTTOKEN_A_TUPLE_IMPL(seq) \
-  WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
-    BOOST_PP_EXPAND(WG_PP_SEQ_MAP_TUPLE_TO_TRUETOKEN seq))
-
 #define WG_PP_SEQ_IFNIL_THENCLEAR_IMPL(seq) \
   BOOST_PP_EXPR_IIF( \
     BOOST_PP_NOT( \
@@ -70,7 +62,7 @@
   BOOST_PP_EXPAND( \
     BOOST_PP_CAT( \
       WG_PP_SEQ_FOR_EACH_I_IMPL_, \
-      WG_PP_SEQ_IS_NEXTTOKEN_A_TUPLE(seq)))(macro, data, seq)
+      WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)))(macro, data, seq)
 
 #define WG_PP_SEQ_SIZE_IMPL_0(seq) 0
 #define WG_PP_SEQ_SIZE_IMPL_1(seq) BOOST_PP_SEQ_SIZE(seq)
@@ -78,7 +70,7 @@
   BOOST_PP_EXPAND( \
     BOOST_PP_CAT( \
       WG_PP_SEQ_SIZE_IMPL_, \
-      WG_PP_SEQ_IS_NEXTTOKEN_A_TUPLE(seq)))(seq)
+      WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)))(seq)
 
 #define WG_PP_SEQ_ENUM_IMPL_0(seq)
 #define WG_PP_SEQ_ENUM_IMPL_1(seq) BOOST_PP_SEQ_ENUM(seq)
@@ -86,7 +78,7 @@
   BOOST_PP_EXPAND( \
     BOOST_PP_CAT( \
       WG_PP_SEQ_ENUM_IMPL_, \
-      WG_PP_SEQ_IS_NEXTTOKEN_A_TUPLE(seq)))(seq)
+      WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)))(seq)
 
 #define WG_PP_SEQ_REPLACE_IMPL_00(seq, indx, elem) BOOST_PP_NIL
 #define WG_PP_SEQ_REPLACE_IMPL_01(seq, indx, elem) BOOST_PP_NIL
@@ -98,7 +90,7 @@
     BOOST_PP_CAT( \
       BOOST_PP_CAT( \
         WG_PP_SEQ_REPLACE_IMPL_, \
-        WG_PP_SEQ_IS_NEXTTOKEN_A_TUPLE(seq)), \
+        WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)), \
       BOOST_PP_NOT(WG_PP_TOKENS_START_WITH_BOOST_PP_NIL(indx)))) \
   (seq, indx, elem)
 
@@ -112,7 +104,7 @@
       BOOST_PP_CAT( \
         WG_PP_SEQ_ELEM_IMPL_, \
         BOOST_PP_NOT(WG_PP_TOKENS_START_WITH_BOOST_PP_NIL(indx))), \
-      WG_PP_SEQ_IS_NEXTTOKEN_A_TUPLE(seq))) \
+      WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq))) \
   (indx, seq)
 
 #define WG_PP_SEQ_CAT_IMPL_00(x, y) BOOST_PP_NIL
@@ -124,7 +116,7 @@
     BOOST_PP_CAT( \
       WG_PP_SEQ_CAT_IMPL_, \
       BOOST_PP_CAT( \
-        WG_PP_SEQ_IS_NEXTTOKEN_A_TUPLE(x), \
-        WG_PP_SEQ_IS_NEXTTOKEN_A_TUPLE(y)))) (x, y)
+        WG_PP_ISNEXTTOKEN_A_TUPLE(1, x), \
+        WG_PP_ISNEXTTOKEN_A_TUPLE(1, y)))) (x, y)
   
 #endif /* WG_PP_SEQ_HH_ */
