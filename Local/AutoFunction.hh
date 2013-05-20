@@ -2,12 +2,12 @@
 #define WG_AUTOFUNCTION_HH_
 
 #include <boost/preprocessor.hpp>
+#include <boost/type_traits/add_const.hpp>
+#include <boost/type_traits/add_reference.hpp>
 #include <WG/Local/Detail/PP.hh>
 #include <WG/Local/Detail/Seq.hh>
 #include <WG/Local/Detail/AltSeq.hh>
 #include <WG/Local/Detail/Keywords.hh>
-#include <boost/type_traits/add_const.hpp>
-#include <boost/type_traits/add_reference.hpp>
 
 //###########
 //Public APIs

@@ -7,6 +7,7 @@
 #include <WG/Local/Detail/AltSeq.hh>
 #include <WG/Local/Detail/Keywords.hh>
 #include <WG/Local/Detail/ExpandN.hh>
+#include <WG/Local/Detail/SplitHeadFromTokens.hh>
 
 #define WG_PP_AUTOFUNCTION_SPEC_PROCESS(spec) \
   WG_PP_EXPANDN( \
@@ -46,7 +47,7 @@
   BOOST_PP_LPAREN() spec, ASSIGNTO, RETURN BOOST_PP_RPAREN()
 #define WG_PP_AUTOFUNCTION_PROCESS_ASSIGNTO(spec, nexttransform) \
   (assignto) \
-  WG_PP_AUTOFUNCTION_SPEC_SPLIT1TUPLEFROMTOKENS( \
+  WG_PP_AUTOFUNCTION_SPEC_SPLIT1TUPLEHEADFROMTOKENS( \
     WG_PP_TOKENS_EAT_HEADKEYWORD(spec), nexttransform)
 
 #define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_RETURN(spec) \
@@ -100,20 +101,5 @@
   BOOST_PP_RPAREN()
 
 #define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_ENDSPEC(spec)
-
-#define WG_PP_AUTOFUNCTION_SPEC_SPLIT1TUPLEFROMTOKENS(spec, nexttransform) \
-  BOOST_PP_EXPAND( \
-    WG_PP_AUTOFUNCTION_SPEC_SPLIT1TUPLEFROMTOKENS_IMPL \
-      BOOST_PP_EXPAND( \
-        BOOST_PP_LPAREN() \
-          WG_PP_ADDCOMMAAFTERTUPLE_1 spec BOOST_PP_COMMA() \
-          nexttransform \
-        BOOST_PP_RPAREN() ))
-
-#define WG_PP_AUTOFUNCTION_SPEC_SPLIT1TUPLEFROMTOKENS_IMPL( \
-  head, rest, nexttransform) \
-    head BOOST_PP_COMMA()\
-    nexttransform \
-    BOOST_PP_LPAREN() rest BOOST_PP_RPAREN()
 
 #endif /* WG_AUTOFUNCTION2_HH_ */
