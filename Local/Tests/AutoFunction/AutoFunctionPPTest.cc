@@ -20,9 +20,9 @@ int main()
 //  __LINE__
 */
   
-#define s1 assignto (x) return parambind
-#define s2 assignto (x) parambind
-#define s3 assignto (x)
+#define s1 assignto (x, 7) return parambind
+#define s2 assignto (x, 8) parambind
+#define s3 assignto (x, 9)
 #define s4 parambind
   
 WG_PP_AUTOFUNCTION_SPEC_PROCESS(s1)
