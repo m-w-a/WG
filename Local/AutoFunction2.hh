@@ -3,14 +3,14 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP.hh>
-#include <WG/Local/Detail/PP_Seq.hh>
-#include <WG/Local/Detail/PP_AltSeq.hh>
+#include <WG/Local/Detail/Seq.hh>
+#include <WG/Local/Detail/AltSeq.hh>
 #include <WG/Local/Detail/Keywords.hh>
 #include <WG/Local/Detail/ExpandN.hh>
 
 #define WG_PP_AUTOFUNCTION_SPEC_PROCESS(spec) \
   WG_PP_EXPANDN( \
-    WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_ASSIGNTO(spec BOOST_PP_NIL), \
+    ( WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_ASSIGNTO(spec BOOST_PP_NIL) ), \
     4)
 
 // Recursive macro emulation.
@@ -40,15 +40,14 @@
           (spec) )) \
     BOOST_PP_RPAREN()
 
+// Well expand to comma(s) containing tokens.
 #define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_ASSIGNTO(spec) \
   WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_IMPL \
   BOOST_PP_LPAREN() spec, ASSIGNTO, RETURN BOOST_PP_RPAREN()
 #define WG_PP_AUTOFUNCTION_PROCESS_ASSIGNTO(spec, nexttransform) \
   (assignto) \
-  nexttransform \
-  BOOST_PP_LPAREN() \
-    WG_PP_TOKENS_EAT_HEADKEYWORD(spec) \
-  BOOST_PP_RPAREN()
+  WG_PP_AUTOFUNCTION_SPEC_SPLIT1TUPLEFROMTOKENS( \
+    WG_PP_TOKENS_EAT_HEADKEYWORD(spec), nexttransform)
 
 #define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_RETURN(spec) \
   WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_IMPL \
@@ -102,5 +101,19 @@
 
 #define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_ENDSPEC(spec)
 
+#define WG_PP_AUTOFUNCTION_SPEC_SPLIT1TUPLEFROMTOKENS(spec, nexttransform) \
+  BOOST_PP_EXPAND( \
+    WG_PP_AUTOFUNCTION_SPEC_SPLIT1TUPLEFROMTOKENS_IMPL \
+      BOOST_PP_EXPAND( \
+        BOOST_PP_LPAREN() \
+          WG_PP_ADDCOMMAAFTERTUPLE_1 spec BOOST_PP_COMMA() \
+          nexttransform \
+        BOOST_PP_RPAREN() ))
+
+#define WG_PP_AUTOFUNCTION_SPEC_SPLIT1TUPLEFROMTOKENS_IMPL( \
+  head, rest, nexttransform) \
+    head BOOST_PP_COMMA()\
+    nexttransform \
+    BOOST_PP_LPAREN() rest BOOST_PP_RPAREN()
 
 #endif /* WG_AUTOFUNCTION2_HH_ */

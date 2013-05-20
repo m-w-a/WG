@@ -3,7 +3,7 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP.hh>
-#include <WG/Local/Detail/PP_Seq.hh>
+#include <WG/Local/Detail/Seq.hh>
 
 //###########
 //Public APIs

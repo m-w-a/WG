@@ -20,16 +20,12 @@ int main()
 //  __LINE__
 */
   
-#define spec1 assignto return parambind
-#define spec2 assignto parambind
-#define spec3 assignto
-#define spec4 parambind
+#define s1 assignto (x) return parambind
+#define s2 assignto (x) parambind
+#define s3 assignto (x)
+#define s4 parambind
   
-WG_PP_AUTOFUNCTION_SPEC_PROCESS(spec1)
-WG_PP_AUTOFUNCTION_SPEC_PROCESS(spec2)
-WG_PP_AUTOFUNCTION_SPEC_PROCESS(spec3)
-WG_PP_AUTOFUNCTION_SPEC_PROCESS(spec4)
-
+WG_PP_AUTOFUNCTION_SPEC_PROCESS(s1)
   
 /*
   WG_AUTOFUNCTION(oneBoundArg, (bool)(didArgumentBind) (int)(y2), (void))

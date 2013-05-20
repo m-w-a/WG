@@ -3,8 +3,8 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP.hh>
-#include <WG/Local/Detail/PP_Seq.hh>
-#include <WG/Local/Detail/PP_AltSeq.hh>
+#include <WG/Local/Detail/Seq.hh>
+#include <WG/Local/Detail/AltSeq.hh>
 #include <WG/Local/Detail/Keywords.hh>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
