@@ -8,17 +8,12 @@
 //Public APIs
 //###########
 
-#define WG_PP_AUTOFUNCTION_SPEC_SPLIT1TUPLEHEADFROMTOKENS(spec, nexttransform) \
-  WG_PP_AUTOFUNCTION_SPEC_SPLITTUPLEHEADFROMTOKENS_IMPL1( \
-    1, \
-    spec, \
-    nexttransform)
-
-#define WG_PP_AUTOFUNCTION_SPEC_SPLIT2TUPLEHEADFROMTOKENS(spec, nexttransform) \
-  WG_PP_AUTOFUNCTION_SPEC_SPLITTUPLEHEADFROMTOKENS_IMPL1( \
-    2, \
-    spec, \
-    nexttransform)
+#define WG_PP_AUTOFUNCTION_SPEC_SPLITTUPLEHEADFROMTOKENS( \
+  tuplearity, spec, nexttransform) \
+    WG_PP_AUTOFUNCTION_SPEC_SPLITTUPLEHEADFROMTOKENS_IMPL1( \
+      tuplearity, \
+      spec, \
+      nexttransform)
 
 //###########
 //Impl Macros

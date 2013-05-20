@@ -20,7 +20,7 @@ int main()
 //  __LINE__
 */
   
-#define s1 assignto (x, 7) return parambind
+#define s1 assignto (x, 7) return (float) parambind
 #define s2 assignto (x, 8) parambind
 #define s3 assignto (x, 9)
 #define s4 parambind
