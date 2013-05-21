@@ -54,6 +54,13 @@ EXTRA_DIST = \
 AM_CPPFLAGS += \
     $(GTEST_CPPFLAGS)
 
+################
+#Compiler Flags.
+################
+
+test_autofunction_CXXFLAGS = \
+	-pedantic
+
 ##############
 #Linker Flags.
 ##############
