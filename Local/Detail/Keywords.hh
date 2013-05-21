@@ -1,6 +1,8 @@
 #ifndef WG_PP_AUTOFUNCTION_KEYWORDS_HH_
 #define WG_PP_AUTOFUNCTION_KEYWORDS_HH_
 
+#include <boost/preprocessor/cat.hpp>
+#include <boost/preprocessor/facilities/expand.hpp>
 #include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
 
 //###########

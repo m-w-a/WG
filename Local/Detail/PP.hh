@@ -1,9 +1,14 @@
 #ifndef WG_PP_HH_
 #define WG_PP_HH_
 
+#include <boost/preprocessor.hpp>
+#include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
+
 //###########
 //Public APIs
 //###########
+
+#define WG_PP_OBJECT_EMPTY
 
 #define WG_PP_IDENTITY(x) x
 #define WG_PP_IDENTITY_1(x) WG_PP_IDENTITY(x)
