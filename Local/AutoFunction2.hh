@@ -9,6 +9,8 @@
 #include <WG/Local/Detail/ExpandN.hh>
 #include <WG/Local/Detail/SplitHeadFromTokens.hh>
 
+// Surround PROCESSIFHEAD_ASSIGNTO with parens because its expansion will contain
+//  commas, and EXPANDN only takes two params.
 #define WG_PP_AUTOFUNCTION_SPEC_PROCESS(spec) \
   WG_PP_EXPANDN( \
     ( WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_ASSIGNTO(spec BOOST_PP_NIL) ), \
@@ -23,6 +25,8 @@
 // Process spec if it's head token matches currentkeyword by passing control to
 //  WG_PP_AUTOFUNCTION_PROCESS_<CURRENTKEYWORD>,
 //  else call WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_<NEXTKEYWORD>
+// Because two different macros with two different arg count can be invoked, 
+//  have to switch on both macro name and args.
 #define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_IMPL( \
   spec, currentkeyword, nextkeyword) \
     BOOST_PP_IIF( \
@@ -69,7 +73,7 @@
 #define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_PARAMSET(spec) \
   BOOST_PP_COMMA() WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_IMPL \
   BOOST_PP_LPAREN() spec, PARAMSET, MEMBIND BOOST_PP_RPAREN()
-#define WG_PP_AUTOFUNCTION_PROCESS_PARAMSET(spec, nextransform) \
+#define WG_PP_AUTOFUNCTION_PROCESS_PARAMSET(spec, nexttransform) \
   (paramset) \
   WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLESEQFROMTOKENS( \
     2, WG_PP_TOKENS_EAT_HEADKEYWORD(spec), BOOST_PP_EMPTY, nexttransform)
