@@ -8,23 +8,21 @@
 //Public APIs
 //###########
 
-// delimiter: an no-arg object macro that will be invoked between the split head
-//  and the transform of the rest of the tokens.
 #define WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLEFROMTOKENS( \
-  tuplearity, spec, delimiter, nexttransform) \
+  tuplearity, spec, headtransform, nexttransform) \
     WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLEFROMTOKENS_IMPL1( \
       tuplearity, \
       spec, \
-      delimiter, \
+      headtransform, \
       nexttransform)
 
 // spec: tokens prefixed by a sequence of same arity tuples followed by a non-tuple.
 #define WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLESEQFROMTOKENS( \
-  tuplearity, spec, delimiter, nexttransform) \
+  tuplearity, spec, headtransform, nexttransform) \
      WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLESEQFROMTOKENS_IMPL1( \
         tuplearity, \
         spec, \
-        delimiter, \
+        headtransform, \
         nexttransform)
 
 //###########
@@ -32,49 +30,48 @@
 //###########
 
 #define WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLEFROMTOKENS_IMPL1( \
-  tuplearity, spec, delimiter, nexttransform) \
+  tuplearity, spec, headtransform, nexttransform) \
     BOOST_PP_EXPAND( \
       WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLEFROMTOKENS_PROCESSSPLIT \
         BOOST_PP_EXPAND( \
           BOOST_PP_LPAREN() \
             BOOST_PP_CAT( \
               WG_PP_ADDCOMMAAFTERTUPLE_, tuplearity) spec BOOST_PP_COMMA() \
-            delimiter BOOST_PP_COMMA() \
+            headtransform BOOST_PP_COMMA() \
             nexttransform \
           BOOST_PP_RPAREN() ))
 
 #define WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLESEQFROMTOKENS_IMPL1( \
-  tuplearity, spec, delimiter, nexttransform) \
+  tuplearity, spec, headtransform, nexttransform) \
     BOOST_PP_EXPAND( \
       WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLESEQFROMTOKENS_IMPL2 \
       BOOST_PP_WHILE( \
         WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_PRED, \
         WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_OP, \
         WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_INITSTATE( \
-          tuplearity, spec, delimiter, nexttransform)) \
+          tuplearity, spec, headtransform, nexttransform)) \
     )
 
 #define WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLESEQFROMTOKENS_IMPL2( \
-  tuplearity, prefixedhead, rest, delimiter, transform) \
+  tuplearity, prefixedhead, rest, headtransform, nexttransform) \
     WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLEFROMTOKENS_PROCESSSPLIT( \
       BOOST_PP_CAT(WG_PP_OBJECT_, prefixedhead), \
       rest, \
-      delimiter, \
-      transform)
+      headtransform, \
+      nexttransform)
     
 #define WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLEFROMTOKENS_PROCESSSPLIT( \
-  head, rest, delimiter, nexttransform) \
-    head delimiter() \
-    nexttransform \
-    BOOST_PP_LPAREN() rest BOOST_PP_RPAREN()
+  head, rest, headtransform, nexttransform) \
+    headtransform(head) \
+    nexttransform(rest)
 
 #define WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_INITSTATE( \
-  tuplearity, spec, delimiter, nexttransform) \
+  tuplearity, spec, headtransform, nexttransform) \
     ( \
       tuplearity, \
       EMPTY, \
       spec, \
-      delimiter, \
+      headtransform, \
       nexttransform \
     )
     
@@ -110,7 +107,7 @@
       WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLEFROMTOKENS( \
         WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_ARITY(state),  \
         WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_REST(state), \
-        BOOST_PP_EMPTY, \
+        WG_PP_IDENTITY, \
         BOOST_PP_TUPLE_EAT(1)), \
       \
       BOOST_PP_EXPAND( \
@@ -126,19 +123,21 @@
         4, state) \
     )
 
-/* Debug Aid.
+/*
+// Debug Aid.
 #define S1 (a) foo
 #define S2 (a)(b)(c) foo
 #define S3 (a,b) foo
 #define S4 (a,b)(c,d) foo
 
+#define head(x) x ,
 #define next(z) z
 
-WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLEFROMTOKENS(1, S1, BOOST_PP_COMMA, next)
-WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLEFROMTOKENS(2, S3, BOOST_PP_COMMA, next)
+WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLEFROMTOKENS(1, S1, head, next)
+WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLEFROMTOKENS(2, S3, head, next)
 
-WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLESEQFROMTOKENS(1, S2, BOOST_PP_COMMA, next)
-WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLESEQFROMTOKENS(2, S4, BOOST_PP_COMMA, next)
+WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLESEQFROMTOKENS(1, S2, head, next)
+WG_PP_AUTOFUNCTION_SPEC_SPLITHEADTUPLESEQFROMTOKENS(2, S4, head, next)
 */
     
 #endif /* WG_PP_SPLITHEADFROMTOKENS_HH_ */
