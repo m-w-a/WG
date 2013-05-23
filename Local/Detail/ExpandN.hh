@@ -7,17 +7,17 @@
 //Public APIs
 //###########
 
-#define WG_PP_EXPANDN(tokenstoexpand, expandcount) \
+#define WG_PP_EXPANDN(expandcount, tokenstoexpand) \
   BOOST_PP_TUPLE_ELEM( \
     2, \
     1, \
-    WG_PP_EXPANDN_IMPL(tokenstoexpand, expandcount))
+    WG_PP_EXPANDN_IMPL(expandcount, tokenstoexpand))
 
 //###########
 //Impl Macros
 //###########
 
-#define WG_PP_EXPANDN_IMPL(tokenstoexpand, expandcount) \
+#define WG_PP_EXPANDN_IMPL(expandcount, tokenstoexpand) \
   BOOST_PP_WHILE( \
     WG_PP_AUTOFUNCTION_EXPANDN_WHILELOOP_PRED, \
     WG_PP_AUTOFUNCTION_EXPANDN_WHILELOOP_OP, \
