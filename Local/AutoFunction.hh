@@ -73,60 +73,50 @@
 
 #define WG_PP_FORMAT_NAME(name) \
   BOOST_PP_CAT(WG_PP_IDENTITY(pgcllXXXautofunctionXXX), name)
-    
-#define WG_PP_SPECIFIEDTYPE_local(specifiedtype) local
-#define WG_PP_SPECIFIEDTYPE_VALUE_local(value) value
+
 #define WG_PP_SPECIFIEDTYPE_LOCAL_VALUE(specifiedtype) \
   BOOST_PP_EXPAND( \
-    BOOST_PP_CAT(WG_PP_SPECIFIEDTYPE_VALUE_, specifiedtype))
-#define WG_PP_IS_SPECIFIEDTYPE_LOCAL(specifiedtype) \
-  WG_PP_TOKENS_STARTS_WITH_LOCAL( \
-    BOOST_PP_EXPAND( \
-      BOOST_PP_CAT(WG_PP_SPECIFIEDTYPE_,specifiedtype)))
+    BOOST_PP_CAT(WG_PP_SPECIFIEDTYPE_VALUEIMPL_, specifiedtype))
+#define WG_PP_SPECIFIEDTYPE_VALUEIMPL_local(value) value
 
-#define WG_PP_SPECIFIEDTYPE_localref(specifiedtype) localref
-#define WG_PP_SPECIFIEDTYPE_VALUE_localref(value) value
 #define WG_PP_SPECIFIEDTYPE_LOCALREF_VALUE(specifiedtype) \
   BOOST_PP_EXPAND( \
-    BOOST_PP_CAT(WG_PP_SPECIFIEDTYPE_VALUE_, specifiedtype))
-#define WG_PP_IS_SPECIFIEDTYPE_LOCALREF(specifiedtype) \
-  WG_PP_TOKENS_STARTS_WITH_LOCALREF( \
-    BOOST_PP_EXPAND( \
-      BOOST_PP_CAT(WG_PP_SPECIFIEDTYPE_,specifiedtype)))
-      
+    BOOST_PP_CAT(WG_PP_SPECIFIEDTYPE_VALUEIMPL_, specifiedtype))
+#define WG_PP_SPECIFIEDTYPE_VALUEIMPL_localref(value) value
+    
 #define WG_PP_SPECIFIEDTYPE_VALUE(specifiedtype) \
   BOOST_PP_IIF( \
-    WG_PP_IS_SPECIFIEDTYPE_LOCAL(specifiedtype), \
+    WG_PP_TOKENS_STARTS_WITH_LOCAL(specifiedtype), \
     WG_PP_SPECIFIEDTYPE_LOCAL_VALUE(specifiedtype), \
     BOOST_PP_IIF( \
-      WG_PP_IS_SPECIFIEDTYPE_LOCALREF(specifiedtype), \
+      WG_PP_TOKENS_STARTS_WITH_LOCALREF(specifiedtype), \
       WG_PP_SPECIFIEDTYPE_LOCALREF_VALUE(specifiedtype), \
       specifiedtype))
     
 #define WG_PP_SPECIFIEDTYPE_ADDCONST(specifiedtype) \
   BOOST_PP_IIF( \
-    WG_PP_IS_SPECIFIEDTYPE_LOCALREF(specifiedtype), \
+    WG_PP_TOKENS_STARTS_WITH_LOCALREF(specifiedtype), \
     WG_PP_SPECIFIEDTYPE_LOCALREF_VALUE(specifiedtype), \
     BOOST_PP_IIF( \
-      WG_PP_IS_SPECIFIEDTYPE_LOCAL(specifiedtype), \
+      WG_PP_TOKENS_STARTS_WITH_LOCAL(specifiedtype), \
       WG_PP_SPECIFIEDTYPE_LOCAL_VALUE(specifiedtype), \
       boost::add_const<WG_PP_IDENTITY(specifiedtype)>::type))
 
 #define WG_PP_SPECIFIEDTYPE_ADDREFERENCE(specifiedtype) \
   BOOST_PP_IIF( \
-    WG_PP_IS_SPECIFIEDTYPE_LOCALREF(specifiedtype), \
+    WG_PP_TOKENS_STARTS_WITH_LOCALREF(specifiedtype), \
     WG_PP_SPECIFIEDTYPE_LOCALREF_VALUE(specifiedtype), \
     BOOST_PP_IIF( \
-      WG_PP_IS_SPECIFIEDTYPE_LOCAL(specifiedtype), \
+      WG_PP_TOKENS_STARTS_WITH_LOCAL(specifiedtype), \
       WG_PP_SPECIFIEDTYPE_LOCAL_VALUE(specifiedtype) &, \
       boost::add_reference<WG_PP_IDENTITY(specifiedtype)>::type))
       
 #define WG_PP_SPECIFIEDTYPE_ADDCONST_ADDREF(specifiedtype) \
   BOOST_PP_IIF( \
-    WG_PP_IS_SPECIFIEDTYPE_LOCALREF(specifiedtype), \
+    WG_PP_TOKENS_STARTS_WITH_LOCALREF(specifiedtype), \
     WG_PP_SPECIFIEDTYPE_LOCALREF_VALUE(specifiedtype), \
     BOOST_PP_IIF( \
-      WG_PP_IS_SPECIFIEDTYPE_LOCAL(specifiedtype), \
+      WG_PP_TOKENS_STARTS_WITH_LOCAL(specifiedtype), \
       WG_PP_SPECIFIEDTYPE_LOCAL_VALUE(specifiedtype), \
       boost::add_reference< \
         boost::add_const<WG_PP_IDENTITY(specifiedtype)>::type \

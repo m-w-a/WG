@@ -114,4 +114,23 @@
 
 #define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_ENDSPEC(spec)
 
+/*
+//Debugging Aide
+#define T1 assignto (x, 7)
+#define T2 return (float)
+#define T3 parambind (b)
+#define T4 parambind (b)(c)
+#define T5 paramset (x, 7)
+#define T6 paramset (x, 7) (y, 8)
+
+#pragma wave trace(enable)
+BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_PROCESS(T1))
+BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_PROCESS(T2))
+BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_PROCESS(T3))
+BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_PROCESS(T4))
+BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_PROCESS(T5))
+BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_PROCESS(T6))
+#pragma wave trace(disable)
+*/
+
 #endif /* WG_AUTOFUNCTION2_HH_ */

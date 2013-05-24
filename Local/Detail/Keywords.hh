@@ -9,6 +9,10 @@
 //Public APIs
 //###########
 
+#define WG_PP_TOKENS_EAT_HEADKEYWORD(tokens) \
+  BOOST_PP_EXPAND( \
+    BOOST_PP_CAT(WG_PP_EAT_KEYWORD_, tokens))
+
 #define WG_PP_TOKENS_STARTS_WITH_VOID(tokens) \
   WG_PP_TOKENS_STARTS_WITH_VOID_IMPL(tokens)
 
@@ -38,11 +42,7 @@
 
 #define WG_PP_TOKENS_STARTS_WITH_MEMSET(tokens) \
   WG_PP_TOKENS_STARTS_WITH_MEMSET_IMPL(tokens)
-
-#define WG_PP_TOKENS_EAT_HEADKEYWORD(tokens) \
-  BOOST_PP_EXPAND( \
-    BOOST_PP_CAT(WG_PP_EAT_KEYWORD_, tokens))
-
+  
 //###########
 //Impl Macros
 //###########

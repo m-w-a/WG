@@ -20,13 +20,6 @@ int main()
 //  __LINE__
 */
   
-#define s1 assignto (x, 7) return (float) parambind (b)(c)
-#define s2 assignto (x, 8) parambind
-#define s3 assignto (x, 9)
-#define s4 parambind
-  
-WG_PP_AUTOFUNCTION_SPEC_PROCESS(s1)
-  
 /*
   WG_AUTOFUNCTION(oneBoundArg, (bool)(didArgumentBind) (int)(y2), (void))
   {
