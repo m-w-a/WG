@@ -13,6 +13,13 @@
 //Public APIs
 //###########
 
+// Expands to the following:
+//   (assignto) [(BOOST_PP_NIL) | (2tuple)]
+//   (return) [(BOOST_PP_NIL) | (1tuple)]
+//   (parambind) [(BOOST_PP_NIL) | (1tuple-seq-after-parambind-before-nxtkywd)]
+//   (paramset) [(BOOST_PP_NIL) | (1tuple-seq-after-paramset-before-nxtkywd)]
+//   (membind) [(BOOST_PP_NIL) | (1tuple-seq-after-membind-before-nxtkywd)]
+//   (memset) [(BOOST_PP_NIL) | (1tuple-seq-after-memset-before-nxtkywd)]
 #define WG_PP_AUTOFUNCTION_SPEC_PROCESS(spec) \
   WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_ASSIGNTO(spec BOOST_PP_NIL)
 
@@ -20,6 +27,8 @@
 //Impl Macros
 //###########
 
+// Need to use these instead of BOOST_PP_EXPAND because for some reason the 
+//  latter prevents the macro expansion of nested BOOST_PP_EXPANDs
 #define WG_PP_AUTOFUNCTION_EXPAND1(x) x
 #define WG_PP_AUTOFUNCTION_EXPAND2(x) x
 #define WG_PP_AUTOFUNCTION_EXPAND3(x) x
@@ -56,8 +65,17 @@
      BOOST_PP_CAT( \
       WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_, \
       nextkeyword))
-    
-// Well expand to comma(s) containing tokens.
+
+//------------------------------------------------------------------------------
+// WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_<...>
+// Algorithm Overview:
+//   If head token matches <keyword>
+//     then process tokens upto nextkeyword, and apply transform to rest of 
+//       tokens starting from nextkeyword.
+//     else output (BOOST_PP_NIL) and apply transform to rest of tokens 
+//       starting from nextkeyword.
+//------------------------------------------------------------------------------
+
 #define WG_PP_AUTOFUNCTION_SPEC_PROCESSIFHEAD_ASSIGNTO(spec) \
   (assignto) \
   WG_PP_AUTOFUNCTION_EXPAND1( \
@@ -131,6 +149,9 @@ BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_PROCESS(T4))
 BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_PROCESS(T5))
 BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_PROCESS(T6))
 #pragma wave trace(disable)
+
+//EXPECTED:
+//See WG_PP_AUTOFUNCTION_SPEC_PROCESS description.
 */
 
 #endif /* WG_AUTOFUNCTION2_HH_ */
