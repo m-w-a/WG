@@ -40,7 +40,7 @@
   spec, currentkeyword, nextkeyword) \
     BOOST_PP_CAT( \
       WG_PP_AUTOFUNCTION_PROCESSIFHEADIMPL_MACRONAME_IMPL, \
-      BOOST_PP_CAT(WG_PP_TOKENS_STARTS_WITH_, currentkeyword) (spec)) \
+      BOOST_PP_CAT(WG_PP_TOKENS_STARTWITH_, currentkeyword) (spec)) \
       (spec, currentkeyword, nextkeyword)
 #define WG_PP_AUTOFUNCTION_PROCESSIFHEADIMPL_MACRONAME_IMPL0( \
   spec, currentkeyword, nextkeyword) \
@@ -54,7 +54,7 @@
   spec, currentkeyword, nextkeyword) \
     BOOST_PP_CAT( \
       WG_PP_AUTOFUNCTION_PROCESSIFHEADIMPL_MACROPARAMS_IMPL, \
-      BOOST_PP_CAT(WG_PP_TOKENS_STARTS_WITH_, currentkeyword) (spec)) \
+      BOOST_PP_CAT(WG_PP_TOKENS_STARTWITH_, currentkeyword) (spec)) \
       (spec, currentkeyword, nextkeyword)
 #define WG_PP_AUTOFUNCTION_PROCESSIFHEADIMPL_MACROPARAMS_IMPL0( \
   spec, currentkeyword, nextkeyword) \

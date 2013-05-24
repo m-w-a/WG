@@ -76,37 +76,37 @@
     
 #define WG_PP_SPECIFIEDTYPE_VALUE(specifiedtype) \
   BOOST_PP_IIF( \
-    WG_PP_TOKENS_STARTS_WITH_LOCAL(specifiedtype), \
+    WG_PP_TOKENS_STARTWITH_LOCAL(specifiedtype), \
     WG_PP_TOKENS_LOCAL_VALUE(specifiedtype), \
     BOOST_PP_IIF( \
-      WG_PP_TOKENS_STARTS_WITH_LOCALREF(specifiedtype), \
+      WG_PP_TOKENS_STARTWITH_LOCALREF(specifiedtype), \
       WG_PP_TOKENS_LOCALREF_VALUE(specifiedtype), \
       specifiedtype))
     
 #define WG_PP_SPECIFIEDTYPE_ADDCONST(specifiedtype) \
   BOOST_PP_IIF( \
-    WG_PP_TOKENS_STARTS_WITH_LOCALREF(specifiedtype), \
+    WG_PP_TOKENS_STARTWITH_LOCALREF(specifiedtype), \
     WG_PP_TOKENS_LOCALREF_VALUE(specifiedtype), \
     BOOST_PP_IIF( \
-      WG_PP_TOKENS_STARTS_WITH_LOCAL(specifiedtype), \
+      WG_PP_TOKENS_STARTWITH_LOCAL(specifiedtype), \
       WG_PP_TOKENS_LOCAL_VALUE(specifiedtype), \
       boost::add_const<WG_PP_IDENTITY(specifiedtype)>::type))
 
 #define WG_PP_SPECIFIEDTYPE_ADDREFERENCE(specifiedtype) \
   BOOST_PP_IIF( \
-    WG_PP_TOKENS_STARTS_WITH_LOCALREF(specifiedtype), \
+    WG_PP_TOKENS_STARTWITH_LOCALREF(specifiedtype), \
     WG_PP_TOKENS_LOCALREF_VALUE(specifiedtype), \
     BOOST_PP_IIF( \
-      WG_PP_TOKENS_STARTS_WITH_LOCAL(specifiedtype), \
+      WG_PP_TOKENS_STARTWITH_LOCAL(specifiedtype), \
       WG_PP_TOKENS_LOCAL_VALUE(specifiedtype) &, \
       boost::add_reference<WG_PP_IDENTITY(specifiedtype)>::type))
       
 #define WG_PP_SPECIFIEDTYPE_ADDCONST_ADDREF(specifiedtype) \
   BOOST_PP_IIF( \
-    WG_PP_TOKENS_STARTS_WITH_LOCALREF(specifiedtype), \
+    WG_PP_TOKENS_STARTWITH_LOCALREF(specifiedtype), \
     WG_PP_TOKENS_LOCALREF_VALUE(specifiedtype), \
     BOOST_PP_IIF( \
-      WG_PP_TOKENS_STARTS_WITH_LOCAL(specifiedtype), \
+      WG_PP_TOKENS_STARTWITH_LOCAL(specifiedtype), \
       WG_PP_TOKENS_LOCAL_VALUE(specifiedtype), \
       boost::add_reference< \
         boost::add_const<WG_PP_IDENTITY(specifiedtype)>::type \
@@ -155,7 +155,7 @@
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_MARK_THISU_INDX(r, data, indx, elem) \
   BOOST_PP_EXPR_IF( \
-    WG_PP_TOKENS_STARTS_WITH_THISU(elem), \
+    WG_PP_TOKENS_STARTWITH_THISU(elem), \
     (indx))
     
 #define WG_PP_THISU_INDX_IMPL_0 BOOST_PP_NIL
@@ -215,7 +215,7 @@
   BOOST_PP_IIF( \
     BOOST_PP_AND( \
       BOOST_PP_EQUAL(BOOST_PP_SEQ_SIZE(bp_seq), 1), \
-      WG_PP_TOKENS_STARTS_WITH_VOID( \
+      WG_PP_TOKENS_STARTWITH_VOID( \
         BOOST_PP_EXPAND(WG_PP_IDENTITY bp_seq BOOST_PP_NIL))), \
       1, \
       0)
@@ -226,7 +226,7 @@
       2, BOOST_PP_TUPLE_EAT(1) ap_alt_seq BOOST_PP_NIL), \
     0, \
     BOOST_PP_IF( \
-      WG_PP_TOKENS_STARTS_WITH_VOID( \
+      WG_PP_TOKENS_STARTWITH_VOID( \
         BOOST_PP_EXPAND(WG_PP_IDENTITY ap_alt_seq BOOST_PP_NIL)), \
       1, \
       0))
@@ -430,7 +430,7 @@
 #define WG_PP_CALL_PARAM_ENTRY(r, obj_seq, indx, elem) \
   BOOST_PP_LPAREN() \
     BOOST_PP_IF( \
-      WG_PP_TOKENS_STARTS_WITH_THISU(WG_PP_SEQ_ELEM(indx, obj_seq)), \
+      WG_PP_TOKENS_STARTWITH_THISU(WG_PP_SEQ_ELEM(indx, obj_seq)), \
       WG_PP_SPECIFIEDTYPE_ADDCONST(elem), \
       WG_PP_SPECIFIEDTYPE_VALUE(elem)) \
     WG_PP_SEQ_ELEM(indx, obj_seq) \
