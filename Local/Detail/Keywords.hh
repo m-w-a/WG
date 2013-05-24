@@ -43,12 +43,19 @@
 #define WG_PP_TOKENS_STARTS_WITH_MEMSET(tokens) \
   WG_PP_TOKENS_STARTS_WITH_MEMSET_IMPL(tokens)
 
+#define WG_PP_TOKENS_STARTS_WITH_CONST(tokens) \
+  WG_PP_TOKENS_STARTS_WITH_CONST_IMPL(tokens)
+
+#define WG_PP_TOKENS_STARTS_WITH_REF(tokens) \
+  WG_PP_TOKENS_STARTS_WITH_REF_IMPL(tokens)
+
+
 #define WG_PP_TOKENS_LOCAL_VALUE(specifiedtype) \
   WG_PP_TOKENS_LOCAL_VALUEIMPL(specifiedtype) \
 
 #define WG_PP_TOKENS_LOCALREF_VALUE(specifiedtype) \
   WG_PP_TOKENS_LOCALREF_VALUEIMPL(specifiedtype) \
-
+  
 //###########
 //Impl Macros
 //###########
@@ -113,6 +120,18 @@
     tokens, \
     WG_PP_AUTOFUNCTION_TOKEN_MATCHES11_)
 
+#define WG_PP_AUTOFUNCTION_TOKEN_MATCHES12_const (1) /* unary */
+#define WG_PP_TOKENS_STARTS_WITH_CONST_IMPL(tokens) \
+  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
+    tokens, \
+    WG_PP_AUTOFUNCTION_TOKEN_MATCHES12_)
+
+#define WG_PP_AUTOFUNCTION_TOKEN_MATCHES13_ref (1) /* unary */
+#define WG_PP_TOKENS_STARTS_WITH_REF_IMPL(tokens) \
+  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
+    tokens, \
+    WG_PP_AUTOFUNCTION_TOKEN_MATCHES13_)
+
 #define WG_PP_TOKENS_LOCAL_VALUEIMPL(specifiedtype) \
   BOOST_PP_EXPAND( \
     BOOST_PP_CAT(WG_PP_SPECIFIEDTYPE_VALUEIMPL_, specifiedtype))
@@ -133,5 +152,7 @@
 #define WG_PP_EAT_KEYWORD_paramset
 #define WG_PP_EAT_KEYWORD_membind
 #define WG_PP_EAT_KEYWORD_memset
+#define WG_PP_EAT_KEYWORD_const
+#define WG_PP_EAT_KEYWORD_ref
 
 #endif /* WG_PP_AUTOFUNCTION_KEYWORDS_HH_ */
