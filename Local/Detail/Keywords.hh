@@ -42,7 +42,13 @@
 
 #define WG_PP_TOKENS_STARTS_WITH_MEMSET(tokens) \
   WG_PP_TOKENS_STARTS_WITH_MEMSET_IMPL(tokens)
-  
+
+#define WG_PP_TOKENS_LOCAL_VALUE(specifiedtype) \
+  WG_PP_TOKENS_LOCAL_VALUEIMPL(specifiedtype) \
+
+#define WG_PP_TOKENS_LOCALREF_VALUE(specifiedtype) \
+  WG_PP_TOKENS_LOCALREF_VALUEIMPL(specifiedtype) \
+
 //###########
 //Impl Macros
 //###########
@@ -107,6 +113,16 @@
     tokens, \
     WG_PP_AUTOFUNCTION_TOKEN_MATCHES11_)
 
+#define WG_PP_TOKENS_LOCAL_VALUEIMPL(specifiedtype) \
+  BOOST_PP_EXPAND( \
+    BOOST_PP_CAT(WG_PP_SPECIFIEDTYPE_VALUEIMPL_, specifiedtype))
+#define WG_PP_SPECIFIEDTYPE_VALUEIMPL_local(value) value
+
+#define WG_PP_TOKENS_LOCALREF_VALUEIMPL(specifiedtype) \
+  BOOST_PP_EXPAND( \
+    BOOST_PP_CAT(WG_PP_SPECIFIEDTYPE_VALUEIMPL_, specifiedtype))
+#define WG_PP_SPECIFIEDTYPE_VALUEIMPL_localref(value) value
+    
 #define WG_PP_EAT_KEYWORD_void
 #define WG_PP_EAT_KEYWORD_thisu
 #define WG_PP_EAT_KEYWORD_local
