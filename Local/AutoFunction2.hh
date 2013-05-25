@@ -4,10 +4,8 @@
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP.hh>
 #include <WG/Local/Detail/Seq.hh>
-#include <WG/Local/Detail/AltSeq.hh>
 #include <WG/Local/Detail/Keywords.hh>
-#include <WG/Local/Detail/ExpandN.hh>
-#include <WG/Local/Detail/SplitHeadFromTokens.hh>
+#include <WG/Local/Detail/FrontEnd/SplitHeadFromTokens.hh>
 
 //###########
 //Public APIs
