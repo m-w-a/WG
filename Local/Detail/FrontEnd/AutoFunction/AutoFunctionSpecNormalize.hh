@@ -14,12 +14,12 @@
 //###########
 
 // Expands to the following:
-//   (assignto) [(BOOST_PP_NIL) | (2tuple)]
-//   (return) [(BOOST_PP_NIL) | (1tuple)]
-//   (parambind) [(BOOST_PP_NIL) | (1tuple-seq-after-parambind-before-nxtkywd)]
-//   (paramset) [(BOOST_PP_NIL) | (1tuple-seq-after-paramset-before-nxtkywd)]
-//   (membind) [(BOOST_PP_NIL) | (1tuple-seq-after-membind-before-nxtkywd)]
-//   (memset) [(BOOST_PP_NIL) | (1tuple-seq-after-memset-before-nxtkywd)]
+//   (assignto) { (BOOST_PP_NIL) | (normalized-bound-var-dcln) }
+//   (return) { (BOOST_PP_NIL) | (return-type) }
+//   (parambind) { (BOOST_PP_NIL) | {(normalized-bound-var-dcln)}+ nextkywd }
+//   (paramset) { (BOOST_PP_NIL) | ({(normalized-set-var-dcln)}+ nextkywd) }
+//   (membind) { (BOOST_PP_NIL) | {(normalized-bound-var-dcln)}+ nextkywd }
+//   (memset) { (BOOST_PP_NIL) | ({(normalized-set-var-dcln)}+ nextkywd) }
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(spec) \
   WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_ASSIGNTO(spec BOOST_PP_NIL)
 
