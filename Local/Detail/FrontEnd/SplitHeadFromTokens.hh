@@ -47,11 +47,19 @@
 //Impl Macros
 //###########
 
+// Work Around.
+// Needed because using BOOST_PP_EXPAND on the public APIs will disable 
+//   BOOST_PP_EXPAND internally.
+#define WG_PP_SPLITHEADTUPLEFROMTOKENS_EXPAND1(x) x
+#define WG_PP_SPLITHEADTUPLEFROMTOKENS_EXPAND2(x) x
+#define WG_PP_SPLITHEADTUPLEFROMTOKENS_EXPAND3(x) x
+#define WG_PP_SPLITHEADTUPLEFROMTOKENS_EXPAND4(x) x
+
 #define WG_PP_SPLITHEADTUPLEFROMTOKENS_IMPL1( \
   tuplearity, spec, headelemtransform, headtransform, nexttransform) \
-    BOOST_PP_EXPAND( \
+    WG_PP_SPLITHEADTUPLEFROMTOKENS_EXPAND1( \
       WG_PP_SPLITHEADTUPLEFROMTOKENS_IMPL2 \
-        BOOST_PP_EXPAND( \
+        WG_PP_SPLITHEADTUPLEFROMTOKENS_EXPAND2( \
           BOOST_PP_LPAREN() \
             BOOST_PP_CAT( \
               WG_PP_ADDCOMMAAFTERTUPLE_, tuplearity) spec BOOST_PP_COMMA() \
@@ -70,7 +78,7 @@
 
 #define WG_PP_SPLITHEADTUPLESEQFROMTOKENS_IMPL1( \
   tuplearity, spec, headelemtransform, headtransform, nexttransform) \
-    BOOST_PP_EXPAND( \
+    WG_PP_SPLITHEADTUPLEFROMTOKENS_EXPAND3( \
       WG_PP_SPLITHEADTUPLESEQFROMTOKENS_IMPL2 \
       BOOST_PP_WHILE( \
         WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_PRED, \
@@ -143,7 +151,7 @@
         WG_PP_IDENTITY, \
         BOOST_PP_TUPLE_EAT(1)) \
       ,\
-      BOOST_PP_EXPAND( \
+      WG_PP_SPLITHEADTUPLEFROMTOKENS_EXPAND4( \
         BOOST_PP_TUPLE_EAT( \
           WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_ARITY( \
             state)) \
