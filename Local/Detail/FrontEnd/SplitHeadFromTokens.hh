@@ -13,13 +13,16 @@
 //   at least another token.
 // headtransform:
 //   a 1-arg function macro to apply to the split head.
+// headelemtransform:
+//   a "tuplearity"-arg function macro to apply to the head tuple that was split.
 // nexttransform:
 //   a 1-arg function macro to apply to the rest of spec after the split
 #define WG_PP_SPLITHEADTUPLEFROMTOKENS( \
-  tuplearity, spec, headtransform, nexttransform) \
+  tuplearity, spec, headelemtransform, headtransform, nexttransform) \
     WG_PP_SPLITHEADTUPLEFROMTOKENS_IMPL1( \
       tuplearity, \
       spec, \
+      headelemtransform, \
       headtransform, \
       nexttransform)
 
@@ -27,13 +30,16 @@
 //   a sequence of tokens prefixed by some number of tuples of the same 
 //   "tuplearity" arity, followed by a non-tuple.
 //   a 1-arg function macro to apply to the split head.
+// headelemtransform:
+//   a "tuplearity"-arg function macro to apply to the head tuple that was split.
 // nexttransform:
 //   a 1-arg function macro to apply to the rest of spec after the split
 #define WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
-  tuplearity, spec, headtransform, nexttransform) \
+  tuplearity, spec, headelemtransform, headtransform, nexttransform) \
      WG_PP_SPLITHEADTUPLESEQFROMTOKENS_IMPL1( \
         tuplearity, \
         spec, \
+        headelemtransform, \
         headtransform, \
         nexttransform)
 
@@ -42,30 +48,44 @@
 //###########
 
 #define WG_PP_SPLITHEADTUPLEFROMTOKENS_IMPL1( \
-  tuplearity, spec, headtransform, nexttransform) \
+  tuplearity, spec, headelemtransform, headtransform, nexttransform) \
     BOOST_PP_EXPAND( \
-      WG_PP_SPLITHEADTUPLEFROMTOKENS_PROCESSSPLIT \
+      WG_PP_SPLITHEADTUPLEFROMTOKENS_IMPL2 \
         BOOST_PP_EXPAND( \
           BOOST_PP_LPAREN() \
             BOOST_PP_CAT( \
               WG_PP_ADDCOMMAAFTERTUPLE_, tuplearity) spec BOOST_PP_COMMA() \
+            headelemtransform BOOST_PP_COMMA() \
             headtransform BOOST_PP_COMMA() \
             nexttransform \
           BOOST_PP_RPAREN() ))
 
+#define WG_PP_SPLITHEADTUPLEFROMTOKENS_IMPL2( \
+  head, rest, headelemtransform, headtransform, nexttransform) \
+    WG_PP_SPLITHEADTUPLEFROMTOKENS_PROCESSSPLIT( \
+      headelemtransform head, \
+      rest, \
+      headtransform, \
+      nexttransform)
+
 #define WG_PP_SPLITHEADTUPLESEQFROMTOKENS_IMPL1( \
-  tuplearity, spec, headtransform, nexttransform) \
+  tuplearity, spec, headelemtransform, headtransform, nexttransform) \
     BOOST_PP_EXPAND( \
       WG_PP_SPLITHEADTUPLESEQFROMTOKENS_IMPL2 \
       BOOST_PP_WHILE( \
         WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_PRED, \
         WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_OP, \
         WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_INITSTATE( \
-          tuplearity, spec, headtransform, nexttransform)) \
+          tuplearity, spec, headelemtransform, headtransform, nexttransform)) \
     )
 
 #define WG_PP_SPLITHEADTUPLESEQFROMTOKENS_IMPL2( \
-  tuplearity, prefixedhead, rest, headtransform, nexttransform) \
+  tuplearity, \
+  prefixedhead, \
+  rest, \
+  headelemtransform, \
+  headtransform, \
+  nexttransform) \
     WG_PP_SPLITHEADTUPLEFROMTOKENS_PROCESSSPLIT( \
       BOOST_PP_CAT(WG_PP_OBJECT_, prefixedhead), \
       rest, \
@@ -78,30 +98,30 @@
     nexttransform(rest)
 
 #define WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_INITSTATE( \
-  tuplearity, spec, headtransform, nexttransform) \
+  tuplearity, spec, headelemtransform, headtransform, nexttransform) \
     ( \
       tuplearity, \
       EMPTY, \
       spec, \
+      headelemtransform, \
       headtransform, \
       nexttransform \
     )
     
-#define WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_STATEELEM( \
-  indx, state) \
-    BOOST_PP_TUPLE_ELEM(5, indx, state)
-#define WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_ARITY( \
-  state) \
-    WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_STATEELEM( \
-      0, state)
-#define WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_HEAD( \
-  state) \
-    WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_STATEELEM( \
-      1, state)
-#define WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_REST( \
-  state) \
-    WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_STATEELEM( \
-      2, state)
+#define WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_STATEELEM(indx, state) \
+  BOOST_PP_TUPLE_ELEM(6, indx, state)
+#define WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_ARITY(state) \
+  WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_STATEELEM( \
+    0, state)
+#define WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_HEAD(state) \
+  WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_STATEELEM( \
+    1, state)
+#define WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_REST(state) \
+  WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_STATEELEM( \
+    2, state)
+#define WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_HEADELEMTRANSFORM(state) \
+  WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_STATEELEM( \
+    3, state)
 
 #define WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_PRED( \
   d, state) \
@@ -113,26 +133,30 @@
 #define WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_OP( \
   d, state) \
     ( \
-      WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_ARITY(state), \
-      \
+      WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_ARITY(state) \
+      ,\
       WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_HEAD(state) \
       WG_PP_SPLITHEADTUPLEFROMTOKENS( \
         WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_ARITY(state),  \
         WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_REST(state), \
+        WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_HEADELEMTRANSFORM(state), \
         WG_PP_IDENTITY, \
-        BOOST_PP_TUPLE_EAT(1)), \
-      \
+        BOOST_PP_TUPLE_EAT(1)) \
+      ,\
       BOOST_PP_EXPAND( \
         BOOST_PP_TUPLE_EAT( \
           WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_ARITY( \
             state)) \
-      WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_REST(state)), \
-      \
+      WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_REST(state)) \
+      ,\
       WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_STATEELEM( \
-        3, state), \
-      \
+        3, state) \
+      ,\
       WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_STATEELEM( \
         4, state) \
+      , \
+      WG_PP_SPLITHEADTUPLESEQFROMTOKENS_WHILELOOP_STATEELEM( \
+        5, state) \
     )
 
 /*
@@ -142,20 +166,22 @@
 #define S3 (a,b) foo
 #define S4 (a,b)(c,d) foo
 
+#define quoteelem_1(x) (~x~)
+#define quoteelem_2(x, y) (~x~, +y+)
 #define head(x) x ,
 #define next(z) z
 
-WG_PP_SPLITHEADTUPLEFROMTOKENS(1, S1, head, next)
-WG_PP_SPLITHEADTUPLEFROMTOKENS(2, S3, head, next)
+WG_PP_SPLITHEADTUPLEFROMTOKENS(1, S1, WG_PP_TUPLIZE_1, head, next)
+WG_PP_SPLITHEADTUPLEFROMTOKENS(2, S3, WG_PP_TUPLIZE_2, head, next)
 
-WG_PP_SPLITHEADTUPLESEQFROMTOKENS(1, S2, head, next)
-WG_PP_SPLITHEADTUPLESEQFROMTOKENS(2, S4, head, next)
+WG_PP_SPLITHEADTUPLESEQFROMTOKENS(1, S2, quoteelem_1, head, next)
+WG_PP_SPLITHEADTUPLESEQFROMTOKENS(2, S4, quoteelem_2, head, next)
 
 //EXPECTED:
 //(a) , foo
-//(a,b) , foo
-//(a)(b)(c) , foo
-//(a,b)(c,d) , foo
+//(a, b) , foo
+//(~a~) (~b~) (~c~) , foo
+//(~a~, +b+) (~c~, +d+) , foo
 */
     
 #endif /* WG_PP_SPLITHEADFROMTOKENS_HH_ */
