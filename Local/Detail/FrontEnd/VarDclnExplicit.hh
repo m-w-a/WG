@@ -19,6 +19,8 @@
 //Impl Macros
 //###########
 
+#define WG_PP_VARDCLNEXPLICIT_EXPAND1(x) x
+
 #define WG_PP_VARDCLNEXPLICIT_TUPLIZE_IMPL(explicitvardcln) \
   BOOST_PP_CAT( \
     WG_PP_VARDCLNEXPLICIT_TUPLIZE_IMPL_, \
@@ -27,9 +29,18 @@
     BOOST_PP_EXPR_IIF(WG_PP_TOKENS_STARTWITH_LOCALREF(explicitvardcln), LOCALREF) ) \
   (explicitvardcln)
 
+// NOTE: can't use WG_PP_SPLITHEADTUPLEFROMTOKENS in implementation because
+//   this macro will/might be called via a WG_PP_SPLITHEADTUPLEFROMTOKENS
+//   callback macro, thus disabling the implementation's own 
+//   WG_PP_SPLITHEADTUPLEFROMTOKENS invocation.
 #define WG_PP_VARDCLNEXPLICIT_TUPLIZE_IMPL_NONLOCAL(explicitvardcln) \
-  WG_PP_SPLITHEADTUPLEFROMTOKENS( \
-    1, explicitvardcln, WG_PP_TUPLIZE, WG_PP_IDENTITY, WG_PP_TUPLIZE)
+  WG_PP_VARDCLNEXPLICIT_EXPAND1( \
+    WG_PP_VARDCLNEXPLICIT_TUPLIZE_IMPL_NONLOCAL1 \
+    BOOST_PP_LPAREN() \
+      WG_PP_ADDCOMMAAFTERTUPLE_1 explicitvardcln \
+    BOOST_PP_RPAREN() )
+#define WG_PP_VARDCLNEXPLICIT_TUPLIZE_IMPL_NONLOCAL1(type, varname) \
+  type (varname)
 
 #define WG_PP_VARDCLNEXPLICIT_TUPLIZE_IMPL_LOCAL(explicitvardcln) \
   BOOST_PP_CAT( \
@@ -60,7 +71,7 @@ WG_PP_VARDCLNEXPLICIT_TUPLIZE(VDE3)
 //EXPECTED:
 //(T const *) (var1)
 //(local(U) (var2)
-//(localref(Callback &) (var3)
+//(localref(Callback &)) (var3)
 */
 
 #endif //WG_PP_VARDCLNEXPLICIT_HH_

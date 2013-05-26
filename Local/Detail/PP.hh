@@ -26,6 +26,7 @@
 #define WG_PP_ISNEXTTOKEN_A_TUPLE(tuplearity, tokens) \
   WG_PP_ISNEXTTOKEN_A_TUPLE_IMPL(tuplearity, tokens)
 
+// Usage: BOOST_PP_EXPAND(WG_PP_ADDCOMMAAFTERTUPLE_# some-tuple-token)
 #define WG_PP_ADDCOMMAAFTERTUPLE_1(x) (x) BOOST_PP_COMMA()
 #define WG_PP_ADDCOMMAAFTERTUPLE_2(x, y) (x, y) BOOST_PP_COMMA()
 
