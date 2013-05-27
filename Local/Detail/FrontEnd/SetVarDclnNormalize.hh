@@ -10,6 +10,8 @@
 
 // Expands to the following:
 //   {(explicit-type) (var-name) (value-expr)}+
+//
+// (For definition of terms see SymbolTable documentation.)
 #define WG_PP_SETVARDCLNNORMALIZE(explicittypedvardcln, valueexpr) \
   WG_PP_VARDCLNEXPLICIT_TUPLIZE(explicittypedvardcln) \
   WG_PP_TUPLIZE(valueexpr)

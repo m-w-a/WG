@@ -13,7 +13,9 @@
 //###########
 
 // Expands to the following:
-//   {(explicit-or-deduced-bound-type) (bound-var-name)}+
+//   {(explicit-or-deduced-type) (bound-var-name)}+
+//
+// (For definition of terms see SymbolTable documentation.)
 #define WG_PP_BOUNDVARDCLN_NORMALIZE(boundvardcln) \
   WG_PP_BOUNDVARDCLN_NORMALIZE_IMPL(boundvardcln)
 

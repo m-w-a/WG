@@ -14,12 +14,14 @@
 //###########
 
 // Expands to the following:
-//   (assignto) { (BOOST_PP_NIL) | (normalized-bound-var-dcln) }
+//   (assignto) { (BOOST_PP_NIL) | (normalized-bound-tuple) }
 //   (return) { (BOOST_PP_NIL) | (return-type) }
-//   (parambind) { (BOOST_PP_NIL) | {(normalized-bound-var-dcln)}+ }
-//   (paramset) { (BOOST_PP_NIL) | ({(normalized-set-var-dcln)}+ }
-//   (membind) { (BOOST_PP_NIL) | {(normalized-bound-var-dcln)}+ }
-//   (memset) { (BOOST_PP_NIL) | ({(normalized-set-var-dcln)}+ }
+//   (parambind) { (BOOST_PP_NIL) | ( {normalized-bound-tuple}+ ) }
+//   (paramset) { (BOOST_PP_NIL) | ( {normalized-set-tuple}+ ) }
+//   (membind) { (BOOST_PP_NIL) | ( {normalized-bound-tuple}+ ) }
+//   (memset) { (BOOST_PP_NIL) | ( {normalized-set-tuple}+ ) }
+//
+// (For definition of terms see SymbolTable documentation.)
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(spec) \
   WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_IMPL(spec BOOST_PP_NIL)
 
