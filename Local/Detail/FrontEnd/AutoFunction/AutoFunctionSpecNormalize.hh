@@ -16,12 +16,12 @@
 // Expands to the following:
 //   (assignto) { (BOOST_PP_NIL) | (normalized-bound-var-dcln) }
 //   (return) { (BOOST_PP_NIL) | (return-type) }
-//   (parambind) { (BOOST_PP_NIL) | {(normalized-bound-var-dcln)}+ nextkywd }
-//   (paramset) { (BOOST_PP_NIL) | ({(normalized-set-var-dcln)}+ nextkywd) }
-//   (membind) { (BOOST_PP_NIL) | {(normalized-bound-var-dcln)}+ nextkywd }
-//   (memset) { (BOOST_PP_NIL) | ({(normalized-set-var-dcln)}+ nextkywd) }
+//   (parambind) { (BOOST_PP_NIL) | {(normalized-bound-var-dcln)}+ }
+//   (paramset) { (BOOST_PP_NIL) | ({(normalized-set-var-dcln)}+ }
+//   (membind) { (BOOST_PP_NIL) | {(normalized-bound-var-dcln)}+ }
+//   (memset) { (BOOST_PP_NIL) | ({(normalized-set-var-dcln)}+ }
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(spec) \
-  WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_ASSIGNTO(spec BOOST_PP_NIL)
+  WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_IMPL(spec BOOST_PP_NIL)
 
 //###########
 //Impl Macros
@@ -35,6 +35,13 @@
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_EXPAND4(x) x
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_EXPAND5(x) x
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_EXPAND6(x) x
+
+#define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_IMPL(spec) \
+  WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_ASSIGNTO( \
+    BOOST_PP_IIF( \
+      WG_PP_TOKENS_STARTWITH_VOID(spec), \
+      WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
+      spec) )
 
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZEIMPL_MACRONAME( \
   spec, currentkeyword, nextkeyword) \
@@ -154,7 +161,20 @@
     WG_PP_TUPLIZE, \
     nexttransform)
 
-#define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_ENDSPEC(spec)
+#define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_ENDSPEC(spec) \
+  WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_VALIDATESPEC(spec)
+
+// To be called after an attempt to parse the complete spec.
+//   If the remaining spec is not BOOST_PP_NIL, then the head token(s) should
+//   be a good indicator of where things went wrong.
+#define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_VALIDATESPEC(spec) \
+  BOOST_PP_EXPR_IIF( \
+    BOOST_PP_NOT( \
+      WG_PP_TOKENS_START_WITH_BOOST_PP_NIL(spec)), \
+    BOOST_PP_ASSERT_MSG( \
+      0, "ERROR: Invalid token(s): (Excluding trailing BOOST_PP_NIL)" \
+    BOOST_PP_ASSERT_MSG( \
+      0, BOOST_PP_STRINGIZE(spec)) ))
 
 /*
 //Debugging Aide
@@ -166,12 +186,13 @@
 #define T6 paramset ((int) x, 7) (local(Callback) y, 8)
 
 #pragma wave trace(enable)
-BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(T1))
-BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(T2))
-BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(T3))
-BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(T4))
-BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(T5))
-BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(T6))
+WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(void)
+// BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(T1))
+// BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(T2))
+// BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(T3))
+// BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(T4))
+// BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(T5))
+// BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(T6))
 #pragma wave trace(disable)
 
 //EXPECTED:
