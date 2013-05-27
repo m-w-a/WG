@@ -59,7 +59,7 @@
     (localref(localrefvalue)) BOOST_PP_LPAREN()
 
 /*
-//Debugging Aide.
+//Unit Tests.
 #define VDE1 (T const * ) var1
 #define VDE2 local(U) var2
 #define VDE3 localref(Callback &) var3

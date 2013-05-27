@@ -58,7 +58,7 @@
   boost::add_reference<boost::add_const< BOOST_TYPEOF(bvar) >::type>::type
 
 /*
-//Debugging Aide.
+//Unit Tests.
 #define VDI1 var1
 #define VDI2 ref var2
 #define VDI3 const var3

@@ -30,7 +30,7 @@
     WG_PP_VARDCLNIMPLICIT_TUPLIZE) (boundvardcln)
 
 /*
-//Debugging Aide.
+//Unit Tests.
 #define S1 (T const * ) var1
 #define S2 local(U) var2
 #define S3 localref(Callback &) var3

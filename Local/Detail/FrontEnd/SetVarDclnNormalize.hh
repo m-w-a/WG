@@ -17,7 +17,7 @@
   WG_PP_TUPLIZE(valueexpr)
 
 /*
-//Debugging Aide.
+//Unit Tests.
 #define S1 ( (T const * ) var1 , &this->m_Foo )
 #define S2 ( local(U) var2 , catInTheHat )
 #define S3 ( localref(Callback &) var3 , mouse << in << the << hole )

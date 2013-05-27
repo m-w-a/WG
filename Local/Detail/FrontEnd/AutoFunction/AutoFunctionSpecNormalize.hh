@@ -179,7 +179,7 @@
       0, BOOST_PP_STRINGIZE(spec)) ))
 
 /*
-//Debugging Aide
+//Unit Tests
 #define T1 assignto (x)
 #define T2 return (float)
 #define T3 parambind (b)

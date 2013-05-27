@@ -18,15 +18,24 @@
 #define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(parsedtype) \
   WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_IMPL(parsedtype)
 
+// parsedtype: explicit-or-deduced-type
 // Result: a cpp type.
+//
+// (For definition of terms see SymbolTable documentation.)
 #define WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONST(parsedtype) \
   WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONST_IMPL(parsedtype)
 
+// parsedtype: explicit-or-deduced-type
 // Result: a cpp type.
+//
+// (For definition of terms see SymbolTable documentation.)
 #define WG_PP_PARSEDTYPE_IFNONLOCAL_ADDREFERENCE(parsedtype) \
   WG_PP_PARSEDTYPE_IFNONLOCAL_ADDREFERENCE_IMPL(parsedtype)
 
+// parsedtype: explicit-or-deduced-type
 // Result: a cpp type.
+//
+// (For definition of terms see SymbolTable documentation.)
 #define WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONSTADDREFERENCE(parsedtype) \
   WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONSTADDREFERENCE_IMPL(parsedtype)
 
@@ -74,7 +83,7 @@
         transform(parsedtype) ))
 
 /*
-//Debugging Aide.
+//Unit Tests.
 #define S1 Foo &
 #define S2 local(Bar)
 #define S3 localref(Bar &)
