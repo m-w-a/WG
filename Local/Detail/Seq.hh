@@ -13,7 +13,7 @@
   WG_PP_SEQ_IFNIL_THENCLEAR_IMPL(seq)
 
 #define WG_PP_SEQ_IS_COUNT_EVEN(seq) \
-  BOOST_PP_NOT(BOOST_PP_MOD(BOOST_PP_SEQ_SIZE(seq), 2))
+  BOOST_PP_NOT(BOOST_PP_MOD(WG_PP_SEQ_SIZE(seq), 2))
 
 #define WG_PP_SEQ_IS_COUNT_ODD(seq) \
   BOOST_PP_NOT(WG_PP_SEQ_IS_COUNT_EVEN(seq))
@@ -28,13 +28,23 @@
 // Handles empty token as indx.
 #define WG_PP_SEQ_ELEM(indx, seq) \
   WG_PP_SEQ_ELEM_IMPL(indx, seq)
-  
+
 #define WG_PP_SEQ_CAT(x, y) \
   WG_PP_SEQ_CAT_IMPL(x, y)
+#define WG_PP_SEQ_JOIN2(a, b) \
+  WG_PP_SEQ_CAT(a,b)
+#define WG_PP_SEQ_JOIN3(a, b, c) \
+  WG_PP_SEQ_JOIN2(a, WG_PP_SEQ_JOIN2(b,c))
+#define WG_PP_SEQ_JOIN4(a, b, c, d) \
+  WG_PP_SEQ_JOIN2(a, WG_PP_SEQ_JOIN3(b,c,d))
+#define WG_PP_SEQ_JOIN4(a, b, c, d, e) \
+  WG_PP_SEQ_JOIN2(a, WG_PP_SEQ_JOIN4(b,c,d,e))
 
+// Handles empty sequences.
 #define WG_PP_SEQ_TRANSFORM(macro, data, seq) \
   WG_PP_SEQ_TRANSFORM_IMPL(macro, data, seq)
 
+// Handles empty sequences.
 #define WG_PP_SEQ_FOR_EACH_I(macro, data, seq) \
   WG_PP_SEQ_FOR_EACH_I_IMPL(macro, data, seq)
   
