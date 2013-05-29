@@ -12,6 +12,6 @@
 //###########
 
 #define WG_PP_AUTOFUNCTION_CG_FORMATNAME(name) \
-  BOOST_PP_CAT(WG_PP_IDENTITY(wgWWWautofunctionWWW), name)
+  BOOST_PP_CAT(WG_PP_IDENTITY(wgXXXautofunctionXXX), name)
   
 #endif //WG_PP_AUTOFUNCTIONCODEGEN_HH_

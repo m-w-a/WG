@@ -7,7 +7,7 @@
 #include <WG/Local/Detail/AltSeq.hh>
 #include <WG/Local/Detail/Keywords.hh>
 
-#include <WG/Local/Detail/BackEnd/AutoFunction/AutoFunctionCodeGen.hh>
+#include <WG/Local/Detail/BackEnd/AutoFunction/CodeGen.hh>
 #include <WG/Local/Detail/BackEnd/SymbolTable.hh>
 #include <WG/Local/Detail/BackEnd/Type.hh>
 
@@ -83,11 +83,11 @@
       0)
 
 #define WG_PP_ASSIGNED_PSEQ_IS_VOID(ap_alt_seq) \
-  BOOST_PP_IF( \
+  BOOST_PP_IIF( \
     WG_PP_ISNEXTTOKEN_A_TUPLE( \
       2, BOOST_PP_TUPLE_EAT(1) ap_alt_seq BOOST_PP_NIL), \
     0, \
-    BOOST_PP_IF( \
+    BOOST_PP_IIF( \
       WG_PP_TOKENS_STARTWITH_VOID( \
         BOOST_PP_EXPAND(WG_PP_IDENTITY ap_alt_seq BOOST_PP_NIL)), \
       1, \
@@ -109,124 +109,11 @@
       BOOST_PP_NIL, \
       WG_PP_ALTSEQ_LINEARIZE(ap_alt_seq)))
 
-//// WG_PP_SEQ_FOR_EACH_I functor.
-//#define WG_PP_PARAMPROXY_TYPE_MEMBER(r, offset, indx, elem) \
-//  WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONSTADDREFERENCE(elem) \
-//      BOOST_PP_CAT(m, BOOST_PP_ADD(indx,offset)) WG_PP_IDENTITY(;)
-//
-//#define WG_PP_PARAMPROXY_TYPE_MEMBERDECLNS(pseq) \
-//  BOOST_PP_EXPR_IIF( \
-//    WG_PP_SYMBOLTABLE_ASSIGNEDTO_EXISTS(pseq), \
-//    WG_PP_PARSEDTYPE_IFNONLOCAL_ADDREFERENCE( \
-//      BOOST_PP_EXPAND(WG_PP_IDENTITY WG_PP_SYMBOLTABLE_ASSIGNEDTO_TYPE(pseq))) \
-//    m0;) \
-//  WG_PP_SEQ_IFNIL_THENCLEAR( \
-//    WG_PP_SEQ_FOR_EACH_I( \
-//      WG_PP_PARAMPROXY_TYPE_MEMBER, \
-//      WG_PP_SYMBOLTABLE_ASSIGNEDTO_EXISTS(pseq), \
-//      WG_PP_SEQ_CAT( \
-//        WG_PP_SYMBOLTABLE_PARAMBIND_TYPES(pseq), \
-//        WG_PP_SYMBOLTABLE_PARAMSET_TYPES(pseq))))
-//
-//// WG_PP_SEQ_FOR_EACH_I functor.
-//#define WG_PP_PARAMPROXY_TYPE_CTORPARAM(r, offset, indx, elem) \
-//  BOOST_PP_LPAREN() \
-//    WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONSTADDREFERENCE(elem) \
-//      BOOST_PP_CAT(p, BOOST_PP_ADD(indx,offset)) \
-//  BOOST_PP_RPAREN()
-//
-//#define WG_PP_PARAMPROXY_TYPE_CTORPARAMLIST(pseq) \
-//  BOOST_PP_IIF( \
-//    WG_PP_SYMBOLTABLE_ASSIGNEDTO_EXISTS(pseq), \
-//    WG_PP_PARSEDTYPE_IFNONLOCAL_ADDREFERENCE( \
-//      BOOST_PP_EXPAND(WG_PP_IDENTITY WG_PP_SYMBOLTABLE_ASSIGNEDTO_TYPE(pseq))) \
-//    p0 \
-//    BOOST_PP_IIF( \
-//      BOOST_PP_GREATER(WG_PP_SYMBOLTABLE_TOTALXXX_SIZE(pseq), 1), \
-//      BOOST_PP_COMMA, \
-//      BOOST_PP_EMPTY), \
-//    BOOST_PP_EMPTY)() \
-//  WG_PP_SEQ_ENUM( \
-//    WG_PP_SEQ_FOR_EACH_I( \
-//      WG_PP_PARAMPROXY_TYPE_CTORPARAM, \
-//      WG_PP_SYMBOLTABLE_ASSIGNEDTO_EXISTS(pseq), \
-//      WG_PP_SEQ_CAT( \
-//        WG_PP_SYMBOLTABLE_PARAMBIND_TYPES(pseq), \
-//        WG_PP_SYMBOLTABLE_PARAMSET_TYPES(pseq))))
-//
-//// BOOST_PP_ENUM functor.
-//#define WG_PP_PARAMPROXY_TYPE_CTORINITENTRY(z, indx, data) \
-//  BOOST_PP_CAT(m, indx)BOOST_PP_LPAREN()BOOST_PP_CAT(p, indx)BOOST_PP_RPAREN()
-//
-//#define WG_PP_PARAMPROXY_TYPE_CTORINITLIST(pseq) \
-//  BOOST_PP_ENUM( \
-//    WG_PP_SYMBOLTABLE_TOTALXXX_SIZE(pseq), \
-//    WG_PP_PARAMPROXY_TYPE_CTORINITENTRY, \
-//    ~)
-//
-//#define WG_PP_PARAMPROXY_TYPE_CTORDCNL(pseq) \
-//  WG_PP_PARAMPROXY_TYPE_NAME() \
-//    BOOST_PP_LPAREN() \
-//      WG_PP_PARAMPROXY_TYPE_CTORPARAMLIST(pseq) \
-//    BOOST_PP_RPAREN() \
-//      BOOST_PP_EXPR_IF(WG_PP_SYMBOLTABLE_TOTALXXX_SIZE(pseq), WG_PP_IDENTITY(:)) \
-//      WG_PP_PARAMPROXY_TYPE_CTORINITLIST(pseq) \
-//    {}
-//
-//
-//#define WG_PP_PARAMPROXY_TYPE_ACCESSORDCLN(r, offset, indx, elem) \
-//  WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONSTADDREFERENCE(elem) \
-//    BOOST_PP_CAT(get, BOOST_PP_ADD(indx,offset)) () const \
-//  { \
-//    return BOOST_PP_CAT(m, BOOST_PP_ADD(indx,offset)); \
-//  }
-//
-//#define WG_PP_PARAMPROXY_TYPE_ACCESSORS(pseq) \
-//  BOOST_PP_EXPR_IIF( \
-//    WG_PP_SYMBOLTABLE_ASSIGNEDTO_EXISTS(pseq), \
-//    WG_PP_PARSEDTYPE_IFNONLOCAL_ADDREFERENCE( \
-//      BOOST_PP_EXPAND(WG_PP_IDENTITY WG_PP_SYMBOLTABLE_ASSIGNEDTO_TYPE(pseq))) \
-//    get0() const { return m0; }) \
-//  WG_PP_SEQ_IFNIL_THENCLEAR( \
-//    WG_PP_SEQ_FOR_EACH_I( \
-//      WG_PP_PARAMPROXY_TYPE_ACCESSORDCLN, \
-//      WG_PP_SYMBOLTABLE_ASSIGNEDTO_EXISTS(pseq), \
-//      WG_PP_SEQ_CAT( \
-//        WG_PP_SYMBOLTABLE_PARAMBIND_TYPES(pseq), \
-//        WG_PP_SYMBOLTABLE_PARAMSET_TYPES(pseq))))
-    
-#define WG_PP_PARAMPROXY_OBJ_INITLIST( \
-  bound_objs_seq, assigned_values_seq, thisu_marker) \
-    WG_PP_SEQ_ENUM( \
-      WG_PP_SEQ_CAT( \
-        WG_PP_SEQ_REPLACE( \
-          bound_objs_seq, \
-          thisu_marker, \
-          this), \
-        assigned_values_seq))
 
 #define WG_PP_PARAMPROXY_TYPE_NAME() \
   WG_PP_AUTOFUNCTION_CG_FORMATNAME(param_proxy_type)
 #define WG_PP_PARAMPROXY_OBJ_NAME() \
   WG_PP_AUTOFUNCTION_CG_FORMATNAME(param_proxy)
-
-//#define WG_PP_PARAMPROXY_DCLN(pseq) \
-//  struct WG_PP_PARAMPROXY_TYPE_NAME() \
-//  { \
-//    WG_PP_PARAMPROXY_TYPE_MEMBERDECLNS(pseq) \
-//    WG_PP_PARAMPROXY_TYPE_CTORDCNL(pseq) \
-//    WG_PP_PARAMPROXY_TYPE_ACCESSORS(pseq) \
-//  } WG_PP_IDENTITY(;) \
-//  WG_PP_PARAMPROXY_TYPE_NAME() const & WG_PP_PARAMPROXY_OBJ_NAME() = \
-//    WG_PP_PARAMPROXY_TYPE_NAME() \
-//    BOOST_PP_LPAREN() \
-//      WG_PP_PARAMPROXY_OBJ_INITLIST( \
-//        WG_PP_SEQ_CAT( \
-//          WG_PP_SYMBOLTABLE_ASSIGNEDTO_OBJ(pseq), \
-//          WG_PP_SYMBOLTABLE_PARAMBIND_OBJS(pseq)), \
-//        WG_PP_SYMBOLTABLE_PARAMSET_VALUES(pseq), \
-//        WG_PP_SYMBOLTABLE_PARAMBIND_OBJS_THISU_MARKER(pseq)) \
-//    BOOST_PP_RPAREN() WG_PP_IDENTITY(;)
 
 // BOOST_PP_ENUM functor.
 #define WG_PP_PARAMPROXY_OBJ_ELEMACCESS(z, n, obj_name) \
@@ -246,7 +133,7 @@
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_CALL_PARAM_ENTRY(r, obj_seq, indx, elem) \
   BOOST_PP_LPAREN() \
-    BOOST_PP_IF( \
+    BOOST_PP_IIF( \
       WG_PP_TOKENS_STARTWITH_THISU(WG_PP_SEQ_ELEM(indx, obj_seq)), \
       WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONST(elem), \
       WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(elem)) \
@@ -258,10 +145,10 @@
     WG_PP_SEQ_ENUM( \
       WG_PP_SEQ_FOR_EACH_I( \
         WG_PP_CALL_PARAM_ENTRY, \
-        WG_PP_SEQ_CAT( \
+        WG_PP_SEQ_JOIN( \
           WG_PP_SYMBOLTABLE_PARAMBIND_OBJS(pseq), \
           WG_PP_SYMBOLTABLE_PARAMSET_OBJS(pseq)), \
-        WG_PP_SEQ_CAT( \
+        WG_PP_SEQ_JOIN( \
           WG_PP_SYMBOLTABLE_PARAMBIND_TYPES(pseq), \
           WG_PP_SYMBOLTABLE_PARAMSET_TYPES(pseq)))) \
   BOOST_PP_RPAREN()

@@ -201,7 +201,7 @@
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_ST_THISU_MARK_INDX(r, data, indx, elem) \
-  BOOST_PP_EXPR_IF( \
+  BOOST_PP_EXPR_IIF( \
     WG_PP_TOKENS_STARTWITH_THISU(elem), \
     (indx))
 
