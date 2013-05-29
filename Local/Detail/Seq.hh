@@ -9,54 +9,56 @@
 //###########
 
 // Nil sequences are defined to be BOOST_PP_NIL.
+
+// Maps to nothing if seq is nil, else maps to seq.
 #define WG_PP_SEQ_IFNIL_THENCLEAR(seq) \
   WG_PP_SEQ_IFNIL_THENCLEAR_IMPL(seq)
 
-#define WG_PP_SEQ_IS_COUNT_EVEN(seq) \
-  BOOST_PP_NOT(BOOST_PP_MOD(WG_PP_SEQ_SIZE(seq), 2))
-
-#define WG_PP_SEQ_IS_COUNT_ODD(seq) \
-  BOOST_PP_NOT(WG_PP_SEQ_IS_COUNT_EVEN(seq))
-
+// seq_count as param instead of seq because want to encourage caching former.
 #define WG_PP_SEQ_IS_INDEX_LAST(seq_count, indx) \
   BOOST_PP_EQUAL(seq_count, BOOST_PP_INC(indx))
 
-#define WG_PP_SEQ_SIZE(seq) \
-  WG_PP_SEQ_SIZE_IMPL(seq)
+// Maps to BOOST_PP_NIL if seq is nil.
+#define WG_PP_SEQ_CAT(seq) \
+  WG_PP_SEQ_CAT_IMPL(seq)
 
-// Handles empty sequences.
-// Handles empty token as indx.
+// Maps to BOOST_PP_NIL if indx or seq is nil
 #define WG_PP_SEQ_ELEM(indx, seq) \
   WG_PP_SEQ_ELEM_IMPL(indx, seq)
 
-#define WG_PP_SEQ_CAT(x, y) \
-  WG_PP_SEQ_CAT_IMPL(x, y)
-#define WG_PP_SEQ_JOIN2(a, b) \
-  WG_PP_SEQ_CAT(a,b)
-#define WG_PP_SEQ_JOIN3(a, b, c) \
-  WG_PP_SEQ_JOIN2(a, WG_PP_SEQ_JOIN2(b,c))
-#define WG_PP_SEQ_JOIN4(a, b, c, d) \
-  WG_PP_SEQ_JOIN2(a, WG_PP_SEQ_JOIN3(b,c,d))
-#define WG_PP_SEQ_JOIN4(a, b, c, d, e) \
-  WG_PP_SEQ_JOIN2(a, WG_PP_SEQ_JOIN4(b,c,d,e))
-
-// Handles empty sequences.
-#define WG_PP_SEQ_TRANSFORM(macro, data, seq) \
-  WG_PP_SEQ_TRANSFORM_IMPL(macro, data, seq)
-
-// Handles empty sequences.
-#define WG_PP_SEQ_FOR_EACH_I(macro, data, seq) \
-  WG_PP_SEQ_FOR_EACH_I_IMPL(macro, data, seq)
-  
 // Handles empty sequences.
 // NOTE: maps empty sequences to NOTHING!
 #define WG_PP_SEQ_ENUM(seq) \
   WG_PP_SEQ_ENUM_IMPL(seq)
 
-// Handles empty sequences.
-// Handles empty token as indx.
+// Maps to BOOST_PP_NIL if seq is nil
+#define WG_PP_SEQ_FOR_EACH_I(macro, data, seq) \
+  WG_PP_SEQ_FOR_EACH_I_IMPL(macro, data, seq)
+
+//Maps to BOOST_PP_NIL iff all params are nil sequences.
+#define WG_PP_SEQ_JOIN(x, y) \
+  WG_PP_SEQ_JOIN_IMPL(x, y)
+#define WG_PP_SEQ_JOIN2(a, b) \
+  WG_PP_SEQ_JOIN(a,b)
+#define WG_PP_SEQ_JOIN3(a, b, c) \
+  WG_PP_SEQ_JOIN2(a, WG_PP_SEQ_JOIN2(b,c))
+#define WG_PP_SEQ_JOIN4(a, b, c, d) \
+  WG_PP_SEQ_JOIN3(a, b, WG_PP_SEQ_JOIN2(c,d))
+#define WG_PP_SEQ_JOIN5(a, b, c, d, e) \
+  WG_PP_SEQ_JOIN4(a, b, c, WG_PP_SEQ_JOIN2(d,e))
+
+// Maps to BOOST_PP_NIL if seq is nil.
+// Maps to seq if indx is BOOST_PP_NIL.
 #define WG_PP_SEQ_REPLACE(seq, indx, elem) \
   WG_PP_SEQ_REPLACE_IMPL(seq, indx, elem)
+
+// Nil sequences have zero size.
+#define WG_PP_SEQ_SIZE(seq) \
+  WG_PP_SEQ_SIZE_IMPL(seq)
+
+// Maps to BOOST_PP_NIL if seq is nil.
+#define WG_PP_SEQ_TRANSFORM(macro, data, seq) \
+  WG_PP_SEQ_TRANSFORM_IMPL(macro, data, seq)
 
 //###########
 //Impl Macros
@@ -67,6 +69,13 @@
     BOOST_PP_NOT( \
       WG_PP_TOKENS_START_WITH_BOOST_PP_NIL(seq)), \
     seq)
+
+#define WG_PP_SEQ_CAT_IMPL_0(seq) BOOST_PP_NIL
+#define WG_PP_SEQ_CAT_IMPL_1(seq) BOOST_PP_SEQ_CAT(seq)
+#define WG_PP_SEQ_CAT_IMPL(seq) \
+  BOOST_PP_CAT( \
+    WG_PP_SEQ_CAT_IMPL_, \
+    BOOST_PP_NOT(WG_PP_TOKENS_START_WITH_BOOST_PP_NIL(seq))) (seq)
 
 #define WG_PP_SEQ_FOR_EACH_I_IMPL_0(macro, data, seq) BOOST_PP_NIL
 #define WG_PP_SEQ_FOR_EACH_I_IMPL_1(macro, data, seq) \
@@ -123,15 +132,15 @@
     WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) \
   (indx, seq)
 
-#define WG_PP_SEQ_CAT_IMPL_00(x, y) BOOST_PP_NIL
-#define WG_PP_SEQ_CAT_IMPL_01(x, y) y
-#define WG_PP_SEQ_CAT_IMPL_10(x, y) x
-#define WG_PP_SEQ_CAT_IMPL_11(x, y) x y
-#define WG_PP_SEQ_CAT_IMPL(x, y) \
+#define WG_PP_SEQ_JOIN_IMPL_00(x, y) BOOST_PP_NIL
+#define WG_PP_SEQ_JOIN_IMPL_01(x, y) y
+#define WG_PP_SEQ_JOIN_IMPL_10(x, y) x
+#define WG_PP_SEQ_JOIN_IMPL_11(x, y) x y
+#define WG_PP_SEQ_JOIN_IMPL(x, y) \
   BOOST_PP_CAT( \
-    WG_PP_SEQ_CAT_IMPL_, \
+    WG_PP_SEQ_JOIN_IMPL_, \
     BOOST_PP_CAT( \
       WG_PP_ISNEXTTOKEN_A_TUPLE(1, x), \
       WG_PP_ISNEXTTOKEN_A_TUPLE(1, y))) (x, y)
-  
+
 #endif /* WG_PP_SEQ_HH_ */
