@@ -10,6 +10,22 @@
 //Public APIs
 //###########
 
+#define WG_PP_FORWARDER_DCLN( \
+  frwdr_typename, frwdr_objname, symbtbl) \
+    WG_PP_FORWARDER_DCLN_IMPL(frwdr_typename, frwder_objname, symbtbl)
+
+// Expands to <frwdr_objname>.<assignto_accessor>()
+#define WG_PP_FORWARDER_ACCESSOR_ASSIGNTO(frwdr_objname) \
+  WG_PP_FORWARDER_ACCESSOR_ASSIGNTO_IMPL(frwdr_objname)
+
+// Expands to { BOOST_PP_NIL | (ACCESSOR_INDX0)(ACCESSOR_INDX1) ... }
+#define WG_PP_FORWARDER_ACCESSORWGSEQ_PARAMBIND(frwdr_objname, count) \
+  WG_PP_FORWARDER_ACCESSORWGSEQ_PARAMBIND_IMPL(frwdr_objname, count)
+
+// Expands to { BOOST_PP_NIL | (ACCESSOR_INDX0)(ACCESSOR_INDX1) ... }
+#define WG_PP_FORWARDER_ACCESSORWGSEQ_PARAMSET(frwdr_objname, count) \
+  WG_PP_FORWARDER_ACCESSORWGSEQ_PARAMSET_IMPL(frwdr_objname, count)
+
 //###########
 //Impl Macros
 //###########
@@ -22,7 +38,7 @@
       WG_PP_FORWARDER_TYPE_MEMBERDCLNS(symbtbl) \
     public: \
       WG_PP_FORWARDER_TYPE_CTOR_DCLN(frwdr_typename, symbtbl) \
-      WG_PP_PARAMPROXY_TYPE_ACCESSORS(symbtbl) \
+      WG_PP_FORWARDER_TYPE_ACCESSORS(symbtbl) \
     } WG_PP_IDENTITY(;) \
     frwdr_typename const & frwdr_objname = \
       frwdr_typename \
@@ -30,23 +46,55 @@
         WG_PP_FORWARDER_OBJ_INITLIST(symbtbl) \
       BOOST_PP_RPAREN() WG_PP_IDENTITY(;)
 
+#define WG_PP_FORWARDER_ACCESSOR_ASSIGNTO_IMPL(frwdr_objname) \
+  frwdr_objname.WG_PP_FORWARDER_TYPE_ACCESSORVARNAME( \
+    WG_PP_FORWARDER_TYPE_MEMBERVAR_ASSIGNEEROOTNAME(), 0)
+
+#define WG_PP_FORWARDER_ACCESSORWGSEQ_PARAMBIND_IMPL(frwdr_objname, count) \
+  WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL( \
+    frwdr_objname, \
+    WG_PP_FORWARDER_TYPE_MEMBERVAR_BOUNDPARAMROOTNAME(), \
+    count)
+
+#define WG_PP_FORWARDER_ACCESSORWGSEQ_PARAMSET_IMPL(frwdr_objname, count) \
+  WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL( \
+    frwdr_objname, \
+    WG_PP_FORWARDER_TYPE_MEMBERVAR_SETPARAMROOTNAME(), \
+    count)
+
+#define WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL( \
+  frwdr_objname, membervar_rootname, count) \
+    BOOST_PP_REPEAT( \
+      count, \
+      WG_PP_FORWARDER_ACCESSOR_TUPLIZE, \
+      (frwdr_objname) \
+      (membervar_rootname) )
+
+// BOOST_PP_REPEAT functor.
+// access_seq: (frwdr_objname)(membervar_rootname)
+#define WG_PP_FORWARDER_ACCESSOR_TUPLIZE(z, indx, access_seq) \
+  ( BOOST_SEQ_ELEM(0, access_seq) . \
+    WG_PP_FORWARDER_TYPE_ACCESSORVARNAME( \
+      BOOST_SEQ_ELEM(1, access_seq), indx) () )
+
 //------------
 //Common Utils
 //------------
-
-#define WG_PP_FORWARDER_TYPE_MEMBERVAR_NAME(rootname, indx) \
-  BOOST_PP_CAT(rootname, indx)
-
-#define WG_PP_FORWARDER_TYPE_ACCESSORVARNAME(membervar_rootname, indx) \
-  BOOST_PP_CAT( \
-    BOOST_PP_CAT(getXXX, membervar_rootname), \
-    indx)
 
 #define WG_PP_FORWARDER_TYPE_MEMBERVAR_ASSIGNEEROOTNAME() assignee
 #define WG_PP_FORWARDER_TYPE_MEMBERVAR_BOUNDPARAMROOTNAME() boundparam
 #define WG_PP_FORWARDER_TYPE_MEMBERVAR_SETPARAMROOTNAME() setparam
 #define WG_PP_FORWARDER_TYPE_MEMBERVAR_BOUNDMEMROOTNAME() boundmem
 #define WG_PP_FORWARDER_TYPE_MEMBERVAR_SETMEMROOTNAME() setmem
+
+#define WG_PP_FORWARDER_TYPE_MEMBERVAR_NAME(rootname, indx) \
+  BOOST_PP_CAT(rootname, indx)
+
+// membervar_rootname: use any of the MEMBERVAR_*ROOTNAME() macros.
+#define WG_PP_FORWARDER_TYPE_ACCESSORVARNAME(membervar_rootname, indx) \
+  BOOST_PP_CAT( \
+    BOOST_PP_CAT(getXXX, membervar_rootname), \
+    indx)
 
 // transform:
 //   a WG_PP_SEQ_FOR_EACH_I that will be passed the following params:

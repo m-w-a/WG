@@ -115,20 +115,20 @@
 #define WG_PP_PARAMPROXY_OBJ_NAME() \
   WG_PP_AUTOFUNCTION_CG_FORMATNAME(param_proxy)
 
-// BOOST_PP_ENUM functor.
-#define WG_PP_PARAMPROXY_OBJ_ELEMACCESS(z, n, obj_name) \
-  WG_PP_IDENTITY(obj_name).BOOST_PP_CAT(get,n)()
-
-#define WG_PP_PARAMPROXY_OBJ_ELEMACCESSLIST(pseq, obj_name) \
-  BOOST_PP_IIF( \
-    WG_PP_SYMBOLTABLE_ASSIGNEDTO_EXISTS(pseq), \
-    BOOST_PP_ENUM_SHIFTED, \
-    BOOST_PP_ENUM) \
-    ( \
-      WG_PP_SYMBOLTABLE_TOTALXXX_SIZE(pseq), \
-      WG_PP_PARAMPROXY_OBJ_ELEMACCESS, \
-      obj_name \
-    )
+//// BOOST_PP_ENUM functor.
+//#define WG_PP_PARAMPROXY_OBJ_ELEMACCESS(z, n, obj_name) \
+//  WG_PP_IDENTITY(obj_name).BOOST_PP_CAT(get,n)()
+//
+//#define WG_PP_PARAMPROXY_OBJ_ELEMACCESSLIST(pseq, obj_name) \
+//  BOOST_PP_IIF( \
+//    WG_PP_SYMBOLTABLE_ASSIGNEDTO_EXISTS(pseq), \
+//    BOOST_PP_ENUM_SHIFTED, \
+//    BOOST_PP_ENUM) \
+//    ( \
+//      WG_PP_SYMBOLTABLE_TOTALXXX_SIZE(pseq), \
+//      WG_PP_PARAMPROXY_OBJ_ELEMACCESS, \
+//      obj_name \
+//    )
     
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_CALL_PARAM_ENTRY(r, obj_seq, indx, elem) \
