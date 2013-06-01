@@ -14,7 +14,7 @@
 //INPUT:
 //------
 //assignto_nrmlzd_tuple: { BOOST_PP_NIL | normalized-bound-tuple }
-//return_nrmlzd_tuple: { (void) | (some-token) }
+//return_nrmlzd_type: { void | some-token }
 //parambind_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-bound-tuple}+ }
 //paramset_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-set-tuple}+ }
 //

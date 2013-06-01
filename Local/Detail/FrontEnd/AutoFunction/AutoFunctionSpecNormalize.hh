@@ -15,7 +15,7 @@
 
 // Expands to the following:
 //   (assignto) { (BOOST_PP_NIL) | (normalized-bound-tuple) }
-//   (return) { (return_nrmlzd_tuple) }
+//   (return) { (return_nrmlzd_type) }
 //   (parambind) { (BOOST_PP_NIL) | ( {normalized-bound-tuple}+ ) }
 //   (paramset) { (BOOST_PP_NIL) | ( {normalized-set-tuple}+ ) }
 //   (membind) { (BOOST_PP_NIL) | ( {normalized-bound-tuple}+ ) }
@@ -53,8 +53,10 @@
       (spec, currentkeyword, nextkeyword)
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZEIMPL_MACRONAME_IMPL0( \
   spec, currentkeyword, nextkeyword) \
-    (BOOST_PP_NIL) \
-      BOOST_PP_CAT(WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_, nextkeyword)
+    BOOST_PP_CAT( \
+      WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_NOTFOUNDHOOK_, currentkeyword) () \
+    BOOST_PP_CAT( \
+      WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_, nextkeyword)
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZEIMPL_MACRONAME_IMPL1( \
   spec, currentkeyword, nextkeyword) \
     BOOST_PP_CAT(WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_, currentkeyword)
@@ -76,13 +78,12 @@
       nextkeyword))
 
 //------------------------------------------------------------------------------
-// WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_<...>
+// WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_<keyword>
 // Algorithm Overview:
 //   If head token matches <keyword>
-//     then process tokens upto nextkeyword, and apply transform to rest of 
-//       tokens starting from nextkeyword.
-//     else output (BOOST_PP_NIL) and apply transform to rest of tokens 
-//       starting from nextkeyword.
+//     then dispatch to WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ<keyword>
+//     else call WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_NOTFOUNDHOOK_<keyword> and
+//       then dispatch to WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_<next_keyword>
 //------------------------------------------------------------------------------
 
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_ASSIGNTO(spec) \
@@ -90,6 +91,8 @@
   WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_EXPAND1( \
     WG_PP_AUTOFUNCTION_SPEC_NORMALIZEIMPL_MACRONAME(spec, ASSIGNTO, RETURN) \
     WG_PP_AUTOFUNCTION_SPEC_NORMALIZEIMPL_MACROPARAMS(spec, ASSIGNTO, RETURN) )
+#define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_NOTFOUNDHOOK_ASSIGNTO() \
+  (BOOST_PP_NIL)
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_ASSIGNTO(spec, nexttransform) \
   WG_PP_SPLITHEADTUPLEFROMTOKENS( \
     1, \
@@ -103,11 +106,13 @@
   WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_EXPAND2( \
     WG_PP_AUTOFUNCTION_SPEC_NORMALIZEIMPL_MACRONAME(spec, RETURN, PARAMBIND) \
     WG_PP_AUTOFUNCTION_SPEC_NORMALIZEIMPL_MACROPARAMS(spec, RETURN, PARAMBIND) )
+#define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_NOTFOUNDHOOK_RETURN() \
+  (void)
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_RETURN(spec, nexttransform) \
   WG_PP_SPLITHEADTUPLEFROMTOKENS( \
     1, \
     WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
-    WG_PP_TUPLIZE, \
+    WG_PP_IDENTITY, \
     WG_PP_TUPLIZE, \
     nexttransform)
 
@@ -116,6 +121,8 @@
   WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_EXPAND3( \
     WG_PP_AUTOFUNCTION_SPEC_NORMALIZEIMPL_MACRONAME(spec, PARAMBIND, PARAMSET) \
     WG_PP_AUTOFUNCTION_SPEC_NORMALIZEIMPL_MACROPARAMS(spec, PARAMBIND, PARAMSET) )
+#define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_NOTFOUNDHOOK_PARAMBIND() \
+  (BOOST_PP_NIL)
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_PARAMBIND(spec, nexttransform) \
   WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
     1, \
@@ -129,6 +136,8 @@
   WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_EXPAND4( \
     WG_PP_AUTOFUNCTION_SPEC_NORMALIZEIMPL_MACRONAME(spec, PARAMSET, MEMBIND) \
     WG_PP_AUTOFUNCTION_SPEC_NORMALIZEIMPL_MACROPARAMS(spec, PARAMSET, MEMBIND) )
+#define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_NOTFOUNDHOOK_PARAMSET() \
+  (BOOST_PP_NIL)
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_PARAMSET(spec, nexttransform) \
   WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
     2, \
@@ -142,6 +151,8 @@
   WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_EXPAND5( \
     WG_PP_AUTOFUNCTION_SPEC_NORMALIZEIMPL_MACRONAME(spec, MEMBIND, MEMSET) \
     WG_PP_AUTOFUNCTION_SPEC_NORMALIZEIMPL_MACROPARAMS(spec, MEMBIND, MEMSET) )
+#define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_NOTFOUNDHOOK_MEMBIND() \
+  (BOOST_PP_NIL)
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_MEMBIND(spec, nexttransform) \
   WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
     1, \
@@ -155,6 +166,8 @@
   WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_EXPAND6( \
     WG_PP_AUTOFUNCTION_SPEC_NORMALIZEIMPL_MACRONAME(spec, MEMSET, ENDSPEC) \
     WG_PP_AUTOFUNCTION_SPEC_NORMALIZEIMPL_MACROPARAMS(spec, MEMSET, ENDSPEC) )
+#define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_NOTFOUNDHOOK_MEMSET() \
+  (BOOST_PP_NIL)
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_MEMSET(spec, nexttransform) \
   WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
     2, \
