@@ -22,7 +22,9 @@
 //normalized-set-tuple := (explicit-type)(var-name)(value-expr)
 //explicit-or-deduced-type := explicit-type | deduced-type
 //explicit-type := local(some-token) | localref(some-tokens) | some-token
-//deduced-type := BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> >
+//deduced-type :=
+//  WG_PP_DEDUCEDTYPE
+//  { BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> > }
 //BT := BOOST_TYPEOF(some-token)
 //
 //-------

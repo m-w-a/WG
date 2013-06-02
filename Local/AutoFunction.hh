@@ -110,11 +110,11 @@
       WG_PP_ALTSEQ_LINEARIZE(ap_alt_seq)))
 
 
-#define WG_PP_PARAMPROXY_TYPE_NAME() \
-  WG_PP_AUTOFUNCTION_CG_FORMATNAME(param_proxy_type)
-#define WG_PP_PARAMPROXY_OBJ_NAME() \
-  WG_PP_AUTOFUNCTION_CG_FORMATNAME(param_proxy)
-
+//#define WG_PP_PARAMPROXY_TYPE_NAME() \
+//  WG_PP_AUTOFUNCTION_CG_FORMATNAME(param_proxy_type)
+//#define WG_PP_PARAMPROXY_OBJ_NAME() \
+//  WG_PP_AUTOFUNCTION_CG_FORMATNAME(param_proxy)
+//
 //// BOOST_PP_ENUM functor.
 //#define WG_PP_PARAMPROXY_OBJ_ELEMACCESS(z, n, obj_name) \
 //  WG_PP_IDENTITY(obj_name).BOOST_PP_CAT(get,n)()
@@ -129,59 +129,59 @@
 //      WG_PP_PARAMPROXY_OBJ_ELEMACCESS, \
 //      obj_name \
 //    )
-    
-// WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_CALL_PARAM_ENTRY(r, obj_seq, indx, elem) \
-  BOOST_PP_LPAREN() \
-    BOOST_PP_IIF( \
-      WG_PP_TOKENS_STARTWITH_THISU(WG_PP_SEQ_ELEM(indx, obj_seq)), \
-      WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONST(elem), \
-      WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(elem)) \
-    WG_PP_SEQ_ELEM(indx, obj_seq) \
-  BOOST_PP_RPAREN()
-
-#define WG_PP_CALL_PARAMLIST(pseq) \
-  BOOST_PP_LPAREN() \
-    WG_PP_SEQ_ENUM( \
-      WG_PP_SEQ_FOR_EACH_I( \
-        WG_PP_CALL_PARAM_ENTRY, \
-        WG_PP_SEQ_JOIN( \
-          WG_PP_SYMBOLTABLE_PARAMBIND_OBJS(pseq), \
-          WG_PP_SYMBOLTABLE_PARAMSET_OBJS(pseq)), \
-        WG_PP_SEQ_JOIN( \
-          WG_PP_SYMBOLTABLE_PARAMBIND_TYPES(pseq), \
-          WG_PP_SYMBOLTABLE_PARAMSET_TYPES(pseq)))) \
-  BOOST_PP_RPAREN()
-
-#define WG_PP_AUTOFUNCTOR_START(function_name, pseq) \
-  struct BOOST_PP_CAT(function_name, XXXwgautofunctor) \
-  { \
-    void operator()(WG_PP_PARAMPROXY_TYPE_NAME() const & param_proxy) \
-    { \
-      static_cast<void>(param_proxy); \
-      BOOST_PP_EXPR_IIF( \
-        WG_PP_SYMBOLTABLE_ASSIGNEDTO_EXISTS(pseq), \
-        param_proxy.get0() = ) \
-      this->function_name( \
-        WG_PP_PARAMPROXY_OBJ_ELEMACCESSLIST(pseq, param_proxy)); \
-    } \
-    BOOST_PP_EXPAND(WG_PP_IDENTITY WG_PP_SYMBOLTABLE_RETTYPE(pseq)) \
-      function_name WG_PP_CALL_PARAMLIST(pseq)
-    
-#define WG_PP_AUTOFUNCTOR_END() \
-  } WG_PP_AUTOFUNCTION_CG_FORMATNAME(auto_functor); \
-  WG_PP_AUTOFUNCTION_CG_FORMATNAME(auto_functor) \
-    BOOST_PP_LPAREN() \
-      WG_PP_PARAMPROXY_OBJ_NAME() \
-    BOOST_PP_RPAREN() WG_PP_IDENTITY(;)
-
-#define WG_PP_AUTOFUNCTION(function_name, pseq) \
-  { \
-    WG_PP_PARAMPROXY_DCLN(pseq) \
-    WG_PP_AUTOFUNCTOR_START(function_name, pseq)
-
-#define WG_PP_AUTOFUNCTION_END() \
-  WG_PP_AUTOFUNCTOR_END() \
-  }
+//
+//// WG_PP_SEQ_FOR_EACH_I functor.
+//#define WG_PP_CALL_PARAM_ENTRY(r, obj_seq, indx, elem) \
+//  BOOST_PP_LPAREN() \
+//    BOOST_PP_IIF( \
+//      WG_PP_TOKENS_STARTWITH_THISU(WG_PP_SEQ_ELEM(indx, obj_seq)), \
+//      WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONST(elem), \
+//      WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(elem)) \
+//    WG_PP_SEQ_ELEM(indx, obj_seq) \
+//  BOOST_PP_RPAREN()
+//
+//#define WG_PP_CALL_PARAMLIST(pseq) \
+//  BOOST_PP_LPAREN() \
+//    WG_PP_SEQ_ENUM( \
+//      WG_PP_SEQ_FOR_EACH_I( \
+//        WG_PP_CALL_PARAM_ENTRY, \
+//        WG_PP_SEQ_JOIN( \
+//          WG_PP_SYMBOLTABLE_PARAMBIND_OBJS(pseq), \
+//          WG_PP_SYMBOLTABLE_PARAMSET_OBJS(pseq)), \
+//        WG_PP_SEQ_JOIN( \
+//          WG_PP_SYMBOLTABLE_PARAMBIND_TYPES(pseq), \
+//          WG_PP_SYMBOLTABLE_PARAMSET_TYPES(pseq)))) \
+//  BOOST_PP_RPAREN()
+//
+//#define WG_PP_AUTOFUNCTOR_START(function_name, pseq) \
+//  struct BOOST_PP_CAT(function_name, XXXwgautofunctor) \
+//  { \
+//    void operator()(WG_PP_PARAMPROXY_TYPE_NAME() const & param_proxy) \
+//    { \
+//      static_cast<void>(param_proxy); \
+//      BOOST_PP_EXPR_IIF( \
+//        WG_PP_SYMBOLTABLE_ASSIGNEDTO_EXISTS(pseq), \
+//        param_proxy.get0() = ) \
+//      this->function_name( \
+//        WG_PP_PARAMPROXY_OBJ_ELEMACCESSLIST(pseq, param_proxy)); \
+//    } \
+//    BOOST_PP_EXPAND(WG_PP_IDENTITY WG_PP_SYMBOLTABLE_RETTYPE(pseq)) \
+//      function_name WG_PP_CALL_PARAMLIST(pseq)
+//
+//#define WG_PP_AUTOFUNCTOR_END() \
+//  } WG_PP_AUTOFUNCTION_CG_FORMATNAME(auto_functor); \
+//  WG_PP_AUTOFUNCTION_CG_FORMATNAME(auto_functor) \
+//    BOOST_PP_LPAREN() \
+//      WG_PP_PARAMPROXY_OBJ_NAME() \
+//    BOOST_PP_RPAREN() WG_PP_IDENTITY(;)
+//
+//#define WG_PP_AUTOFUNCTION(function_name, pseq) \
+//  { \
+//    WG_PP_PARAMPROXY_DCLN(pseq) \
+//    WG_PP_AUTOFUNCTOR_START(function_name, pseq)
+//
+//#define WG_PP_AUTOFUNCTION_END() \
+//  WG_PP_AUTOFUNCTOR_END() \
+//  }
 
 #endif //WG_AUTOFUNCTION_HH_
