@@ -6,6 +6,7 @@
 #include <boost/typeof/typeof.hpp>
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/add_const.hpp>
+#include <boost/type_traits/add_pointer.hpp>
 
 //###########
 //Public APIs
@@ -41,39 +42,45 @@
 
 #define WG_PP_VARDCLNIMPLICIT_TUPLIZE_IMPL3( \
   addconst, addref, var) \
+    WG_PP_VARDCLNIMPLICIT_TUPLIZE_IMPL4( \
+      addconst, \
+      addref, \
+      BOOST_PP_IIF( \
+        WG_PP_TOKENS_STARTWITH_THISU(var), 1, 0), \
+      var)
+
+#define WG_PP_VARDCLNIMPLICIT_TUPLIZE_IMPL4( \
+  addconst, addref, isthisu, var) \
     ( BOOST_PP_CAT( \
-      WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_, \
-      BOOST_PP_CAT( \
-        addconst, \
-        addref)) (var) ) \
+        WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_, \
+        BOOST_PP_CAT(BOOST_PP_CAT(addconst, addref), isthisu)) (var) ) \
     (var)
 
-#define WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_00(bvar) \
-  BOOST_TYPEOF(bvar)
-#define WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_01(bvar) \
-  boost::add_reference< BOOST_TYPEOF(bvar) >::type
-#define WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_10(bvar) \
-  boost::add_const< BOOST_TYPEOF(bvar) >::type
-#define WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_11(bvar) \
-  boost::add_reference<boost::add_const< BOOST_TYPEOF(bvar) >::type>::type
+#define WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_000(bvar) \
+  WG_PP_DEDUCEDTYPE BOOST_TYPEOF(bvar)
+#define WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_010(bvar) \
+  WG_PP_DEDUCEDTYPE boost::add_reference< BOOST_TYPEOF(bvar) >::type
+#define WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_100(bvar) \
+  WG_PP_DEDUCEDTYPE boost::add_const< BOOST_TYPEOF(bvar) >::type
+#define WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_110(bvar) \
+  WG_PP_DEDUCEDTYPE \
+    boost::add_reference<boost::add_const< BOOST_TYPEOF(bvar) >::type>::type
+#define WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_001(bvar) \
+  WG_PP_DEDUCEDTYPE BOOST_TYPEOF(this)
+#define WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_011(bvar) \
+  WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_ERRMSG()
+#define WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_101(bvar) \
+  WG_PP_DEDUCEDTYPE \
+    boost::add_const< \
+      boost::add_pointer< \
+        boost::add_const< \
+          BOOST_TYPEOF(*this) >::type >::type >::type
+#define WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_111(bvar) \
+  WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_ERRMSG()
 
-/*
-//Unit Tests.
-#define VDI1 var1
-#define VDI2 ref var2
-#define VDI3 const var3
-#define VDI4 const ref var4
-
-WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI1)
-WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI2)
-WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI3)
-WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI4)
-
-//EXPECTED:
-//( BOOST_TYPEOF(var4) ) (var4)
-//( boost::add_reference< BOOST_TYPEOF(var5) >::type ) (var5)
-//( boost::add_const< BOOST_TYPEOF(var6) >::type ) (var6)
-//( boost::add_reference<boost::add_const< BOOST_TYPEOF(var7) >::type>::type ) (var7)
-*/
+#define WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_ERRMSG() \
+  BOOST_PP_ASSERT_MSG( \
+    0, \
+    "ERROR: ref keyword cannot be used in conjunction with this_ keyword.")
 
 #endif //WG_PP_VARDCLNIMPLICIT_HH_
