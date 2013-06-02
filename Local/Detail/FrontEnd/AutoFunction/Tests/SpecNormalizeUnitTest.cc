@@ -1,4 +1,4 @@
-#include "../AutoFunctionSpecNormalize.hh"
+#include "../SpecNormalize.hh"
 
 //Unit Tests
 #define T1 assignto (x)
