@@ -28,14 +28,19 @@
 //( BOOST_TYPEOF(this) ) (this_)
 //( add_const<add_pointer<add_const<BOOST_TYPEOF(*this)>::type>::type>::type ) (this_)
 
-#define TEST_TYPE_DIDBIND(expected, actual) \
-  TEST_TYPE_DIDBIND2(expected, WG_PP_TOKENS_EATHEADTOKEN_WG_PP_DEDUCEDTYPE(actual))
-#define TEST_TYPE_DIDBIND2(expected, actual) \
+#define EXTRACT_TYPE(implicit_var_dcln) \
+  BOOST_PP_SEQ_ELEM(0, implicit_var_dcln)
+#define EXTRACT_VAR(implicit_var_dcln) \
+  BOOST_PP_SEQ_ELEM(1, implicit_var_dcln)
+
+#define TEST_DIDBIND_TYPE(expected, actual) \
+  TEST_DIDBIND_TYPE2(expected, WG_PP_TOKENS_EATHEADTOKEN_WG_PP_DEDUCEDTYPE(actual))
+#define TEST_DIDBIND_TYPE2(expected, actual) \
   BEGIN \
     boost::is_same<expected, actual>::value == true \
   END
 
-#define TEST_OBJ_DIDBIND(expected, actual) \
+#define TEST_DIDBIND_OBJ(expected, actual) \
   struct BOOST_PP_CAT(test_obj_bound, __LINE__) \
   { \
     int expected; \
@@ -50,8 +55,8 @@ void testNoQualBind()
   int var1 = 0;
 
 #define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(var1)
-  TEST_TYPE_DIDBIND( BOOST_TYPEOF(var1), BOOST_PP_SEQ_ELEM(0, RESULT) )
-  TEST_OBJ_DIDBIND( var1, BOOST_PP_SEQ_ELEM(1, RESULT) )
+  TEST_DIDBIND_TYPE( BOOST_TYPEOF(var1), EXTRACT_TYPE(RESULT) )
+  TEST_DIDBIND_OBJ( var1, EXTRACT_VAR(RESULT) )
 #undef RESULT
 }
 
@@ -61,9 +66,9 @@ void testConstQualBind()
 
   using namespace boost;
 #define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(const var1)
-  TEST_TYPE_DIDBIND(
-    add_const<BOOST_TYPEOF(var1)>::type, BOOST_PP_SEQ_ELEM(0, RESULT) )
-  TEST_OBJ_DIDBIND( var1, BOOST_PP_SEQ_ELEM(1, RESULT) )
+  TEST_DIDBIND_TYPE(
+    add_const<BOOST_TYPEOF(var1)>::type, EXTRACT_TYPE(RESULT) )
+  TEST_DIDBIND_OBJ( var1, EXTRACT_VAR(RESULT) )
 #undef RESULT
 }
 
@@ -73,9 +78,9 @@ void testRefQualBind()
 
   using namespace boost;
 #define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(ref var1)
-  TEST_TYPE_DIDBIND(
-    add_reference<BOOST_TYPEOF(var1)>::type, BOOST_PP_SEQ_ELEM(0, RESULT) )
-  TEST_OBJ_DIDBIND( var1, BOOST_PP_SEQ_ELEM(1, RESULT) )
+  TEST_DIDBIND_TYPE(
+    add_reference<BOOST_TYPEOF(var1)>::type, EXTRACT_TYPE(RESULT) )
+  TEST_DIDBIND_OBJ( var1, EXTRACT_VAR(RESULT) )
 #undef RESULT
 }
 
@@ -85,10 +90,10 @@ void testConstRefBind()
 
   using namespace boost;
 #define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(const ref var1)
-  TEST_TYPE_DIDBIND(
+  TEST_DIDBIND_TYPE(
     add_reference<add_const<BOOST_TYPEOF(var1)>::type>::type,
-    BOOST_PP_SEQ_ELEM(0, RESULT) )
-  TEST_OBJ_DIDBIND( var1, BOOST_PP_SEQ_ELEM(1, RESULT) )
+    EXTRACT_TYPE(RESULT) )
+  TEST_DIDBIND_OBJ( var1, EXTRACT_VAR(RESULT) )
 #undef RESULT
 }
 
@@ -98,10 +103,10 @@ struct testNoQualThisU
   {
     using namespace boost;
 #define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(this_)
-    TEST_TYPE_DIDBIND(
+    TEST_DIDBIND_TYPE(
       BOOST_TYPEOF(this),
-      BOOST_PP_SEQ_ELEM(0, RESULT) )
-    TEST_OBJ_DIDBIND( this_, BOOST_PP_SEQ_ELEM(1, RESULT) )
+      EXTRACT_TYPE(RESULT) )
+    TEST_DIDBIND_OBJ( this_, EXTRACT_VAR(RESULT) )
 #undef RESULT
   }
 };
@@ -112,10 +117,10 @@ struct testConstQualThisU
   {
     using namespace boost;
 #define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(const this_)
-    TEST_TYPE_DIDBIND(
+    TEST_DIDBIND_TYPE(
       add_const<BOOST_TYPEOF(*this)>::type * const,
-      BOOST_PP_SEQ_ELEM(0, RESULT) )
-    TEST_OBJ_DIDBIND( this_, BOOST_PP_SEQ_ELEM(1, RESULT) )
+      EXTRACT_TYPE(RESULT) )
+    TEST_DIDBIND_OBJ( this_, EXTRACT_VAR(RESULT) )
 #undef RESULT
   }
 };
