@@ -12,7 +12,7 @@
 
 #define WG_PP_FORWARDER_DCLN( \
   frwdr_typename, frwdr_objname, symbtbl) \
-    WG_PP_FORWARDER_DCLN_IMPL(frwdr_typename, frwder_objname, symbtbl)
+    WG_PP_FORWARDER_DCLN_IMPL(frwdr_typename, frwdr_objname, symbtbl)
 
 // Expands to <frwdr_objname>.<assignto_accessor>()
 #define WG_PP_FORWARDER_ACCESSOR_ASSIGNTO(frwdr_objname) \
@@ -48,7 +48,7 @@
 
 #define WG_PP_FORWARDER_ACCESSOR_ASSIGNTO_IMPL(frwdr_objname) \
   frwdr_objname.WG_PP_FORWARDER_TYPE_ACCESSORVARNAME( \
-    WG_PP_FORWARDER_TYPE_MEMBERVAR_ASSIGNEEROOTNAME(), 0)
+    WG_PP_FORWARDER_TYPE_MEMBERVAR_ASSIGNEEROOTNAME(), 0) ()
 
 #define WG_PP_FORWARDER_ACCESSORWGSEQ_PARAMBIND_IMPL(frwdr_objname, count) \
   WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL( \
@@ -62,20 +62,29 @@
     WG_PP_FORWARDER_TYPE_MEMBERVAR_SETPARAMROOTNAME(), \
     count)
 
-#define WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL( \
+#define WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL0( \
+  frwdr_objname, membervar_rootname, count) \
+    BOOST_PP_NIL
+#define WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL1( \
   frwdr_objname, membervar_rootname, count) \
     BOOST_PP_REPEAT( \
       count, \
       WG_PP_FORWARDER_ACCESSOR_TUPLIZE, \
-      (frwdr_objname) \
-      (membervar_rootname) )
+      (frwdr_objname)(membervar_rootname) )
+#define WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL( \
+  frwdr_objname, membervar_rootname, count) \
+    BOOST_PP_IF( \
+      count, \
+      WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL1, \
+      WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL0) \
+    (frwdr_objname, membervar_rootname, count)
 
 // BOOST_PP_REPEAT functor.
 // access_seq: (frwdr_objname)(membervar_rootname)
 #define WG_PP_FORWARDER_ACCESSOR_TUPLIZE(z, indx, access_seq) \
-  ( BOOST_SEQ_ELEM(0, access_seq) . \
+  ( BOOST_PP_SEQ_ELEM(0, access_seq) . \
     WG_PP_FORWARDER_TYPE_ACCESSORVARNAME( \
-      BOOST_SEQ_ELEM(1, access_seq), indx) () )
+      BOOST_PP_SEQ_ELEM(1, access_seq), indx) () )
 
 //------------
 //Common Utils
@@ -96,49 +105,46 @@
     BOOST_PP_CAT(getXXX, membervar_rootname), \
     indx)
 
-// transform:
+// assignee_transform
+// rest_transform:
 //   a WG_PP_SEQ_FOR_EACH_I that will be passed the following params:
 //     data: membervarrootname
 //     elem: explicit_or_deduced_type
 #define WG_PP_FORWARDER_TYPE_MEMBERTYPECNGRNCECLASS_COMMONTRANSFORM( \
-  symbtbl, transform, process_assignto) \
-    BOOST_PP_EXPR_IIF( \
-      process_assignto, \
-      WG_PP_SEQ_IFNIL_THENCLEAR( \
-        WG_PP_SEQ_FOR_EACH_I( \
-          transform, \
-          WG_PP_FORWARDER_TYPE_MEMBERVAR_ASSIGNEEROOTNAME(), \
-          WG_PP_SYMBOLTABLE_ASSIGNEDTO_TYPE(symbtbl)))) \
+  symbtbl, assignee_transform, rest_transform) \
     WG_PP_SEQ_IFNIL_THENCLEAR( \
       WG_PP_SEQ_FOR_EACH_I( \
-        transform, \
+        assignee_transform, \
+        WG_PP_FORWARDER_TYPE_MEMBERVAR_ASSIGNEEROOTNAME(), \
+        WG_PP_SYMBOLTABLE_ASSIGNEDTO_TYPE(symbtbl))) \
+    WG_PP_SEQ_IFNIL_THENCLEAR( \
+      WG_PP_SEQ_FOR_EACH_I( \
+        rest_transform, \
         WG_PP_FORWARDER_TYPE_MEMBERVAR_BOUNDPARAMROOTNAME(), \
         WG_PP_SYMBOLTABLE_PARAMBIND_TYPES(symbtbl))) \
     WG_PP_SEQ_IFNIL_THENCLEAR( \
       WG_PP_SEQ_FOR_EACH_I( \
-        transform, \
+        rest_transform, \
         WG_PP_FORWARDER_TYPE_MEMBERVAR_SETPARAMROOTNAME(), \
-        WG_PP_SYMBOLTABLE_PARAMSET_TYPES(symbtbl))) )
+        WG_PP_SYMBOLTABLE_PARAMSET_TYPES(symbtbl)))
 
 //-----------
 //MemberDclns
 //-----------
 
-#define WG_PP_FORWARDER_TYPE_MEMBERDCLNS(symbtbl) \
-  WG_PP_FORWARDER_TYPE_MEMBERVAR_ASSIGNEEDCLN(symbtbl) \
-  WG_PP_FORWARDER_TYPE_MEMBERTYPECNGRNCECLASS_COMMONTRANSFORM( \
-    symbtbl, \
-    WG_PP_FORWARDER_TYPE_MEMBERDCLN, \
-    0)
-
 // Do not use WG_PP_FORWARDER_TYPE_MEMBERDCLN since we only want a reference to
 //   the assignee.
-#define WG_PP_FORWARDER_TYPE_MEMBERVAR_ASSIGNEEDCLN(symbtbl) \
-  BOOST_PP_EXPR_IIF( \
-    WG_PP_SYMBOLTABLE_ASSIGNEDTO_EXISTS(symbtbl), \
-    WG_PP_PARSEDTYPE_IFNONLOCAL_ADDREFERENCE( \
-      BOOST_PP_TUPLE_ELEM(1, 0, WG_PP_SYMBOLTABLE_ASSIGNEDTO_TYPE(symbtbl)) ) \
-    WG_PP_FORWARDER_TYPE_MEMBERVAR_ASSIGNEEROOTNAME() ; )
+#define WG_PP_FORWARDER_TYPE_MEMBERDCLNS(symbtbl) \
+  WG_PP_FORWARDER_TYPE_MEMBERTYPECNGRNCECLASS_COMMONTRANSFORM( \
+    symbtbl, \
+    WG_PP_FORWARDER_TYPE_MEMBERDCLN_ASSIGNEE, \
+    WG_PP_FORWARDER_TYPE_MEMBERDCLN)
+
+// WG_PP_SEQ_FOR_EACH_I functor.
+#define WG_PP_FORWARDER_TYPE_MEMBERDCLN_ASSIGNEE( \
+  r, varrootname, indx, e_or_d_type) \
+    WG_PP_PARSEDTYPE_IFNONLOCAL_ADDREFERENCE(e_or_d_type) \
+    WG_PP_FORWARDER_TYPE_MEMBERVAR_NAME(varrootname, indx) WG_PP_IDENTITY(;)
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_FORWARDER_TYPE_MEMBERDCLN(r, varrootname, indx, e_or_d_type) \
@@ -171,7 +177,7 @@
 //---------------
 
 #define WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST(symbtbl) \
-  BOOST_PP_EXPR_IF( \
+  BOOST_PP_IF( \
     WG_PP_SYMBOLTABLE_TOTALXXX_SIZE(symbtbl), \
     WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_1, \
     WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_0) (symbtbl)
@@ -183,8 +189,16 @@
   WG_PP_SEQ_ENUM( \
     WG_PP_FORWARDER_TYPE_MEMBERTYPECNGRNCECLASS_COMMONTRANSFORM( \
       symbtbl, \
-      WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_ENTRY, \
-      1) )
+      WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_ENTRY_ASSIGNEE, \
+      WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_ENTRY) )
+
+// WG_PP_SEQ_FOR_EACH_I functor.
+#define WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_ENTRY_ASSIGNEE( \
+  r, membervar_rootname, indx, e_or_d_type) \
+    BOOST_PP_LPAREN() \
+      WG_PP_PARSEDTYPE_IFNONLOCAL_ADDREFERENCE(e_or_d_type) \
+      WG_PP_FORWARDER_TYPE_CTOR_PARAMVARNAME(membervar_rootname, indx) \
+    BOOST_PP_RPAREN()
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_ENTRY( \
@@ -199,7 +213,7 @@
 //--------------
 
 #define WG_PP_FORWARDER_TYPE_CTOR_INITLIST(symbtbl) \
-  BOOST_PP_EXPR_IF( \
+  BOOST_PP_IF( \
     WG_PP_SYMBOLTABLE_TOTALXXX_SIZE(symbtbl), \
     WG_PP_FORWARDER_TYPE_CTOR_INITLIST_1, \
     WG_PP_FORWARDER_TYPE_CTOR_INITLIST_0) (symbtbl)
@@ -213,7 +227,7 @@
     WG_PP_FORWARDER_TYPE_MEMBERTYPECNGRNCECLASS_COMMONTRANSFORM( \
       symbtbl, \
       WG_PP_FORWARDER_TYPE_CTOR_INITLISTENTRY, \
-      1))
+      WG_PP_FORWARDER_TYPE_CTOR_INITLISTENTRY))
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_FORWARDER_TYPE_CTOR_INITLISTENTRY( \
@@ -232,13 +246,23 @@
 #define WG_PP_FORWARDER_TYPE_ACCESSORS(symbtbl) \
   WG_PP_FORWARDER_TYPE_MEMBERTYPECNGRNCECLASS_COMMONTRANSFORM( \
     symbtbl, \
-    WG_PP_FORWARDER_TYPE_ACCESSORDCLN, \
-    1)
+    WG_PP_FORWARDER_TYPE_ACCESSORDCLN_ASSIGNEE, \
+    WG_PP_FORWARDER_TYPE_ACCESSORDCLN)
+
+// WG_PP_SEQ_FOR_EACH_I functor.
+#define WG_PP_FORWARDER_TYPE_ACCESSORDCLN_ASSIGNEE( \
+  r, membervar_rootname, indx, e_or_d_type) \
+    WG_PP_PARSEDTYPE_IFNONLOCAL_ADDREFERENCE(e_or_d_type) \
+    WG_PP_FORWARDER_TYPE_ACCESSORDCLN_SIGANDBODY(membervar_rootname, indx)
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_FORWARDER_TYPE_ACCESSORDCLN( \
   r, membervar_rootname, indx, e_or_d_type) \
     WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONSTADDREFERENCE(e_or_d_type) \
+    WG_PP_FORWARDER_TYPE_ACCESSORDCLN_SIGANDBODY(membervar_rootname, indx)
+
+#define WG_PP_FORWARDER_TYPE_ACCESSORDCLN_SIGANDBODY( \
+  membervar_rootname, indx) \
     WG_PP_FORWARDER_TYPE_ACCESSORVARNAME(membervar_rootname,indx) () const \
     { \
       return WG_PP_FORWARDER_TYPE_MEMBERVAR_NAME(membervar_rootname,indx); \

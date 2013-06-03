@@ -21,7 +21,7 @@
 //###########
 
 #define WG_PP_AUTOFUNCTOR_CG_FORMATNAME(name) \
-  BOOST_PP_CAT(WG_PP_IDENTITY(wgXXXautofunctorXXX), name)
+  BOOST_PP_CAT(wgXXXautofunctorXXX, name)
 
 #define WG_PP_AUTOFUNCTOR_CG_FRWDR_TYPENAME() \
   WG_PP_AUTOFUNCTOR_CG_FORMATNAME(frwdr_type)
@@ -35,6 +35,20 @@
 #define WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_OBJNAME() \
   WG_PP_AUTOFUNCTOR_CG_FORMATNAME(autofunctor)
 
+#define WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL(name, symbtble) \
+  { \
+    WG_PP_FORWARDER_DCLN( \
+      WG_PP_AUTOFUNCTOR_CG_FRWDR_TYPENAME(), \
+      WG_PP_AUTOFUNCTOR_CG_FRWDR_OBJNAME(), \
+      symbtble) \
+    \
+    WG_PP_AUTOFUNCTOR_CG_FNCTRDCLN_START(name, symbtble)
+
+#define WG_PP_AUTOFUNCTOR_CODEGEN_END_IMPL() \
+    WG_PP_AUTOFUNCTOR_CG_FNCTRDCLN_END() \
+    WG_PP_AUTOFUNCTOR_CG_FNCTR_INVOKE() \
+  }
+
 #define WG_PP_AUTOFUNCTOR_CG_FNCTRDCLN_START(name, symbtbl) \
   struct WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_TYPENAME(name) \
   { \
@@ -42,7 +56,7 @@
     { \
       static_cast<void>(frwdr); \
       BOOST_PP_EXPR_IIF( \
-        WG_PP_SYMBOLTABLE_ASSIGNEDTO_EXISTS(pseq), \
+        WG_PP_SYMBOLTABLE_ASSIGNEDTO_EXISTS(symbtbl), \
         WG_PP_FORWARDER_ACCESSOR_ASSIGNTO(frwdr) = ) \
       this->name( \
         WG_PP_SEQ_ENUM( \
@@ -55,7 +69,10 @@
               WG_PP_SYMBOLTABLE_PARAMSET_XXX_SIZE(symbtbl)))) ); \
     } \
     WG_PP_SYMBOLTABLE_RETTYPE(symbtbl) \
-    name LPAREN() WG_PP_AUTOFUNCTOR_CG_FUNC_PARAMLIST(symbtbl) RPAREN()
+      name \
+      BOOST_PP_LPAREN() \
+        WG_PP_AUTOFUNCTOR_CG_FUNC_PARAMLIST(symbtbl) \
+      BOOST_PP_RPAREN()
 
 #define WG_PP_AUTOFUNCTOR_CG_FUNC_PARAMLIST(symbtbl) \
   WG_PP_SEQ_ENUM( \
@@ -82,19 +99,5 @@
     BOOST_PP_LPAREN() \
       WG_PP_AUTOFUNCTOR_CG_FRWDR_OBJNAME() \
     BOOST_PP_RPAREN() ;
-
-#define WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL(name, symbtble) \
-  { \
-    WG_PP_FORWARDER_DCLN( \
-      WG_PP_AUTOFUNCTOR_CG_FRWDR_TYPENAME(), \
-      WG_PP_AUTOFUNCTOR_CG_FRWDR_OBJNAME(), \
-      symbtbl) \
-    \
-    WG_PP_AUTOFUNCTOR_CG_FNCTRDCLN_START(name, symbtble)
-
-#define WG_PP_AUTOFUNCTOR_CODEGEN_END_IMPL() \
-    WG_PP_AUTOFUNCTOR_CG_FNCTRDCLN_END() \
-    WG_PP_AUTOFUNCTOR_CG_FNCTR_INVOKE() \
-  }
 
 #endif //WG_PP_AUTOFUNCTOR_CODEGEN_HH_
