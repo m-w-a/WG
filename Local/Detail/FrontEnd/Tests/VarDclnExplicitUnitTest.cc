@@ -1,4 +1,5 @@
 #include <WG/Local/Detail/Tests/test.h>
+#include <WG/Local/Detail/Tests/TestHelper.hh>
 #include <WG/Local/Detail/PP.hh>
 #include <WG/Local/Detail/BackEnd/Type.hh>
 #include "../VarDclnExplicit.hh"
@@ -27,31 +28,10 @@ WG_PP_VARDCLNEXPLICIT_TUPLIZE(VDE3)
   BOOST_PP_SEQ_ELEM(1, explicit_var_dcln)
 
 #define TEST_DIDCAPTURE_TYPE(expected, actual) \
-  TEST_TYPE_IS_SAME(expected, WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(actual))
-#define TEST_TYPE_IS_SAME(expected, actual) \
-  struct BOOST_PP_CAT(test_type_did_bind, __LINE__) \
-  { \
-    void test() \
-    { \
-      typedef void (*expected_fptr_type)(expected param1); \
-      typedef void (*actual_fptr_type)(actual param1); \
-      expected_fptr_type expected_fptr = 0; \
-      actual_fptr_type actual_fptr = 0; \
-      expected_fptr = actual_fptr; \
-    } \
-  };
+  WG_PP_TESTHELPER_IS_SAME_TYPE(expected, WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(actual))
 
 #define TEST_DIDCAPTURE_OBJ(expected, actual) \
-  TEST_OBJNAME_IS_SAME(expected, actual)
-#define TEST_OBJNAME_IS_SAME(expected, actual) \
-  struct BOOST_PP_CAT(test_obj_did_bind, __LINE__) \
-  { \
-    int expected; \
-    void operator()() \
-    { \
-      (void)actual; \
-    } \
-  };
+  WG_PP_TESTHELPER_IS_SAME_OBJ_NAME(expected, actual)
 
 struct SomeGlobalType {};
 void testNonLocal()
