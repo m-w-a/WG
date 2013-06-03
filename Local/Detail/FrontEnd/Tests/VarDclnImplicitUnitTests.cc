@@ -5,6 +5,7 @@
 #include <boost/typeof/typeof.hpp>
 #include <boost/type_traits/is_same.hpp>
 
+/*
 //Unit Tests.
 #define VDI1 var1
 #define VDI2 const var2
@@ -13,12 +14,12 @@
 #define VDI5 this_
 #define VDI6 const this_
 
-//WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI1)
-//WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI2)
-//WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI3)
-//WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI4)
-//WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI5)
-//WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI6)
+WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI1)
+WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI2)
+WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI3)
+WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI4)
+WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI5)
+WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI6)
 
 //EXPECTED:
 //( BOOST_TYPEOF(var4) ) (var1)
@@ -27,6 +28,7 @@
 //( add_reference<add_const< BOOST_TYPEOF(var4) >::type>::type ) (var4)
 //( BOOST_TYPEOF(this) ) (this_)
 //( add_const<add_pointer<add_const<BOOST_TYPEOF(*this)>::type>::type>::type ) (this_)
+*/
 
 #define EXTRACT_TYPE(implicit_var_dcln) \
   BOOST_PP_SEQ_ELEM(0, implicit_var_dcln)
@@ -41,7 +43,7 @@
   END
 
 #define TEST_DIDBIND_OBJ(expected, actual) \
-  struct BOOST_PP_CAT(test_obj_bound, __LINE__) \
+  struct BOOST_PP_CAT(test_obj_did_bound, __LINE__) \
   { \
     int expected; \
     void operator()() \

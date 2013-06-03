@@ -58,20 +58,4 @@
   localrefvalue) \
     (localref(localrefvalue)) BOOST_PP_LPAREN()
 
-/*
-//Unit Tests.
-#define VDE1 (T const * ) var1
-#define VDE2 local(U) var2
-#define VDE3 localref(Callback &) var3
-
-WG_PP_VARDCLNEXPLICIT_TUPLIZE(VDE1)
-WG_PP_VARDCLNEXPLICIT_TUPLIZE(VDE2)
-WG_PP_VARDCLNEXPLICIT_TUPLIZE(VDE3)
-
-//EXPECTED:
-//(T const *) (var1)
-//(local(U) (var2)
-//(localref(Callback &)) (var3)
-*/
-
 #endif //WG_PP_VARDCLNEXPLICIT_HH_
