@@ -1,0 +1,137 @@
+AutoFunction
+------------
+
+x) empty macros
+x) WG_PP_TOKENS_STARTS_WITH_THISU -> replace thisu?
+x) AUTOFUNCTION_BIND
+x) AUTOFUNCTION_ASSIGN
+x) AUTOFUNCTION
+x) local/localref
+x) result
+x) return types
+x) recursive
+x) swap tokens in pp_seq
+WG_PP_TOKENS_STARTS_WITH_ASSIGNTO -> autofunction
+x) TokenMatchings.hh
+x) Make actual unit tests for pp.
+optimize IIF -> by splitting branches
+AUTOFUNCTION -> AUTOFUNCTOR
+x) TOKENS_STARTS_WITH_ -> TOKENS_STARTWITH_
+
+x) comment pseq
+document WG_PP_MAKE_PSEQ_IMPL1
+add token autofunction in autofunction macros
+granularize pp includes ??
+x) IIF instead of IF
+
+finish pp unit tests.
+automate running of pp unit tests.
+
+Better Syntax Error Checking:
+  empty spec
+  missing type in explicit-typed-var-dcln
+  missing var in "..."
+  missing type in implicit-typed-var-dcln
+  missing var in "..."
+
+//----------
+//Semantics:
+//----------
+
+return (optional, defaults to void)
+
+local/localref Rationale.
+  bound vars need to be forwarded to their destination via a temporary cntnr,
+  for purposes of efficiency this is done using the add_reference metafunction. 
+  Since in C++03 local types have no linkage, they cannot be used as template 
+  parameters, and therefore cannot be used with the add_reference metafunction. 
+  Therefore, they need to be specified explicity to avoid the use of add_reference.
+  
+  local is used to denote a local non-reference type, and localref is used to 
+  denote a local reference type. 
+  1) If local is accidentally used to denote a reference type then a compiler error 
+    will ensue since a "&" token will be inserted after that type in the generated
+    code.
+  2) If local is accidentaly used to denote a non-local type then the behaviour
+    will be the same as if it were used to denote a local type.
+  3) If localref is accidentally used to denote a non-reference type then an 
+    unnecessary copy and/or a silent error will pop-up in your code. Examples of
+    such scenarios are:
+    
+    1) assignto
+      If the type of the assignee is a non-reference and localref is accidentally
+      used then the expected assignee value at the end of the function will most
+      likely not be correct.
+    2) membind
+      If a non-mutable local non-reference type is used with localref, then an 
+      extra extraneous copy of that type is made, where such a copy permitted else
+      a compiler error will ensue.
+  4) If localref is accidentaly used to denote a non-local type then the behaviour
+    will be the same as if it were used to denote a local type.
+
+//---
+//BNF
+//---
+
+special symbols:
+  [...] specifies an optional BNF expression.
+terminals : assignto return parambind paramset membind memset const ref
+
+autofunction-spec :=
+    void
+  | [assignto assignto-tuple]
+    [return return-tuple]
+    [parambind parambind-seq]
+    [paramset paramset-seq]
+    [membind membind-seq]
+    [memset memset-seq]
+
+assignto-tuple := bound-tuple
+
+return-tuple := type
+
+parambind-seq := bound-tuple-seq
+paramset-seq := set-tuple-seq
+membind-seq := bound-tuple-seq
+memset-seq := set-tuple-seq
+
+bound-tuple-seq :=
+    bound-tuple
+  | bound-tuple-seq bound-tuple
+
+set-tuple-seq :=
+    set-tuple
+  | set-tuple-seq set-tuple
+
+bound-tuple :=
+  ( bound-var-dcln )
+
+set-tuple :=
+  ( set-var-dcln )
+
+bound-var-dcln :=
+    implicit-typed-var-dcln
+  | explicit-typed-var-dcln
+
+set-var-dcln :=
+  explicit-typed-var-dcln , value-expr
+
+implicit-typed-var-dcln :=
+  implicit-type var-name
+
+explicit-typed-var-dcln :=
+  explicit-type var-name
+
+implicit-type := const | ref | const ref
+
+explicit-type := 
+    local(local-nonref-type)
+  | localref(local-ref-type)
+  | ( non-local-type )
+
+type := A C++ type.
+var-name := A C++ variable name.
+local-nonref-type := A C++ type declaration specifying a local non-reference type.
+local-ref-type := A C++ type declaration specifying a local reference type.
+non-local-type := A C++ type declaration specifying a non-local type.
+value-expr := A C++ expression evaluating to some value.
