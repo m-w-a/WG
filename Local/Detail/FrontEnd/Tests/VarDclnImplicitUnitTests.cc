@@ -5,7 +5,6 @@
 #include <boost/typeof/typeof.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-/*
 //Unit Tests.
 #define VDI1 var1
 #define VDI2 const var2
@@ -13,7 +12,7 @@
 #define VDI4 const ref var4
 #define VDI5 this_
 #define VDI6 const this_
-
+/*
 WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI1)
 WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI2)
 WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI3)
@@ -56,7 +55,7 @@ void testNoQualBind()
 {
   int var1 = 0;
 
-#define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(var1)
+#define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI1)
   TEST_DIDBIND_TYPE( BOOST_TYPEOF(var1), EXTRACT_TYPE(RESULT) )
   TEST_DIDBIND_OBJ( var1, EXTRACT_VAR(RESULT) )
 #undef RESULT
@@ -64,38 +63,38 @@ void testNoQualBind()
 
 void testConstQualBind()
 {
-  int var1 = 0;
+  int var2 = 0;
 
   using namespace boost;
-#define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(const var1)
+#define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI2)
   TEST_DIDBIND_TYPE(
-    add_const<BOOST_TYPEOF(var1)>::type, EXTRACT_TYPE(RESULT) )
-  TEST_DIDBIND_OBJ( var1, EXTRACT_VAR(RESULT) )
+    add_const<BOOST_TYPEOF(var2)>::type, EXTRACT_TYPE(RESULT) )
+  TEST_DIDBIND_OBJ( var2, EXTRACT_VAR(RESULT) )
 #undef RESULT
 }
 
 void testRefQualBind()
 {
-  int var1 = 0;
+  int var3 = 0;
 
   using namespace boost;
-#define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(ref var1)
+#define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI3)
   TEST_DIDBIND_TYPE(
-    add_reference<BOOST_TYPEOF(var1)>::type, EXTRACT_TYPE(RESULT) )
-  TEST_DIDBIND_OBJ( var1, EXTRACT_VAR(RESULT) )
+    add_reference<BOOST_TYPEOF(var3)>::type, EXTRACT_TYPE(RESULT) )
+  TEST_DIDBIND_OBJ( var3, EXTRACT_VAR(RESULT) )
 #undef RESULT
 }
 
 void testConstRefBind()
 {
-  int var1 = 0;
+  int var4 = 0;
 
   using namespace boost;
-#define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(const ref var1)
+#define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI4)
   TEST_DIDBIND_TYPE(
-    add_reference<add_const<BOOST_TYPEOF(var1)>::type>::type,
+    add_reference<add_const<BOOST_TYPEOF(var4)>::type>::type,
     EXTRACT_TYPE(RESULT) )
-  TEST_DIDBIND_OBJ( var1, EXTRACT_VAR(RESULT) )
+  TEST_DIDBIND_OBJ( var4, EXTRACT_VAR(RESULT) )
 #undef RESULT
 }
 
@@ -104,7 +103,7 @@ struct testNoQualThisU
   void operator()()
   {
     using namespace boost;
-#define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(this_)
+#define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI5)
     TEST_DIDBIND_TYPE(
       BOOST_TYPEOF(this),
       EXTRACT_TYPE(RESULT) )
@@ -118,7 +117,7 @@ struct testConstQualThisU
   void operator()()
   {
     using namespace boost;
-#define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(const this_)
+#define RESULT WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI6)
     TEST_DIDBIND_TYPE(
       add_const<BOOST_TYPEOF(*this)>::type * const,
       EXTRACT_TYPE(RESULT) )

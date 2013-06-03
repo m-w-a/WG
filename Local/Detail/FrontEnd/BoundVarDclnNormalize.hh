@@ -57,4 +57,6 @@ WG_PP_BOUNDVARDCLN_NORMALIZE(S7)
 //( boost::add_reference<boost::add_const< BOOST_TYPEOF(var7) >::type>::type ) (var7)
 */
 
+//TODO.
+
 #endif //WG_PP_BOUNDVARDCLNNORMALIZE_HH_
