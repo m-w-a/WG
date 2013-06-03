@@ -30,3 +30,5 @@ BOOST_PP_EXPAND(WG_PP_AUTOFUNCTION_SPEC_NORMALIZE(T6))
 (assignto) (BOOST_PP_NIL) (return) (void) (parambind) (BOOST_PP_NIL) (paramset) ((int) (x) (7)) (membind) (BOOST_PP_NIL) (memset) (BOOST_PP_NIL)
 (assignto) (BOOST_PP_NIL) (return) (void) (parambind) (BOOST_PP_NIL) (paramset) ((int) (x) (7) (local(Callback)) ( y ) (8)) (membind) (BOOST_PP_NIL) (memset) (BOOST_PP_NIL)
 */
+
+//TODO
