@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <WG/Local/AutoFunction.hh>
+#include <WG/Local/AutoFunctionV1.hh>
 #include <WG/GTest/Exceptions.hh>
 
 /*
@@ -172,7 +172,7 @@ TEST(wg_utils_autofunction, void_params)
   {
     static bool autoFunctionCalled = false;
 
-    WG_AUTOFUNCTION((void), (void), noParamsAutoFunction, (void), (void))
+    WG_AUTOFUNCTIONV1((void), (void), noParamsAutoFunction, (void), (void))
     {
       autoFunctionCalled = true;
     }WG_AUTOFUNCTION_END;
@@ -194,7 +194,7 @@ TEST(wg_utils_autofunction, mixed_params)
       int const R = 5;
       int const temp = 4;
 
-      WG_AUTOFUNCTION(
+      WG_AUTOFUNCTIONV1(
         (void), (void),
         calculateVolume,
         (int &)(volume)

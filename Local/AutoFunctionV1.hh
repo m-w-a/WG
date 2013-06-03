@@ -1,11 +1,7 @@
-#ifndef WG_AUTOFUNCTION_HH_
-#define WG_AUTOFUNCTION_HH_
+#ifndef WG_AUTOFUNCTIONV1_HH_
+#define WG_AUTOFUNCTIONV1_HH_
 
-#include <boost/preprocessor.hpp>
-#include <WG/Local/Detail/PP.hh>
-#include <WG/Local/Detail/Seq.hh>
-#include <WG/Local/Detail/AltSeq.hh>
-#include <WG/Local/Detail/Keywords.hh>
+#include <WG/Local/Detail/FrontEnd/AutoFunctionV1/SpecNormalize.hh>
 #include <WG/Local/Detail/BackEnd/AutoFunction/CodeGen.hh>
 
 //###########
@@ -17,7 +13,7 @@
   ret_type, \
   function_name, \
   bound_param_seq) \
-    WG_AUTOFUNCTION( \
+    WG_AUTOFUNCTIONV1( \
       bound_result_seq, ret_type, function_name, bound_param_seq, (void))
 
 #define WG_AUTOFUNCTION_ASSIGN( \
@@ -25,7 +21,7 @@
   ret_type, \
   function_name, \
   assigned_param_seq) \
-    WG_AUTOFUNCTION( \
+    WG_AUTOFUNCTIONV1( \
       bound_result_seq, ret_type, function_name, (void), assigned_param_seq)
   
 ///@brief bound_param_seq
@@ -49,15 +45,11 @@
 ///@brief     (type1)(var1, assigned_val1) (type2)(var2, assigned_val2) ...
 ///@brief   2) or, the token: "(void)", to signify the absence of any additional
 ///@brief   variables.
-#define WG_AUTOFUNCTION( \
-  bound_result_seq, \
-  ret_type, \
-  function_name, \
-  bound_param_seq, \
-  assigned_param_seq) \
+#define WG_AUTOFUNCTIONV1( \
+  bound_result_seq, ret_type, function_name, bound_param_seq, assigned_param_seq) \
     WG_PP_AUTOFUNCTOR_CODEGEN_START( \
       function_name, \
-      WG_PP_MAKE_PSEQ( \
+      WG_PP_AUTOFUNCTIONV1_SPECNORMALIZE( \
         bound_result_seq, ret_type, bound_param_seq, assigned_param_seq))
     
 #define WG_AUTOFUNCTION_END WG_PP_AUTOFUNCTOR_CODEGEN_END()
@@ -66,44 +58,6 @@
 //Impl Macros
 //###########
 
-//------------------------
-//AssignedPSeq & BoundPSeq
-//------------------------
 
-#define WG_PP_BOUND_PSEQ_IS_VOID(bp_seq) \
-  BOOST_PP_IIF( \
-    BOOST_PP_AND( \
-      BOOST_PP_EQUAL(BOOST_PP_SEQ_SIZE(bp_seq), 1), \
-      WG_PP_TOKENS_STARTWITH_VOID( \
-        BOOST_PP_EXPAND(WG_PP_IDENTITY bp_seq BOOST_PP_NIL))), \
-      1, \
-      0)
 
-#define WG_PP_ASSIGNED_PSEQ_IS_VOID(ap_alt_seq) \
-  BOOST_PP_IIF( \
-    WG_PP_ISNEXTTOKEN_A_TUPLE( \
-      2, BOOST_PP_TUPLE_EAT(1) ap_alt_seq BOOST_PP_NIL), \
-    0, \
-    BOOST_PP_IIF( \
-      WG_PP_TOKENS_STARTWITH_VOID( \
-        BOOST_PP_EXPAND(WG_PP_IDENTITY ap_alt_seq BOOST_PP_NIL)), \
-      1, \
-      0))
-
-#define WG_PP_MAKE_PSEQ(bresult_seq, ret_type, bp_seq, ap_alt_seq) \
-  WG_PP_SYMBOLTABLE_CREATE( \
-    BOOST_PP_IIF( \
-      WG_PP_BOUND_PSEQ_IS_VOID(bresult_seq), \
-      BOOST_PP_NIL, \
-      bresult_seq), \
-    BOOST_PP_SEQ_ELEM(0, ret_type), \
-    BOOST_PP_IIF( \
-      WG_PP_BOUND_PSEQ_IS_VOID(bp_seq), \
-      BOOST_PP_NIL, \
-      bp_seq), \
-    BOOST_PP_IIF( \
-      WG_PP_ASSIGNED_PSEQ_IS_VOID(ap_alt_seq), \
-      BOOST_PP_NIL, \
-      WG_PP_ALTSEQ_LINEARIZE(ap_alt_seq)))
-
-#endif //WG_AUTOFUNCTION_HH_
+#endif //WG_AUTOFUNCTIONV1_HH_
