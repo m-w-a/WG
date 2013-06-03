@@ -30,29 +30,4 @@
     1, \
     0)
 
-/*
-//Unit Tests.
-#define S1 (Foo *)
-#define S2 local(Foo)
-#define S3 localref(Foo &)
-#define S4 const
-#define S5 ref
-#define S6 const ref
-
-WG_PP_VARDCLN_ISEXPLICIT(S1)
-WG_PP_VARDCLN_ISEXPLICIT(S2)
-WG_PP_VARDCLN_ISEXPLICIT(S3)
-WG_PP_VARDCLN_ISEXPLICIT(S4)
-WG_PP_VARDCLN_ISEXPLICIT(S5)
-WG_PP_VARDCLN_ISEXPLICIT(S6)
-
-//EXPECTED:
-//1
-//1
-//1
-//0
-//0
-//0
-*/
-
 #endif //WG_PP_VARDCLN_HH_
