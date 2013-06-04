@@ -42,7 +42,7 @@ TESTS = \
     
 test_autofunction_v1_SOURCES = \
     ../AutoFunctionV1/TestMain.cc \
-    ../AutoFunctionV1/AutoFunctionUnitTest.cc
+    ../AutoFunctionV1/UnitTest.cc
 
 EXTRA_DIST = \
     ../AutoFunctionV1/AutoFunctionPPTest.cc
