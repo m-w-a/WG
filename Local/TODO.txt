@@ -15,7 +15,7 @@ WG_PP_TOKENS_STARTS_WITH_ASSIGNTO -> autofunction
 x) TokenMatchings.hh
 x) Make actual unit tests for pp.
 optimize IIF -> by splitting branches
-AUTOFUNCTION -> AUTOFUNCTOR
+x) AUTOFUNCTION -> AUTOFUNCTOR
 x) TOKENS_STARTS_WITH_ -> TOKENS_STARTWITH_
 
 x) comment pseq

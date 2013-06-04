@@ -62,7 +62,12 @@ test_autofunctor_v1_SOURCES = \
 
 test_autofunctor_SOURCES = \
     ../AutoFunctor/TestMain.cc \
-    ../AutoFunctor/UnitTest.cc
+    ../AutoFunctor/ExplicitBoundParams.cc \
+    ../AutoFunctor/ExplicitSetParams.cc \
+    ../AutoFunctor/ExplicitMixedParams.cc \
+    ../AutoFunctor/LocalTypes.cc \
+    ../AutoFunctor/NoSpec.cc \
+    ../AutoFunctor/Recursive.cc
 
 EXTRA_DIST = 
 

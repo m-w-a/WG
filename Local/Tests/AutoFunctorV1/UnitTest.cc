@@ -3,7 +3,7 @@
 #include <WG/GTest/Exceptions.hh>
 
 /*
-wg_utils_autofunctor
+wg_utils_autofunctorv1
   void_params
   bound_params
     test1Arg
@@ -14,7 +14,7 @@ wg_utils_autofunctor
   bound_and_assigned_params
 */
 
-TEST(wg_utils_autofunctor, bound_params)
+TEST(wg_utils_autofunctorv1, bound_params)
 {
   try
   {
@@ -73,7 +73,7 @@ TEST(wg_utils_autofunctor, bound_params)
   WG_GTEST_CATCH
 }
 
-TEST(wg_utils_autofunctor, assigned_params)
+TEST(wg_utils_autofunctorv1, assigned_params)
 {
   try
   {
@@ -121,7 +121,7 @@ TEST(wg_utils_autofunctor, assigned_params)
   WG_GTEST_CATCH
 }
 
-TEST(wg_utils_autofunctor, local_keyword)
+TEST(wg_utils_autofunctorv1, local_keyword)
 {
   try
   {
@@ -144,7 +144,7 @@ TEST(wg_utils_autofunctor, local_keyword)
   WG_GTEST_CATCH
 }
 
-TEST(wg_utils_autofunctor, localref_keyword)
+TEST(wg_utils_autofunctorv1, localref_keyword)
 {
   try
   {
@@ -166,7 +166,7 @@ TEST(wg_utils_autofunctor, localref_keyword)
   WG_GTEST_CATCH
 }
 
-TEST(wg_utils_autofunctor, void_params)
+TEST(wg_utils_autofunctorv1, void_params)
 {
   try
   {
@@ -182,7 +182,7 @@ TEST(wg_utils_autofunctor, void_params)
   WG_GTEST_CATCH
 }
 
-TEST(wg_utils_autofunctor, mixed_params)
+TEST(wg_utils_autofunctorv1, mixed_params)
 {
   try
   {
@@ -210,7 +210,7 @@ TEST(wg_utils_autofunctor, mixed_params)
   WG_GTEST_CATCH
 }
 
-TEST(wg_utils_autofunctor, nonvoidret_assignedresult_recursive)
+TEST(wg_utils_autofunctorv1, nonvoidret_assignedresult_recursive)
 {
   try
   {
