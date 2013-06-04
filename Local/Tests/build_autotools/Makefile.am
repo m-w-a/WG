@@ -67,6 +67,7 @@ test_autofunctor_SOURCES = \
     ../AutoFunctor/ExplicitMixedParams.cc \
     ../AutoFunctor/LocalTypes.cc \
     ../AutoFunctor/NoSpec.cc \
+    ../AutoFunctor/Nested.cc \
     ../AutoFunctor/Recursive.cc
 
 EXTRA_DIST = 
