@@ -85,6 +85,12 @@
 //     else call WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_NOTFOUNDHOOK_<keyword> and
 //       then dispatch to WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_<next_keyword>
 //------------------------------------------------------------------------------
+// Implementation Note:
+// WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_...2 cannot be factored out into a
+//   common macro because it will result in an eventual recursive call of itself.
+// WG_PP_SPLITHEADTUPLEFROMTOKENS cannot apply nexttransform to the rest of
+//   the tokens because it will result in an eventual recursive call of itself.
+//------------------------------------------------------------------------------
 
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_ASSIGNTO(spec) \
   (assignto) \
@@ -94,12 +100,18 @@
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_NOTFOUNDHOOK_ASSIGNTO() \
   (BOOST_PP_NIL)
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_ASSIGNTO(spec, nexttransform) \
-  WG_PP_SPLITHEADTUPLEFROMTOKENS( \
-    1, \
-    WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
-    WG_PP_BOUNDVARDCLN_NORMALIZE, \
-    WG_PP_TUPLIZE, \
+  WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_ASSIGNTO2( \
+    WG_PP_SPLITHEADTUPLEFROMTOKENS( \
+      1, \
+      WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
+      WG_PP_BOUNDVARDCLN_NORMALIZE, \
+      WG_PP_TUPLIZE, \
+      WG_PP_TUPLIZE), \
     nexttransform)
+#define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_ASSIGNTO2( \
+  head_rest_tuple, nexttransform) \
+    ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
+    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) )
 
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_RETURN(spec) \
   (return) \
@@ -109,12 +121,18 @@
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_NOTFOUNDHOOK_RETURN() \
   (void)
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_RETURN(spec, nexttransform) \
-  WG_PP_SPLITHEADTUPLEFROMTOKENS( \
-    1, \
-    WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
-    WG_PP_IDENTITY, \
-    WG_PP_TUPLIZE, \
+  WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_RETURN2( \
+    WG_PP_SPLITHEADTUPLEFROMTOKENS( \
+      1, \
+      WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
+      WG_PP_IDENTITY, \
+      WG_PP_TUPLIZE, \
+      WG_PP_TUPLIZE), \
     nexttransform)
+#define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_RETURN2( \
+  head_rest_tuple, nexttransform) \
+    ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
+    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) )
 
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_PARAMBIND(spec) \
   (parambind) \
@@ -124,12 +142,18 @@
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_NOTFOUNDHOOK_PARAMBIND() \
   (BOOST_PP_NIL)
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_PARAMBIND(spec, nexttransform) \
-  WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
-    1, \
-    WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
-    WG_PP_BOUNDVARDCLN_NORMALIZE, \
-    WG_PP_TUPLIZE, \
+  WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_PARAMBIND2( \
+    WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
+      1, \
+      WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
+      WG_PP_BOUNDVARDCLN_NORMALIZE, \
+      WG_PP_TUPLIZE, \
+      WG_PP_TUPLIZE), \
     nexttransform)
+#define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_PARAMBIND2( \
+  head_rest_tuple, nexttransform) \
+    ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
+    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) )
 
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_PARAMSET(spec) \
   (paramset) \
@@ -139,12 +163,18 @@
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_NOTFOUNDHOOK_PARAMSET() \
   (BOOST_PP_NIL)
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_PARAMSET(spec, nexttransform) \
-  WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
-    2, \
-    WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
-    WG_PP_SETVARDCLNNORMALIZE, \
-    WG_PP_TUPLIZE, \
+  WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_PARAMSET2( \
+    WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
+      2, \
+      WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
+      WG_PP_SETVARDCLNNORMALIZE, \
+      WG_PP_TUPLIZE, \
+      WG_PP_TUPLIZE), \
     nexttransform)
+#define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_PARAMSET2( \
+  head_rest_tuple, nexttransform) \
+    ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
+    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) )
 
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_MEMBIND(spec) \
   (membind) \
@@ -154,12 +184,18 @@
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_NOTFOUNDHOOK_MEMBIND() \
   (BOOST_PP_NIL)
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_MEMBIND(spec, nexttransform) \
-  WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
-    1, \
-    WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
-    WG_PP_BOUNDVARDCLN_NORMALIZE, \
-    WG_PP_TUPLIZE, \
+  WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_MEMBIND2( \
+    WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
+      1, \
+      WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
+      WG_PP_BOUNDVARDCLN_NORMALIZE, \
+      WG_PP_TUPLIZE, \
+      WG_PP_TUPLIZE), \
     nexttransform)
+#define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_MEMBIND2( \
+  head_rest_tuple, nexttransform) \
+    ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
+    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) )
 
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_MEMSET(spec) \
   (memset) \
@@ -169,12 +205,18 @@
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_NOTFOUNDHOOK_MEMSET() \
   (BOOST_PP_NIL)
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_MEMSET(spec, nexttransform) \
-  WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
-    2, \
-    WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
-    WG_PP_SETVARDCLNNORMALIZE, \
-    WG_PP_TUPLIZE, \
+  WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_MEMSET2( \
+    WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
+      2, \
+      WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
+      WG_PP_SETVARDCLNNORMALIZE, \
+      WG_PP_TUPLIZE, \
+      WG_PP_TUPLIZE), \
     nexttransform)
+#define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_SEQ_MEMSET2( \
+  head_rest_tuple, nexttransform) \
+    ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
+    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) )
 
 #define WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_ENDSPEC(spec) \
   WG_PP_AUTOFUNCTION_SPEC_NORMALIZE_VALIDATESPEC(spec)
