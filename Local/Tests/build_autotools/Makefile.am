@@ -6,11 +6,11 @@ include $(top_srcdir)/WG/ExternalLibsNoInstall/build_autotools/GTestFlags.am
 ###########################
 
 noinst_PROGRAMS = \
-    test_autofunction
+    test_autofunction.v1
     
 TEST_BIN_DIR = $(abs_top_builddir)/bin/
 
-TEST_WG_AUTOFUNCTION_APPNAME = test_autofunction$(EXEEXT)
+TEST_WG_AUTOFUNCTION_APPNAME = test_autofunction.v1$(EXEEXT)
 TEST_WG_AUTOFUNCTION_APPALTPATH = \
     $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTION_APPNAME)
 TEST_WG_AUTOFUNCTION_APPBUILDLOC = \
@@ -40,12 +40,12 @@ clean-local : \
 TESTS = \
     $(TEST_WG_AUTOFUNCTION_APPNAME)
     
-test_autofunction_SOURCES = \
-    ../AutoFunction/TestMain.cc \
-    ../AutoFunction/AutoFunctionUnitTest.cc
+test_autofunction_v1_SOURCES = \
+    ../AutoFunctionV1/TestMain.cc \
+    ../AutoFunctionV1/AutoFunctionUnitTest.cc
 
 EXTRA_DIST = \
-    ../AutoFunction/AutoFunctionPPTest.cc
+    ../AutoFunctionV1/AutoFunctionPPTest.cc
 
 ####################
 #Preprocessor Flags.
@@ -58,7 +58,7 @@ AM_CPPFLAGS += \
 #Compiler Flags.
 ################
 
-test_autofunction_CXXFLAGS = \
+test_autofunction_v1_CXXFLAGS = \
 	-pedantic
 
 ##############
