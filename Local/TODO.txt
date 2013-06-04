@@ -19,11 +19,12 @@ AUTOFUNCTION -> AUTOFUNCTOR
 x) TOKENS_STARTS_WITH_ -> TOKENS_STARTWITH_
 
 x) comment pseq
-document WG_PP_MAKE_PSEQ_IMPL1
+x) document WG_PP_MAKE_PSEQ_IMPL1
 add token autofunction in autofunction macros
 granularize pp includes ??
 x) IIF instead of IF
 
+add membind/memset support
 finish pp unit tests.
 automate running of pp unit tests.
 

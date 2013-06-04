@@ -1,27 +1,27 @@
-#ifndef WG_AUTOFUNCTIONV1_HH_
-#define WG_AUTOFUNCTIONV1_HH_
+#ifndef WG_AUTOFUNCTORV1_HH_
+#define WG_AUTOFUNCTORV1_HH_
 
-#include <WG/Local/Detail/FrontEnd/AutoFunctionV1/SpecNormalize.hh>
-#include <WG/Local/Detail/BackEnd/AutoFunction/CodeGen.hh>
+#include <WG/Local/Detail/FrontEnd/AutoFunctorV1/SpecNormalize.hh>
+#include <WG/Local/Detail/BackEnd/AutoFunctor/CodeGen.hh>
 
 //###########
 //Public APIs
 //###########
 
-#define WG_AUTOFUNCTION_BIND( \
+#define WG_AUTOFUNCTOR_BIND( \
   bound_result_seq, \
   ret_type, \
   function_name, \
   bound_param_seq) \
-    WG_AUTOFUNCTIONV1( \
+    WG_AUTOFUNCTORV1( \
       bound_result_seq, ret_type, function_name, bound_param_seq, (void))
 
-#define WG_AUTOFUNCTION_ASSIGN( \
+#define WG_AUTOFUNCTOR_ASSIGN( \
   bound_result_seq, \
   ret_type, \
   function_name, \
   assigned_param_seq) \
-    WG_AUTOFUNCTIONV1( \
+    WG_AUTOFUNCTORV1( \
       bound_result_seq, ret_type, function_name, (void), assigned_param_seq)
   
 ///@brief bound_param_seq
@@ -45,14 +45,14 @@
 ///@brief     (type1)(var1, assigned_val1) (type2)(var2, assigned_val2) ...
 ///@brief   2) or, the token: "(void)", to signify the absence of any additional
 ///@brief   variables.
-#define WG_AUTOFUNCTIONV1( \
+#define WG_AUTOFUNCTORV1( \
   bound_result_seq, ret_type, function_name, bound_param_seq, assigned_param_seq) \
     WG_PP_AUTOFUNCTOR_CODEGEN_START( \
       function_name, \
-      WG_PP_AUTOFUNCTIONV1_SPECNORMALIZE( \
+      WG_PP_AUTOFUNCTORV1_SPECNORMALIZE( \
         bound_result_seq, ret_type, bound_param_seq, assigned_param_seq))
     
-#define WG_AUTOFUNCTION_END WG_PP_AUTOFUNCTOR_CODEGEN_END()
+#define WG_AUTOFUNCTOR_END WG_PP_AUTOFUNCTOR_CODEGEN_END()
 
 //###########
 //Impl Macros
@@ -60,4 +60,4 @@
 
 
 
-#endif //WG_AUTOFUNCTIONV1_HH_
+#endif //WG_AUTOFUNCTORV1_HH_

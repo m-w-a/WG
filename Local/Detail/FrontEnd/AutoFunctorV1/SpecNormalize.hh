@@ -1,5 +1,5 @@
-#ifndef WG_PP_AUTOFUNCTIONV1_SPECNORMALIZE_HH_
-#define WG_PP_AUTOFUNCTIONV1_SPECNORMALIZE_HH_
+#ifndef WG_PP_AUTOFUNCTORV1_SPECNORMALIZE_HH_
+#define WG_PP_AUTOFUNCTORV1_SPECNORMALIZE_HH_
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP.hh>
@@ -11,9 +11,9 @@
 //Public APIs
 //###########
 
-#define WG_PP_AUTOFUNCTIONV1_SPECNORMALIZE( \
+#define WG_PP_AUTOFUNCTORV1_SPECNORMALIZE( \
   bresult_seq, ret_type, bp_seq, ap_alt_seq) \
-    WG_PP_AUTOFUNCTIONV1_SPECNORMALIZE_IMPL( \
+    WG_PP_AUTOFUNCTORV1_SPECNORMALIZE_IMPL( \
       bresult_seq, ret_type, bp_seq, ap_alt_seq)
 
 //###########
@@ -44,7 +44,7 @@
       1, \
       0))
 
-#define WG_PP_AUTOFUNCTIONV1_SPECNORMALIZE_IMPL( \
+#define WG_PP_AUTOFUNCTORV1_SPECNORMALIZE_IMPL( \
   bresult_seq, ret_type, bp_seq, ap_alt_seq) \
     WG_PP_SYMBOLTABLE_CREATE( \
       BOOST_PP_IIF( \
@@ -61,4 +61,4 @@
         BOOST_PP_NIL, \
         WG_PP_ALTSEQ_LINEARIZE(ap_alt_seq)))
 
-#endif /* WG_PP_AUTOFUNCTIONV1_SPECNORMALIZE_HH_ */
+#endif /* WG_PP_AUTOFUNCTORV1_SPECNORMALIZE_HH_ */
