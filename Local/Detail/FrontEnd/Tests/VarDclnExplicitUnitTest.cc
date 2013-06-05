@@ -22,10 +22,11 @@ WG_PP_VARDCLNEXPLICIT_TUPLIZE(VDE3)
 //(localref(SomeLocalType const &)) (var3)
 */
 
-#define EXTRACT_PARSEDTYPE(explicit_var_dcln) \
-  BOOST_PP_SEQ_ELEM(0, explicit_var_dcln)
-#define EXTRACT_VAR(explicit_var_dcln) \
-  BOOST_PP_SEQ_ELEM(1, explicit_var_dcln)
+#define EXTRACT_PARSEDTYPE(explicittype_var_2tuple) \
+  BOOST_PP_SEQ_ELEM(0, explicittype_var_2tuple)
+
+#define EXTRACT_VAR(explicittype_var_2tuple) \
+  BOOST_PP_SEQ_ELEM(1, explicittype_var_2tuple)
 
 #define TEST_DIDCAPTURE_TYPE(expected, actual) \
   WG_PP_TESTHELPER_IS_SAME_TYPE(expected, WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(actual))

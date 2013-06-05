@@ -29,10 +29,11 @@ WG_PP_VARDCLNIMPLICIT_TUPLIZE(VDI6)
 //( add_const<add_pointer<add_const<BOOST_TYPEOF(*this)>::type>::type>::type ) (this_)
 */
 
-#define EXTRACT_TYPE(implicit_var_dcln) \
-  BOOST_PP_SEQ_ELEM(0, implicit_var_dcln)
-#define EXTRACT_VAR(implicit_var_dcln) \
-  BOOST_PP_SEQ_ELEM(1, implicit_var_dcln)
+#define EXTRACT_TYPE(implicittype_var_2tuple) \
+  BOOST_PP_SEQ_ELEM(0, implicittype_var_2tuple)
+
+#define EXTRACT_VAR(implicittype_var_2tuple) \
+  BOOST_PP_SEQ_ELEM(1, implicittype_var_2tuple)
 
 #define TEST_DIDBIND_TYPE(expected, actual) \
   TEST_DIDBIND_TYPE2(expected, WG_PP_TOKENS_EATHEADTOKEN_WG_PP_DEDUCEDTYPE(actual))
