@@ -184,7 +184,7 @@
     nrmlzd_set_tuple_seq)
 
 //----------------------
-//Calculate thisu index.
+//Calculate this_ index.
 //----------------------
 
 //Returns: { BOOST_PP_NIL | integer }

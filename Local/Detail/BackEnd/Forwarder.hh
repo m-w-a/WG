@@ -10,6 +10,7 @@
 //Public APIs
 //###########
 
+// Creates a class for forwarding captured variables and/or their values.
 #define WG_PP_FORWARDER_DCLN( \
   frwdr_typename, frwdr_objname, symbtbl) \
     WG_PP_FORWARDER_DCLN_IMPL(frwdr_typename, frwdr_objname, symbtbl)
