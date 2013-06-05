@@ -14,7 +14,6 @@ x) swap tokens in pp_seq
 WG_PP_TOKENS_STARTS_WITH_ASSIGNTO -> autofunction
 x) TokenMatchings.hh
 x) Make actual unit tests for pp.
-optimize IIF -> by splitting branches
 x) AUTOFUNCTION -> AUTOFUNCTOR
 x) TOKENS_STARTS_WITH_ -> TOKENS_STARTWITH_
 
@@ -24,6 +23,9 @@ add token autofunction in autofunction macros
 granularize pp includes ??
 x) IIF instead of IF
 
+
+optimize IIF -> by splitting branches
+UnitTests : Explicit -> Implicit where possible.
 add membind/memset support
 finish pp unit tests.
 automate running of pp unit tests.
@@ -34,6 +36,10 @@ Better Syntax Error Checking:
   missing var in "..."
   missing type in implicit-typed-var-dcln
   missing var in "..."
+
+assignedto implicit type should not have const or ref as it does not make sense
+for it to be const and it only makes sense for it to be a reference, hence it's 
+ref implicitly.
 
 //----------
 //Semantics:
@@ -87,7 +93,7 @@ autofunction-spec :=
     [membind membind-seq]
     [memset memset-seq]
 
-assignto-tuple := bound-tuple
+assignto-tuple := (explicit-typed-var-dcln) | (var-name)
 
 return-tuple := type
 
