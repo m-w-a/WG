@@ -93,7 +93,7 @@ autofunction-spec :=
     [membind membind-seq]
     [memset memset-seq]
 
-assignto-tuple := (explicit-typed-var-dcln) | (var-name)
+assignto-tuple := (assignto-dcln)
 
 return-tuple := type
 
@@ -115,6 +115,10 @@ bound-tuple :=
 
 set-tuple :=
   ( set-var-dcln )
+
+assignto-dcln := 
+     var-name
+  |  explicit-typed-var-dcln
 
 bound-var-dcln :=
     implicit-typed-var-dcln
