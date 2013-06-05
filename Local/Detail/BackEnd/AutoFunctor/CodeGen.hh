@@ -52,6 +52,8 @@
 #define WG_PP_AUTOFUNCTOR_CG_FNCTRDCLN_START(name, symbtbl) \
   struct WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_TYPENAME(name) \
   { \
+    typedef WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_TYPENAME(name) self_type; \
+    \
     void operator()(WG_PP_AUTOFUNCTOR_CG_FRWDR_TYPENAME() const & frwdr) \
     { \
       static_cast<void>(frwdr); \
