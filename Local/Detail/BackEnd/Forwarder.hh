@@ -16,16 +16,16 @@
     WG_PP_FORWARDER_DCLN_IMPL(frwdr_typename, frwdr_objname, symbtbl)
 
 // Expands to <frwdr_objname>.<assignto_accessor>()
-#define WG_PP_FORWARDER_ACCESSOR_ASSIGNTO(frwdr_objname) \
-  WG_PP_FORWARDER_ACCESSOR_ASSIGNTO_IMPL(frwdr_objname)
+#define WG_PP_FORWARDER_ACCESSOR_ASSIGNEE(frwdr_objname) \
+  WG_PP_FORWARDER_ACCESSOR_ASSIGNEE_IMPL(frwdr_objname)
 
 // Expands to { BOOST_PP_NIL | (ACCESSOR_INDX0)(ACCESSOR_INDX1) ... }
-#define WG_PP_FORWARDER_ACCESSORWGSEQ_PARAMBIND(frwdr_objname, count) \
-  WG_PP_FORWARDER_ACCESSORWGSEQ_PARAMBIND_IMPL(frwdr_objname, count)
+#define WG_PP_FORWARDER_ACCESSORWGSEQ_BOUNDPARAM(frwdr_objname, count) \
+  WG_PP_FORWARDER_ACCESSORWGSEQ_BOUNDPARAM_IMPL(frwdr_objname, count)
 
 // Expands to { BOOST_PP_NIL | (ACCESSOR_INDX0)(ACCESSOR_INDX1) ... }
-#define WG_PP_FORWARDER_ACCESSORWGSEQ_PARAMSET(frwdr_objname, count) \
-  WG_PP_FORWARDER_ACCESSORWGSEQ_PARAMSET_IMPL(frwdr_objname, count)
+#define WG_PP_FORWARDER_ACCESSORWGSEQ_SETPARAM(frwdr_objname, count) \
+  WG_PP_FORWARDER_ACCESSORWGSEQ_SETPARAM_IMPL(frwdr_objname, count)
 
 //###########
 //Impl Macros
@@ -47,17 +47,17 @@
         WG_PP_FORWARDER_OBJ_INITLIST(symbtbl) \
       BOOST_PP_RPAREN() WG_PP_IDENTITY(;)
 
-#define WG_PP_FORWARDER_ACCESSOR_ASSIGNTO_IMPL(frwdr_objname) \
+#define WG_PP_FORWARDER_ACCESSOR_ASSIGNEE_IMPL(frwdr_objname) \
   frwdr_objname.WG_PP_FORWARDER_TYPE_ACCESSORVARNAME( \
     WG_PP_FORWARDER_TYPE_MEMBERVAR_ASSIGNEEROOTNAME(), 0) ()
 
-#define WG_PP_FORWARDER_ACCESSORWGSEQ_PARAMBIND_IMPL(frwdr_objname, count) \
+#define WG_PP_FORWARDER_ACCESSORWGSEQ_BOUNDPARAM_IMPL(frwdr_objname, count) \
   WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL( \
     frwdr_objname, \
     WG_PP_FORWARDER_TYPE_MEMBERVAR_BOUNDPARAMROOTNAME(), \
     count)
 
-#define WG_PP_FORWARDER_ACCESSORWGSEQ_PARAMSET_IMPL(frwdr_objname, count) \
+#define WG_PP_FORWARDER_ACCESSORWGSEQ_SETPARAM_IMPL(frwdr_objname, count) \
   WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL( \
     frwdr_objname, \
     WG_PP_FORWARDER_TYPE_MEMBERVAR_SETPARAMROOTNAME(), \
@@ -117,17 +117,17 @@
       WG_PP_SEQ_FOR_EACH_I( \
         assignee_transform, \
         WG_PP_FORWARDER_TYPE_MEMBERVAR_ASSIGNEEROOTNAME(), \
-        WG_PP_SYMBOLTABLE_ASSIGNEDTO_TYPE(symbtbl))) \
+        WG_PP_SYMBOLTABLE_TYPESEQ_ASSIGNEE(symbtbl))) \
     WG_PP_SEQ_IFNIL_THENCLEAR( \
       WG_PP_SEQ_FOR_EACH_I( \
         rest_transform, \
         WG_PP_FORWARDER_TYPE_MEMBERVAR_BOUNDPARAMROOTNAME(), \
-        WG_PP_SYMBOLTABLE_PARAMBIND_TYPES(symbtbl))) \
+        WG_PP_SYMBOLTABLE_TYPESEQ_BOUNDPARAM(symbtbl))) \
     WG_PP_SEQ_IFNIL_THENCLEAR( \
       WG_PP_SEQ_FOR_EACH_I( \
         rest_transform, \
         WG_PP_FORWARDER_TYPE_MEMBERVAR_SETPARAMROOTNAME(), \
-        WG_PP_SYMBOLTABLE_PARAMSET_TYPES(symbtbl)))
+        WG_PP_SYMBOLTABLE_TYPESEQ_SETPARAM(symbtbl)))
 
 //-----------
 //MemberDclns
@@ -276,11 +276,11 @@
 #define WG_PP_FORWARDER_OBJ_INITLIST(symbtbl) \
   WG_PP_SEQ_ENUM( \
     WG_PP_SEQ_JOIN3( \
-      WG_PP_SYMBOLTABLE_ASSIGNEDTO_OBJ(symbtbl), \
+      WG_PP_SYMBOLTABLE_OBJSEQ_ASSIGNEE(symbtbl), \
       WG_PP_SEQ_REPLACE( \
-        WG_PP_SYMBOLTABLE_PARAMBIND_OBJS(symbtbl), \
-        WG_PP_SYMBOLTABLE_PARAMBIND_OBJS_THISU_MARKER(symbtbl), \
+        WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDPARAM(symbtbl), \
+        WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDPARAM_THISU_MARKER(symbtbl), \
         this), \
-      WG_PP_SYMBOLTABLE_PARAMSET_VALUES(symbtbl) ))
+      WG_PP_SYMBOLTABLE_VALUESEQ_SETPARAM(symbtbl) ))
 
 #endif /* WG_PP_FORWARDER_HH_ */

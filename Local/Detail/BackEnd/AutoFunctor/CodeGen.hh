@@ -58,17 +58,17 @@
     { \
       static_cast<void>(frwdr); \
       BOOST_PP_EXPR_IIF( \
-        WG_PP_SYMBOLTABLE_ASSIGNEDTO_EXISTS(symbtbl), \
-        WG_PP_FORWARDER_ACCESSOR_ASSIGNTO(frwdr) = ) \
+        WG_PP_SYMBOLTABLE_EXISTS_ASSIGNEE(symbtbl), \
+        WG_PP_FORWARDER_ACCESSOR_ASSIGNEE(frwdr) = ) \
       this->name( \
         WG_PP_SEQ_ENUM( \
           WG_PP_SEQ_JOIN2( \
-            WG_PP_FORWARDER_ACCESSORWGSEQ_PARAMBIND( \
+            WG_PP_FORWARDER_ACCESSORWGSEQ_BOUNDPARAM( \
               frwdr, \
-              WG_PP_SYMBOLTABLE_PARAMBIND_XXX_SIZE(symbtbl)), \
-            WG_PP_FORWARDER_ACCESSORWGSEQ_PARAMSET( \
+              WG_PP_SYMBOLTABLE_XXX_SIZE_BOUNDPARAM(symbtbl)), \
+            WG_PP_FORWARDER_ACCESSORWGSEQ_SETPARAM( \
               frwdr, \
-              WG_PP_SYMBOLTABLE_PARAMSET_XXX_SIZE(symbtbl)))) ); \
+              WG_PP_SYMBOLTABLE_XXX_SIZE_SETPARAM(symbtbl)))) ); \
     } \
     WG_PP_SYMBOLTABLE_RETTYPE(symbtbl) \
       name \
@@ -81,11 +81,11 @@
     WG_PP_SEQ_FOR_EACH_I( \
       WG_PP_AUTOFUNCTOR_CG_FUNC_PARAMENTRY, \
       WG_PP_SEQ_JOIN( \
-        WG_PP_SYMBOLTABLE_PARAMBIND_OBJS(symbtbl), \
-        WG_PP_SYMBOLTABLE_PARAMSET_OBJS(symbtbl)), \
+        WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDPARAM(symbtbl), \
+        WG_PP_SYMBOLTABLE_OBJSEQ_SETPARAM(symbtbl)), \
       WG_PP_SEQ_JOIN( \
-        WG_PP_SYMBOLTABLE_PARAMBIND_TYPES(symbtbl), \
-        WG_PP_SYMBOLTABLE_PARAMSET_TYPES(symbtbl))))
+        WG_PP_SYMBOLTABLE_TYPESEQ_BOUNDPARAM(symbtbl), \
+        WG_PP_SYMBOLTABLE_TYPESEQ_SETPARAM(symbtbl))))
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_AUTOFUNCTOR_CG_FUNC_PARAMENTRY(r, obj_seq, indx, elem) \

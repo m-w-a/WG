@@ -43,15 +43,15 @@
       paramset_nrmlzd_tupleseq)
 
 //Returns: { BOOST_PP_NIL | (explicit-or-deduced-type) }
-#define WG_PP_SYMBOLTABLE_ASSIGNEDTO_TYPE(symtbl) \
+#define WG_PP_SYMBOLTABLE_TYPESEQ_ASSIGNEE(symtbl) \
   BOOST_PP_ARRAY_ELEM(0, symtbl)
 
 //Returns: { BOOST_PP_NIL | (var-name) }
-#define WG_PP_SYMBOLTABLE_ASSIGNEDTO_OBJ(symtbl) \
+#define WG_PP_SYMBOLTABLE_OBJSEQ_ASSIGNEE(symtbl) \
   BOOST_PP_ARRAY_ELEM(1, symtbl)
 
 //Returns: { 0 | 1 }
-#define WG_PP_SYMBOLTABLE_ASSIGNEDTO_EXISTS(symtbl) \
+#define WG_PP_SYMBOLTABLE_EXISTS_ASSIGNEE(symtbl) \
   BOOST_PP_ARRAY_ELEM(2, symtbl)
 
 //Returns: { BOOST_PP_NIL | return-type  }
@@ -59,35 +59,35 @@
   BOOST_PP_ARRAY_ELEM(3, symtbl)
 
 //Returns: { BOOST_PP_NIL | {(explicit-or-deduced-type)}+ }
-#define WG_PP_SYMBOLTABLE_PARAMBIND_TYPES(symtbl) \
+#define WG_PP_SYMBOLTABLE_TYPESEQ_BOUNDPARAM(symtbl) \
   BOOST_PP_ARRAY_ELEM(4, symtbl)
 
 //Returns: { BOOST_PP_NIL | {(var-name)}+ }
-#define WG_PP_SYMBOLTABLE_PARAMBIND_OBJS(symtbl) \
+#define WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDPARAM(symtbl) \
   BOOST_PP_ARRAY_ELEM(5, symtbl)
 
 //Returns: { integer }
-#define WG_PP_SYMBOLTABLE_PARAMBIND_XXX_SIZE(symtbl) \
+#define WG_PP_SYMBOLTABLE_XXX_SIZE_BOUNDPARAM(symtbl) \
   BOOST_PP_ARRAY_ELEM(6, symtbl)
 
 //Returns: { BOOST_PP_NIL | integer }
-#define WG_PP_SYMBOLTABLE_PARAMBIND_OBJS_THISU_MARKER(symtbl) \
+#define WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDPARAM_THISU_MARKER(symtbl) \
   BOOST_PP_ARRAY_ELEM(7, symtbl)
 
 //Returns: { BOOST_PP_NIL | {(explicit-type)}+ }
-#define WG_PP_SYMBOLTABLE_PARAMSET_TYPES(symtbl) \
+#define WG_PP_SYMBOLTABLE_TYPESEQ_SETPARAM(symtbl) \
   BOOST_PP_ARRAY_ELEM(8, symtbl)
 
 //Returns: { BOOST_PP_NIL | {(var-name)}+ }
-#define WG_PP_SYMBOLTABLE_PARAMSET_OBJS(symtbl) \
+#define WG_PP_SYMBOLTABLE_OBJSEQ_SETPARAM(symtbl) \
   BOOST_PP_ARRAY_ELEM(9, symtbl)
 
 //Returns: { BOOST_PP_NIL | {(value-expr)}+ }
-#define WG_PP_SYMBOLTABLE_PARAMSET_VALUES(symtbl) \
+#define WG_PP_SYMBOLTABLE_VALUESEQ_SETPARAM(symtbl) \
   BOOST_PP_ARRAY_ELEM(10, symtbl)
 
 //Returns: { BOOST_PP_NIL | integer }
-#define WG_PP_SYMBOLTABLE_PARAMSET_XXX_SIZE(symtbl) \
+#define WG_PP_SYMBOLTABLE_XXX_SIZE_SETPARAM(symtbl) \
   BOOST_PP_ARRAY_ELEM(11, symtbl)
 
 //Returns: { BOOST_PP_NIL | integer }
@@ -139,9 +139,9 @@
     wiparray, \
     BOOST_PP_ADD( \
       BOOST_PP_ADD( \
-        WG_PP_SYMBOLTABLE_PARAMBIND_XXX_SIZE(wiparray), \
-        WG_PP_SYMBOLTABLE_PARAMSET_XXX_SIZE(wiparray)), \
-        WG_PP_SYMBOLTABLE_ASSIGNEDTO_EXISTS(wiparray)))
+        WG_PP_SYMBOLTABLE_XXX_SIZE_BOUNDPARAM(wiparray), \
+        WG_PP_SYMBOLTABLE_XXX_SIZE_SETPARAM(wiparray)), \
+        WG_PP_SYMBOLTABLE_EXISTS_ASSIGNEE(wiparray)))
 
 //------------------------
 //Partitioning Operations.
