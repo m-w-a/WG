@@ -66,6 +66,7 @@ test_autofunctor_SOURCES = \
     ../AutoFunctor/SetParams.cc \
     ../AutoFunctor/ImplicitBoundParams.cc \
     ../AutoFunctor/MixedParamsSetAndBoundExplicitly.cc \
+    ../AutoFunctor/MixedImplicitAndExplicitBoundParams.cc \
     ../AutoFunctor/LocalTypes.cc \
     ../AutoFunctor/NoSpec.cc \
     ../AutoFunctor/Nested.cc \

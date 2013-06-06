@@ -2,7 +2,7 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
 
-TEST(wg_autofunctor_boundparams_implicit, OkIf1ArgBound)
+TEST(wg_autofunctor_implicitboundparams, OkIf1ArgBound)
 {
   try
   {
@@ -19,7 +19,7 @@ TEST(wg_autofunctor_boundparams_implicit, OkIf1ArgBound)
   WG_GTEST_CATCH
 }
 
-TEST(wg_autofunctor_boundparams_implicit, OkIf3ArgsOfVaryingMutabilityBound)
+TEST(wg_autofunctor_implicitboundparams, OkIf3ArgsOfVaryingMutabilityBound)
 {
   try
   {
@@ -55,7 +55,7 @@ struct SomeNonLocalClass
 };
 }
 
-TEST(wg_autofunctor_boundparams_implicit, OkIfKeywordThisUBound)
+TEST(wg_autofunctor_implicitboundparams, OkIfKeywordThisUBound)
 {
   try
   {
