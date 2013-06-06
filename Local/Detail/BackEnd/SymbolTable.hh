@@ -275,19 +275,11 @@
 // suffix: {ASSIGNEE, BOUNDPARAM, BOUNDMEM}
 #define WG_PP_ST_USETYPEDEDUCER_REPLACEBOUNDTUPLESEQ( \
   symbtbl, typededucer_name, suffix) \
-    WG_PP_ST_USETYPEDEDUCER_REPLACEBOUNDTUPLESEQ2( \
-      symbtbl, \
-      typededucer_name, \
-      suffix, \
-      WG_PP_ST_USETYPEDEDUCER_REPLACEMENTBOUNDTUPLESEQ( \
-        symbtbl, typededucer_name, suffix) )
-
-#define WG_PP_ST_USETYPEDEDUCER_REPLACEBOUNDTUPLESEQ2( \
-  symbtbl, typededucer_name, suffix, newseq) \
     BOOST_PP_ARRAY_REPLACE( \
       symbtbl, \
       BOOST_PP_CAT(WG_PP_SYMBOLTABLE_INDX_TYPESEQ_, suffix), \
-      newseq )
+      WG_PP_ST_USETYPEDEDUCER_REPLACEMENTBOUNDTUPLESEQ( \
+        symbtbl, typededucer_name, suffix) )
 
 #define WG_PP_ST_USETYPEDEDUCER_REPLACEMENTBOUNDTUPLESEQ( \
   symbtbl, typededucer_name, suffix) \
