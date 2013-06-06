@@ -2,7 +2,7 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
 
-TEST(wg_autofunctor_setparams_explicit, OkIf1ArgSet)
+TEST(wg_autofunctor_setparams, OkIf1ArgSet)
 {
   try
   {
@@ -22,7 +22,7 @@ TEST(wg_autofunctor_setparams_explicit, OkIf1ArgSet)
   WG_GTEST_CATCH
 }
 
-TEST(wg_autofunctor_setparams_explicit, OkIf3ArgsOfVaryingMutabilitySet)
+TEST(wg_autofunctor_setparams, OkIf3ArgsOfVaryingMutabilitySet)
 {
   try
   {

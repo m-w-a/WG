@@ -2,7 +2,7 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
 
-TEST(wg_autofunctor_mixedparams_explicit, OkIfUsing21Combo)
+TEST(wg_autofunctor_mixedparamssetandboundexplicitly, OkIfUsing21Combo)
 {
   try
   {
