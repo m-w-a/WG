@@ -5,6 +5,7 @@
 #include <WG/Local/Detail/PP.hh>
 #include <WG/Local/Detail/Seq.hh>
 #include <WG/Local/Detail/Keywords.hh>
+#include <WG/Local/Detail/BackEnd/TypeDeducer.hh>
 
 //###########
 //Public APIs
@@ -42,62 +43,102 @@
       parambind_nrmlzd_tupleseq, \
       paramset_nrmlzd_tupleseq)
 
+//------
+//INPUT:
+//------
+//The symbol table created using WG_PP_SYMBOLTABLE_CREATE.
+//-------
+//OUTPUT:
+//-------
+//Maps all occurrences of deduced-type to their typededucer counterparts.
+//
+//A SymbolTable whose values are accessible using the below macros.
+//Note: the new definition of deduced-type:
+//
+//deduced-type := <typededucer_name>::<some_typedef_name>
+#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER(symbtbl, typededucer_name) \
+  WG_PP_SYMBOLTABLE_USETYPEDEDUCER_IMPL(symbtbl, typededucer_name)
+
 //Returns: { BOOST_PP_NIL | (explicit-or-deduced-type) }
-#define WG_PP_SYMBOLTABLE_TYPESEQ_ASSIGNEE(symtbl) \
-  BOOST_PP_ARRAY_ELEM(0, symtbl)
+#define WG_PP_SYMBOLTABLE_TYPESEQ_ASSIGNEE(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, TYPESEQ_ASSIGNEE)
 
 //Returns: { BOOST_PP_NIL | (var-name) }
-#define WG_PP_SYMBOLTABLE_OBJSEQ_ASSIGNEE(symtbl) \
-  BOOST_PP_ARRAY_ELEM(1, symtbl)
+#define WG_PP_SYMBOLTABLE_OBJSEQ_ASSIGNEE(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, OBJSEQ_ASSIGNEE)
 
 //Returns: { 0 | 1 }
-#define WG_PP_SYMBOLTABLE_EXISTS_ASSIGNEE(symtbl) \
-  BOOST_PP_ARRAY_ELEM(2, symtbl)
+#define WG_PP_SYMBOLTABLE_EXISTS_ASSIGNEE(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, EXISTS_ASSIGNEE)
 
 //Returns: { BOOST_PP_NIL | return-type  }
-#define WG_PP_SYMBOLTABLE_RETTYPE(symtbl) \
-  BOOST_PP_ARRAY_ELEM(3, symtbl)
+#define WG_PP_SYMBOLTABLE_RETTYPE(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, RETTYPE)
 
 //Returns: { BOOST_PP_NIL | {(explicit-or-deduced-type)}+ }
-#define WG_PP_SYMBOLTABLE_TYPESEQ_BOUNDPARAM(symtbl) \
-  BOOST_PP_ARRAY_ELEM(4, symtbl)
+#define WG_PP_SYMBOLTABLE_TYPESEQ_BOUNDPARAM(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, TYPESEQ_BOUNDPARAM)
 
 //Returns: { BOOST_PP_NIL | {(var-name)}+ }
-#define WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDPARAM(symtbl) \
-  BOOST_PP_ARRAY_ELEM(5, symtbl)
+#define WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDPARAM(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, OBJSEQ_BOUNDPARAM)
 
 //Returns: { integer }
-#define WG_PP_SYMBOLTABLE_XXX_SIZE_BOUNDPARAM(symtbl) \
-  BOOST_PP_ARRAY_ELEM(6, symtbl)
+#define WG_PP_SYMBOLTABLE_XXX_SIZE_BOUNDPARAM(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, XXX_SIZE_BOUNDPARAM)
 
 //Returns: { BOOST_PP_NIL | integer }
-#define WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDPARAM_THISU_MARKER(symtbl) \
-  BOOST_PP_ARRAY_ELEM(7, symtbl)
+#define WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDPARAM_THISU_MARKER(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, OBJSEQ_BOUNDPARAM_THISU_MARKER)
 
 //Returns: { BOOST_PP_NIL | {(explicit-type)}+ }
-#define WG_PP_SYMBOLTABLE_TYPESEQ_SETPARAM(symtbl) \
-  BOOST_PP_ARRAY_ELEM(8, symtbl)
+#define WG_PP_SYMBOLTABLE_TYPESEQ_SETPARAM(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, TYPESEQ_SETPARAM)
 
 //Returns: { BOOST_PP_NIL | {(var-name)}+ }
-#define WG_PP_SYMBOLTABLE_OBJSEQ_SETPARAM(symtbl) \
-  BOOST_PP_ARRAY_ELEM(9, symtbl)
+#define WG_PP_SYMBOLTABLE_OBJSEQ_SETPARAM(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, OBJSEQ_SETPARAM)
 
 //Returns: { BOOST_PP_NIL | {(value-expr)}+ }
-#define WG_PP_SYMBOLTABLE_VALUESEQ_SETPARAM(symtbl) \
-  BOOST_PP_ARRAY_ELEM(10, symtbl)
+#define WG_PP_SYMBOLTABLE_VALUESEQ_SETPARAM(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, VALUESEQ_SETPARAM)
 
 //Returns: { BOOST_PP_NIL | integer }
-#define WG_PP_SYMBOLTABLE_XXX_SIZE_SETPARAM(symtbl) \
-  BOOST_PP_ARRAY_ELEM(11, symtbl)
+#define WG_PP_SYMBOLTABLE_XXX_SIZE_SETPARAM(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, XXX_SIZE_SETPARAM)
 
 //Returns: { BOOST_PP_NIL | integer }
-#define WG_PP_SYMBOLTABLE_TOTALXXX_SIZE(symtbl) \
-  BOOST_PP_ARRAY_ELEM(12, symtbl)
+#define WG_PP_SYMBOLTABLE_TOTALXXX_SIZE(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, TOTALXXX_SIZE)
 
 //###########
 //Impl Macros
 //###########
-  
+
+#define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_ASSIGNEE 0
+#define WG_PP_SYMBOLTABLE_INDX_OBJSEQ_ASSIGNEE 1
+#define WG_PP_SYMBOLTABLE_INDX_EXISTS_ASSIGNEE 2
+#define WG_PP_SYMBOLTABLE_INDX_RETTYPE 3
+#define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_BOUNDPARAM 4
+#define WG_PP_SYMBOLTABLE_INDX_OBJSEQ_BOUNDPARAM 5
+#define WG_PP_SYMBOLTABLE_INDX_XXX_SIZE_BOUNDPARAM 6
+#define WG_PP_SYMBOLTABLE_INDX_OBJSEQ_BOUNDPARAM_THISU_MARKER 7
+#define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_SETPARAM 8
+#define WG_PP_SYMBOLTABLE_INDX_OBJSEQ_SETPARAM 9
+#define WG_PP_SYMBOLTABLE_INDX_VALUESEQ_SETPARAM 10
+#define WG_PP_SYMBOLTABLE_INDX_XXX_SIZE_SETPARAM 11
+#define WG_PP_SYMBOLTABLE_INDX_TOTALXXX_SIZE 12
+
+// suffix: must match one of the following: WG_PP_SYMBOLTABLE_INDX_<suffix>
+#define WG_PP_SYMBOLTABLE_GET(symbtbl, suffix) \
+  BOOST_PP_ARRAY_ELEM( \
+    BOOST_PP_CAT(WG_PP_SYMBOLTABLE_INDX_, suffix), \
+    symbtbl)
+
+//---------------
+//Creation Macros
+//---------------
+
 #define WG_PP_ST_CREATE_IMPL1( \
   assignto_nrmlzd_tuple, \
   return_type, \
@@ -206,5 +247,64 @@
   BOOST_PP_EXPR_IIF( \
     WG_PP_TOKENS_STARTWITH_THISU(elem), \
     (indx))
+
+//---------------------
+//UseTypeDeducer Macros
+//---------------------
+
+#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER_IMPL(symbtbl, typededucer_name) \
+  WG_PP_SYMBOLTABLE_USETYPEDEDUCER_IMPL2( \
+    WG_PP_ST_USETYPEDEDUCER_REPLACEBOUNDTUPLESEQ( \
+      symbtbl, typededucer_name, ASSIGNEE), \
+    typededucer_name)
+
+#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER_IMPL2(symbtbl, typededucer_name) \
+  WG_PP_SYMBOLTABLE_USETYPEDEDUCER_IMPL3( \
+    WG_PP_ST_USETYPEDEDUCER_REPLACEBOUNDTUPLESEQ( \
+      symbtbl, typededucer_name, BOUNDPARAM), \
+    typededucer_name)
+
+// TODO: BOUNDMEM
+#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER_IMPL3(symbtbl, typededucer_name) \
+  symbtbl
+
+// suffix: {ASSIGNEE, BOUNDPARAM, BOUNDMEM}
+#define WG_PP_ST_USETYPEDEDUCER_REPLACEBOUNDTUPLESEQ ( \
+  symbtbl, typededucer_name, suffix) \
+    BOOST_PP_ARRAY_REPLACE( \
+      symbtbl, \
+      BOOST_PP_CAT(WG_PP_SYMBOLTABLE_INDX_TYPESEQ_, suffix), \
+      WG_PP_ST_USETYPEDEDUCER_REPLACEMENTBOUNDTUPLESEQ( \
+        symbtbl, typededucer_name, suffix) )
+
+#define WG_PP_ST_USETYPEDEDUCER_REPLACEMENTBOUNDTUPLESEQ( \
+  symbtbl, typededucer_name, suffix) \
+    WG_PP_SEQ_FOR_EACH_I( \
+      WG_PP_ST_USETYPEDEDUCER_REPLACEBOUNDTUPLEENTRY, \
+      (BOOST_PP_CAT(WG_PP_TYPEDEDUCER_TYPENAME_, suffix)) (typededucer_name), \
+      BOOST_PP_CAT(WG_PP_SYMBOLTABLE_TYPESEQ_, suffix) (symbtbl) )
+
+// WG_PP_SEQ_FOR_EACH_I functor.
+#define WG_PP_ST_USETYPEDEDUCER_REPLACEBOUNDTUPLEENTRY( \
+  r, boundtypenamer_typededucername, indx, entry) \
+    BOOST_PP_LPAREN() \
+      BOOST_PP_IIF( \
+        WG_PP_TOKENS_START_WITH_WG_PP_DEDUCEDTYPE(entry), \
+        WG_PP_ST_USETYPEDEDUCER_REPLACEBOOSTYPEOF( \
+          boundtypenamer_typededucername, indx), \
+        entry) \
+    BOOST_PP_RPAREN()
+
+//#define WG_PP_ST_USETYPEDEDUCER_REPLACEBOOSTYPEOF( \
+//  boundtypenamer_typededucername, indx)
+//    WG_PP_ST_USETYPEDEDUCER_REPLACEBOOSTYPEOF2( \
+//      BOOST_PP_SEQ_ELEM(0, boundtypenamer_typededucername), \
+//      BOOST_PP_SEQ_ELEM(1, boundtypenamer_typededucername), \
+//      indx)
+
+#define WG_PP_ST_USETYPEDEDUCER_REPLACEBOOSTYPEOF2( \
+  boundtypenamer, typededucername, indx) \
+    typededucername::boundtypenamer(indx)
+
 
 #endif //WG_PP_SYMBOLTABLE_HH_

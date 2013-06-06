@@ -5,13 +5,14 @@
 #include <WG/Local/Detail/BackEnd/SymbolTable.hh>
 #include <WG/Local/Detail/BackEnd/Forwarder.hh>
 #include <WG/Local/Detail/Seq.hh>
+#include <WG/Local/Detail/BackEnd/TypeDeducer.hh>
 
 //###########
 //Public APIs
 //###########
 
-#define WG_PP_AUTOFUNCTOR_CODEGEN_START(name, symbtble) \
-  WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL(name, symbtble)
+#define WG_PP_AUTOFUNCTOR_CODEGEN_START(name, symbtbl) \
+  WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL(name, symbtbl)
 
 #define WG_PP_AUTOFUNCTOR_CODEGEN_END() \
   WG_PP_AUTOFUNCTOR_CODEGEN_END_IMPL()
@@ -22,6 +23,9 @@
 
 #define WG_PP_AUTOFUNCTOR_CG_FORMATNAME(name) \
   BOOST_PP_CAT(wgXXXautofunctorXXX, name)
+
+#define WG_PP_AUTOFUNCTOR_CG_TYPEDEDUCER_NAME() \
+  WG_PP_AUTOFUNCTOR_CG_FORMATNAME(typededucer)
 
 #define WG_PP_AUTOFUNCTOR_CG_FRWDR_TYPENAME() \
   WG_PP_AUTOFUNCTOR_CG_FORMATNAME(frwdr_type)
@@ -35,14 +39,23 @@
 #define WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_OBJNAME() \
   WG_PP_AUTOFUNCTOR_CG_FORMATNAME(autofunctor)
 
-#define WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL(name, symbtble) \
+#define WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL(name, symbtbl) \
   { \
-    WG_PP_FORWARDER_DCLN( \
-      WG_PP_AUTOFUNCTOR_CG_FRWDR_TYPENAME(), \
-      WG_PP_AUTOFUNCTOR_CG_FRWDR_OBJNAME(), \
-      symbtble) \
-    \
-    WG_PP_AUTOFUNCTOR_CG_FNCTRDCLN_START(name, symbtble)
+    WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL2(name, symbtbl)
+//    WG_PP_TYPEDEDUCER_DCLN(WG_PP_AUTOFUNCTOR_CG_TYPEDEDUCER_NAME(), symbtbl) \
+//    WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL2( \
+//      name, \
+//      WG_PP_SYMBOLTABLE_USETYPEDEDUCER( \
+//        symbtbl, \
+//        WG_PP_AUTOFUNCTOR_CG_TYPEDEDUCER_NAME()) )
+
+#define WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL2(name, symbtbl) \
+  WG_PP_FORWARDER_DCLN( \
+    WG_PP_AUTOFUNCTOR_CG_FRWDR_TYPENAME(), \
+    WG_PP_AUTOFUNCTOR_CG_FRWDR_OBJNAME(), \
+    symbtbl) \
+  \
+  WG_PP_AUTOFUNCTOR_CG_FNCTRDCLN_START(name, symbtbl)
 
 #define WG_PP_AUTOFUNCTOR_CODEGEN_END_IMPL() \
     WG_PP_AUTOFUNCTOR_CG_FNCTRDCLN_END() \
