@@ -268,14 +268,26 @@
 #define WG_PP_SYMBOLTABLE_USETYPEDEDUCER_IMPL3(symbtbl, typededucer_name) \
   symbtbl
 
+//TODO: WORKAROUND
+#ifndef BOOST_PP_TUPLE_REM_0
+#define BOOST_PP_TUPLE_REM_0() // nothing
+#endif
 // suffix: {ASSIGNEE, BOUNDPARAM, BOUNDMEM}
-#define WG_PP_ST_USETYPEDEDUCER_REPLACEBOUNDTUPLESEQ ( \
+#define WG_PP_ST_USETYPEDEDUCER_REPLACEBOUNDTUPLESEQ( \
   symbtbl, typededucer_name, suffix) \
+    WG_PP_ST_USETYPEDEDUCER_REPLACEBOUNDTUPLESEQ2( \
+      symbtbl, \
+      typededucer_name, \
+      suffix, \
+      WG_PP_ST_USETYPEDEDUCER_REPLACEMENTBOUNDTUPLESEQ( \
+        symbtbl, typededucer_name, suffix) )
+
+#define WG_PP_ST_USETYPEDEDUCER_REPLACEBOUNDTUPLESEQ2( \
+  symbtbl, typededucer_name, suffix, newseq) \
     BOOST_PP_ARRAY_REPLACE( \
       symbtbl, \
       BOOST_PP_CAT(WG_PP_SYMBOLTABLE_INDX_TYPESEQ_, suffix), \
-      WG_PP_ST_USETYPEDEDUCER_REPLACEMENTBOUNDTUPLESEQ( \
-        symbtbl, typededucer_name, suffix) )
+      newseq )
 
 #define WG_PP_ST_USETYPEDEDUCER_REPLACEMENTBOUNDTUPLESEQ( \
   symbtbl, typededucer_name, suffix) \
@@ -295,12 +307,12 @@
         entry) \
     BOOST_PP_RPAREN()
 
-//#define WG_PP_ST_USETYPEDEDUCER_REPLACEBOOSTYPEOF( \
-//  boundtypenamer_typededucername, indx)
-//    WG_PP_ST_USETYPEDEDUCER_REPLACEBOOSTYPEOF2( \
-//      BOOST_PP_SEQ_ELEM(0, boundtypenamer_typededucername), \
-//      BOOST_PP_SEQ_ELEM(1, boundtypenamer_typededucername), \
-//      indx)
+#define WG_PP_ST_USETYPEDEDUCER_REPLACEBOOSTYPEOF( \
+  boundtypenamer_typededucername, indx) \
+    WG_PP_ST_USETYPEDEDUCER_REPLACEBOOSTYPEOF2( \
+      BOOST_PP_SEQ_ELEM(0, boundtypenamer_typededucername), \
+      BOOST_PP_SEQ_ELEM(1, boundtypenamer_typededucername), \
+      indx)
 
 #define WG_PP_ST_USETYPEDEDUCER_REPLACEBOOSTYPEOF2( \
   boundtypenamer, typededucername, indx) \
