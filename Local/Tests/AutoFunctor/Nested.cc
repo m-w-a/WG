@@ -8,11 +8,11 @@ TEST(wg_autofunctor_nested, onelevel)
   {
     int count = 0;
 
-    WG_AUTOFUNCTOR(oneStep, parambind ((int &) count) )
+    WG_AUTOFUNCTOR(oneStep, parambind (ref count) )
     {
       ++count;
 
-      WG_AUTOFUNCTOR(twoStep, parambind ((int &) count) )
+      WG_AUTOFUNCTOR(twoStep, parambind (ref count) )
       {
         count += 2;
       }
@@ -31,15 +31,15 @@ TEST(wg_autofunctor_nested, twolevel)
   {
     int count = 0;
 
-    WG_AUTOFUNCTOR(oneStep, parambind ((int &) count) )
+    WG_AUTOFUNCTOR(oneStep, parambind (ref count) )
     {
       ++count;
 
-      WG_AUTOFUNCTOR(twoStep, parambind ((int &) count) )
+      WG_AUTOFUNCTOR(twoStep, parambind (ref count) )
       {
         count += 2;
 
-        WG_AUTOFUNCTOR(threeStep, parambind ((int &) count) )
+        WG_AUTOFUNCTOR(threeStep, parambind (ref count) )
         {
           count += 3;
         }
