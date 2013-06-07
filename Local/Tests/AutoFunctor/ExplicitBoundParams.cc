@@ -8,11 +8,11 @@ TEST(wg_autofunctor_explicitboundparams, OkIf1ArgBound)
   {
     bool didArgumentBind = false;
 
-    WG_AUTOFUNCTOR(oneArgAutoFunctor,
-      parambind ((bool &)didArgumentBind) )
+    WG_AUTOFUNCTOR(oneArgAutoFunctor, parambind ((bool &)didArgumentBind) )
     {
       didArgumentBind = true;
-    }WG_AUTOFUNCTOR_END;
+    }
+    WG_AUTOFUNCTOR_END;
 
     EXPECT_TRUE(didArgumentBind);
   }
@@ -27,11 +27,13 @@ TEST(wg_autofunctor_explicitboundparams, OkIf3ArgsOfVaryingMutabilityBound)
     int const mass = 10;
     int const velocity = 2;
 
-    WG_AUTOFUNCTOR(calculateForce,
+    WG_AUTOFUNCTOR
+    (calculateForce,
       parambind ((int &) force) ((int const) mass) ((int const) velocity) )
     {
       force = mass * velocity;
-    }WG_AUTOFUNCTOR_END;
+    }
+    WG_AUTOFUNCTOR_END;
 
     EXPECT_EQ(force, 20);
   }
@@ -49,11 +51,13 @@ TEST(wg_autofunctor_explicitboundparams, OkIfKeywordThisUBound)
       SomeLocalClass()
       : didBindThis(false)
       {
-        WG_AUTOFUNCTOR(bindThisU,
+        WG_AUTOFUNCTOR
+        (bindThisU,
           parambind (local(SomeLocalClass * const) this_) )
         {
           this_->didBindThis = true;
-        }WG_AUTOFUNCTOR_END;
+        }
+        WG_AUTOFUNCTOR_END;
       }
     } someLocalObj;
 

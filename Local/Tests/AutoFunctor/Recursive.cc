@@ -8,7 +8,8 @@ TEST(wg_autofunctor_recursive, fibonacci)
   {
     int fib = 0;
 
-    WG_AUTOFUNCTOR(calculateFibonacci,
+    WG_AUTOFUNCTOR
+    (calculateFibonacci,
       assignto ((int) fib)
       return (int)
       paramset ((int) input, 4) )
@@ -18,7 +19,8 @@ TEST(wg_autofunctor_recursive, fibonacci)
         return calculateFibonacci(input - 1) + calculateFibonacci(input - 2);
       }
       else return input;
-    }WG_AUTOFUNCTOR_END;
+    }
+    WG_AUTOFUNCTOR_END;
 
     EXPECT_EQ(fib, 3);
   }

@@ -12,12 +12,14 @@ TEST(wg_autofunctor_mixedparamssetandboundimplicitly, OkIfUsing21Combo)
     int const R = 5;
     int const temp = 4;
 
-    WG_AUTOFUNCTOR(calculateVolume,
+    WG_AUTOFUNCTOR
+    (calculateVolume,
       parambind (ref volume) (pressure)
       paramset ((int const) numerator, numMoles * R * temp) )
     {
       volume = numerator / pressure;
-    }WG_AUTOFUNCTOR_END;
+    }
+    WG_AUTOFUNCTOR_END;
 
     EXPECT_EQ(volume, 30);
   }

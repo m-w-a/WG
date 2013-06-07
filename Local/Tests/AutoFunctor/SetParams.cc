@@ -11,11 +11,13 @@ TEST(wg_autofunctor_setparams, OkIf1ArgSet)
       bool didAssign;
     } proxy = {false};
 
-    WG_AUTOFUNCTOR(oneArgAutoFunctor,
+    WG_AUTOFUNCTOR
+    (oneArgAutoFunctor,
       paramset ((bool &) didAssign, proxy.didAssign) )
     {
       didAssign = true;
-    }WG_AUTOFUNCTOR_END;
+    }
+    WG_AUTOFUNCTOR_END;
 
     EXPECT_TRUE(proxy.didAssign);
   }
@@ -33,13 +35,15 @@ TEST(wg_autofunctor_setparams, OkIf3ArgsOfVaryingMutabilitySet)
       int volume;
     } cylinder = {2, 10, -1};
 
-    WG_AUTOFUNCTOR(calculateVolume,
+    WG_AUTOFUNCTOR
+    (calculateVolume,
       paramset ((int const) radius, cylinder.radius)
         ((int const) height, cylinder.height)
         ((int &) volume, cylinder.volume) )
     {
       volume = radius * height;
-    }WG_AUTOFUNCTOR_END;
+    }
+    WG_AUTOFUNCTOR_END;
 
     EXPECT_EQ(cylinder.radius * cylinder.height, cylinder.volume);
   }

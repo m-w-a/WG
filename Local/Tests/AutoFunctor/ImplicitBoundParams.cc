@@ -8,11 +8,11 @@ TEST(wg_autofunctor_implicitboundparams, OkIf1ArgBound)
   {
     bool didArgumentBind = false;
 
-    WG_AUTOFUNCTOR(oneArgAutoFunctor,
-      parambind (ref didArgumentBind) )
+    WG_AUTOFUNCTOR(oneArgAutoFunctor, parambind (ref didArgumentBind) )
     {
       didArgumentBind = true;
-    }WG_AUTOFUNCTOR_END;
+    }
+    WG_AUTOFUNCTOR_END;
 
     EXPECT_TRUE(didArgumentBind);
   }
@@ -27,11 +27,11 @@ TEST(wg_autofunctor_implicitboundparams, OkIf3ArgsOfVaryingMutabilityBound)
     int const mass = 10;
     int const velocity = 2;
 
-    WG_AUTOFUNCTOR(calculateForce,
-      parambind (ref force) (mass) (velocity) )
+    WG_AUTOFUNCTOR(calculateForce, parambind (ref force) (mass) (velocity) )
     {
       force = mass * velocity;
-    }WG_AUTOFUNCTOR_END;
+    }
+    WG_AUTOFUNCTOR_END;
 
     EXPECT_EQ(force, 20);
   }
@@ -50,7 +50,8 @@ struct SomeNonLocalClass
     WG_AUTOFUNCTOR(bindThisU, parambind (this_) )
     {
       this_->didBindThis = true;
-    }WG_AUTOFUNCTOR_END;
+    }
+    WG_AUTOFUNCTOR_END;
   }
 };
 }

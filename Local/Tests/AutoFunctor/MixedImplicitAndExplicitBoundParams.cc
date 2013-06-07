@@ -11,11 +11,12 @@ TEST(wg_autofunctor_mixedimplicitandexplicitboundparams, \
     int const mass = 10;
     int const velocity = 2;
 
-    WG_AUTOFUNCTOR(calculateForce,
-      parambind (ref force) ((int const) mass) (velocity) )
+    WG_AUTOFUNCTOR
+    (calculateForce, parambind (ref force) ((int const) mass) (velocity) )
     {
       force = mass * velocity;
-    }WG_AUTOFUNCTOR_END;
+    }
+    WG_AUTOFUNCTOR_END;
 
     EXPECT_EQ(force, 20);
   }
@@ -34,11 +35,13 @@ TEST(wg_autofunctor_mixedimplicitandexplicitboundparams, \
 
     int const newValue = 10;
 
-    WG_AUTOFUNCTOR(useLocalKeyword,
+    WG_AUTOFUNCTOR
+    (useLocalKeyword,
       parambind (localref(SomeLocalClass &) localObj) (newValue) )
     {
       localObj.value = newValue;
-    }WG_AUTOFUNCTOR_END;
+    }
+    WG_AUTOFUNCTOR_END;
 
     EXPECT_EQ(localObj.value, 10);
   }

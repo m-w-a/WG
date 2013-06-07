@@ -12,12 +12,12 @@ TEST(wg_autofunctor_localtypes, OkIfNonRefUsed)
     } localObj = {10};
 
     static int newValue = 0;
-    WG_AUTOFUNCTOR(useLocalKeyword,
-      parambind (local(SomeLocalClass) localObj) )
+    WG_AUTOFUNCTOR(useLocalKeyword, parambind (local(SomeLocalClass) localObj) )
     {
       localObj.value += 1;
       newValue = localObj.value;
-    }WG_AUTOFUNCTOR_END;
+    }
+    WG_AUTOFUNCTOR_END;
 
     EXPECT_EQ(localObj.value, 10);
     EXPECT_EQ(newValue, 11);
@@ -34,11 +34,12 @@ TEST(wg_autofunctor_localtypes, OkIfRefUsed)
       int value;
     } localObj = {0};
 
-    WG_AUTOFUNCTOR(useLocalKeyword,
-      parambind (localref(SomeLocalClass &) localObj) )
+    WG_AUTOFUNCTOR
+    (useLocalKeyword, parambind (localref(SomeLocalClass &) localObj) )
     {
       localObj.value = 10;
-    }WG_AUTOFUNCTOR_END;
+    }
+    WG_AUTOFUNCTOR_END;
 
     EXPECT_EQ(localObj.value, 10);
   }
