@@ -2,7 +2,7 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
 
-TEST(wg_autofunctor_parambindexplicitandimplicit, \
+TEST(wg_autofunctor_parambindexplicitandimplicit,
   OkIf3ArgsOfVaryingMutabilityBound)
 {
   try
@@ -23,8 +23,8 @@ TEST(wg_autofunctor_parambindexplicitandimplicit, \
   WG_GTEST_CATCH
 }
 
-TEST(wg_autofunctor_parambindexplicitandimplicit, \
-  OkIfLocalRefKeywordUsed)
+TEST(wg_autofunctor_parambindexplicitandimplicit,
+  OkIfLocalRefTypeBound)
 {
   try
   {

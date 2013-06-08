@@ -49,3 +49,48 @@ TEST(wg_autofunctor_paramsetexplicit, OkIf3ArgsOfVaryingMutabilitySet)
   }
   WG_GTEST_CATCH
 }
+
+TEST(wg_autofunctor_paramsetexplicit, OkIfLocalTypeSet)
+{
+  try
+  {
+    struct SomeLocalClass
+    {
+      int value;
+    } localObj = {10};
+
+    static int newValue = 0;
+    WG_AUTOFUNCTOR
+    (useLocalKeyword, paramset (local(SomeLocalClass) obj, localObj) )
+    {
+      obj.value += 1;
+      newValue = obj.value;
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_EQ(localObj.value, 10);
+    EXPECT_EQ(newValue, 11);
+  }
+  WG_GTEST_CATCH
+}
+
+TEST(wg_autofunctor_paramsetexplicit, OkIfLocalRefTypeSet)
+{
+  try
+  {
+    struct SomeLocalClass
+    {
+      int value;
+    } localObj = {0};
+
+    WG_AUTOFUNCTOR
+    (useLocalKeyword, paramset (localref(SomeLocalClass &) obj, localObj) )
+    {
+      obj.value = 10;
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_EQ(localObj.value, 10);
+  }
+  WG_GTEST_CATCH
+}

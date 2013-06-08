@@ -25,5 +25,3 @@ TEST(wg_autofunctor_parambindimplicitandparamsetexplicit, OkIfUsing21Combo)
   }
   WG_GTEST_CATCH
 }
-
-//TODO: add more ...
