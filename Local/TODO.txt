@@ -30,6 +30,9 @@ add membind/memset support
 finish pp unit tests.
 automate running of pp unit tests.
 
+Better Error Message Reporting:
+  ASSERT_MSG
+  below
 Better Syntax Error Checking:
   empty spec
   missing type in explicit-typed-var-dcln
