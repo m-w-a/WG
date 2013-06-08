@@ -22,22 +22,28 @@
 // Result: a cpp type.
 //
 // (For definition of terms see SymbolTable documentation.)
-#define WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONST(parsedtype) \
-  WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONST_IMPL(parsedtype)
+#define WG_PP_PARSEDTYPE_IFNONLOCALTYPE_ADDCONST(parsedtype) \
+  WG_PP_PARSEDTYPE_IFNONLOCALTYPE_ADDCONST_IMPL(parsedtype)
 
 // parsedtype: explicit-or-deduced-type
 // Result: a cpp type.
 //
 // (For definition of terms see SymbolTable documentation.)
-#define WG_PP_PARSEDTYPE_IFNONLOCAL_ADDREFERENCE(parsedtype) \
-  WG_PP_PARSEDTYPE_IFNONLOCAL_ADDREFERENCE_IMPL(parsedtype)
+#define WG_PP_PARSEDTYPE_IFNONLOCALTYPE_ADDREFERENCE(parsedtype) \
+  WG_PP_PARSEDTYPE_IFNONLOCALTYPE_ADDREFERENCE_IMPL(parsedtype)
+
+//// parsedtype: explicit-or-deduced-type
+//// Result: a cpp type.
+////
+//// (For definition of terms see SymbolTable documentation.)
+//WG_PP_PARSEDTYPE_IFNOTLOCALREFQUALIFIED_ADDREFERENCE
 
 // parsedtype: explicit-or-deduced-type
 // Result: a cpp type.
 //
 // (For definition of terms see SymbolTable documentation.)
-#define WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONSTADDREFERENCE(parsedtype) \
-  WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONSTADDREFERENCE_IMPL(parsedtype)
+#define WG_PP_PARSEDTYPE_IFNONLOCALTYPE_ADDCONSTADDREFERENCE(parsedtype) \
+  WG_PP_PARSEDTYPE_IFNONLOCALTYPE_ADDCONSTADDREFERENCE_IMPL(parsedtype)
 
 //###########
 //Impl Macros
@@ -50,14 +56,14 @@
 
 #define WG_PP_PARSEDTYPE_ADDCONST(nonlocaltype) \
   boost::add_const<WG_PP_IDENTITY(nonlocaltype)>::type
-#define WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONST_IMPL(parsedtype) \
+#define WG_PP_PARSEDTYPE_IFNONLOCALTYPE_ADDCONST_IMPL(parsedtype) \
   WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_TRANSFORMIFNONLOCAL( \
     parsedtype, \
     WG_PP_PARSEDTYPE_ADDCONST)
 
 #define WG_PP_PARSEDTYPE_ADDREFERENCE(nonlocaltype) \
   boost::add_reference<WG_PP_IDENTITY(nonlocaltype)>::type
-#define WG_PP_PARSEDTYPE_IFNONLOCAL_ADDREFERENCE_IMPL(parsedtype) \
+#define WG_PP_PARSEDTYPE_IFNONLOCALTYPE_ADDREFERENCE_IMPL(parsedtype) \
   WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_TRANSFORMIFNONLOCAL( \
     parsedtype, \
     WG_PP_PARSEDTYPE_ADDREFERENCE)
@@ -66,7 +72,7 @@
   boost::add_reference< \
     boost::add_const<WG_PP_IDENTITY(nonlocaltype)>::type \
   >::type
-#define WG_PP_PARSEDTYPE_IFNONLOCAL_ADDCONSTADDREFERENCE_IMPL(parsedtype) \
+#define WG_PP_PARSEDTYPE_IFNONLOCALTYPE_ADDCONSTADDREFERENCE_IMPL(parsedtype) \
   WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_TRANSFORMIFNONLOCAL( \
     parsedtype, \
     WG_PP_PARSEDTYPE_ADDCONSTADDREFERENCE)
