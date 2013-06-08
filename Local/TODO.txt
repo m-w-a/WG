@@ -37,15 +37,44 @@ Better Syntax Error Checking:
   missing type in implicit-typed-var-dcln
   missing var in "..."
 
-assignedto implicit type should not have const or ref as it does not make sense
-for it to be const and it only makes sense for it to be a reference, hence it's 
-ref implicitly.
+Better Test Names:
+  AssignTo
+  Return
+  ParamBindExplicit
+  ParamBindImplicit
+  ParamBindImplicitAndExplicit
+  ParamSetExplicit
+  ParamSetImplicit
+  ParamSetImplicitAndExplicit
+  ParamBindExplicitAndParamSetExplicit
+  ParamBindImplicitAndParamSetImplicit
+  ParamBindExplicitAndParamSetImplicit
+  ParamBindImplicitAndParamSetExplicit
+
+Then go over And make sure test coverage right.
 
 //----------
 //Semantics:
 //----------
 
-return (optional, defaults to void)
+assignto:
+  1) If not explicitly typed with local/localref then will always be bound by 
+    reference.
+    Rationale:
+    1) Doing otherwise will result in assignment to a copy of the variable,
+      instead of the actual variable itself.
+  1) If implicitly typed, then it's illegal for it to be const or ref qualified.
+    Rationale:
+    1) const qualification does not make sense, since we want to eventually 
+      assign to the assignto variable.
+    2) ref qualification is redundant, per 1.1
+
+return:
+  1) If present then indicates the return type of the functor,
+  2) else if not present and assignto is present then the return type of the
+    functor is determined by the type of assignto declaration,
+  3) else if not present and assignto is not present then the return type of the
+    functor is void.
 
 local/localref Rationale.
   bound vars need to be forwarded to their destination via a temporary cntnr,
@@ -71,7 +100,7 @@ local/localref Rationale.
       likely not be correct.
     2) membind
       If a non-mutable local non-reference type is used with localref, then an 
-      extra extraneous copy of that type is made, where such a copy permitted else
+      extra extraneous copy of that type is made, if such a copy permitted, else
       a compiler error will ensue.
   4) If localref is accidentaly used to denote a non-local type then the behaviour
     will be the same as if it were used to denote a local type.
@@ -133,12 +162,17 @@ implicit-typed-var-dcln :=
 explicit-typed-var-dcln :=
   explicit-type var-name
 
-implicit-type := const | ref | const ref
+implicit-type := bound-type-qualifiers | empty-string
+
+bound-type-qualifiers := const | ref | const ref
 
 explicit-type := 
+    local-type
+  | ( non-local-type )
+
+local-type :=
     local(local-nonref-type)
   | localref(local-ref-type)
-  | ( non-local-type )
 
 type := A C++ type.
 var-name := A C++ variable name.

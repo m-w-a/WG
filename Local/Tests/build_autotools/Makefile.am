@@ -62,11 +62,12 @@ test_autofunctor_v1_SOURCES = \
 
 test_autofunctor_SOURCES = \
     ../AutoFunctor/TestMain.cc \
-    ../AutoFunctor/ExplicitBoundParams.cc \
-    ../AutoFunctor/SetParams.cc \
-    ../AutoFunctor/ImplicitBoundParams.cc \
-    ../AutoFunctor/MixedParamsSetAndBoundExplicitly.cc \
-    ../AutoFunctor/MixedImplicitAndExplicitBoundParams.cc \
+    ../AutoFunctor/ParamBindExplicit.cc \
+    ../AutoFunctor/ParamBindImplicit.cc \
+    ../AutoFunctor/ParamBindExplicitAndImplicit.cc \
+    ../AutoFunctor/ParamSetExplicit.cc \
+    ../AutoFunctor/ParamBindExplicitAndParamSetExplicit.cc \
+    ../AutoFunctor/ParamBindImplicitAndParamSetExplicit.cc \
     ../AutoFunctor/LocalTypes.cc \
     ../AutoFunctor/NoSpec.cc \
     ../AutoFunctor/Nested.cc \

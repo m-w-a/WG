@@ -10,7 +10,7 @@ TEST(wg_autofunctor_recursive, fibonacci)
 
     WG_AUTOFUNCTOR
     (calculateFibonacci,
-      assignto ((int) fib)
+      assignto ((int &) fib)
       return (int)
       paramset ((int) input, 4) )
     {
