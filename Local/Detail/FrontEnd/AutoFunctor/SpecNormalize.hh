@@ -16,7 +16,7 @@
 
 // Expands to the following:
 //   (assignto) { (BOOST_PP_NIL) | (normalized-bound-tuple) }
-//   (return) { (return_nrmlzd_type) }
+//   (return) { (BOOST_PP_NIL) | (type) }
 //   (parambind) { (BOOST_PP_NIL) | ( {normalized-bound-tuple}+ ) }
 //   (paramset) { (BOOST_PP_NIL) | ( {normalized-set-tuple}+ ) }
 //   (membind) { (BOOST_PP_NIL) | ( {normalized-bound-tuple}+ ) }
@@ -120,7 +120,7 @@
     WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACRONAME(spec, RETURN, PARAMBIND) \
     WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS(spec, RETURN, PARAMBIND) )
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_NOTFOUNDHOOK_RETURN() \
-  (void)
+  (BOOST_PP_NIL)
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_RETURN(spec, nexttransform) \
   WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_RETURN2( \
     WG_PP_SPLITHEADTUPLEFROMTOKENS( \

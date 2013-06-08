@@ -83,11 +83,22 @@
               frwdr, \
               WG_PP_SYMBOLTABLE_XXX_SIZE_SETPARAM(symbtbl)))) ); \
     } \
-    WG_PP_SYMBOLTABLE_RETTYPE(symbtbl) \
+    WG_PP_AUTOFUNCTOR_CG_FUNCTOR_RETURNTYPE(symbtbl) \
       name \
       BOOST_PP_LPAREN() \
         WG_PP_AUTOFUNCTOR_CG_FUNC_PARAMLIST(symbtbl) \
       BOOST_PP_RPAREN()
+
+#define WG_PP_AUTOFUNCTOR_CG_FUNCTOR_RETURNTYPE(symbtbl) \
+  BOOST_PP_IIF( \
+    WG_PP_SYMBOLTABLE_EXISTS_RETTYPE(symbtbl), \
+    WG_PP_SYMBOLTABLE_RETTYPE(symbtbl), \
+    BOOST_PP_IIF( \
+      WG_PP_SYMBOLTABLE_EXISTS_ASSIGNEE(symbtbl), \
+      WG_PP_SEQ_CAT(WG_PP_SYMBOLTABLE_TYPESEQ_ASSIGNEE(symbtbl)), \
+      void))
+
+#define WG_PP_AUTOFUNCTOR_CG_FUNCTOR_RETURNTYPE2()
 
 #define WG_PP_AUTOFUNCTOR_CG_FUNC_PARAMLIST(symbtbl) \
   WG_PP_SEQ_ENUM( \

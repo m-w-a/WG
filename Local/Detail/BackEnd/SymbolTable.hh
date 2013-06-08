@@ -15,7 +15,7 @@
 //INPUT:
 //------
 //assignto_nrmlzd_tuple: { BOOST_PP_NIL | normalized-bound-tuple }
-//return_nrmlzd_type: { void | some-token }
+//return_nrmlzd_type: { BOOST_PP_NIL | type }
 //parambind_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-bound-tuple}+ }
 //paramset_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-set-tuple}+ }
 //
@@ -74,6 +74,12 @@
 //Returns: { BOOST_PP_NIL | return-type  }
 #define WG_PP_SYMBOLTABLE_RETTYPE(symbtbl) \
   WG_PP_SYMBOLTABLE_GET(symbtbl, RETTYPE)
+
+//Returns: { 0 | 1 }
+#define WG_PP_SYMBOLTABLE_EXISTS_RETTYPE(symbtbl) \
+  BOOST_PP_NOT( \
+    WG_PP_TOKENS_START_WITH_BOOST_PP_NIL( \
+      WG_PP_SYMBOLTABLE_RETTYPE(symbtbl) ))
 
 //Returns: { BOOST_PP_NIL | {(explicit-or-deduced-type)}+ }
 #define WG_PP_SYMBOLTABLE_TYPESEQ_BOUNDPARAM(symbtbl) \
