@@ -8,7 +8,7 @@
 //Public APIs
 //###########
 
-#define WG_PP_OBJECT_EMPTY
+#define WG_PP_NOTHING
 
 #define WG_PP_TOKENS_START_WITH_WG_PP_TRUE(tokens) \
   WG_PP_TOKENS_START_WITH_WG_PP_TRUE_IMPL(tokens)
@@ -35,6 +35,9 @@
 #define WG_PP_1TUPLIZE_1(x) WG_PP_1TUPLIZE(x)
 #define WG_PP_1TUPLIZE_2(x, y) (x)(y)
 
+// tokens:
+//   A sequence of tokens whose head token is either a tuple of arity
+//   tuplearity, or not a tuple.
 #define WG_PP_ISNEXTTOKEN_A_TUPLE(tuplearity, tokens) \
   WG_PP_ISNEXTTOKEN_A_TUPLE_IMPL(tuplearity, tokens)
 

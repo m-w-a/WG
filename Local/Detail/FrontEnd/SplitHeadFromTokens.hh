@@ -98,7 +98,7 @@
   headtransform, \
   nexttransform) \
     WG_PP_SPLITHEADTUPLEFROMTOKENS_PROCESSSPLIT( \
-      BOOST_PP_CAT(WG_PP_OBJECT_, prefixedhead), \
+      BOOST_PP_CAT(WG_PP_, prefixedhead), \
       rest, \
       headtransform, \
       nexttransform)
@@ -112,7 +112,7 @@
   tuplearity, spec, headelemtransform, headtransform, nexttransform) \
     ( \
       tuplearity, \
-      EMPTY, \
+      NOTHING, \
       spec, \
       headelemtransform, \
       headtransform, \
