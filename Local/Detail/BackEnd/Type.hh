@@ -75,7 +75,14 @@
 
 #define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_IFNOTQUALIFIEDLOCALREF_ADDREFERENCE_IMPL( \
   parsedtype) \
-    TODO
+    BOOST_PP_IIF( \
+      WG_PP_TOKENS_STARTWITH_LOCAL(parsedtype), \
+      WG_PP_PARSEDTYPE_LOCALTYPE_ADDREFERENCE( \
+        WG_PP_TOKENS_LOCAL_VALUE(parsedtype)), \
+      BOOST_PP_IIF( \
+        WG_PP_TOKENS_STARTWITH_LOCALREF(parsedtype), \
+        WG_PP_TOKENS_LOCALREF_VALUE(parsedtype), \
+        WG_PP_PARSEDTYPE_NONLOCALTYPE_ADDREFERENCE(parsedtype)))
 
 #define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_IFNONLOCALTYPE_ADDCONSTADDREFERENCE_IMPL(parsedtype) \
   WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_TRANSFORMIF( \
@@ -93,6 +100,9 @@
 #define WG_PP_PARSEDTYPE_NONLOCALTYPE_ADDREFERENCE(nonlocaltype) \
   boost::add_reference<WG_PP_IDENTITY(nonlocaltype)>::type
 
+#define WG_PP_PARSEDTYPE_LOCALTYPE_ADDREFERENCE(localtype) \
+  localtype &
+
 #define WG_PP_PARSEDTYPE_NONLOCALTYPE_ADDCONSTADDREFERENCE(nonlocaltype) \
   boost::add_reference< \
     boost::add_const<WG_PP_IDENTITY(nonlocaltype)>::type \
@@ -108,6 +118,9 @@
 #define WG_PP_PARSEDTYPE_ISQUALIFIEDLOCALREF(parsedtype) \
   WG_PP_TOKENS_STARTWITH_LOCALREF(parsedtype)
 
+#define WG_PP_PARSEDTYPE_ISNOTQUALIFIEDLOCALREF(parsedtype) \
+  BOOST_PP_NOT(WG_PP_PARSEDTYPE_ISQUALIFIEDLOCALREF(parsedtype))
+
 #define WG_PP_PARSEDTYPE_ISLOCALTYPE(parsedtype) \
   BOOST_PP_OR( \
     WG_PP_PARSEDTYPE_ISQUALIFIEDLOCAL(parsedtype), \
@@ -115,17 +128,6 @@
 
 #define WG_PP_PARSEDTYPE_ISNONLOCALTYPE(parsedtype) \
   BOOST_PP_NOT(WG_PP_PARSEDTYPE_ISLOCALTYPE(parsedtype))
-
-//// transform: a 1-arg function macro
-//#define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_TRANSFORMIFNONLOCALTYPE( \
-//  parsedtype, transform) \
-//    BOOST_PP_IIF( \
-//      WG_PP_TOKENS_STARTWITH_LOCAL(parsedtype), \
-//      WG_PP_TOKENS_LOCAL_VALUE(parsedtype), \
-//      BOOST_PP_IIF( \
-//        WG_PP_TOKENS_STARTWITH_LOCALREF(parsedtype), \
-//        WG_PP_TOKENS_LOCALREF_VALUE(parsedtype), \
-//        transform(parsedtype) ))
 
 // transform:
 //   a 1-arg function macro that will be applied to the extracted

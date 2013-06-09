@@ -35,3 +35,47 @@ TEST(wg_autofunctor_assignto, OkIfNonLocalImplicit)
   }
   WG_GTEST_CATCH
 }
+
+TEST(wg_autofunctor_assignto, OkIfLocal)
+{
+  try
+  {
+    struct SomeLocalType
+    {
+      int value;
+    } obj = {0};
+
+    WG_AUTOFUNCTOR(assign, assignto (local(SomeLocalType) obj) )
+    {
+      SomeLocalType toRet = {1};
+
+      return toRet;
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_EQ(obj.value, 1);
+  }
+  WG_GTEST_CATCH
+}
+
+TEST(wg_autofunctor_assignto, OkIfLocalRef)
+{
+  try
+  {
+    struct SomeLocalType
+    {
+      int value;
+    } obj = {0};
+
+    WG_AUTOFUNCTOR(assign, assignto (localref(SomeLocalType &) obj) )
+    {
+      static SomeLocalType toRet = {1};
+
+      return toRet;
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_EQ(obj.value, 1);
+  }
+  WG_GTEST_CATCH
+}

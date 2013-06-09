@@ -61,12 +61,14 @@ Then go over And make sure test coverage right.
 //----------
 
 assignto:
-  1) If not explicitly typed with local/localref then will always be bound by 
-    reference.
+  1) If not typed with localref then it will always be implicitly bound by
+    reference. 
     Rationale:
     1) Doing otherwise will result in assignment to a copy of the variable,
       instead of the actual variable itself.
-  1) If implicitly typed, then it's illegal for it to be const or ref qualified.
+    2) If typed with localref, then it is assumed that the bound type is already
+      a reference, hence no need to implicitly bind it by reference.
+  2) If implicitly typed, then it's illegal for it to be const or ref qualified.
     Rationale:
     1) const qualification does not make sense, since we want to eventually 
       assign to the assignto variable.
@@ -79,7 +81,8 @@ return:
   3) else if not present and assignto is not present then the return type of the
     functor is void.
 
-local/localref Rationale.
+local/localref
+  Rationale:
   bound vars need to be forwarded to their destination via a temporary cntnr,
   for purposes of efficiency this is done using the add_reference metafunction. 
   Since in C++03 local types have no linkage, they cannot be used as template 
@@ -107,6 +110,24 @@ local/localref Rationale.
       a compiler error will ensue.
   4) If localref is accidentaly used to denote a non-local type then the behaviour
     will be the same as if it were used to denote a local type.
+    
+  In C++0X local/localref -> treat as explicit non-local/non-local-reference types? 
+  No.
+  Rationale:
+    Then when localref is mistakenly used with a non-reference local type, two 
+    different program behaviours might result, one in a silent runtime error (C++03), 
+    the other in correct behaviour (C++0x). Consider the following:
+  
+    struct SomeLocalType { int value; } obj = {0};
+    WG_AUTOFUNCTOR(someFunctor, parambind (localref(SomeLocalType) obj) )
+    {
+      obj.value = 1;
+    }
+    WG_AUTOFUNCTOR_END;
+
+    In C++03, it will result in a silent error since the type declared in localref 
+    is actually a non-reference type. If in C++0X localref types were treated as
+    regular C++ reference types, then the program will work as intended. 
 
 //---
 //BNF
