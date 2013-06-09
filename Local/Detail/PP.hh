@@ -47,6 +47,9 @@
 #define WG_PP_MAP_TO_TRUETOKEN_ARG2(x, y) \
   WG_PP_TRUE
 
+#define WG_PP_MAP_TO_0_ARG1(x) 0
+#define WG_PP_MAP_TO_1_ARG1(x) 1
+
 #define WG_PP_IS_ODD(num) BOOST_PP_MOD(num,2)
 #define WG_PP_IS_EVEN(num) \
   BOOST_PP_NOT(WG_PP_IS_ODD(num))
