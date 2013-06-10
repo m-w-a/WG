@@ -1,36 +1,89 @@
 #ifndef WG_PP_TOKENMATCHING_HH_
 #define WG_PP_TOKENMATCHING_HH_
 
-// TODO.
-#include <boost/preprocessor.hpp>
+#include <boost/preprocessor/punctuation/paren.hpp>
 
 //###########
 //Public APIs
 //###########
 
 // tokens:
-//   a sequence of tokens that does not contain comma(s)
+//   a sequence of tokens that does not contain comma(s) nor end in
+//   non-alphanumeric-underscore characters.
 // endmatcher:
 //   an object-like macro of the form:
 //     _<keyword-to-match>_<keyword-to-match>_<some-app-specific-id>
 //   that evaluates to: ) (
-#define WG_PP_TOKENS_ENDWITH(tokens, endmatcher) \
-  WG_PP_TOKENS_ENDWITH_IMPL(tokens, endmatcher)
+#define WG_PP_TOKENMATCH_ENDSWITH(tokens, endmatcher) \
+  WG_PP_TOKENMATCH_ENDSWITH_IMPL(tokens, endmatcher)
 
 //###########
 //Impl Macros
 //###########
 
-#define WG_PP_TOKENS_ENDWITH_IMPL(tokens, endmatcher) \
-  WG_PP_TOKENS_ENDWITH_IMPL2( \
-    BOOST_PP_LPAREN() \
-      BOOST_PP_CAT(tokens, endmatcher BOOST_PP_NIL) \
-    BOOST_PP_RPAREN() )
+#define WG_PP_TOKENMATCH_EXPAND(x) x
 
-#define WG_PP_TOKENS_ENDWITH_IMPL2(seq) \
-  BOOST_PP_IIF( \
-    WG_PP_ISNEXTTOKEN_A_TUPLE(1, BOOST_PP_SEQ_POP_FRONT(seq) BOOST_PP_NIL), \
-    1, \
-    0)
+#define WG_PP_TOKENMATCH_SEQ_EATHEADELEM(x)
+#define WG_PP_TOKENMATCH_SEQ_EATHEADELEM_1(x)
+#define WG_PP_TOKENMATCH_SEQ_EATHEADELEM_0
+
+#define WG_PP_TOKENMATCH_SEQ_PROCESSHEAD(x) \
+  x WG_PP_TOKENMATCH_CAT(WG_PP_TOKENMATCH_SEQ_EATHEADELEM_, x)
+
+// On end token match, will expand to:
+//   (tokens-minus-lasttoken)(1)(0)
+// else, will expand to:
+//   (some-tokens 1)(0)
+#define WG_PP_TOKENMATCH_ENDSWITH_IMPL(tokens, endmatcher) \
+  WG_PP_TOKENMATCH_ENDSWITH_IMPL2( \
+    BOOST_PP_LPAREN() \
+      WG_PP_TOKENMATCH_CAT(tokens, endmatcher 1) \
+    BOOST_PP_RPAREN() (0) )
+
+#define WG_PP_TOKENMATCH_ENDSWITH_IMPL2(seq) \
+  WG_PP_TOKENMATCH_ENDSWITH_IMPL3( \
+    WG_PP_TOKENMATCH_SEQ_EATHEADELEM seq)
+
+#define WG_PP_TOKENMATCH_ENDSWITH_IMPL3(seq) \
+  WG_PP_TOKENMATCH_EXPAND( \
+    WG_PP_TOKENMATCH_SEQ_PROCESSHEAD seq)
+
+//--------------------
+//WG_PP_TOKENMATCH_CAT
+//--------------------
+// Use our own version instead of BOOST_PP_CAT, since if BOOST_PP_CAT expands
+// to a macro that contains any of this files' public apis, those apis will be
+// disabled.
+//--------------------
+
+# /* Copyright (C) 2001
+#  * Housemarque Oy
+#  * http://www.housemarque.com
+#  *
+#  * Distributed under the Boost Software License, Version 1.0. (See
+#  * accompanying file LICENSE_1_0.txt or copy at
+#  * http://www.boost.org/LICENSE_1_0.txt)
+#  */
+#
+# /* Revised by Paul Mensonides (2002) */
+#
+# /* See http://www.boost.org for most recent version. */
+# include <boost/preprocessor/config/config.hpp>
+#
+# /* WG_PP_TOKENMATCH_CAT */
+#
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
+#    define WG_PP_TOKENMATCH_CAT(a, b) WG_PP_TOKENMATCH_CAT_I(a, b)
+# else
+#    define WG_PP_TOKENMATCH_CAT(a, b) WG_PP_TOKENMATCH_CAT_OO((a, b))
+#    define WG_PP_TOKENMATCH_CAT_OO(par) WG_PP_TOKENMATCH_CAT_I ## par
+# endif
+#
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MSVC()
+#    define WG_PP_TOKENMATCH_CAT_I(a, b) a ## b
+# else
+#    define WG_PP_TOKENMATCH_CAT_I(a, b) WG_PP_TOKENMATCH_CAT_II(~, a ## b)
+#    define WG_PP_TOKENMATCH_CAT_II(p, res) res
+# endif
 
 #endif /* WG_PP_TOKENMATCHING_HH_ */
