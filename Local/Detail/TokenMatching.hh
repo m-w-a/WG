@@ -9,12 +9,26 @@
 //###########
 
 // tokens:
-//   a sequence of tokens that does not contain comma(s) nor end in
+//   a sequence of tokens that does not contain comma(s) nor begins with any
+//   non-alphanumeric-underscore characters.
+// frontmatcher:
+//   a token of the form:
+//     <some-app-specific-id>_<keyword-to-match>_
+//   that has an accompanying object like macro of the form:
+//     <some-app-specific-id>_<keyword-to-match>_<keyword-to-match>
+//   which expands to: ) (
+#define WG_PP_TOKENMATCH_BEGINSWITH(tokens, frontmatcher) \
+  WG_PP_TOKENMATCH_BEGINSWITH_IMPL(tokens, frontmatcher)
+
+// tokens:
+//   a sequence of tokens that does not contain comma(s) nor ends in
 //   non-alphanumeric-underscore characters.
 // endmatcher:
-//   an object-like macro of the form:
-//     _<keyword-to-match>_<keyword-to-match>_<some-app-specific-id>
-//   that evaluates to: ) (
+//   a token of the form:
+//     _<keyword-to-match>_<some-app-specific-id>
+//   that has an accompanying object like macro of the form:
+//     <keyword-to-match>_<keyword-to-match>_<some-app-specific-id>
+//   which expands to: ) (
 #define WG_PP_TOKENMATCH_ENDSWITH(tokens, endmatcher) \
   WG_PP_TOKENMATCH_ENDSWITH_IMPL(tokens, endmatcher)
 
@@ -31,6 +45,16 @@
 #define WG_PP_TOKENMATCH_SEQ_PROCESSHEAD(x) \
   x WG_PP_TOKENMATCH_CAT(WG_PP_TOKENMATCH_SEQ_EATHEADELEM_, x)
 
+// On front token match, will expand to:
+//   (BOOST_PP_NIL)(tokens-minus-1st-token)
+// else, will expand to:
+//   (BOOST_PP_NIL some-tokens)
+#define WG_PP_TOKENMATCH_BEGINSWITH_IMPL(tokens, frontmatcher) \
+  WG_PP_TOKENMATCH_SEQ_ISCOUNT2( \
+    BOOST_PP_LPAREN() \
+      BOOST_PP_NIL WG_PP_TOKENMATCH_CAT(frontmatcher, tokens) \
+    BOOST_PP_RPAREN() )
+
 // On end token match, will expand to:
 //   (tokens-minus-lasttoken)(BOOST_PP_NIL)
 // else, will expand to:
@@ -38,7 +62,7 @@
 #define WG_PP_TOKENMATCH_ENDSWITH_IMPL(tokens, endmatcher) \
   WG_PP_TOKENMATCH_SEQ_ISCOUNT2( \
     BOOST_PP_LPAREN() \
-      WG_PP_TOKENMATCH_CAT(tokens, endmatcher BOOST_PP_NIL) \
+      WG_PP_TOKENMATCH_CAT(tokens, endmatcher) BOOST_PP_NIL \
     BOOST_PP_RPAREN() )
 
 #define WG_PP_TOKENMATCH_SEQ_ISCOUNT2(seq) \
