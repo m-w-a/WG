@@ -2,6 +2,7 @@
 #define WG_PP_TOKENMATCHING_HH_
 
 #include <boost/preprocessor/punctuation/paren.hpp>
+#include <boost/preprocessor/seq/size.hpp>
 
 //###########
 //Public APIs
@@ -31,22 +32,22 @@
   x WG_PP_TOKENMATCH_CAT(WG_PP_TOKENMATCH_SEQ_EATHEADELEM_, x)
 
 // On end token match, will expand to:
-//   (tokens-minus-lasttoken)(1)(0)
+//   (tokens-minus-lasttoken)(BOOST_PP_NIL)
 // else, will expand to:
-//   (some-tokens 1)(0)
+//   (some-tokens BOOST_PP_NIL)
 #define WG_PP_TOKENMATCH_ENDSWITH_IMPL(tokens, endmatcher) \
-  WG_PP_TOKENMATCH_ENDSWITH_IMPL2( \
+  WG_PP_TOKENMATCH_SEQ_ISCOUNT2( \
     BOOST_PP_LPAREN() \
-      WG_PP_TOKENMATCH_CAT(tokens, endmatcher 1) \
-    BOOST_PP_RPAREN() (0) )
+      WG_PP_TOKENMATCH_CAT(tokens, endmatcher BOOST_PP_NIL) \
+    BOOST_PP_RPAREN() )
 
-#define WG_PP_TOKENMATCH_ENDSWITH_IMPL2(seq) \
-  WG_PP_TOKENMATCH_ENDSWITH_IMPL3( \
-    WG_PP_TOKENMATCH_SEQ_EATHEADELEM seq)
+#define WG_PP_TOKENMATCH_SEQ_ISCOUNT2(seq) \
+  WG_PP_TOKENMATCH_CAT( \
+    WG_PP_TOKENMATCH_SEQ_ISCOUNT2_, \
+    BOOST_PP_SEQ_SIZE(seq))
 
-#define WG_PP_TOKENMATCH_ENDSWITH_IMPL3(seq) \
-  WG_PP_TOKENMATCH_EXPAND( \
-    WG_PP_TOKENMATCH_SEQ_PROCESSHEAD seq)
+#define WG_PP_TOKENMATCH_SEQ_ISCOUNT2_2 1
+#define WG_PP_TOKENMATCH_SEQ_ISCOUNT2_1 0
 
 //--------------------
 //WG_PP_TOKENMATCH_CAT
