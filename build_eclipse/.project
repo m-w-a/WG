@@ -23,7 +23,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildArguments</key>
-					<value></value>
+					<value>-j4</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildCommand</key>
@@ -80,6 +80,18 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>local_function</name>
+			<type>2</type>
+			<location>C:/cygwin/home/HPC/boost_installed/v1_53_0/include/boost/local_function</location>
+		</link>
+		<link>
+			<name>preprocessor</name>
+			<type>2</type>
+			<location>C:/cygwin/home/HPC/boost_1_53_0/libs/preprocessor</location>
+		</link>
+	</linkedResources>
 	<filteredResources>
 		<filter>
 			<id>1368215814226</id>

@@ -59,5 +59,4 @@ AM_CPPFLAGS += \
 ##############
 
 LDADD = \
-    $(top_builddir)/WG/ExternalLibsNoInstall/build_autotools/libgtest.la \
-    $(top_builddir)/WG/Utils/build_autotools/libwgutils.la
+    $(top_builddir)/WG/ExternalLibsNoInstall/build_autotools/libgtest.la
