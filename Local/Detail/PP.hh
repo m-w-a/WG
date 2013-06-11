@@ -1,5 +1,5 @@
-#ifndef WG_PP_HH_
-#define WG_PP_HH_
+#ifndef WG_PP_PP_HH_
+#define WG_PP_PP_HH_
 
 #include <boost/preprocessor.hpp>
 #include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
@@ -94,4 +94,4 @@
   WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
     BOOST_PP_CAT(WG_PP_MAP_TO_TRUETOKEN_ARG, tuplearity) tokens)
 
-#endif /* WG_PP_HH_ */
+#endif /* WG_PP_PP_HH_ */
