@@ -13,16 +13,9 @@ noinst_PROGRAMS = \
     test_pp_vardcln_implicit \
     test_pp_vardcln_explicit \
     test_pp_parsedtype \
-    test_autofunctor.v1 \
     test_autofunctor
-    
-TEST_BIN_DIR = $(abs_top_builddir)/bin/
 
-TEST_WG_AUTOFUNCTORV1_APPNAME = test_autofunctor.v1$(EXEEXT)
-TEST_WG_AUTOFUNCTORV1_APPALTPATH = \
-    $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTORV1_APPNAME)
-TEST_WG_AUTOFUNCTORV1_APPBUILDLOC = \
-    $(abs_builddir)/$(TEST_WG_AUTOFUNCTORV1_APPNAME)
+TEST_BIN_DIR = $(abs_top_builddir)/bin/
 
 TEST_WG_AUTOFUNCTOR_APPNAME = test_autofunctor$(EXEEXT)
 TEST_WG_AUTOFUNCTOR_APPALTPATH = \
@@ -33,17 +26,10 @@ TEST_WG_AUTOFUNCTOR_APPBUILDLOC = \
 #Custom init.
 all-local : \
     $(TEST_BIN_DIR) \
-    $(TEST_WG_AUTOFUNCTORV1_APPALTPATH) \
     $(TEST_WG_AUTOFUNCTOR_APPALTPATH)
     
 $(TEST_BIN_DIR) :
 	$(MKDIR_P) $(TEST_BIN_DIR)
-
-$(TEST_WG_AUTOFUNCTORV1_APPALTPATH) : $(TEST_WG_AUTOFUNCTORV1_APPBUILDLOC)
-	( cd $(TEST_BIN_DIR); \
-      $(LN_S) -f \
-          $(TEST_WG_AUTOFUNCTORV1_APPBUILDLOC) \
-          $(TEST_WG_AUTOFUNCTORV1_APPNAME); )
 
 $(TEST_WG_AUTOFUNCTOR_APPALTPATH) : $(TEST_WG_AUTOFUNCTOR_APPBUILDLOC)
 	( cd $(TEST_BIN_DIR); \
@@ -53,7 +39,6 @@ $(TEST_WG_AUTOFUNCTOR_APPALTPATH) : $(TEST_WG_AUTOFUNCTOR_APPBUILDLOC)
 
 #Custom finalize.
 clean-local : \
-    rm -rf $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTORV1_APPNAME) \
     rm -rf $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTOR_APPNAME)
 
 ##############################
@@ -61,7 +46,6 @@ clean-local : \
 ##############################
 # Don't add test_pp_* to TESTS since they're compile-only tests.
 TESTS = \
-    $(TEST_WG_AUTOFUNCTORV1_APPNAME) \
     $(TEST_WG_AUTOFUNCTOR_APPNAME)
 
 test_pp_pp_SOURCES = ../../Detail/Tests/PPUnitTest.cc
@@ -71,10 +55,6 @@ test_pp_vardcln_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnUnitTest.cc
 test_pp_vardcln_implicit_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnImplicitUnitTest.cc
 test_pp_vardcln_explicit_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnExplicitUnitTest.cc
 test_pp_parsedtype_SOURCES = ../../Detail/BackEnd/Tests/TypeUnitTest.cc
-
-test_autofunctor_v1_SOURCES = \
-    ../AutoFunctorV1/TestMain.cc \
-    ../AutoFunctorV1/UnitTest.cc
 
 test_autofunctor_SOURCES = \
     ../AutoFunctor/TestMain.cc \
@@ -103,9 +83,6 @@ AM_CPPFLAGS += \
 ################
 
 AM_CXXFLAGS += \
-    -pedantic
-
-test_autofunctor_v1_CXXFLAGS = \
     -pedantic
 
 test_autofunctor_CXXFLAGS = \
