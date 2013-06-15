@@ -1,7 +1,7 @@
 #include <WG/Local/Detail/Tests/test.h>
 #include <WG/Local/Detail/Tests/TestHelper.hh>
 #include <WG/Local/Detail/PP.hh>
-#include <WG/Local/Detail/BackEnd/Type.hh>
+#include <WG/Local/Detail/BackEnd/TypeExtractor.hh>
 #include "../VarDclnExplicit.hh"
 #include <boost/preprocessor.hpp>
 #include <boost/typeof/typeof.hpp>

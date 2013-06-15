@@ -2,7 +2,7 @@
 #include <WG/Local/Detail/Tests/TestHelper.hh>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
-#include "../Type.hh"
+#include "../TypeExtractor.hh"
 
 //Unit Tests.
 #define S1 SomeGlobalType &
