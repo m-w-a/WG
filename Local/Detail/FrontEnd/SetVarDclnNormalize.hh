@@ -9,7 +9,7 @@
 //###########
 
 // Expands to the following:
-//   {(explicit-type) (var-name) (value-expr)}+
+//   {(parsed-explicit-type) (var-name) (value-expr)}+
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_SETVARDCLNNORMALIZE(explicittypedvardcln, valueexpr) \
@@ -20,7 +20,7 @@
 //Unit Tests.
 #define S1 ( (T const * ) var1 , &this->m_Foo )
 #define S2 ( local(U) var2 , catInTheHat )
-#define S3 ( localref(Callback &) var3 , mouse << in << the << hole )
+#define S3 ( local(U *) ref var3 , mouse << in << the << hole )
 
 #include <boost/preprocessor/expand.hpp>
 
@@ -31,7 +31,7 @@ BOOST_PP_EXPAND(WG_PP_SETVARDCLNNORMALIZE S3)
 //EXPECTED:
 //(T const *) (var1) (&this->m_Foo)
 //(local(U)) ( var2 ) (catInTheHat)
-//(localref(Callback &)) ( var3 ) (mouse << in << the << hole)
+//(local(U *) (ref)) ( var3 ) (mouse << in << the << hole)
 */
 
 #endif //WG_PP_SETVARDCLNNORMALIZE_HH_

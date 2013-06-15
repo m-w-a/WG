@@ -11,6 +11,11 @@
 //Public APIs
 //###########
 
+//-----
+//NOTE:
+//-----
+//
+//What ever terms not defined here are defined in the respective BNF.
 //------
 //INPUT:
 //------
@@ -19,11 +24,13 @@
 //parambind_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-bound-tuple}+ }
 //paramset_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-set-tuple}+ }
 //
-//normalized-bound-tuple := (explicit-or-deduced-type)(var-name)
-//normalized-set-tuple := (explicit-type)(var-name)(value-expr)
-//explicit-or-deduced-type := explicit-type | deduced-type
-//explicit-type := local(some-token) | localref(some-tokens) | some-token
-//deduced-type :=
+//normalized-bound-tuple := (parsed-explicit-or-deduced-type)(var-name)
+//normalized-set-tuple := (parsed-explicit-type)(var-name)(value-expr)
+//parsed-explicit-or-deduced-type := parsed-explicit-type | parsed-deduced-type
+//parsed-explicit-type := parsed-local-type | non-local-type
+//parsed-local-type := local(some-token) lib-type-qualifier-seq
+//lib-type-qualifier-seq := (const) | (ref) | (const)(ref)
+//parsed-deduced-type :=
 //  WG_PP_DEDUCEDTYPE
 //  { BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> > }
 //BT := BOOST_TYPEOF(some-token)
@@ -50,16 +57,16 @@
 //-------
 //OUTPUT:
 //-------
-//Maps all occurrences of deduced-type to their typededucer counterparts.
+//Maps all occurrences of parsed-deduced-type to their typededucer counterparts.
 //
 //A SymbolTable whose values are accessible using the below macros.
-//Note: the new definition of deduced-type:
+//Note: the new definition of parsed-deduced-type:
 //
-//deduced-type := <typededucer_name>::<some_typedef_name>
+//parsed-deduced-type := <typededucer_name>::<some_typedef_name>
 #define WG_PP_SYMBOLTABLE_USETYPEDEDUCER(symbtbl, typededucer_name) \
   WG_PP_SYMBOLTABLE_USETYPEDEDUCER_IMPL(symbtbl, typededucer_name)
 
-//Returns: { BOOST_PP_NIL | (explicit-or-deduced-type) }
+//Returns: { BOOST_PP_NIL | (parsed-explicit-or-deduced-type) }
 #define WG_PP_SYMBOLTABLE_TYPESEQ_ASSIGNEE(symbtbl) \
   WG_PP_SYMBOLTABLE_GET(symbtbl, TYPESEQ_ASSIGNEE)
 
@@ -81,7 +88,7 @@
     WG_PP_TOKENS_START_WITH_BOOST_PP_NIL( \
       WG_PP_SYMBOLTABLE_RETTYPE(symbtbl) ))
 
-//Returns: { BOOST_PP_NIL | {(explicit-or-deduced-type)}+ }
+//Returns: { BOOST_PP_NIL | {(parsed-explicit-or-deduced-type)}+ }
 #define WG_PP_SYMBOLTABLE_TYPESEQ_BOUNDPARAM(symbtbl) \
   WG_PP_SYMBOLTABLE_GET(symbtbl, TYPESEQ_BOUNDPARAM)
 
@@ -97,7 +104,7 @@
 #define WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDPARAM_THISU_MARKER(symbtbl) \
   WG_PP_SYMBOLTABLE_GET(symbtbl, OBJSEQ_BOUNDPARAM_THISU_MARKER)
 
-//Returns: { BOOST_PP_NIL | {(explicit-type)}+ }
+//Returns: { BOOST_PP_NIL | {(parsed-explicit-type)}+ }
 #define WG_PP_SYMBOLTABLE_TYPESEQ_SETPARAM(symbtbl) \
   WG_PP_SYMBOLTABLE_GET(symbtbl, TYPESEQ_SETPARAM)
 

@@ -9,8 +9,12 @@
 //Public APIs
 //###########
 
-#define WG_PP_TYPEDEDUCER_DCLN(typededucer_name, symbtbl) \
-  WG_PP_TYPEDEDUCER_DCLN_IMPL(typededucer_name, symbtbl)
+// Will create a struct named <typededucername> that typedefs all the types
+// of implicitly-typed vars to aliases that are accessible via the macros that
+// follow. Note that the indx param in the said macros reflect the order in
+// which they appeared when declared, starting from the number 0.
+#define WG_PP_TYPEDEDUCER_DCLN(typededucername, symbtbl) \
+  WG_PP_TYPEDEDUCER_DCLN_IMPL(typededucername, symbtbl)
 
 #define WG_PP_TYPEDEDUCER_TYPENAME_ASSIGNEE(indx) \
   WG_PP_TYPEDEDUCER_TYPENAME_ASSIGNEE_IMPL(indx)
@@ -44,9 +48,9 @@
 #define WG_PP_TYPEDEDUCER_TYPENAME(rootname, indx) \
   BOOST_PP_CAT(rootname, indx)
 
-// TODO: add BOUNDMEM
-#define WG_PP_TYPEDEDUCER_DCLN_IMPL(typededucer_name, symbtbl) \
-  struct typededucer_name \
+// TODO: add BOUNDMEM/SETMEM
+#define WG_PP_TYPEDEDUCER_DCLN_IMPL(typededucername, symbtbl) \
+  struct typededucername \
   { \
     WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS(ASSIGNEE, symbtbl) \
     WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS(BOUNDPARAM, symbtbl) \

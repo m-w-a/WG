@@ -12,6 +12,10 @@
 //Public APIs
 //###########
 
+// Expands to the following:
+//   (parsed-deduced-type) (var-name)
+//
+// (For definition of terms see SymbolTable documentation.)
 #define WG_PP_VARDCLNIMPLICIT_TUPLIZE(implicitvardcln) \
   WG_PP_VARDCLNIMPLICIT_TUPLIZE_IMPL(implicitvardcln)
   

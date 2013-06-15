@@ -22,9 +22,6 @@
 #define WG_PP_TOKENS_STARTWITH_LOCAL(tokens) \
   WG_PP_TOKENS_STARTWITH_LOCAL_IMPL(tokens)
 
-#define WG_PP_TOKENS_STARTWITH_LOCALREF(tokens) \
-  WG_PP_TOKENS_STARTWITH_LOCALREF_IMPL(tokens)
-
 #define WG_PP_TOKENS_STARTWITH_ASSIGNTO(tokens) \
   WG_PP_TOKENS_STARTWITH_ASSIGNTO_IMPL(tokens)
 
@@ -48,13 +45,6 @@
 
 #define WG_PP_TOKENS_STARTWITH_REF(tokens) \
   WG_PP_TOKENS_STARTWITH_REF_IMPL(tokens)
-
-
-#define WG_PP_TOKENS_LOCAL_VALUE(specifiedtype) \
-  WG_PP_TOKENS_LOCAL_VALUEIMPL(specifiedtype) \
-
-#define WG_PP_TOKENS_LOCALREF_VALUE(specifiedtype) \
-  WG_PP_TOKENS_LOCALREF_VALUEIMPL(specifiedtype) \
   
 //###########
 //Impl Macros
@@ -77,12 +67,6 @@
   BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
     tokens, \
     WG_PP_AUTOFUNCTOR_TOKEN_MATCHES_local_)
-
-#define WG_PP_AUTOFUNCTOR_TOKEN_MATCHES_localref_localref (1) /* unary */
-#define WG_PP_TOKENS_STARTWITH_LOCALREF_IMPL(tokens) \
-  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
-    tokens, \
-    WG_PP_AUTOFUNCTOR_TOKEN_MATCHES_localref_)
 
 #define WG_PP_AUTOFUNCTOR_TOKEN_MATCHES_assignto_assignto (1) /* unary */
 #define WG_PP_TOKENS_STARTWITH_ASSIGNTO_IMPL(tokens) \
@@ -131,21 +115,10 @@
   BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
     tokens, \
     WG_PP_AUTOFUNCTOR_TOKEN_MATCHES_ref_)
-
-#define WG_PP_TOKENS_LOCAL_VALUEIMPL(specifiedtype) \
-  BOOST_PP_EXPAND( \
-    BOOST_PP_CAT(WG_PP_SPECIFIEDTYPE_VALUEIMPL_, specifiedtype))
-#define WG_PP_SPECIFIEDTYPE_VALUEIMPL_local(value) value
-
-#define WG_PP_TOKENS_LOCALREF_VALUEIMPL(specifiedtype) \
-  BOOST_PP_EXPAND( \
-    BOOST_PP_CAT(WG_PP_SPECIFIEDTYPE_VALUEIMPL_, specifiedtype))
-#define WG_PP_SPECIFIEDTYPE_VALUEIMPL_localref(value) value
     
 #define WG_PP_EAT_KEYWORD_void
 #define WG_PP_EAT_KEYWORD_thisu
 #define WG_PP_EAT_KEYWORD_local
-#define WG_PP_EAT_KEYWORD_localref
 #define WG_PP_EAT_KEYWORD_assignto
 #define WG_PP_EAT_KEYWORD_return
 #define WG_PP_EAT_KEYWORD_parambind

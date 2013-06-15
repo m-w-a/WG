@@ -22,13 +22,16 @@ x) document WG_PP_MAKE_PSEQ_IMPL1
 add token autofunction in autofunction macros
 granularize pp includes ??
 x) IIF instead of IF
+Type.hh -> ParsedTypeToCppType.hh
 
 
 optimize IIF -> by splitting branches
 UnitTests : Explicit -> Implicit where possible.
 add membind/memset support
 finish pp unit tests.
-automate running of pp unit tests.
+  do SetVarDclnNormalize.hh - do compile time array comparisons exist?
+x) automate running of pp unit tests.
+allow implicit typing in paramset.
 
 Better Error Message Reporting:
   ASSERT_MSG
@@ -81,53 +84,20 @@ return:
   3) else if not present and assignto is not present then the return type of the
     functor is void.
 
-local/localref
+local()
   Rationale:
   bound vars need to be forwarded to their destination via a temporary cntnr,
   for purposes of efficiency this is done using the add_reference metafunction. 
   Since in C++03 local types have no linkage, they cannot be used as template 
-  parameters, and therefore cannot be used with the add_reference metafunction. 
-  Therefore, they need to be specified explicity to avoid the use of add_reference.
+  parameters, and therefore cannot be used with metafunctions. 
+  Hence, the need to bind such types differently.
   
-  local is used to denote a local non-reference type, and localref is used to 
-  denote a local reference type. 
-  1) If local is accidentally used to denote a reference type then a compiler error 
-    will ensue since a "&" token will be inserted after that type in the generated
-    code.
-  2) If local is accidentaly used to denote a non-local type then the behaviour
-    will be the same as if it were used to denote a local type.
-  3) If localref is accidentally used to denote a non-reference type then an 
-    unnecessary copy and/or a silent error will pop-up in your code. Examples of
-    such scenarios are:
-    
-    1) assignto
-      If the type of the assignee is a non-reference and localref is accidentally
-      used then the expected assignee value at the end of the function will most
-      likely not be correct.
-    2) membind
-      If a non-mutable local non-reference type is used with localref, then an 
-      extra extraneous copy of that type is made, if such a copy permitted, else
-      a compiler error will ensue.
-  4) If localref is accidentaly used to denote a non-local type then the behaviour
-    will be the same as if it were used to denote a local type.
-    
-  In C++0X local/localref -> treat as explicit non-local/non-local-reference types? 
-  No.
-  Rationale:
-    Then when localref is mistakenly used with a non-reference local type, two 
-    different program behaviours might result, one in a silent runtime error (C++03), 
-    the other in correct behaviour (C++0x). Consider the following:
+  The local keyword is to be used to wrap non-const non-reference local types.  
+  Any use contrary to such will result in a compiler error. Such wrapped types
+  may then be qualified via the keywords const, ref, or const ref as demonstrated
+  in the BNF section.
   
-    struct SomeLocalType { int value; } obj = {0};
-    WG_AUTOFUNCTOR(someFunctor, parambind (localref(SomeLocalType) obj) )
-    {
-      obj.value = 1;
-    }
-    WG_AUTOFUNCTOR_END;
-
-    In C++03, it will result in a silent error since the type declared in localref 
-    is actually a non-reference type. If in C++0X localref types were treated as
-    regular C++ reference types, then the program will work as intended. 
+  IMPL detail: in C++11 treat such types as regular types for the purposes of codegen?
 
 //---
 //BNF
@@ -148,7 +118,9 @@ autofunction-spec :=
 
 assignto-tuple := (assignto-dcln)
 
-return-tuple := type
+return-tuple := 
+    (non-local-type)
+  | (local-type)
 
 parambind-seq := bound-tuple-seq
 paramset-seq := set-tuple-seq
@@ -186,21 +158,21 @@ implicit-typed-var-dcln :=
 explicit-typed-var-dcln :=
   explicit-type var-name
 
-implicit-type := bound-type-qualifiers | empty-string
+implicit-type := lib-type-qualifiers | empty-string
 
-bound-type-qualifiers := const | ref | const ref
+lib-type-qualifiers := const | ref | const ref
 
 explicit-type := 
     local-type
   | ( non-local-type )
 
 local-type :=
-    local(local-nonref-type)
-  | localref(local-ref-type)
+    local(local-nonconst-nonref-type)
+  | local(local-nonconst-nonref-type) lib-type-qualifiers
 
 type := A C++ type.
 var-name := A C++ variable name.
-local-nonref-type := A C++ type declaration specifying a local non-reference type.
-local-ref-type := A C++ type declaration specifying a local reference type.
+local-nonconst-nonref-type := 
+  A C++ type declaration specifying a non-const, non-reference local type.
 non-local-type := A C++ type declaration specifying a non-local type.
 value-expr := A C++ expression evaluating to some value.

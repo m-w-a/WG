@@ -10,6 +10,10 @@
 //Public APIs
 //###########
 
+// Expands to the following:
+//   (parsed-explicit-or-deduced-type) (var-name)
+//
+// (For definition of terms see SymbolTable documentation.)
 #define WG_PP_ASSIGNTODCLN_NORMALIZE(assigntodcln) \
   WG_PP_ASSIGNTODCLN_NORMALIZE_IMPL(assigntodcln)
 
