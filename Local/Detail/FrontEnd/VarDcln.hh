@@ -24,9 +24,7 @@
   BOOST_PP_IIF( \
     BOOST_PP_OR( \
       WG_PP_ISNEXTTOKEN_A_TUPLE(1, vardcln), \
-      BOOST_PP_OR( \
-        WG_PP_TOKENS_STARTWITH_LOCAL(vardcln), \
-        WG_PP_TOKENS_STARTWITH_LOCALREF(vardcln))), \
+      WG_PP_TOKENS_STARTWITH_LOCAL(vardcln)), \
     1, \
     0)
 
