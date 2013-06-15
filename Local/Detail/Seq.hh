@@ -30,6 +30,9 @@
 
 // Handles empty sequences.
 // NOTE: maps empty sequences to NOTHING!
+//   Rationale:
+//     SEQ_ENUM introduces commas into the token seq, therefore it's impossible
+//     to use with non-variadic WG_PP_SEQ_IFNIL_THENCLEAR.
 #define WG_PP_SEQ_ENUM(seq) WG_PP_SEQ_ENUM_IMPL(seq)
 
 // Maps to BOOST_PP_NIL if seq is nil
