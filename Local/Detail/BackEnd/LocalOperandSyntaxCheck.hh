@@ -42,14 +42,17 @@
   WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN2( \
     BOOST_PP_CAT(WG_PP_SYMBOLTABLE_TYPESEQ_, suffix) (symbtbl), \
     BOOST_PP_CAT(WG_PP_SYMBOLTABLE_OBJSEQ_, suffix) (symbtbl), \
-    BOOST_PP_CAT(WG_PP_LOCALOPERANDSYNTAXCHECK_ROOTNAME_, suffix))
+    BOOST_PP_CAT(WG_PP_LOCALOPERANDSYNTAXCHECK_ROOTNAME_, suffix) ())
 
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN2( \
   typeseq, objseq, varrootname) \
     WG_PP_LOCALOPERANDSYNTAXCHECK_EXPAND1( \
       BOOST_PP_EMPTY \
       WG_PP_SEQ_IFNIL_THENMAPTO( \
-        WG_PP_SEQ_FOR_EACH_I(transform, (varrootname)(objseq), typeseq), \
+        WG_PP_SEQ_FOR_EACH_I( \
+          WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN, \
+          (varrootname)(objseq), \
+          typeseq), \
         () BOOST_PP_EMPTY ) \
       () )
 
@@ -74,9 +77,10 @@
 
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN3( \
   localtype, objname, varrootname, indx) \
-    localtype const & \
-      WG_PP_ID_CAT( \
-        WG_PP_ID_CAT(WG_PP_ID_CAT(varrootname, indx), objname), \
-        ERROR_local_operand_is_a_reference_or_is_const_qualified) ;
+    typedef \
+      localtype const & (* \
+        WG_PP_ID_CAT( \
+          WG_PP_ID_CAT(WG_PP_ID_CAT(varrootname, indx), objname), \
+          ERROR_local_operand_is_a_reference_or_is_const_qualified) ) () ;
 
 #endif /* WG_PP_LOCALOPERANDSYNTAXCHECK_HH_ */

@@ -53,7 +53,7 @@ TEST(wg_autofunctor_parambindexplicit, OkIfKeywordThisUBound)
       {
         WG_AUTOFUNCTOR
         (bindThisU,
-          parambind (local(SomeLocalClass * const) this_) )
+          parambind (local(SomeLocalClass *) const this_) )
         {
           this_->didBindThis = true;
         }
@@ -99,7 +99,7 @@ TEST(wg_autofunctor_parambindexplicit, OkIfLocalRefTypeBound)
     } localObj = {0};
 
     WG_AUTOFUNCTOR
-    (useLocalKeyword, parambind (localref(SomeLocalClass &) localObj) )
+    (useLocalKeyword, parambind (local(SomeLocalClass) ref localObj) )
     {
       localObj.value = 10;
     }

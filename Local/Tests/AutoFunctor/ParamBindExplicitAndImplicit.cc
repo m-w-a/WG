@@ -37,7 +37,7 @@ TEST(wg_autofunctor_parambindexplicitandimplicit,
 
     WG_AUTOFUNCTOR
     (useLocalKeyword,
-      parambind (localref(SomeLocalClass &) localObj) (newValue) )
+      parambind (local(SomeLocalClass) ref localObj) (newValue) )
     {
       localObj.value = newValue;
     }

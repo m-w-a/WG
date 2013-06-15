@@ -7,6 +7,7 @@
 #include <WG/Local/Detail/Seq.hh>
 #include <WG/Local/Detail/BackEnd/TypeDeducer.hh>
 #include <WG/Local/Detail/BackEnd/ID.hh>
+#include <WG/Local/Detail/BackEnd/LocalOperandSyntaxCheck.hh>
 
 //###########
 //Public APIs
@@ -27,6 +28,9 @@
 #define WG_PP_AUTOFUNCTOR_CG_FORMATNAME(name) \
   WG_PP_ID_CAT(WG_PP_AUTOFUNCTOR_GLOBALID(), name)
 
+#define WG_PP_AUTOFUNCTOR_CG_LOCALOPERANDSYNTAXCHECKER_NAME() \
+  WG_PP_AUTOFUNCTOR_CG_FORMATNAME(localoperandsyntaxchecker)
+
 #define WG_PP_AUTOFUNCTOR_CG_TYPEDEDUCER_NAME() \
   WG_PP_AUTOFUNCTOR_CG_FORMATNAME(typededucer)
 
@@ -45,6 +49,8 @@
 // WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL2(name, symbtbl)
 #define WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL(name, symbtbl) \
   { \
+    WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN( \
+      WG_PP_AUTOFUNCTOR_CG_LOCALOPERANDSYNTAXCHECKER_NAME(), symbtbl) \
     WG_PP_TYPEDEDUCER_DCLN(WG_PP_AUTOFUNCTOR_CG_TYPEDEDUCER_NAME(), symbtbl) \
     WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL2( \
       name, \

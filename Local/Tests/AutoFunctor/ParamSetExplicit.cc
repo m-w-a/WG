@@ -84,7 +84,7 @@ TEST(wg_autofunctor_paramsetexplicit, OkIfLocalRefTypeSet)
     } localObj = {0};
 
     WG_AUTOFUNCTOR
-    (useLocalKeyword, paramset (localref(SomeLocalClass &) obj, localObj) )
+    (useLocalKeyword, paramset (local(SomeLocalClass) ref obj, localObj) )
     {
       obj.value = 10;
     }

@@ -54,7 +54,7 @@ test_pp_tokenmatch_SOURCES = ../../Detail/Tests/TokenMatchUnitTest.cc
 test_pp_vardcln_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnUnitTest.cc
 test_pp_vardcln_implicit_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnImplicitUnitTest.cc
 test_pp_vardcln_explicit_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnExplicitUnitTest.cc
-test_pp_parsedtype_SOURCES = ../../Detail/BackEnd/Tests/TypeUnitTest.cc
+test_pp_parsedtype_SOURCES = ../../Detail/BackEnd/Tests/TypeExtractorUnitTest.cc
 
 test_autofunctor_SOURCES = \
     ../AutoFunctor/TestMain.cc \
@@ -75,7 +75,8 @@ EXTRA_DIST =
 #Preprocessor Flags.
 ####################
 
-AM_CPPFLAGS += \
+test_autofunctor_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
     $(GTEST_CPPFLAGS)
 
 ################
@@ -92,5 +93,8 @@ test_autofunctor_CXXFLAGS = \
 #Linker Flags.
 ##############
 
-LDADD = \
+GTEST_LTLIB = \
     $(top_builddir)/WG/ExternalLibsNoInstall/build_autotools/libgtest.la
+
+test_autofunctor_LDADD = $(GTEST_LTLIB)
+    

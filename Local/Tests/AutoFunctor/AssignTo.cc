@@ -67,7 +67,7 @@ TEST(wg_autofunctor_assignto, OkIfLocalRef)
       int value;
     } obj = {0};
 
-    WG_AUTOFUNCTOR(assign, assignto (localref(SomeLocalType &) obj) )
+    WG_AUTOFUNCTOR(assign, assignto (local(SomeLocalType) ref obj) )
     {
       static SomeLocalType toRet = {1};
 

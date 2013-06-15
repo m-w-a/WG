@@ -22,7 +22,7 @@ x) document WG_PP_MAKE_PSEQ_IMPL1
 add token autofunction in autofunction macros
 granularize pp includes ??
 x) IIF instead of IF
-Type.hh -> ParsedTypeToCppType.hh
+x) Type.hh -> ParsedTypeToCppType.hh
 
 
 optimize IIF -> by splitting branches
