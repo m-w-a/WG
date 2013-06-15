@@ -6,6 +6,7 @@
 #include <WG/Local/Detail/BackEnd/Forwarder.hh>
 #include <WG/Local/Detail/Seq.hh>
 #include <WG/Local/Detail/BackEnd/TypeDeducer.hh>
+#include <WG/Local/Detail/BackEnd/ID.hh>
 
 //###########
 //Public APIs
@@ -21,8 +22,10 @@
 //Impl Macros
 //###########
 
+#define WG_PP_AUTOFUNCTOR_GLOBALID() WG_PP_ID_MAKE_GLOBAL(autofunctor)
+
 #define WG_PP_AUTOFUNCTOR_CG_FORMATNAME(name) \
-  BOOST_PP_CAT(wgXXXautofunctorXXX, name)
+  WG_PP_ID_CAT(WG_PP_AUTOFUNCTOR_GLOBALID(), name)
 
 #define WG_PP_AUTOFUNCTOR_CG_TYPEDEDUCER_NAME() \
   WG_PP_AUTOFUNCTOR_CG_FORMATNAME(typededucer)

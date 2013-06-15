@@ -5,6 +5,7 @@
 #include <WG/Local/Detail/PP.hh>
 #include <WG/Local/Detail/BackEnd/SymbolTable.hh>
 #include <WG/Local/Detail/BackEnd/Type.hh>
+#include <WG/Local/Detail/BackEnd/ID.hh>
 
 //###########
 //Public APIs
@@ -103,7 +104,7 @@
 // membervar_rootname: use any of the MEMBERVAR_ROOTNAME_*() macros.
 #define WG_PP_FORWARDER_TYPE_ACCESSORNAME(membervar_rootname, indx) \
   BOOST_PP_CAT( \
-    BOOST_PP_CAT(getXXX, membervar_rootname), \
+    WG_PP_ID_CAT(get, membervar_rootname), \
     indx)
 
 #define WG_PP_FORWARDER_TYPE_MEMBERTYPE_ASSIGNEE(e_or_d_type) \
@@ -121,14 +122,14 @@
 //     elem: explicit_or_deduced_type
 #define WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM( \
   symbtbl, assignee_transform, rest_transform) \
-    WG_PP_FORWARDER_TYPE_MEMBERCNGRNCECLASS_COMMONTRANSFORM( \
+    WG_PP_FORWARDER_TYPE_CNGRNCECLASS_MEMBER_TRANSFORM( \
       ASSIGNEE, assignee_transform, symbtbl) \
-    WG_PP_FORWARDER_TYPE_MEMBERCNGRNCECLASS_COMMONTRANSFORM( \
+    WG_PP_FORWARDER_TYPE_CNGRNCECLASS_MEMBER_TRANSFORM( \
       BOUNDPARAM, rest_transform, symbtbl) \
-    WG_PP_FORWARDER_TYPE_MEMBERCNGRNCECLASS_COMMONTRANSFORM( \
+    WG_PP_FORWARDER_TYPE_CNGRNCECLASS_MEMBER_TRANSFORM( \
       SETPARAM, rest_transform, symbtbl)
 
-#define WG_PP_FORWARDER_TYPE_MEMBERCNGRNCECLASS_COMMONTRANSFORM( \
+#define WG_PP_FORWARDER_TYPE_CNGRNCECLASS_MEMBER_TRANSFORM( \
   suffix, transform, symbtbl) \
     WG_PP_SEQ_IFNIL_THENCLEAR( \
       WG_PP_SEQ_FOR_EACH_I( \
@@ -165,7 +166,7 @@
 
 #define WG_PP_FORWARDER_TYPE_CTOR_PARAMVARNAME(membervar_rootname, indx) \
   BOOST_PP_CAT( \
-    BOOST_PP_CAT(paramXXX, membervar_rootname), \
+    WG_PP_ID_CAT(param, membervar_rootname), \
     indx)
 
 //----------
