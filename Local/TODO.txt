@@ -32,10 +32,8 @@ finish pp unit tests.
   do SetVarDclnNormalize.hh - do compile time array comparisons exist?
 x) automate running of pp unit tests.
 allow implicit typing in paramset.
+simplicify LOCALOPERANDSYNTAXCHECK error msg.
 
-Better Error Message Reporting:
-  ASSERT_MSG
-  below
 Better Syntax Error Checking:
   empty spec
   missing type in explicit-typed-var-dcln

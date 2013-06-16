@@ -75,7 +75,8 @@ TEST(wg_autofunctor_parambindexplicit, OkIfLocalTypeBound)
       int value;
     } localObj = {10};
 
-    static int newValue = 0;
+    static int newValue;
+    newValue = 0;
     WG_AUTOFUNCTOR(useLocalKeyword, parambind (local(SomeLocalClass) localObj) )
     {
       localObj.value += 1;
@@ -106,6 +107,52 @@ TEST(wg_autofunctor_parambindexplicit, OkIfLocalRefTypeBound)
     WG_AUTOFUNCTOR_END;
 
     EXPECT_EQ(localObj.value, 10);
+  }
+  WG_GTEST_CATCH
+}
+
+TEST(wg_autofunctor_parambindexplicit, OkIfLocalConstTypeBound)
+{
+  try
+  {
+    struct SomeLocalClass
+    {
+      int value;
+    } localObj = {10};
+
+    static bool didLocalObjBind;
+    didLocalObjBind = false;
+    WG_AUTOFUNCTOR
+    (useLocalKeyword, parambind (local(SomeLocalClass) const localObj) )
+    {
+      didLocalObjBind = (localObj.value == 10);
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_TRUE(didLocalObjBind);
+  }
+  WG_GTEST_CATCH
+}
+
+TEST(wg_autofunctor_parambindexplicit, OkIfLocalConstRefTypeBound)
+{
+  try
+  {
+    struct SomeLocalClass
+    {
+      int value;
+    } localObj = {10};
+
+    static bool didLocalObjBind;
+    didLocalObjBind = false;
+    WG_AUTOFUNCTOR
+    (useLocalKeyword, parambind (local(SomeLocalClass) const ref localObj) )
+    {
+      didLocalObjBind = (localObj.value == 10);
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_TRUE(didLocalObjBind);
   }
   WG_GTEST_CATCH
 }
