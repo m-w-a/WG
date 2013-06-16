@@ -64,18 +64,9 @@ Then go over And make sure test coverage right.
 //----------
 
 assignto:
-  1) If not typed with localref then it will always be implicitly bound by
-    reference. 
+  1) if obj type is qualified const then a compiler error will result.
     Rationale:
-    1) Doing otherwise will result in assignment to a copy of the variable,
-      instead of the actual variable itself.
-    2) If typed with localref, then it is assumed that the bound type is already
-      a reference, hence no need to implicitly bind it by reference.
-  2) If implicitly typed, then it's illegal for it to be const or ref qualified.
-    Rationale:
-    1) const qualification does not make sense, since we want to eventually 
-      assign to the assignto variable.
-    2) ref qualification is redundant, per 1.1
+    It's impossible to assign to an object of a const qualified type.
 
 return:
   1) If present then indicates the return type of the functor,

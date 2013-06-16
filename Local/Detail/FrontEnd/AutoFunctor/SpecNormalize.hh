@@ -6,7 +6,6 @@
 #include <WG/Local/Detail/Seq.hh>
 #include <WG/Local/Detail/Keywords.hh>
 #include <WG/Local/Detail/FrontEnd/SplitHeadFromTokens.hh>
-#include <WG/Local/Detail/FrontEnd/AssignToDclnNormalize.hh>
 #include <WG/Local/Detail/FrontEnd/BoundVarDclnNormalize.hh>
 #include <WG/Local/Detail/FrontEnd/SetVarDclnNormalize.hh>
 
@@ -105,7 +104,7 @@
     WG_PP_SPLITHEADTUPLEFROMTOKENS( \
       1, \
       WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
-      WG_PP_ASSIGNTODCLN_NORMALIZE, \
+      WG_PP_BOUNDVARDCLN_NORMALIZE, \
       WG_PP_TUPLIZE, \
       WG_PP_TUPLIZE), \
     nexttransform)
