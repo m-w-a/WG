@@ -31,7 +31,9 @@
 
 // TODO: Add boundmem/setmem
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN_IMPL(syntaxcheckername, symbtbl) \
-  struct syntaxcheckername \
+  struct WG_PP_ID_CAT( \
+    syntaxcheckername, \
+    ERROR_local_operand_is_a_reference_or_is_const_qualified) \
   { \
     WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN(ASSIGNEE, symbtbl) \
     WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN(BOUNDPARAM, symbtbl) \
@@ -79,8 +81,6 @@
   localtype, objname, varrootname, indx) \
     typedef \
       localtype const & (* \
-        WG_PP_ID_CAT( \
-          WG_PP_ID_CAT(WG_PP_ID_CAT(varrootname, indx), objname), \
-          ERROR_local_operand_is_a_reference_or_is_const_qualified) ) () ;
+        WG_PP_ID_CAT(WG_PP_ID_CAT(varrootname, indx), objname) ) () ;
 
 #endif /* WG_PP_LOCALOPERANDSYNTAXCHECK_HH_ */
