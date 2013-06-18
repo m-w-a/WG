@@ -2,7 +2,9 @@
 #define WG_PP_SETVARDCLNNORMALIZE_HH_
 
 #include <WG/Local/Detail/PP.hh>
+#include <WG/Local/Detail/FrontEnd/VarDcln.hh>
 #include <WG/Local/Detail/FrontEnd/VarDclnExplicit.hh>
+#include <WG/Local/Detail/FrontEnd/VarDclnImplicit.hh>
 
 //###########
 //Public APIs
@@ -12,9 +14,26 @@
 //   {(parsed-explicit-type) (var-name) (value-expr)}+
 //
 // (For definition of terms see SymbolTable documentation.)
-#define WG_PP_SETVARDCLNNORMALIZE(explicittypedvardcln, valueexpr) \
-  WG_PP_VARDCLNEXPLICIT_TUPLIZE(explicittypedvardcln) \
+#define WG_PP_SETVARDCLNNORMALIZE(typevardcln, valueexpr) \
+  WG_PP_TYPEVARDCLN_NORMALIZE_IMPL(typevardcln, valueexpr) \
   WG_PP_TUPLIZE(valueexpr)
+
+//###########
+//Impl Macros
+//###########
+
+#define WG_PP_TYPEVARDCLN_NORMALIZE_EXPAND1(x) x
+
+#define WG_PP_TYPEVARDCLN_NORMALIZE_IMPL(typevardcln, valueexpr) \
+  WG_PP_TYPEVARDCLN_NORMALIZE_EXPAND1( \
+    BOOST_PP_IIF( \
+      WG_PP_VARDCLN_ISEXPLICIT(typevardcln), \
+      WG_PP_VARDCLNEXPLICIT_TUPLIZE, \
+      WG_PP_VARDCLNIMPLICIT_TUPLIZE_2ARG) \
+    BOOST_PP_IIF( \
+      WG_PP_VARDCLN_ISEXPLICIT(typevardcln), \
+      (typevardcln), \
+      (typevardcln, valueexpr) ))
 
 /*
 //Unit Tests.

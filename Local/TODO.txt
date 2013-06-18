@@ -34,11 +34,13 @@ x) automate running of pp unit tests.
 allow implicit typing in paramset.
 simplicify LOCALOPERANDSYNTAXCHECK error msg.
 
-Better Syntax Error Checking:
+Better Syntax Error Checking/Reporting:
+  BOOST_PP_ASSERT_MSG
   empty spec
-  missing type in explicit-typed-var-dcln
+  ref thisu
+  missing type in explicit-type-var-dcln
   missing var in "..."
-  missing type in implicit-typed-var-dcln
+  missing type in implicit-type-var-dcln
   missing var in "..."
 
 Better Test Names:
@@ -88,6 +90,36 @@ local()
   
   IMPL detail: in C++11 treat such types as regular types for the purposes of codegen?
 
+this_:
+  1) If encountered as a bound variable name, then it will bind to the "this" 
+    keyword.
+  2) If encountered as a bound variable and implicitly typed and explicitly
+    qualified with the keyword const, then the constness will apply to the
+    pointed-to-type.
+    Rationale:
+      The type of "this", and hence the type of "this_", is already const. 
+      Therefore the const keyword would be redundant if applied to the "outer 
+      type". The above semantics are provided as an alternative shortcut 
+      to explicitly typing "this_" and const qualifying the pointed-to-type.
+
+bound-variables:
+  1) variables designated as such are bound to variables of the same name from 
+    the enclosing scope.
+  2) If implicitly typed, the types of such variables are determined by the
+    type of the variables they are bound to via BOOST_TYPEOF. Hence, this will
+    always be remove_reference<remove_const<type-of-boundee>::type>::type.
+    (*) Therefore, if you want something bound by reference always use the ref
+    keyword and if you want something bound by const always use the const 
+    keyword.
+  3) If explicitly typed, the types of such variables must be "implicitly
+    convertible to" from the type of the variable that they respectively bind in
+    their outer scope.
+
+set-variables:
+  1) If implicitly typed, the types of such variables are determined by the
+    type of the expression they are set to via BOOST_TYPEOF. If such an 
+    expression is a variable, then the caveats of b-v 2) apply.
+
 //---
 //BNF
 //---
@@ -105,7 +137,7 @@ autofunction-spec :=
     [membind membind-seq]
     [memset memset-seq]
 
-assignto-tuple := (assignto-dcln)
+assignto-tuple := bound-tuple
 
 return-tuple := 
     (non-local-type)
@@ -130,21 +162,18 @@ bound-tuple :=
 set-tuple :=
   ( set-var-dcln )
 
-assignto-dcln := 
-     var-name
-  |  explicit-typed-var-dcln
+bound-var-dcln := type-var-dcln
 
-bound-var-dcln :=
-    implicit-typed-var-dcln
-  | explicit-typed-var-dcln
+set-var-dcln := type-var-dcln , value-expr
 
-set-var-dcln :=
-  explicit-typed-var-dcln , value-expr
+type-var-dcln := 
+    implicit-type-var-dcln
+  | explicit-type-var-dcln
 
-implicit-typed-var-dcln :=
+implicit-type-var-dcln :=
   implicit-type var-name
 
-explicit-typed-var-dcln :=
+explicit-type-var-dcln :=
   explicit-type var-name
 
 implicit-type := lib-type-qualifiers | empty-string

@@ -15,7 +15,7 @@
 #define WG_PP_VARDCLN_ISIMPLICIT(vardcln) \
   BOOST_PP_NOT( \
     WG_PP_VARDCLN_ISEXPLICIT(vardcln))
-  
+
 //###########
 //Impl Macros
 //###########

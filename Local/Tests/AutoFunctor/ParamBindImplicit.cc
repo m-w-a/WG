@@ -27,7 +27,8 @@ TEST(wg_autofunctor_parambindimplicit, OkIf3ArgsOfVaryingMutabilityBound)
     int const mass = 10;
     int const velocity = 2;
 
-    WG_AUTOFUNCTOR(calculateForce, parambind (ref force) (mass) (velocity) )
+    WG_AUTOFUNCTOR
+    (calculateForce, parambind (ref force) (const mass) (const velocity) )
     {
       force = mass * velocity;
     }
