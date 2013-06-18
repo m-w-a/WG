@@ -14,7 +14,7 @@ TEST(wg_autofunctor_parambindimplicitandparamsetexplicit, OkIfUsing21Combo)
 
     WG_AUTOFUNCTOR
     (calculateVolume,
-      parambind (ref volume) (pressure)
+      parambind (ref volume) (const pressure)
       paramset ((int const) numerator, numMoles * R * temp) )
     {
       volume = numerator / pressure;
