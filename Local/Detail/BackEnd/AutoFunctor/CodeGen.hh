@@ -106,10 +106,7 @@
         WG_PP_AUTOFUNCTOR_CG_FRWDR_ACCESSOR_ASSIGNEE(frwdr, symbtbl) = ) \
       this->name \
       ( \
-        WG_PP_AUTOFUNCTOR_CG_FUNCTOR_CALLLIST( \
-          frwdr, \
-          symbtbl, \
-          BOOST_PP_SEQ_TAIL(WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPECSEQ()) ) \
+        WG_PP_AUTOFUNCTOR_CG_FUNCTOR_CALLLIST(frwdr, symbtbl) \
       ); \
     } \
     WG_PP_AUTOFUNCTOR_CG_FUNCTOR_RETURNTYPE(symbtbl) \
@@ -125,26 +122,17 @@
       symbtbl, \
       WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_ASSIGNEE())
 
-#define WG_PP_AUTOFUNCTOR_CG_FUNCTOR_CALLLIST(objname, symbtbl, spec) \
-  WG_PP_SEQ_ENUM( \
-    WG_PP_AUTOFUNCTOR_CG_EXPAND1( \
-      BOOST_PP_CAT(WG_PP_SEQ_JOIN, BOOST_PP_SEQ_SIZE(spec)) \
-      BOOST_PP_LPAREN() \
-        BOOST_PP_SEQ_ENUM( \
-          BOOST_PP_SEQ_FOR_EACH( \
-            WG_PP_AUTOFUNCTOR_CG_FUNCTOR_CALLENTRY, \
-            (objname)(symbtbl), \
-            spec)) \
-      BOOST_PP_RPAREN() ))
-
-// BOOST_PP_SEQ_FOR_EACH functor.
-#define WG_PP_AUTOFUNCTOR_CG_FUNCTOR_CALLENTRY(r, objname_symbtbl, spec) \
-  ( \
+#define WG_PP_AUTOFUNCTOR_CG_FUNCTOR_CALLLIST(objname, symbtbl) \
+WG_PP_SEQ_ENUM( \
+  WG_PP_SEQ_JOIN2( \
     WG_PP_FORWARDER_ACCESSORWGSEQ( \
-      BOOST_PP_SEQ_ELEM(0, objname_symbtbl), \
-      BOOST_PP_SEQ_ELEM(1, objname_symbtbl), \
-      spec) \
-  )
+      objname, \
+      symbtbl, \
+      WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_BOUNDPARAM()), \
+    WG_PP_FORWARDER_ACCESSORWGSEQ( \
+      objname, \
+      symbtbl, \
+      WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_SETPARAM())))
 
 #define WG_PP_AUTOFUNCTOR_CG_FUNCTOR_RETURNTYPE(symbtbl) \
   BOOST_PP_IIF( \
