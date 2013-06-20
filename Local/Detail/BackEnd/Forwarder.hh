@@ -19,11 +19,10 @@
 //     3) WG_PP_SYMBOLTABLE_VALUESEQ_<suffix>
 //     4) WG_PP_SYMBOLTABLE_XXX_SIZE_<suffix>
 //     5) and when necessary, WG_PP_SYMBOLTABLE_OBJSEQ_THISU_MARKER_<suffix>
-//        where suffix is defined below in specseq.
+//   Where suffix is defined below in specseq.
 // specseq:
 //   { ( (suffix)(forwarding_type)(varrootname)(thisu_policy) ) }+
-//   suffix:
-//     must match WG_PP_SYMBOLTABLE_{TYPESEQ | OBJSEQ | OBJSEQ_THISU_MARKER}_<*>
+//
 //   forwarding_type:
 //     one of {REF, CONSTREF}
 //     determines whether the variable will be forwarded by ref or const ref.
@@ -82,7 +81,8 @@
       WG_PP_FORWARDER_SPEC_VARROOTNAME(spec), \
       BOOST_PP_CAT( \
         WG_PP_SYMBOLTABLE_XXX_SIZE_, \
-        WG_PP_FORWARDER_SPEC_SUFFIX(spec)) (symbtbl) )
+        WG_PP_FORWARDER_SPEC_SUFFIX(spec)) (symbtbl) \
+    )
 
 #define WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL0( \
   frwdr_objname, varrootname, count) \
