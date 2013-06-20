@@ -23,6 +23,12 @@
 //Impl Macros
 //###########
 
+//-----
+//Utils
+//-----
+
+#define WG_PP_AUTOFUNCTOR_CG_EXPAND1(x) x
+
 #define WG_PP_AUTOFUNCTOR_GLOBALID() WG_PP_ID_MAKE_GLOBAL(autofunctor)
 
 #define WG_PP_AUTOFUNCTOR_CG_FORMATNAME(name) \
@@ -46,7 +52,10 @@
 #define WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_OBJNAME() \
   WG_PP_AUTOFUNCTOR_CG_FORMATNAME(autofunctor)
 
-// WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL2(name, symbtbl)
+//------------
+//The CodeGen.
+//------------
+
 #define WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL(name, symbtbl) \
   { \
     WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN( \
@@ -58,11 +67,24 @@
         symbtbl, \
         WG_PP_AUTOFUNCTOR_CG_TYPEDEDUCER_NAME()) )
 
+#define WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_ASSIGNEE() \
+  (ASSIGNEE)(REF)(assignee)(DONOTREPLACETHISU)
+#define WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_BOUNDPARAM() \
+  (BOUNDPARAM)(CONSTREF)(parambind)(REPLACETHISU)
+#define WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_SETPARAM() \
+  (SETPARAM)(CONSTREF)(paramset)(DONOTREPLACETHISU)
+
+#define WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPECSEQ() \
+  ( WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_ASSIGNEE() ) \
+  ( WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_BOUNDPARAM() ) \
+  ( WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_SETPARAM() )
+
 #define WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL2(name, symbtbl) \
     WG_PP_FORWARDER_DCLN( \
       WG_PP_AUTOFUNCTOR_CG_FRWDR_TYPENAME(), \
       WG_PP_AUTOFUNCTOR_CG_FRWDR_OBJNAME(), \
-      symbtbl) \
+      symbtbl, \
+      WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPECSEQ()) \
     \
     WG_PP_AUTOFUNCTOR_CG_FNCTRDCLN_START(name, symbtbl)
 
@@ -81,22 +103,46 @@
       static_cast<void>(frwdr); \
       BOOST_PP_EXPR_IIF( \
         WG_PP_SYMBOLTABLE_EXISTS_ASSIGNEE(symbtbl), \
-        WG_PP_FORWARDER_ACCESSOR_ASSIGNEE(frwdr) = ) \
-      this->name( \
+        WG_PP_AUTOFUNCTOR_CG_FRWDR_ACCESSOR_ASSIGNEE(frwdr, symbtbl) = ) \
+      this->name \
+      ( \
         WG_PP_SEQ_ENUM( \
-          WG_PP_SEQ_JOIN2( \
-            WG_PP_FORWARDER_ACCESSORWGSEQ_BOUNDPARAM( \
-              frwdr, \
-              WG_PP_SYMBOLTABLE_XXX_SIZE_BOUNDPARAM(symbtbl)), \
-            WG_PP_FORWARDER_ACCESSORWGSEQ_SETPARAM( \
-              frwdr, \
-              WG_PP_SYMBOLTABLE_XXX_SIZE_SETPARAM(symbtbl)))) ); \
+          WG_PP_AUTOFUNCTOR_CG_EXPAND1( \
+            BOOST_PP_CAT( \
+              WG_PP_SEQ_JOIN, \
+              BOOST_PP_DEC( \
+                BOOST_PP_SEQ_SIZE( \
+                  WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPECSEQ()))) \
+            BOOST_PP_LPAREN() \
+              BOOST_PP_SEQ_ENUM( \
+                BOOST_PP_SEQ_FOR_EACH( \
+                  WG_PP_AUTOFUNCTOR_CG_FUNCTOR_CALLENTRY, \
+                  (frwdr)(symbtbl), \
+                  BOOST_PP_SEQ_TAIL(WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPECSEQ()))) \
+            BOOST_PP_RPAREN() )) \
+      ); \
     } \
     WG_PP_AUTOFUNCTOR_CG_FUNCTOR_RETURNTYPE(symbtbl) \
       name \
       BOOST_PP_LPAREN() \
         WG_PP_AUTOFUNCTOR_CG_FUNC_PARAMLIST(symbtbl) \
       BOOST_PP_RPAREN()
+
+#define WG_PP_AUTOFUNCTOR_CG_FRWDR_ACCESSOR_ASSIGNEE(objname, symbtbl) \
+  WG_PP_IDENTITY \
+    WG_PP_FORWARDER_ACCESSORWGSEQ( \
+      objname, \
+      symbtbl, \
+      WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_ASSIGNEE())
+
+// BOOST_PP_SEQ_FOR_EACH functor.
+#define WG_PP_AUTOFUNCTOR_CG_FUNCTOR_CALLENTRY(r, objname_symbtbl, spec) \
+  ( \
+    WG_PP_FORWARDER_ACCESSORWGSEQ( \
+      BOOST_PP_SEQ_ELEM(0, objname_symbtbl), \
+      BOOST_PP_SEQ_ELEM(1, objname_symbtbl), \
+      spec) \
+  )
 
 #define WG_PP_AUTOFUNCTOR_CG_FUNCTOR_RETURNTYPE(symbtbl) \
   BOOST_PP_IIF( \
