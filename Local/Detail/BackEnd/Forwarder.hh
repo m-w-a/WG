@@ -19,7 +19,7 @@
 //     3) WG_PP_SYMBOLTABLE_VALUESEQ_<suffix>
 //     4) WG_PP_SYMBOLTABLE_XXX_SIZE_<suffix>
 //     5) and when necessary, WG_PP_SYMBOLTABLE_OBJSEQ_THISU_MARKER_<suffix>
-//   Where suffix is defined below in specseq.
+//   Where suffix is declared in specseq.
 // specseq:
 //   { ( (suffix)(forwarding_type)(varrootname)(thisu_policy) ) }+
 //

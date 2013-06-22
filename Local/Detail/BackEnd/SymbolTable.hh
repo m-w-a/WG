@@ -63,8 +63,8 @@
 //Note: the new definition of parsed-deduced-type:
 //
 //parsed-deduced-type := <typededucer_name>::<some_typedef_name>
-#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER(symbtbl, typededucer_name) \
-  WG_PP_SYMBOLTABLE_USETYPEDEDUCER_IMPL(symbtbl, typededucer_name)
+#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER(symbtbl, typededucer_name, specseq) \
+  WG_PP_SYMBOLTABLE_USETYPEDEDUCER_IMPL(symbtbl, typededucer_name, specseq)
 
 //Returns: { BOOST_PP_NIL | (parsed-explicit-or-deduced-type) }
 #define WG_PP_SYMBOLTABLE_TYPESEQ_ASSIGNEE(symbtbl) \
@@ -276,65 +276,93 @@
 //UseTypeDeducer Macros
 //---------------------
 
-#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER_IMPL(symbtbl, typededucer_name) \
-  WG_PP_SYMBOLTABLE_USETYPEDEDUCER_IMPL2( \
+#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_STATE_INIT( \
+  symbtbl, typededucer_name, specseq) \
+    (specseq, typededucer_name, symbtbl)
+#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_STATE_ELEM(indx, state) \
+  BOOST_PP_TUPLE_ELEM(3, indx, state)
+#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_STATE_SPECSEQ(state) \
+  WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_STATE_ELEM(0, state)
+#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_STATE_TDNAME(state) \
+  WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_STATE_ELEM(1, state)
+#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_STATE_SYMBTBL(state) \
+  WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_STATE_ELEM(2, state)
+
+#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_PRED(d, state) \
+  BOOST_PP_GREATER( \
+    BOOST_PP_SEQ_SIZE(\
+      WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_STATE_SPECSEQ(state)), \
+    1)
+
+#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_OP(d, state) \
+  ( \
+    BOOST_PP_SEQ_POP_FRONT( \
+      WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_STATE_SPECSEQ(state)), \
+    WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_STATE_TDNAME(state), \
     WG_PP_ST_USETYPEDEDUCER_REPLACEDEDUCEDTUPLESEQ( \
-      symbtbl, typededucer_name, ASSIGNEE), \
-    typededucer_name)
+      WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_STATE_SYMBTBL(state), \
+      WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_STATE_TDNAME(state), \
+      BOOST_PP_SEQ_HEAD( \
+        WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_STATE_SPECSEQ(state)) ) \
+  )
 
-#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER_IMPL2(symbtbl, typededucer_name) \
-  WG_PP_SYMBOLTABLE_USETYPEDEDUCER_IMPL3( \
-    WG_PP_ST_USETYPEDEDUCER_REPLACEDEDUCEDTUPLESEQ( \
-      symbtbl, typededucer_name, BOUNDPARAM), \
-    typededucer_name)
-
-#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER_IMPL3(symbtbl, typededucer_name) \
-  WG_PP_ST_USETYPEDEDUCER_REPLACEDEDUCEDTUPLESEQ( \
-    symbtbl, typededucer_name, SETPARAM)
-
-// TODO: BOUNDMEM, SETMEM
+#define WG_PP_SYMBOLTABLE_USETYPEDEDUCER_IMPL( \
+  symbtbl, typededucer_name, specseq) \
+    WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_STATE_SYMBTBL( \
+      BOOST_PP_WHILE( \
+        WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_PRED, \
+        WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_OP, \
+        WG_PP_SYMBOLTABLE_USETYPEDEDUCER_WHILE_STATE_INIT( \
+          symbtbl, \
+          typededucer_name, \
+          specseq (BOOST_PP_NIL) )))
 
 //TODO: WORKAROUND
 #ifndef BOOST_PP_TUPLE_REM_0
 #define BOOST_PP_TUPLE_REM_0() // nothing
 #endif
-// suffix: {ASSIGNEE, BOUNDPARAM, SETPARAM, BOUNDMEM}
+
 #define WG_PP_ST_USETYPEDEDUCER_REPLACEDEDUCEDTUPLESEQ( \
-  symbtbl, typededucer_name, suffix) \
+  symbtbl, typededucer_name, spec) \
     BOOST_PP_ARRAY_REPLACE( \
       symbtbl, \
-      BOOST_PP_CAT(WG_PP_SYMBOLTABLE_INDX_TYPESEQ_, suffix), \
+      BOOST_PP_CAT( \
+        WG_PP_SYMBOLTABLE_INDX_TYPESEQ_, \
+        WG_PP_TYPEDEDUCER_SPEC_SUFFIX(spec)), \
       WG_PP_ST_USETYPEDEDUCER_REPLACEMENTDEDUCEDTUPLESEQ( \
-        symbtbl, typededucer_name, suffix) )
+        symbtbl, \
+        typededucer_name, \
+        spec) )
 
 #define WG_PP_ST_USETYPEDEDUCER_REPLACEMENTDEDUCEDTUPLESEQ( \
-  symbtbl, typededucer_name, suffix) \
+  symbtbl, typededucer_name, spec) \
     WG_PP_SEQ_FOR_EACH_I( \
       WG_PP_ST_USETYPEDEDUCER_REPLACEBOUNDTUPLEENTRY, \
-      (BOOST_PP_CAT(WG_PP_TYPEDEDUCER_TYPENAME_, suffix)) (typededucer_name), \
-      BOOST_PP_CAT(WG_PP_SYMBOLTABLE_TYPESEQ_, suffix) (symbtbl) )
+      (spec) (typededucer_name), \
+      BOOST_PP_CAT( \
+        WG_PP_SYMBOLTABLE_TYPESEQ_, \
+        WG_PP_TYPEDEDUCER_SPEC_SUFFIX(spec)) (symbtbl) )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_ST_USETYPEDEDUCER_REPLACEBOUNDTUPLEENTRY( \
-  r, boundtypenamer_typededucername, indx, entry) \
+  r, spec_typededucername, indx, entry) \
     BOOST_PP_LPAREN() \
       BOOST_PP_IIF( \
         WG_PP_TOKENS_START_WITH_WG_PP_DEDUCEDTYPE(entry), \
         WG_PP_ST_USETYPEDEDUCER_REPLACEBOOSTYPEOF( \
-          boundtypenamer_typededucername, indx), \
+          spec_typededucername, indx), \
         entry) \
     BOOST_PP_RPAREN()
 
 #define WG_PP_ST_USETYPEDEDUCER_REPLACEBOOSTYPEOF( \
-  boundtypenamer_typededucername, indx) \
+  spec_typededucername, indx) \
     WG_PP_ST_USETYPEDEDUCER_REPLACEBOOSTYPEOF2( \
-      BOOST_PP_SEQ_ELEM(0, boundtypenamer_typededucername), \
-      BOOST_PP_SEQ_ELEM(1, boundtypenamer_typededucername), \
+      BOOST_PP_SEQ_ELEM(0, spec_typededucername), \
+      BOOST_PP_SEQ_ELEM(1, spec_typededucername), \
       indx)
 
 #define WG_PP_ST_USETYPEDEDUCER_REPLACEBOOSTYPEOF2( \
-  boundtypenamer, typededucername, indx) \
-    typededucername::boundtypenamer(indx)
-
+  spec, typededucername, indx) \
+    typededucername::WG_PP_TYPEDEDUCER_TYPENAME(spec, indx)
 
 #endif //WG_PP_SYMBOLTABLE_HH_

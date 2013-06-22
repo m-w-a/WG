@@ -12,85 +12,74 @@
 // Will create a struct named <typededucername> that typedefs all the types
 // of implicitly-typed vars to aliases that are accessible via the macros that
 // follow. Note that the indx param in the said macros reflect the order in
-// which they appeared when declared, starting from the number 0.
-#define WG_PP_TYPEDEDUCER_DCLN(typededucername, symbtbl) \
-  WG_PP_TYPEDEDUCER_DCLN_IMPL(typededucername, symbtbl)
+// which the vars were encountered in the symbtbl, starting from the number 0.
+//
+// symbtbl:
+//   must have the following defined:
+//     1) WG_PP_SYMBOLTABLE_TYPESEQ_<suffix>
+//  where suffix is declared in specseq.
+//
+// specseq:
+//   { ( (suffix)(varrootname) ) }+
+//
+//   varrootname:
+//     the root name of the congruence class of variables being forwarded.
+#define WG_PP_TYPEDEDUCER_DCLN(typededucername, symbtbl, specseq) \
+  WG_PP_TYPEDEDUCER_DCLN_IMPL(typededucername, symbtbl, specseq)
 
-#define WG_PP_TYPEDEDUCER_TYPENAME_ASSIGNEE(indx) \
-  WG_PP_TYPEDEDUCER_TYPENAME_ASSIGNEE_IMPL(indx)
+#define WG_PP_TYPEDEDUCER_SPEC_SUFFIX(spec) BOOST_PP_SEQ_ELEM(0, spec)
+#define WG_PP_TYPEDEDUCER_SPEC_VARROOTNAME(spec) BOOST_PP_SEQ_ELEM(1, spec)
 
-#define WG_PP_TYPEDEDUCER_TYPENAME_BOUNDPARAM(indx) \
-  WG_PP_TYPEDEDUCER_TYPENAME_BOUNDPARAM_IMPL(indx)
-
-#define WG_PP_TYPEDEDUCER_TYPENAME_SETPARAM(indx) \
-  WG_PP_TYPEDEDUCER_TYPENAME_SETPARAM_IMPL(indx)
-
-#define WG_PP_TYPEDEDUCER_TYPENAME_BOUNDMEM(indx) \
-  WG_PP_TYPEDEDUCER_TYPENAME_BOUNDMEM_IMPL(indx)
+#define WG_PP_TYPEDEDUCER_TYPENAME(spec, indx) \
+  WG_PP_TYPEDEDUCER_TYPENAME_IMPL(spec, indx)
 
 //###########
 //Impl Macros
 //###########
 
-#define WG_PP_TYPEDEDUCER_TYPENAME_ASSIGNEE_IMPL(indx) \
-  WG_PP_TYPEDEDUCER_TYPENAME( \
-    WG_PP_TYPEDEDUCER_TYPEROOTNAME_ASSIGNEE(), indx)
+#define WG_PP_TYPEDEDUCER_TYPENAME_IMPL(spec, indx) \
+  BOOST_PP_CAT( \
+    WG_PP_TYPEDEDUCER_SPEC_VARROOTNAME(spec), \
+    indx)
 
-#define WG_PP_TYPEDEDUCER_TYPENAME_BOUNDPARAM_IMPL(indx) \
-  WG_PP_TYPEDEDUCER_TYPENAME( \
-    WG_PP_TYPEDEDUCER_TYPEROOTNAME_BOUNDPARAM(), indx)
-
-#define WG_PP_TYPEDEDUCER_TYPENAME_SETPARAM_IMPL(indx) \
-  WG_PP_TYPEDEDUCER_TYPENAME( \
-    WG_PP_TYPEDEDUCER_TYPEROOTNAME_SETPARAM(), indx)
-
-#define WG_PP_TYPEDEDUCER_TYPENAME_BOUNDMEM_IMPL(indx) \
-  WG_PP_TYPEDEDUCER_TYPENAME( \
-    WG_PP_TYPEDEDUCER_TYPEROOTNAME_BOUNDMEM(), indx)
-
-#define WG_PP_TYPEDEDUCER_TYPEROOTNAME_ASSIGNEE() assignee
-#define WG_PP_TYPEDEDUCER_TYPEROOTNAME_BOUNDPARAM() boundparam
-#define WG_PP_TYPEDEDUCER_TYPEROOTNAME_SETPARAM() setparam
-#define WG_PP_TYPEDEDUCER_TYPEROOTNAME_BOUNDMEM() boundmem
-#define WG_PP_TYPEDEDUCER_TYPEROOTNAME_SETMEM() setmem
-
-#define WG_PP_TYPEDEDUCER_TYPENAME(rootname, indx) \
-  BOOST_PP_CAT(rootname, indx)
-
-// TODO: add BOUNDMEM/SETMEM
-#define WG_PP_TYPEDEDUCER_DCLN_IMPL(typededucername, symbtbl) \
+#define WG_PP_TYPEDEDUCER_DCLN_IMPL(typededucername, symbtbl, specseq) \
   struct typededucername \
   { \
-    WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS(ASSIGNEE, symbtbl) \
-    WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS(BOUNDPARAM, symbtbl) \
-    WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS(SETPARAM, symbtbl) \
+    BOOST_PP_SEQ_FOR_EACH( \
+      WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS, \
+      symbtbl, \
+      specseq) \
   };
 
-// The following need to be defined:
-//   WG_PP_TYPEDEDUCER_TYPENAME_<suffix>
-//   WG_PP_SYMBOLTABLE_TYPESEQ_<suffix>
-#define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS(suffix, symbtbl) \
+// BOOST_PP_SEQ_FOR_EACH functor.
+#define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS(r, symbtbl, spec) \
   BOOST_PP_IIF( \
     WG_PP_TOKENS_START_WITH_BOOST_PP_NIL( \
-      BOOST_PP_CAT(WG_PP_SYMBOLTABLE_TYPESEQ_, suffix) (symbtbl)), \
+      BOOST_PP_CAT( \
+        WG_PP_SYMBOLTABLE_TYPESEQ_, \
+        WG_PP_TYPEDEDUCER_SPEC_SUFFIX(spec)) (symbtbl)), \
     WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS_NONE, \
-    WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS_PROCESS) (suffix, symbtbl)
+    WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS_PROCESS) (symbtbl, spec)
 
-#define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS_NONE(suffix, symbtbl) // nothing
-#define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS_PROCESS(suffix, symbtbl) \
+#define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS_NONE(symbtbl, spec) // nothing
+
+#define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS_PROCESS(symbtbl, spec) \
   WG_PP_SEQ_FOR_EACH_I( \
     WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN, \
-    BOOST_PP_CAT(WG_PP_TYPEDEDUCER_TYPENAME_, suffix), \
-    BOOST_PP_CAT(WG_PP_SYMBOLTABLE_TYPESEQ_, suffix) (symbtbl)  )
+    spec, \
+    BOOST_PP_CAT( \
+      WG_PP_SYMBOLTABLE_TYPESEQ_, \
+      WG_PP_TYPEDEDUCER_SPEC_SUFFIX(spec)) (symbtbl)  )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN(r, namer, indx, e_or_d_type) \
+#define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN(r, spec, indx, e_or_d_type) \
   BOOST_PP_EXPR_IIF( \
     WG_PP_TOKENS_START_WITH_WG_PP_DEDUCEDTYPE(e_or_d_type), \
-    WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN_IMPL(namer, indx, e_or_d_type) )
+    WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN_IMPL(spec, indx, e_or_d_type) )
 
-#define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN_IMPL(namer, indx, deduced_type) \
-  typedef WG_PP_TOKENS_EATHEADTOKEN_WG_PP_DEDUCEDTYPE(deduced_type) \
-  namer(indx) ;
+#define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN_IMPL( \
+  spec, indx, deduced_type) \
+    typedef WG_PP_TOKENS_EATHEADTOKEN_WG_PP_DEDUCEDTYPE(deduced_type) \
+    WG_PP_TYPEDEDUCER_TYPENAME(spec, indx) ;
 
 #endif /* WG_PP_TYPEDEDUCER_HH_ */
