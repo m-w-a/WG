@@ -22,6 +22,8 @@
 //return_nrmlzd_type: { BOOST_PP_NIL | type }
 //parambind_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-bound-tuple}+ }
 //paramset_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-set-tuple}+ }
+//membind_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-bound-tuple}+ }
+//memset_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-set-tuple}+ }
 //
 //normalized-bound-tuple := (parsed-explicit-or-deduced-type)(var-name)
 //normalized-set-tuple := (parsed-explicit-type)(var-name)(value-expr)
@@ -42,12 +44,16 @@
   assignto_nrmlzd_tuple, \
   return_type, \
   parambind_nrmlzd_tupleseq, \
-  paramset_nrmlzd_tupleseq) \
+  paramset_nrmlzd_tupleseq, \
+  membind_nrmlzd_tupleseq, \
+  memset_nrmlzd_tupleseq) \
     WG_PP_ST_CREATE_IMPL1( \
       assignto_nrmlzd_tuple, \
       return_type, \
       parambind_nrmlzd_tupleseq, \
-      paramset_nrmlzd_tupleseq)
+      paramset_nrmlzd_tupleseq, \
+      membind_nrmlzd_tupleseq, \
+      memset_nrmlzd_tupleseq)
 
 //Returns: { BOOST_PP_NIL | (parsed-explicit-or-deduced-type) }
 #define WG_PP_SYMBOLTABLE_TYPESEQ_ASSIGNEE(symbtbl) \
@@ -110,11 +116,43 @@
 #define WG_PP_SYMBOLTABLE_VALUESEQ_SETPARAM(symbtbl) \
   WG_PP_SYMBOLTABLE_GET(symbtbl, VALUESEQ_SETPARAM)
 
-//Returns: { BOOST_PP_NIL | integer }
+//Returns: { integer }
 #define WG_PP_SYMBOLTABLE_XXX_SIZE_SETPARAM(symbtbl) \
   WG_PP_SYMBOLTABLE_GET(symbtbl, XXX_SIZE_SETPARAM)
 
+//Returns: { BOOST_PP_NIL | {(parsed-explicit-or-deduced-type)}+ }
+#define WG_PP_SYMBOLTABLE_TYPESEQ_BOUNDMEM(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, TYPESEQ_BOUNDMEM)
+
+//Returns: { BOOST_PP_NIL | {(var-name)}+ }
+#define WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDMEM(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, OBJSEQ_BOUNDMEM)
+
+//Returns: { integer }
+#define WG_PP_SYMBOLTABLE_XXX_SIZE_BOUNDMEM(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, XXX_SIZE_BOUNDMEM)
+
 //Returns: { BOOST_PP_NIL | integer }
+#define WG_PP_SYMBOLTABLE_OBJSEQ_THISU_MARKER_BOUNDMEM(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, OBJSEQ_THISU_MARKER_BOUNDMEM)
+
+//Returns: { BOOST_PP_NIL | {(parsed-explicit-type)}+ }
+#define WG_PP_SYMBOLTABLE_TYPESEQ_SETMEM(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, TYPESEQ_SETMEM)
+
+//Returns: { BOOST_PP_NIL | {(var-name)}+ }
+#define WG_PP_SYMBOLTABLE_OBJSEQ_SETMEM(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, OBJSEQ_SETMEM)
+
+//Returns: { BOOST_PP_NIL | {(value-expr)}+ }
+#define WG_PP_SYMBOLTABLE_VALUESEQ_SETMEM(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, VALUESEQ_SETMEM)
+
+//Returns: { integer }
+#define WG_PP_SYMBOLTABLE_XXX_SIZE_SETMEM(symbtbl) \
+  WG_PP_SYMBOLTABLE_GET(symbtbl, XXX_SIZE_SETMEM)
+
+//Returns: { integer }
 #define WG_PP_SYMBOLTABLE_TOTALXXX_SIZE(symbtbl) \
   WG_PP_SYMBOLTABLE_GET(symbtbl, TOTALXXX_SIZE)
 
@@ -126,15 +164,28 @@
 #define WG_PP_SYMBOLTABLE_INDX_OBJSEQ_ASSIGNEE 1
 #define WG_PP_SYMBOLTABLE_INDX_EXISTS_ASSIGNEE 2
 #define WG_PP_SYMBOLTABLE_INDX_RETTYPE 3
+
 #define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_BOUNDPARAM 4
 #define WG_PP_SYMBOLTABLE_INDX_OBJSEQ_BOUNDPARAM 5
 #define WG_PP_SYMBOLTABLE_INDX_XXX_SIZE_BOUNDPARAM 6
 #define WG_PP_SYMBOLTABLE_INDX_OBJSEQ_THISU_MARKER_BOUNDPARAM 7
+
 #define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_SETPARAM 8
 #define WG_PP_SYMBOLTABLE_INDX_OBJSEQ_SETPARAM 9
 #define WG_PP_SYMBOLTABLE_INDX_VALUESEQ_SETPARAM 10
 #define WG_PP_SYMBOLTABLE_INDX_XXX_SIZE_SETPARAM 11
-#define WG_PP_SYMBOLTABLE_INDX_TOTALXXX_SIZE 12
+
+#define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_BOUNDMEM 12
+#define WG_PP_SYMBOLTABLE_INDX_OBJSEQ_BOUNDMEM 13
+#define WG_PP_SYMBOLTABLE_INDX_XXX_SIZE_BOUNDMEM 14
+#define WG_PP_SYMBOLTABLE_INDX_OBJSEQ_BOUNDMEM_THISU_MARKER 15
+
+#define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_SETMEM 16
+#define WG_PP_SYMBOLTABLE_INDX_OBJSEQ_SETMEM 17
+#define WG_PP_SYMBOLTABLE_INDX_VALUESEQ_SETMEM 18
+#define WG_PP_SYMBOLTABLE_INDX_XXX_SIZE_SETMEM 19
+
+#define WG_PP_SYMBOLTABLE_INDX_TOTALXXX_SIZE 20
 
 // suffix: must match one of the following: WG_PP_SYMBOLTABLE_INDX_<suffix>
 #define WG_PP_SYMBOLTABLE_GET(symbtbl, suffix) \
@@ -150,7 +201,9 @@
   assignto_nrmlzd_tuple, \
   return_type, \
   parambind_nrmlzd_tupleseq, \
-  paramset_nrmlzd_tupleseq) \
+  paramset_nrmlzd_tupleseq, \
+  membind_nrmlzd_tupleseq, \
+  memset_nrmlzd_tupleseq) \
     WG_PP_ST_CREATE_IMPL2( \
       WG_PP_STUTIL_BOUNDTUPLESEQ_TO_TYPESEQ(assignto_nrmlzd_tuple), \
       WG_PP_STUTIL_BOUNDTUPLESEQ_TO_OBJSEQ(assignto_nrmlzd_tuple), \
@@ -159,15 +212,22 @@
       WG_PP_STUTIL_BOUNDTUPLESEQ_TO_OBJSEQ(parambind_nrmlzd_tupleseq), \
       WG_PP_STUTIL_SETTUPLESEQ_TO_TYPESEQ(paramset_nrmlzd_tupleseq), \
       WG_PP_STUTIL_SETTUPLESEQ_TO_OBJSEQ(paramset_nrmlzd_tupleseq), \
-      WG_PP_STUTIL_SETTUPLESEQ_TO_VALUESEQ(paramset_nrmlzd_tupleseq))
+      WG_PP_STUTIL_SETTUPLESEQ_TO_VALUESEQ(paramset_nrmlzd_tupleseq), \
+      WG_PP_STUTIL_BOUNDTUPLESEQ_TO_TYPESEQ(membind_nrmlzd_tupleseq), \
+      WG_PP_STUTIL_BOUNDTUPLESEQ_TO_OBJSEQ(membind_nrmlzd_tupleseq), \
+      WG_PP_STUTIL_SETTUPLESEQ_TO_TYPESEQ(memset_nrmlzd_tupleseq), \
+      WG_PP_STUTIL_SETTUPLESEQ_TO_OBJSEQ(memset_nrmlzd_tupleseq), \
+      WG_PP_STUTIL_SETTUPLESEQ_TO_VALUESEQ(memset_nrmlzd_tupleseq) )
 
 #define WG_PP_ST_CREATE_IMPL2( \
   assignto_type_seq, assignto_ob_seq, \
   return_type, \
   parambind_type_seq, parambind_obj_seq, \
-  paramset_type_seq, paramset_obj_seq, paramset_value_seq) \
+  paramset_type_seq, paramset_obj_seq, paramset_value_seq, \
+  membind_type_seq, membind_obj_seq, \
+  memset_type_seq, memset_obj_seq, memset_value_seq) \
     WG_PP_ST_CREATE_IMPL3( \
-      (12, \
+      (20, \
         (assignto_type_seq, \
         assignto_ob_seq, \
         WG_PP_SEQ_SIZE(assignto_type_seq), \
@@ -179,7 +239,15 @@
         paramset_type_seq, \
         paramset_obj_seq, \
         paramset_value_seq, \
-        WG_PP_SEQ_SIZE(paramset_type_seq))) \
+        WG_PP_SEQ_SIZE(paramset_type_seq), \
+        membind_type_seq, \
+        membind_obj_seq, \
+        WG_PP_SEQ_SIZE(membind_type_seq), \
+        WG_PP_STUTIL_THISU_INDX(membind_type_seq), \
+        memset_type_seq, \
+        memset_obj_seq, \
+        memset_value_seq, \
+        WG_PP_SEQ_SIZE(memset_type_seq) )) \
     )
 
 #define WG_PP_ST_CREATE_IMPL3(wiparray) \
@@ -187,8 +255,12 @@
     wiparray, \
     BOOST_PP_ADD( \
       BOOST_PP_ADD( \
-        WG_PP_SYMBOLTABLE_XXX_SIZE_BOUNDPARAM(wiparray), \
-        WG_PP_SYMBOLTABLE_XXX_SIZE_SETPARAM(wiparray)), \
-        WG_PP_SYMBOLTABLE_XXX_SIZE_ASSIGNEE(wiparray)))
+        BOOST_PP_ADD( \
+          BOOST_PP_ADD( \
+            WG_PP_SYMBOLTABLE_XXX_SIZE_BOUNDPARAM(wiparray), \
+            WG_PP_SYMBOLTABLE_XXX_SIZE_SETPARAM(wiparray)), \
+          WG_PP_SYMBOLTABLE_XXX_SIZE_BOUNDMEM(wiparray)), \
+        WG_PP_SYMBOLTABLE_XXX_SIZE_SETMEM(wiparray)), \
+      WG_PP_SYMBOLTABLE_XXX_SIZE_ASSIGNEE(wiparray)))
 
 #endif //WG_PP_SYMBOLTABLE_HH_

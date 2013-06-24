@@ -42,7 +42,10 @@
   m5, membind_seq, \
   m6, memset_seq) \
     WG_PP_SYMBOLTABLE_CREATE( \
-      assignto_seq, return_type, parambind_seq, paramset_seq)
+      assignto_seq, \
+      return_type, \
+      parambind_seq, paramset_seq, \
+      membind_seq, memset_seq)
 
 #define WG_AUTOFUNCTOR_END_IMPL() \
   WG_PP_AUTOFUNCTOR_CODEGEN_END()
