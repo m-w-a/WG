@@ -14,8 +14,21 @@
 // This has to be done in the CodeGen phase since it's impossible to do in the
 // front end without running into UB. Explicitly, one can't check for const or
 // & usage in local(SomeType *) without having to concat '&' or '*'.
-#define WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN(syntaxcheckername, symbtbl) \
-  WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN_IMPL(syntaxcheckername, symbtbl)
+//
+// symbtbl:
+//   must have the following defined:
+//     1) WG_PP_SYMBOLTABLE_TYPESEQ_<suffix>
+//     2) WG_PP_SYMBOLTABLE_OBJSEQ_<suffix>
+//   where suffix is declared in specseq.
+//
+// specseq:
+//   { ( (suffix)(varrootname) ) }+
+//
+//   varrootname:
+//     the root name of the congruence class of variables that if are locally
+//     typed then should be syntax checked.
+#define WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN(syntaxcheckername, symbtbl, specseq) \
+  WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN_IMPL(syntaxcheckername, symbtbl, specseq)
 
 //###########
 //Impl Macros
@@ -23,28 +36,33 @@
 
 #define  WG_PP_LOCALOPERANDSYNTAXCHECK_EXPAND1(x) x
 
-#define WG_PP_LOCALOPERANDSYNTAXCHECK_ROOTNAME_ASSIGNEE() assignee
-#define WG_PP_LOCALOPERANDSYNTAXCHECK_ROOTNAME_BOUNDPARAM() boundparam
-#define WG_PP_LOCALOPERANDSYNTAXCHECK_ROOTNAME_SETPARAM() setparam
-#define WG_PP_LOCALOPERANDSYNTAXCHECK_ROOTNAME_BOUNDMEM() boundmem
-#define WG_PP_LOCALOPERANDSYNTAXCHECK_ROOTNAME_SETMEM() setmem
+#define WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec) \
+  BOOST_PP_SEQ_ELEM(0, spec)
+#define WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_VARROOTNAME(spec) \
+  BOOST_PP_SEQ_ELEM(1, spec)
 
-// TODO: Add boundmem/setmem
-#define WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN_IMPL(syntaxcheckername, symbtbl) \
-  struct WG_PP_ID_CAT( \
-    syntaxcheckername, \
-    ERROR_local_operand_is_a_reference_or_is_const_qualified) \
-  { \
-    WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN(ASSIGNEE, symbtbl) \
-    WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN(BOUNDPARAM, symbtbl) \
-    WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN(SETPARAM, symbtbl) \
-  };
+#define WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN_IMPL( \
+  syntaxcheckername, symbtbl, specseq) \
+    struct WG_PP_ID_CAT( \
+      syntaxcheckername, \
+      ERROR_local_operand_is_a_reference_or_is_const_qualified) \
+    { \
+      BOOST_PP_SEQ_FOR_EACH( \
+        WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN, \
+        symbtbl, \
+        specseq) \
+    };
 
-#define WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN(suffix, symbtbl) \
+// BOOST_PP_SEQ_FOR_EACH functor.
+#define WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN(r, symbtbl, spec) \
   WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN2( \
-    BOOST_PP_CAT(WG_PP_SYMBOLTABLE_TYPESEQ_, suffix) (symbtbl), \
-    BOOST_PP_CAT(WG_PP_SYMBOLTABLE_OBJSEQ_, suffix) (symbtbl), \
-    BOOST_PP_CAT(WG_PP_LOCALOPERANDSYNTAXCHECK_ROOTNAME_, suffix) ())
+    BOOST_PP_CAT( \
+      WG_PP_SYMBOLTABLE_TYPESEQ_, \
+      WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec)) (symbtbl), \
+    BOOST_PP_CAT( \
+      WG_PP_SYMBOLTABLE_OBJSEQ_, \
+      WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec)) (symbtbl), \
+    WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_VARROOTNAME(spec))
 
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN2( \
   typeseq, objseq, varrootname) \

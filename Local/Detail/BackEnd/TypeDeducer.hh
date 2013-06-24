@@ -17,13 +17,14 @@
 // symbtbl:
 //   must have the following defined:
 //     1) WG_PP_SYMBOLTABLE_TYPESEQ_<suffix>
-//  where suffix is declared in specseq.
+//   where suffix is declared in specseq.
 //
 // specseq:
 //   { ( (suffix)(varrootname) ) }+
 //
 //   varrootname:
-//     the root name of the congruence class of variables being forwarded.
+//     the root name of the congruence class of variables whose types should
+//     be deduced.
 #define WG_PP_TYPEDEDUCER_DCLN(typededucername, symbtbl, specseq) \
   WG_PP_TYPEDEDUCER_DCLN_IMPL(typededucername, symbtbl, specseq)
 
