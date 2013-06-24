@@ -1,5 +1,5 @@
 #include <WG/Local/Detail/Tests/test.h>
-#include <WG/Local/Detail/Tests/TestHelper.hh>
+#include <WG/Local/Tests/TestHelper.hh>
 #include <WG/Local/Detail/PP.hh>
 #include <WG/Local/Detail/BackEnd/TypeExtractor.hh>
 #include "../VarDclnExplicit.hh"

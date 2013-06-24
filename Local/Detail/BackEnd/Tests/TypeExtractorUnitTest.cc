@@ -1,5 +1,5 @@
 #include <WG/Local/Detail/Tests/test.h>
-#include <WG/Local/Detail/Tests/TestHelper.hh>
+#include <WG/Local/Tests/TestHelper.hh>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
 #include "../TypeExtractor.hh"

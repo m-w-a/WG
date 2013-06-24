@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
+#include <boost/typeof/typeof.hpp>
+#include <WG/Local/Tests/TestHelper.hh>
 
 TEST(wg_autofunctor_parambindexplicit, OkIf1ArgBound)
 {
@@ -8,8 +10,11 @@ TEST(wg_autofunctor_parambindexplicit, OkIf1ArgBound)
   {
     bool didArgumentBind = false;
 
-    WG_AUTOFUNCTOR(oneArgAutoFunctor, parambind ((bool &)didArgumentBind) )
+    WG_AUTOFUNCTOR(oneArgAutoFunctor, parambind ((bool &) didArgumentBind) )
     {
+      WG_PP_TESTHELPER_IS_SAME_TYPE(
+        bool &, BOOST_TYPEOF(didArgumentBind) &);
+
       didArgumentBind = true;
     }
     WG_AUTOFUNCTOR_END;
@@ -31,6 +36,13 @@ TEST(wg_autofunctor_parambindexplicit, OkIf3ArgsOfVaryingMutabilityBound)
     (calculateForce,
       parambind ((int &) force) ((int const) mass) ((int const) velocity) )
     {
+      WG_PP_TESTHELPER_IS_SAME_TYPE(
+        int &, BOOST_TYPEOF(force) &);
+      WG_PP_TESTHELPER_IS_SAME_TYPE(
+        int const, BOOST_TYPEOF(mass) const);
+      WG_PP_TESTHELPER_IS_SAME_TYPE(
+        int const, BOOST_TYPEOF(velocity) const);
+
       force = mass * velocity;
     }
     WG_AUTOFUNCTOR_END;
@@ -66,7 +78,7 @@ TEST(wg_autofunctor_parambindexplicit, OkIfKeywordThisUBound)
   WG_GTEST_CATCH
 }
 
-TEST(wg_autofunctor_parambindexplicit, OkIfLocalTypeBound)
+TEST(wg_autofunctor_parambindexplicit, OkIfLocalTypeNoQualBound)
 {
   try
   {
