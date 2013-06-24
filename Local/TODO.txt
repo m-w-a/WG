@@ -26,12 +26,12 @@ x) Type.hh -> ParsedTypeToCppType.hh
 
 
 optimize IIF -> by splitting branches
-UnitTests : Explicit -> Implicit where possible.
+x) UnitTests : Explicit -> Implicit where possible.
 add membind/memset support
 finish pp unit tests.
   do SetVarDclnNormalize.hh - do compile time array comparisons exist?
 x) automate running of pp unit tests.
-allow implicit typing in paramset.
+x) allow implicit typing in paramset.
 simplicify LOCALOPERANDSYNTAXCHECK error msg.
 
 Better Syntax Error Checking/Reporting:
@@ -43,7 +43,7 @@ Better Syntax Error Checking/Reporting:
   missing type in implicit-type-var-dcln
   missing var in "..."
 
-Better Test Names:
+x) Better Test Names:
   AssignTo
   Return
   ParamBindExplicit
@@ -57,7 +57,7 @@ Better Test Names:
   ParamBindExplicitAndParamSetImplicit
   ParamBindImplicitAndParamSetExplicit
 
-Then go over And make sure test coverage right.
+x) Then go over And make sure test coverage right.
 
 //----------
 //Semantics:

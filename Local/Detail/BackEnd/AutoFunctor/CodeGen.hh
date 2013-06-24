@@ -8,6 +8,7 @@
 #include <WG/Local/Detail/BackEnd/TypeDeducer.hh>
 #include <WG/Local/Detail/BackEnd/ID.hh>
 #include <WG/Local/Detail/BackEnd/LocalOperandSyntaxCheck.hh>
+#include <WG/Local/Detail/BackEnd/SymbolTableUtil.hh>
 
 //###########
 //Public APIs
@@ -103,7 +104,7 @@
       WG_PP_AUTOFUNCTOR_CODEGEN_TYPEDDCR_SPECSEQ()) \
     WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL2( \
       name, \
-      WG_PP_SYMBOLTABLE_USETYPEDEDUCER( \
+      WG_PP_STUTIL_USETYPEDEDUCER( \
         symbtbl, \
         WG_PP_AUTOFUNCTOR_CG_TYPEDEDUCER_NAME(), \
         WG_PP_AUTOFUNCTOR_CODEGEN_TYPEDDCR_SPECSEQ()) )
