@@ -4,6 +4,23 @@
 #include <boost/typeof/typeof.hpp>
 #include <WG/Local/Tests/TestHelper.hh>
 
+TEST(wg_autofunctor_parambindexplicit, ensureTypeOfNotUsed)
+{
+  try
+  {
+    float value = 1.2f;
+
+    WG_AUTOFUNCTOR(bindByDiffType, parambind((int const) value))
+    {
+      WG_PP_TESTHELPER_IS_SAME_TYPE(
+        int const, BOOST_TYPEOF(value) const);
+      EXPECT_EQ(1, value);
+    }
+    WG_AUTOFUNCTOR_END;
+  }
+  WG_GTEST_CATCH
+}
+
 TEST(wg_autofunctor_parambindexplicit, OkIf1ArgBound)
 {
   try

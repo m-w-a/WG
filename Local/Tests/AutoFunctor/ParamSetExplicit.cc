@@ -4,6 +4,21 @@
 #include <WG/Local/Tests/TestHelper.hh>
 #include <boost/typeof/typeof.hpp>
 
+TEST(wg_autofunctor_paramsetexplicit, ensureTypeOfNotUsed)
+{
+  try
+  {
+    WG_AUTOFUNCTOR(setToDiffType, paramset ((int) value, 1.2f) )
+    {
+      WG_PP_TESTHELPER_IS_SAME_TYPE(
+        int, BOOST_TYPEOF(value));
+      EXPECT_EQ(1, value);
+    }
+    WG_AUTOFUNCTOR_END;
+  }
+  WG_GTEST_CATCH
+}
+
 TEST(wg_autofunctor_paramsetexplicit, OkIf1ArgSet)
 {
   try
