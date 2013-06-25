@@ -64,6 +64,7 @@ test_autofunctor_SOURCES = \
     ../AutoFunctor/ParamBindExplicitAndImplicit.cc \
     ../AutoFunctor/ParamSetExplicit.cc \
     ../AutoFunctor/ParamSetImplicit.cc \
+    ../AutoFunctor/ParamSetExplicitAndImplicit.cc \
     ../AutoFunctor/ParamBindExplicitAndParamSetExplicit.cc \
     ../AutoFunctor/ParamBindImplicitAndParamSetExplicit.cc \
     ../AutoFunctor/ParamBindImplicitAndParamSetImplicit.cc \
@@ -72,6 +73,7 @@ test_autofunctor_SOURCES = \
     ../AutoFunctor/MemBindExplicitAndImplicit.cc \
     ../AutoFunctor/MemSetExplicit.cc \
     ../AutoFunctor/MemSetImplicit.cc \
+    ../AutoFunctor/MemSetExplicitAndImplicit.cc \
     ../AutoFunctor/NoSpec.cc \
     ../AutoFunctor/Nested.cc \
     ../AutoFunctor/Recursive.cc
