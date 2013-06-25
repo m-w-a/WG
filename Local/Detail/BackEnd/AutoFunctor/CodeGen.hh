@@ -134,8 +134,15 @@
 #define WG_PP_AUTOFUNCTOR_CG_FNCTRDCLN_START(name, symbtbl) \
   struct WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_TYPENAME(name) \
   { \
+  private: \
+    WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_MEM_DCLNS(symbtbl) \
+  public: \
     typedef WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_TYPENAME(name) self_type; \
     \
+    explicit WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_TYPENAME(name) ( \
+      WG_PP_AUTOFUNCTOR_CG_FRWDR_TYPENAME() const & frwdr) \
+      WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_CTOR_INITLIST(frwdr, symbtbl) \
+    {} \
     void operator()(WG_PP_AUTOFUNCTOR_CG_FRWDR_TYPENAME() const & frwdr) \
     { \
       static_cast<void>(frwdr); \
@@ -153,24 +160,76 @@
         WG_PP_AUTOFUNCTOR_CG_FUNC_PARAMLIST(symbtbl) \
       BOOST_PP_RPAREN()
 
+//----------------------
+//AutoFunctor Mem Dclns.
+//----------------------
+
+#define WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_MEM_DCLNS(symbtbl) \
+  WG_PP_SEQ_ENUM( \
+    WG_PP_SEQ_JOIN( \
+      WG_PP_SEQ_FOR_EACH_I( \
+        WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_MEM_DCLN, \
+        WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDMEM(symbtbl), \
+        WG_PP_SYMBOLTABLE_TYPESEQ_BOUNDMEM(symbtbl)) , \
+      WG_PP_SEQ_FOR_EACH_I( \
+        WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_MEM_DCLN, \
+        WG_PP_SYMBOLTABLE_OBJSEQ_SETMEM(symbtbl), \
+        WG_PP_SYMBOLTABLE_TYPESEQ_SETMEM(symbtbl)) ))
+
+#define WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_MEM_DCLN(r, objseq, indx, type) \
+  type WG_PP_SEQ_ELEM(indx, objseq) ;
+
+//-----------------------
+//AutoFunctor CTor Dclns.
+//-----------------------
+
+#define WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_CTOR_INITLIST(frwdr, symbtbl) \
+  WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_CTOR_INITLIST2( \
+    WG_PP_SEQ_JOIN( \
+      WG_PP_SEQ_FOR_EACH_I( \
+        WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_CTOR_INITENTRY, \
+        frwdr, \
+        WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDMEM(symbtbl)) , \
+      WG_PP_SEQ_FOR_EACH_I( \
+        WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_CTOR_INITENTRY, \
+        frwdr, \
+        WG_PP_SYMBOLTABLE_OBJSEQ_SETMEM(symbtbl)) ))
+
+#define WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_CTOR_INITENTRY( \
+  r, localfrwdrobjname, indx, memname) \
+    ( memname(WG_PP_FORWARDER_ACCESSOR(localfrwdrobjname, indx)) )
+
+#define WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_CTOR_INITLIST2(initseq) \
+  BOOST_PP_EXPR_IIF( \
+    BOOST_PP_NOT( \
+      WG_PP_TOKENS_START_WITH_BOOST_PP_NIL(initseq)), \
+      WG_PP_IDENTITY(:) ) \
+  WG_PP_SEQ_ENUM(initseq)
+
+//-----------------
+//AutoFunctor Misc.
+//-----------------
+
 #define WG_PP_AUTOFUNCTOR_CG_FRWDR_ACCESSOR_ASSIGNEE(objname, symbtbl) \
-  WG_PP_IDENTITY \
-    WG_PP_FORWARDER_ACCESSORWGSEQ( \
-      objname, \
-      symbtbl, \
-      WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_ASSIGNEE())
+  WG_PP_FORWARDER_ACCESSOR( \
+    objname, \
+    WG_PP_FORWARDER_SPEC_VARROOTNAME( \
+      WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_ASSIGNEE()), \
+    0)
 
 #define WG_PP_AUTOFUNCTOR_CG_FUNCTOR_CALLLIST(objname, symbtbl) \
-WG_PP_SEQ_ENUM( \
-  WG_PP_SEQ_JOIN2( \
-    WG_PP_FORWARDER_ACCESSORWGSEQ( \
-      objname, \
-      symbtbl, \
-      WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_BOUNDPARAM()), \
-    WG_PP_FORWARDER_ACCESSORWGSEQ( \
-      objname, \
-      symbtbl, \
-      WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_SETPARAM())))
+  WG_PP_SEQ_ENUM( \
+    WG_PP_SEQ_JOIN2( \
+      WG_PP_FORWARDER_ACCESSORWGSEQ( \
+        objname, \
+        WG_PP_FORWARDER_SPEC_VARROOTNAME( \
+          WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_BOUNDPARAM()), \
+        WG_PP_SYMBOLTABLE_XXX_SIZE_BOUNDPARAM(symbtbl)), \
+      WG_PP_FORWARDER_ACCESSORWGSEQ( \
+        objname, \
+        WG_PP_FORWARDER_SPEC_VARROOTNAME( \
+          WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_SETPARAM()), \
+        WG_PP_SYMBOLTABLE_XXX_SIZE_SETPARAM(symbtbl))))
 
 #define WG_PP_AUTOFUNCTOR_CG_FUNCTOR_RETURNTYPE(symbtbl) \
   BOOST_PP_IIF( \
@@ -181,6 +240,10 @@ WG_PP_SEQ_ENUM( \
       WG_PP_PARSEDTYPE_EXTRACTCPPTYPE( \
         WG_PP_SEQ_CAT(WG_PP_SYMBOLTABLE_TYPESEQ_ASSIGNEE(symbtbl))), \
       void))
+
+//--------------------------
+//AutoFunctor FUNC ParamList
+//--------------------------
 
 #define WG_PP_AUTOFUNCTOR_CG_FUNC_PARAMLIST(symbtbl) \
   WG_PP_SEQ_ENUM( \
@@ -200,7 +263,8 @@ WG_PP_SEQ_ENUM( \
   BOOST_PP_RPAREN()
 
 #define WG_PP_AUTOFUNCTOR_CG_FNCTRDCLN_END() \
-  } WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_OBJNAME() ;
+  } WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_OBJNAME() ( \
+    WG_PP_AUTOFUNCTOR_CG_FRWDR_OBJNAME() ) ;
 
 #define WG_PP_AUTOFUNCTOR_CG_FNCTR_INVOKE() \
   WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_OBJNAME() \

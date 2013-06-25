@@ -41,8 +41,16 @@
 //   same as that pass in to WG_PP_FORWARDER_DCLN.
 // spec:
 //   an element of specseq as defined in WG_PP_FORWARDER_DCLN.
-#define WG_PP_FORWARDER_ACCESSORWGSEQ(frwdr_objname, symbtbl, spec) \
-  WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL(frwdr_objname, symbtbl, spec)
+#define WG_PP_FORWARDER_ACCESSORWGSEQ(frwdr_objname, varrootname, count) \
+  WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL(frwdr_objname, varrootname, count)
+
+#define WG_PP_FORWARDER_ACCESSOR(frwdr_objname, varrootname, indx) \
+  frwdr_objname.WG_PP_FORWARDER_TYPE_ACCESSORNAME(varrootname, indx) ()
+
+#define WG_PP_FORWARDER_SPEC_SUFFIX(spec) BOOST_PP_SEQ_ELEM(0, spec)
+#define WG_PP_FORWARDER_SPEC_FORWARDINGTYPE(spec) BOOST_PP_SEQ_ELEM(1, spec)
+#define WG_PP_FORWARDER_SPEC_VARROOTNAME(spec) BOOST_PP_SEQ_ELEM(2, spec)
+#define WG_PP_FORWARDER_SPEC_THISUPOLICY(spec) BOOST_PP_SEQ_ELEM(3, spec)
 
 //###########
 //Impl Macros
@@ -69,20 +77,12 @@
 //-----------------------------
 
 #define WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL( \
-  frwdr_objname, symbtbl, spec) \
+  frwdr_objname, varrootname, count) \
     BOOST_PP_IF( \
-      BOOST_PP_CAT( \
-        WG_PP_SYMBOLTABLE_XXX_SIZE_, \
-        WG_PP_FORWARDER_SPEC_SUFFIX(spec)) (symbtbl), \
+      count, \
       WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL1, \
       WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL0) \
-    ( \
-      frwdr_objname, \
-      WG_PP_FORWARDER_SPEC_VARROOTNAME(spec), \
-      BOOST_PP_CAT( \
-        WG_PP_SYMBOLTABLE_XXX_SIZE_, \
-        WG_PP_FORWARDER_SPEC_SUFFIX(spec)) (symbtbl) \
-    )
+    (frwdr_objname, varrootname, count)
 
 #define WG_PP_FORWARDER_ACCESSORWGSEQ_IMPL0( \
   frwdr_objname, varrootname, count) \
@@ -120,11 +120,6 @@
 
 #define WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYCONSTREF(e_or_d_type) \
   WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE(e_or_d_type)
-
-#define WG_PP_FORWARDER_SPEC_SUFFIX(spec) BOOST_PP_SEQ_ELEM(0, spec)
-#define WG_PP_FORWARDER_SPEC_FORWARDINGTYPE(spec) BOOST_PP_SEQ_ELEM(1, spec)
-#define WG_PP_FORWARDER_SPEC_VARROOTNAME(spec) BOOST_PP_SEQ_ELEM(2, spec)
-#define WG_PP_FORWARDER_SPEC_THISUPOLICY(spec) BOOST_PP_SEQ_ELEM(3, spec)
 
 //-------------------------------------------
 //WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM
