@@ -177,7 +177,7 @@
         WG_PP_SYMBOLTABLE_TYPESEQ_SETMEM(symbtbl)) ))
 
 #define WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_MEM_DCLN(r, objseq, indx, type) \
-  type WG_PP_SEQ_ELEM(indx, objseq) ;
+  ( type WG_PP_SEQ_ELEM(indx, objseq) ; )
 
 //-----------------------
 //AutoFunctor CTor Dclns.
@@ -188,16 +188,26 @@
     WG_PP_SEQ_JOIN( \
       WG_PP_SEQ_FOR_EACH_I( \
         WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_CTOR_INITENTRY, \
-        frwdr, \
+        (frwdr)(WG_PP_FORWARDER_SPEC_VARROOTNAME( \
+          WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_BOUNDMEM())), \
         WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDMEM(symbtbl)) , \
       WG_PP_SEQ_FOR_EACH_I( \
         WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_CTOR_INITENTRY, \
-        frwdr, \
+        (frwdr)(WG_PP_FORWARDER_SPEC_VARROOTNAME( \
+          WG_PP_AUTOFUNCTOR_CODEGEN_FWRDR_SPEC_SETMEM())), \
         WG_PP_SYMBOLTABLE_OBJSEQ_SETMEM(symbtbl)) ))
 
 #define WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_CTOR_INITENTRY( \
-  r, localfrwdrobjname, indx, memname) \
-    ( memname(WG_PP_FORWARDER_ACCESSOR(localfrwdrobjname, indx)) )
+  r, localfrwdrobjname_varrootname, indx, memname) \
+    ( \
+      memname \
+      ( \
+        WG_PP_FORWARDER_ACCESSOR( \
+          BOOST_PP_SEQ_ELEM(0, localfrwdrobjname_varrootname), \
+          BOOST_PP_SEQ_ELEM(1, localfrwdrobjname_varrootname), \
+          indx) \
+      ) \
+    )
 
 #define WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_CTOR_INITLIST2(initseq) \
   BOOST_PP_EXPR_IIF( \
