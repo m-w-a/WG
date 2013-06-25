@@ -67,6 +67,7 @@ test_autofunctor_SOURCES = \
     ../AutoFunctor/ParamBindExplicitAndParamSetExplicit.cc \
     ../AutoFunctor/ParamBindImplicitAndParamSetExplicit.cc \
     ../AutoFunctor/ParamBindImplicitAndParamSetImplicit.cc \
+    ../AutoFunctor/MemBindExplicit.cc \
     ../AutoFunctor/NoSpec.cc \
     ../AutoFunctor/Nested.cc \
     ../AutoFunctor/Recursive.cc

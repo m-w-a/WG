@@ -243,7 +243,7 @@
         membind_type_seq, \
         membind_obj_seq, \
         WG_PP_SEQ_SIZE(membind_type_seq), \
-        WG_PP_STUTIL_THISU_INDX(membind_type_seq), \
+        WG_PP_STUTIL_THISU_INDX(membind_obj_seq), \
         memset_type_seq, \
         memset_obj_seq, \
         memset_value_seq, \

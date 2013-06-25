@@ -165,19 +165,19 @@
 //----------------------
 
 #define WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_MEM_DCLNS(symbtbl) \
-  WG_PP_SEQ_ENUM( \
-    WG_PP_SEQ_JOIN( \
-      WG_PP_SEQ_FOR_EACH_I( \
-        WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_MEM_DCLN, \
-        WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDMEM(symbtbl), \
-        WG_PP_SYMBOLTABLE_TYPESEQ_BOUNDMEM(symbtbl)) , \
-      WG_PP_SEQ_FOR_EACH_I( \
-        WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_MEM_DCLN, \
-        WG_PP_SYMBOLTABLE_OBJSEQ_SETMEM(symbtbl), \
-        WG_PP_SYMBOLTABLE_TYPESEQ_SETMEM(symbtbl)) ))
+  WG_PP_SEQ_IFNIL_THENCLEAR( \
+    WG_PP_SEQ_FOR_EACH_I( \
+      WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_MEM_DCLN, \
+      WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDMEM(symbtbl), \
+      WG_PP_SYMBOLTABLE_TYPESEQ_BOUNDMEM(symbtbl)) )  \
+  WG_PP_SEQ_IFNIL_THENCLEAR( \
+    WG_PP_SEQ_FOR_EACH_I( \
+      WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_MEM_DCLN, \
+      WG_PP_SYMBOLTABLE_OBJSEQ_SETMEM(symbtbl), \
+      WG_PP_SYMBOLTABLE_TYPESEQ_SETMEM(symbtbl)) )
 
-#define WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_MEM_DCLN(r, objseq, indx, type) \
-  ( type WG_PP_SEQ_ELEM(indx, objseq) ; )
+#define WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_MEM_DCLN(r, objseq, indx, parsedtype) \
+  WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(parsedtype) WG_PP_SEQ_ELEM(indx, objseq) ;
 
 //-----------------------
 //AutoFunctor CTor Dclns.
@@ -267,9 +267,9 @@
         WG_PP_SYMBOLTABLE_TYPESEQ_SETPARAM(symbtbl))))
 
 // WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_AUTOFUNCTOR_CG_FUNC_PARAMENTRY(r, obj_seq, indx, elem) \
+#define WG_PP_AUTOFUNCTOR_CG_FUNC_PARAMENTRY(r, obj_seq, indx, parsedtype) \
   BOOST_PP_LPAREN() \
-    WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(elem) WG_PP_SEQ_ELEM(indx, obj_seq) \
+    WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(parsedtype) WG_PP_SEQ_ELEM(indx, obj_seq) \
   BOOST_PP_RPAREN()
 
 #define WG_PP_AUTOFUNCTOR_CG_FNCTRDCLN_END() \
