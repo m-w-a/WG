@@ -16,7 +16,7 @@ TEST(wg_autofunctor_membindexplicitandimplicit,
     WG_AUTOFUNCTOR
     (calculateForce, membind (ref force) ((int const) mass) (velocity) )
     {
-      force = mass * velocity;
+      this->force = this->mass * this->velocity;
     }
     WG_AUTOFUNCTOR_END;
 
@@ -41,7 +41,7 @@ TEST(wg_autofunctor_membindexplicitandimplicit,
     (useLocalKeyword,
       membind (local(SomeLocalClass) ref localObj) (newValue) )
     {
-      localObj.value = newValue;
+      this->localObj.value = this->newValue;
     }
     WG_AUTOFUNCTOR_END;
 

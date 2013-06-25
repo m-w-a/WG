@@ -12,7 +12,7 @@ TEST(wg_autofunctor_membindimplicit, OkIf1ArgBound)
 
     WG_AUTOFUNCTOR(oneArgAutoFunctor, membind (ref didArgumentBind) )
     {
-      didArgumentBind = true;
+      this->didArgumentBind = true;
     }
     WG_AUTOFUNCTOR_END;
 
@@ -32,7 +32,7 @@ TEST(wg_autofunctor_membindimplicit, OkIf3ArgsOfVaryingMutabilityBound)
     WG_AUTOFUNCTOR
     (calculateForce, membind (ref force) (const mass) (const velocity) )
     {
-      force = mass * velocity;
+      this->force = this->mass * this->velocity;
     }
     WG_AUTOFUNCTOR_END;
 
@@ -52,7 +52,7 @@ struct SomeNonLocalClass
   {
     WG_AUTOFUNCTOR(bindThisU, membind (this_) )
     {
-      this_->didBindThis = true;
+      this->this_->didBindThis = true;
     }
     WG_AUTOFUNCTOR_END;
   }

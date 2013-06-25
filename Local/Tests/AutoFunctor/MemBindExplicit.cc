@@ -11,7 +11,7 @@ TEST(wg_autofunctor_membindexplicit, ensureTypeOfNotUsed)
 
     WG_AUTOFUNCTOR(bindByDiffType, membind((int const) value))
     {
-      EXPECT_EQ(1, value);
+      EXPECT_EQ(1, this->value);
     }
     WG_AUTOFUNCTOR_END;
   }
@@ -26,7 +26,7 @@ TEST(wg_autofunctor_membindexplicit, OkIf1ArgBound)
 
     WG_AUTOFUNCTOR(oneArgAutoFunctor, membind ((bool &) didArgumentBind) )
     {
-      didArgumentBind = true;
+      this->didArgumentBind = true;
     }
     WG_AUTOFUNCTOR_END;
 
@@ -47,7 +47,7 @@ TEST(wg_autofunctor_membindexplicit, OkIf3ArgsOfVaryingMutabilityBound)
     (calculateForce,
       membind ((int &) force) ((int const) mass) ((int const) velocity) )
     {
-      force = mass * velocity;
+      this->force = this->mass * this->velocity;
     }
     WG_AUTOFUNCTOR_END;
 
@@ -71,7 +71,7 @@ TEST(wg_autofunctor_membindexplicit, OkIfKeywordThisUBound)
         (bindThisU,
           membind (local(SomeLocalClass *) const this_) )
         {
-          this_->didBindThis = true;
+          this->this_->didBindThis = true;
         }
         WG_AUTOFUNCTOR_END;
       }
@@ -95,7 +95,7 @@ TEST(wg_autofunctor_membindexplicit, OkIfLocalTypeNoQualBound)
     newValue = 0;
     WG_AUTOFUNCTOR(useLocalKeyword, membind (local(SomeLocalClass) localObj) )
     {
-      localObj.value += 1;
+      this->localObj.value += 1;
       newValue = localObj.value;
     }
     WG_AUTOFUNCTOR_END;
@@ -118,7 +118,7 @@ TEST(wg_autofunctor_membindexplicit, OkIfLocalRefTypeBound)
     WG_AUTOFUNCTOR
     (useLocalKeyword, membind (local(SomeLocalClass) ref localObj) )
     {
-      localObj.value = 10;
+      this->localObj.value = 10;
     }
     WG_AUTOFUNCTOR_END;
 
@@ -141,7 +141,7 @@ TEST(wg_autofunctor_membindexplicit, OkIfLocalConstTypeBound)
     WG_AUTOFUNCTOR
     (useLocalKeyword, membind (local(SomeLocalClass) const localObj) )
     {
-      didLocalObjBind = (localObj.value == 10);
+      didLocalObjBind = (this->localObj.value == 10);
     }
     WG_AUTOFUNCTOR_END;
 
@@ -164,7 +164,7 @@ TEST(wg_autofunctor_membindexplicit, OkIfLocalConstRefTypeBound)
     WG_AUTOFUNCTOR
     (useLocalKeyword, membind (local(SomeLocalClass) const ref localObj) )
     {
-      didLocalObjBind = (localObj.value == 10);
+      didLocalObjBind = (this->localObj.value == 10);
     }
     WG_AUTOFUNCTOR_END;
 
