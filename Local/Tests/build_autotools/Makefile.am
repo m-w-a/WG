@@ -66,6 +66,7 @@ test_autofunctor_SOURCES = \
     ../AutoFunctor/ParamSetImplicit.cc \
     ../AutoFunctor/ParamSetExplicitAndImplicit.cc \
     ../AutoFunctor/ParamBindExplicitAndParamSetExplicit.cc \
+    ../AutoFunctor/ParamBindExplicitAndParamSetImplicit.cc \
     ../AutoFunctor/ParamBindImplicitAndParamSetExplicit.cc \
     ../AutoFunctor/ParamBindImplicitAndParamSetImplicit.cc \
     ../AutoFunctor/MemBindExplicit.cc \
