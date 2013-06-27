@@ -1,8 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
-#include <boost/typeof/typeof.hpp>
-#include <WG/Local/Tests/TestHelper.hh>
 
 TEST(wg_autofunctor_membindimplicit, OkIf1ArgBound)
 {

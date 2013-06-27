@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/Tests/TestHelper.hh>
 
 TEST(wg_autofunctor_membindexplicit, ensureTypeOfNotUsed)
 {

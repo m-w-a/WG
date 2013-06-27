@@ -75,6 +75,10 @@ test_autofunctor_SOURCES = \
     ../AutoFunctor/MemSetExplicit.cc \
     ../AutoFunctor/MemSetImplicit.cc \
     ../AutoFunctor/MemSetExplicitAndImplicit.cc \
+    ../AutoFunctor/MemBindExplicitAndMemSetExplicit.cc \
+    ../AutoFunctor/MemBindExplicitAndMemSetImplicit.cc \
+    ../AutoFunctor/MemBindImplicitAndMemSetExplicit.cc \
+    ../AutoFunctor/MemBindImplicitAndMemSetImplicit.cc \
     ../AutoFunctor/NoSpec.cc \
     ../AutoFunctor/Nested.cc \
     ../AutoFunctor/Recursive.cc

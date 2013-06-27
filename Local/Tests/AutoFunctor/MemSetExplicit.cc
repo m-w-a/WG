@@ -1,8 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/Tests/TestHelper.hh>
-#include <boost/typeof/typeof.hpp>
 
 TEST(wg_autofunctor_memsetexplicit, ensureTypeOfNotUsed)
 {
