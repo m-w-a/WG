@@ -58,6 +58,7 @@ test_pp_parsedtype_SOURCES = ../../Detail/BackEnd/Tests/TypeExtractorUnitTest.cc
 
 test_autofunctor_SOURCES = \
     ../AutoFunctor/TestMain.cc \
+    ../AutoFunctor/AllCombo.cc \
     ../AutoFunctor/AssignTo.cc \
     ../AutoFunctor/ParamBindExplicit.cc \
     ../AutoFunctor/ParamBindImplicit.cc \

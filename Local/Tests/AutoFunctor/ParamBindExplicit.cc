@@ -10,7 +10,7 @@ TEST(wg_autofunctor_parambindexplicit, ensureTypeOfNotUsed)
   {
     float value = 1.2f;
 
-    WG_AUTOFUNCTOR(bindByDiffType, parambind((int const) value))
+    WG_AUTOFUNCTOR(bindByDiffType, parambind ((int const) value) )
     {
       WG_PP_TESTHELPER_IS_SAME_TYPE(
         int const, BOOST_TYPEOF(value) const);
