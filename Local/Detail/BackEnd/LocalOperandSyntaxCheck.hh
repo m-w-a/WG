@@ -3,12 +3,17 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP.hh>
-#include <WG/Local/Detail/BackEnd/SymbolTable.hh>
 #include <WG/Local/Detail/BackEnd/TypeExtractor.hh>
 
 //###########
 //Public APIs
 //###########
+
+//----------------------------------------------------------------------------//
+//#include <.../SymbolTable.hh>
+// Whereever this file is included, then the appropiate SymbolTable.hh must
+// also be included
+//----------------------------------------------------------------------------//
 
 // Creates a noop struct for checking the syntax of local operands.
 // This has to be done in the CodeGen phase since it's impossible to do in the

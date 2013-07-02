@@ -2,7 +2,7 @@
 #define WG_PP_AUTOFUNCTOR_CODEGEN_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/Detail/BackEnd/SymbolTable.hh>
+#include <WG/Local/Detail/BackEnd/AutoFunctor/SymbolTable.hh>
 #include <WG/Local/Detail/BackEnd/Forwarder.hh>
 #include <WG/Local/Detail/Seq.hh>
 #include <WG/Local/Detail/BackEnd/TypeDeducer.hh>

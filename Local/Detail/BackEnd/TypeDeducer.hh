@@ -3,11 +3,16 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/Seq.hh>
-#include <WG/Local/Detail/BackEnd/SymbolTable.hh>
 
 //###########
 //Public APIs
 //###########
+
+//----------------------------------------------------------------------------//
+//#include <.../SymbolTable.hh>
+// Whereever this file is included, then the appropiate SymbolTable.hh must
+// also be included
+//----------------------------------------------------------------------------//
 
 // Will create a struct named <typededucername> that typedefs all the types
 // of implicitly-typed vars to aliases that are accessible via the macros that

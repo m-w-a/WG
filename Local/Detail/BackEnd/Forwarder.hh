@@ -3,13 +3,18 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP.hh>
-#include <WG/Local/Detail/BackEnd/SymbolTable.hh>
 #include <WG/Local/Detail/BackEnd/TypeExtractor.hh>
 #include <WG/Local/Detail/BackEnd/ID.hh>
 
 //###########
 //Public APIs
 //###########
+
+//----------------------------------------------------------------------------//
+//#include <.../SymbolTable.hh>
+// Whereever this file is included, then the appropiate SymbolTable.hh must
+// also be included
+//----------------------------------------------------------------------------//
 
 // Creates a class for forwarding captured variables and/or expressions.
 // symbtbl:

@@ -3,7 +3,7 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/FrontEnd/AutoFunctor/SpecNormalize.hh>
-#include <WG/Local/Detail/BackEnd/SymbolTable.hh>
+#include <WG/Local/Detail/BackEnd/AutoFunctor/SymbolTable.hh>
 #include <WG/Local/Detail/BackEnd/AutoFunctor/CodeGen.hh>
 
 //###########
@@ -41,7 +41,7 @@
   m4, paramset_seq, \
   m5, membind_seq, \
   m6, memset_seq) \
-    WG_PP_SYMBOLTABLE_CREATE( \
+    WG_PP_AUTOFUNCTOR_SYMBOLTABLE_CREATE( \
       assignto_seq, \
       return_type, \
       parambind_seq, paramset_seq, \
