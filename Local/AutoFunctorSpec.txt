@@ -1,0 +1,135 @@
+//----------
+//Semantics:
+//----------
+
+assignto:
+  1) if obj type is qualified const then a compiler error will result.
+    Rationale:
+    It's impossible to assign to an object of a const qualified type.
+
+return:
+  1) If present then indicates the return type of the functor,
+  2) else if not present and assignto is present then the return type of the
+    functor is determined by the type of assignto declaration,
+  3) else if not present and assignto is not present then the return type of the
+    functor is void.
+
+local()
+  Rationale:
+  bound vars need to be forwarded to their destination via a temporary cntnr,
+  for purposes of efficiency this is done using the add_reference metafunction. 
+  Since in C++03 local types have no linkage, they cannot be used as template 
+  parameters, and therefore cannot be used with metafunctions. 
+  Hence, the need to bind such types differently.
+  
+  The local keyword is to be used to wrap non-const non-reference local types.  
+  Any use contrary to such will result in a compiler error. Such wrapped types
+  may then be qualified via the keywords const, ref, or const ref as demonstrated
+  in the BNF section.
+  
+  IMPL detail: in C++11 treat such types as regular types for the purposes of codegen?
+
+this_:
+  1) If encountered as a bound variable name, then it will bind to the "this" 
+    keyword.
+  2) If encountered as a bound variable and implicitly typed and explicitly
+    qualified with the keyword const, then the constness will apply to the
+    pointed-to-type.
+    Rationale:
+      The type of "this", and hence the type of "this_", is already const. 
+      Therefore the const keyword would be redundant if applied to the "outer 
+      type". The above semantics are provided as an alternative shortcut 
+      to explicitly typing "this_" and const qualifying the pointed-to-type.
+
+bound-variables:
+  1) variables designated as such are bound to variables of the same name from 
+    the enclosing scope.
+  2) If implicitly typed, the types of such variables are determined by the
+    type of the variables they are bound to via BOOST_TYPEOF. Hence, this will
+    always be remove_reference<remove_const<type-of-boundee>::type>::type.
+    (*) Therefore, if you want something bound by reference always use the ref
+    keyword and if you want something bound by const always use the const 
+    keyword.
+  3) If explicitly typed, the types of such variables must be "implicitly
+    convertible to" from the type of the variable that they respectively bind in
+    their outer scope.
+
+set-variables:
+  1) If implicitly typed, the types of such variables are determined by the
+    type of the expression they are set to via BOOST_TYPEOF. If such an 
+    expression is a variable, then the caveats of b-v 2) apply.
+
+//---
+//BNF
+//---
+
+special symbols:
+  [...] specifies an optional BNF expression.
+terminals : assignto return parambind paramset membind memset const ref
+
+autofunction-spec :=
+    void
+  | [assignto assignto-tuple]
+    [return return-tuple]
+    [parambind parambind-seq]
+    [paramset paramset-seq]
+    [membind membind-seq]
+    [memset memset-seq]
+
+assignto-tuple := bound-tuple
+
+return-tuple := 
+    (non-local-type)
+  | (local-type)
+
+parambind-seq := bound-tuple-seq
+paramset-seq := set-tuple-seq
+membind-seq := bound-tuple-seq
+memset-seq := set-tuple-seq
+
+bound-tuple-seq :=
+    bound-tuple
+  | bound-tuple-seq bound-tuple
+
+set-tuple-seq :=
+    set-tuple
+  | set-tuple-seq set-tuple
+
+bound-tuple :=
+  ( bound-var-dcln )
+
+set-tuple :=
+  ( set-var-dcln )
+
+bound-var-dcln := type-var-dcln
+
+set-var-dcln := type-var-dcln , value-expr
+
+type-var-dcln := 
+    implicit-type-var-dcln
+  | explicit-type-var-dcln
+
+implicit-type-var-dcln :=
+  implicit-type var-name
+
+explicit-type-var-dcln :=
+  explicit-type var-name
+
+implicit-type := lib-type-qualifiers | empty-string
+
+lib-type-qualifiers := const | ref | const ref
+
+explicit-type := 
+    local-type
+  | ( non-local-type )
+
+local-type :=
+    local(local-nonconst-nonref-type)
+  | local(local-nonconst-nonref-type) lib-type-qualifiers
+
+type := A C++ type.
+var-name := A C++ variable name.
+local-nonconst-nonref-type := 
+  A C++ type declaration specifying a non-const, non-reference local type.
+non-local-type := A C++ type declaration specifying a non-local type.
+value-expr := A C++ expression evaluating to some value.
