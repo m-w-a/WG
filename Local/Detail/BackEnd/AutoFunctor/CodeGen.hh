@@ -20,6 +20,9 @@
 #define WG_PP_AUTOFUNCTOR_CODEGEN_END() \
   WG_PP_AUTOFUNCTOR_CODEGEN_END_IMPL()
 
+#define WG_PP_AUTOFUNCTOR_CODEGEN_TYPENAME(name) \
+  WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_TYPENAME(name)
+
 //###########
 //Impl Macros
 //###########
@@ -137,8 +140,6 @@
   private: \
     WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_MEM_DCLNS(symbtbl) \
   public: \
-    typedef WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_TYPENAME(name) self_type; \
-    \
     explicit WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_TYPENAME(name) ( \
       WG_PP_AUTOFUNCTOR_CG_FRWDR_TYPENAME() const & frwdr) \
       WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_CTOR_INITLIST(frwdr, symbtbl) \

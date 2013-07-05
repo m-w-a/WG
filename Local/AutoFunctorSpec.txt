@@ -1,3 +1,7 @@
+WG_AUTOFUNCTOR_TYPE(name)
+  Expands to the implementation dependent type name of the autofunctor named
+  "name".
+
 //----------
 //Semantics:
 //----------

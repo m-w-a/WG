@@ -82,7 +82,8 @@ test_autofunctor_SOURCES = \
     ../AutoFunctor/MemBindImplicitAndMemSetImplicit.cc \
     ../AutoFunctor/NoSpec.cc \
     ../AutoFunctor/Nested.cc \
-    ../AutoFunctor/Recursive.cc
+    ../AutoFunctor/Recursive.cc \
+    ../AutoFunctor/SelfType.cc
 
 EXTRA_DIST = 
 

@@ -16,6 +16,9 @@
 #define WG_AUTOFUNCTOR_END \
   WG_AUTOFUNCTOR_END_IMPL()
 
+#define WG_AUTOFUNCTOR_TYPE(name) \
+  WG_PP_AUTOFUNCTOR_CODEGEN_TYPENAME(name)
+
 //###########
 //Impl Macros
 //###########
