@@ -73,7 +73,8 @@
 #define WG_PP_PARSEDTYPE_NONLOCALTYPE_ADDCONSTADDREFERENCE( \
   nonlocaltype, istpl) \
     WG_PP_ADDTYPENAME(istpl) boost::add_reference< \
-      boost::add_const<WG_PP_IDENTITY(nonlocaltype)>::type \
+      WG_PP_ADDTYPENAME(istpl) boost::add_const<WG_PP_IDENTITY(nonlocaltype) \
+      >::type \
     >::type
 
 // elem: 0 or 1.
