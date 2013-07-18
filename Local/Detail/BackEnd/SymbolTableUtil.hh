@@ -67,8 +67,9 @@
 //------
 //The symbol table created using WG_PP_SYMBOLTABLE_CREATE. This symbol table
 //must have the following defined:
-//  1) WG_PP_SYMBOLTABLE_INDX_TYPESEQ_<suffix>
-//  2) WG_PP_SYMBOLTABLE_TYPESEQ_<suffix>
+//  1) WG_PP_SYMBOLTABLE_ISTPL
+//  2) WG_PP_SYMBOLTABLE_INDX_TYPESEQ_<suffix>
+//  3) WG_PP_SYMBOLTABLE_TYPESEQ_<suffix>
 //where suffix is declared in specseq as defined in the TypeDeducer.hh
 //
 //-------
@@ -215,31 +216,33 @@
   symbtbl, typededucer_name, spec) \
     WG_PP_SEQ_FOR_EACH_I( \
       WG_PP_STUTIL_USETYPEDEDUCER_REPLACEBOUNDTUPLEENTRY, \
-      (spec) (typededucer_name), \
+      (spec) (typededucer_name) (WG_PP_SYMBOLTABLE_ISTPL(symbtbl)), \
       BOOST_PP_CAT( \
         WG_PP_SYMBOLTABLE_TYPESEQ_, \
         WG_PP_TYPEDEDUCER_SPEC_SUFFIX(spec)) (symbtbl) )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_STUTIL_USETYPEDEDUCER_REPLACEBOUNDTUPLEENTRY( \
-  r, spec_typededucername, indx, entry) \
+  r, spec_typededucername_istpl, indx, entry) \
     BOOST_PP_LPAREN() \
       BOOST_PP_IIF( \
         WG_PP_TOKENS_START_WITH_WG_PP_DEDUCEDTYPE(entry), \
         WG_PP_STUTIL_USETYPEDEDUCER_REPLACEBOOSTYPEOF( \
-          spec_typededucername, indx), \
+          spec_typededucername_istpl, indx), \
         entry) \
     BOOST_PP_RPAREN()
 
 #define WG_PP_STUTIL_USETYPEDEDUCER_REPLACEBOOSTYPEOF( \
-  spec_typededucername, indx) \
+  spec_typededucername_istpl, indx) \
     WG_PP_STUTIL_USETYPEDEDUCER_REPLACEBOOSTYPEOF2( \
-      BOOST_PP_SEQ_ELEM(0, spec_typededucername), \
-      BOOST_PP_SEQ_ELEM(1, spec_typededucername), \
+      BOOST_PP_SEQ_ELEM(0, spec_typededucername_istpl), \
+      BOOST_PP_SEQ_ELEM(1, spec_typededucername_istpl), \
+      BOOST_PP_SEQ_ELEM(2, spec_typededucername_istpl), \
       indx)
 
 #define WG_PP_STUTIL_USETYPEDEDUCER_REPLACEBOOSTYPEOF2( \
-  spec, typededucername, indx) \
-    typededucername::WG_PP_TYPEDEDUCER_TYPENAME(spec, indx)
+  spec, typededucername, istpl, indx) \
+    WG_PP_ADDTYPENAME(istpl) \
+      typededucername::WG_PP_TYPEDEDUCER_TYPENAME(spec, indx)
 
 #endif /* WG_PP_SYMBOLTABLEUTIL_HH_ */

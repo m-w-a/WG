@@ -19,11 +19,12 @@
 // Creates a class for forwarding captured variables and/or expressions.
 // symbtbl:
 //   must have:
-//     1) WG_PP_SYMBOLTABLE_TYPESEQ_<suffix>
-//     2) WG_PP_SYMBOLTABLE_OBJSEQ_<suffix>
-//     3) WG_PP_SYMBOLTABLE_VALUESEQ_<suffix>
-//     4) WG_PP_SYMBOLTABLE_XXX_SIZE_<suffix>
-//     5) and when necessary, WG_PP_SYMBOLTABLE_OBJSEQ_THISU_MARKER_<suffix>
+//     1) WG_PP_SYMBOLTABLE_ISTPL
+//     2) WG_PP_SYMBOLTABLE_TYPESEQ_<suffix>
+//     3) WG_PP_SYMBOLTABLE_OBJSEQ_<suffix>
+//     4) WG_PP_SYMBOLTABLE_VALUESEQ_<suffix>
+//     5) WG_PP_SYMBOLTABLE_XXX_SIZE_<suffix>
+//     6) and when necessary, WG_PP_SYMBOLTABLE_OBJSEQ_THISU_MARKER_<suffix>
 //   Where suffix is declared in specseq.
 // specseq:
 //   { ( (suffix)(forwarding_type)(varrootname)(thisu_policy) ) }+
@@ -120,11 +121,11 @@
 
 #define WG_PP_FORWARDER_EXPAND1(x) x
 
-#define WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYREF(e_or_d_type) \
-  WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE(e_or_d_type)
+#define WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYREF(e_or_d_type, istpl) \
+  WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE(e_or_d_type, istpl)
 
-#define WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYCONSTREF(e_or_d_type) \
-  WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE(e_or_d_type)
+#define WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYCONSTREF(e_or_d_type, istpl) \
+  WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE(e_or_d_type, istpl)
 
 //-------------------------------------------
 //WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM
@@ -133,7 +134,7 @@
 // ref_transform:
 // constref_transform:
 //   a WG_PP_SEQ_FOR_EACH_I that will be passed the following params:
-//     data: varrootname
+//     data: use WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_<...>
 //     elem: explicit_or_deduced_type
 #define WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM( \
   symbtbl, specseq, ref_transform, constref_transform) \
@@ -141,6 +142,10 @@
       WG_PP_FORWARDER_TYPE_MEMBER_TRANSFORM_SPEC, \
       (symbtbl)(ref_transform)(constref_transform), \
       specseq)
+#define WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_VARROOTNAME(data) \
+  BOOST_PP_SEQ_ELEM(0, data)
+#define WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_ISTPL(data) \
+  BOOST_PP_SEQ_ELEM(1, data)
 
 #define WG_PP_FORWARDER_TYPE_MEMBER_TRANSFORM_SPEC_DATA_SYMBTBL(data) \
   BOOST_PP_SEQ_ELEM(0, data)
@@ -166,7 +171,7 @@
     WG_PP_SEQ_IFNIL_THENCLEAR( \
       WG_PP_SEQ_FOR_EACH_I( \
         transform, \
-        varrootname, \
+        (varrootname)( WG_PP_SYMBOLTABLE_ISTPL(symbtbl) ), \
         BOOST_PP_CAT(WG_PP_SYMBOLTABLE_TYPESEQ_, suffix) (symbtbl) ))
 
 //-----------
@@ -182,15 +187,23 @@
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_FORWARDER_TYPE_MEMBERDCLN_REF( \
-  r, varrootname, indx, e_or_d_type) \
-    WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYREF(e_or_d_type) \
-    WG_PP_FORWARDER_TYPE_MEMBERVARNAME(varrootname, indx) WG_PP_IDENTITY(;)
+  r, data, indx, e_or_d_type) \
+    WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYREF( \
+      e_or_d_type, \
+      WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_ISTPL(data)) \
+    WG_PP_FORWARDER_TYPE_MEMBERVARNAME( \
+      WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_VARROOTNAME(data), indx) \
+    WG_PP_IDENTITY(;)
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_FORWARDER_TYPE_MEMBERDCLN_CONSTREF( \
-  r, varrootname, indx, e_or_d_type) \
-    WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYCONSTREF(e_or_d_type) \
-    WG_PP_FORWARDER_TYPE_MEMBERVARNAME(varrootname, indx) WG_PP_IDENTITY(;)
+  r, data, indx, e_or_d_type) \
+    WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYCONSTREF( \
+      e_or_d_type, \
+      WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_ISTPL(data)) \
+    WG_PP_FORWARDER_TYPE_MEMBERVARNAME( \
+      WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_VARROOTNAME(data), indx) \
+    WG_PP_IDENTITY(;)
 
 //----------
 //Ctor Utils
@@ -236,18 +249,24 @@
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_ENTRY_REF( \
-  r, varrootname, indx, e_or_d_type) \
+  r, data, indx, e_or_d_type) \
     BOOST_PP_LPAREN() \
-      WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYREF(e_or_d_type) \
-      WG_PP_FORWARDER_TYPE_CTOR_PARAMVARNAME(varrootname, indx) \
+      WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYREF( \
+        e_or_d_type, \
+        WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_ISTPL(data)) \
+      WG_PP_FORWARDER_TYPE_CTOR_PARAMVARNAME( \
+        WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_VARROOTNAME(data), indx) \
     BOOST_PP_RPAREN()
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_ENTRY_CONSTREF( \
-  r, varrootname, indx, e_or_d_type) \
+  r, data, indx, e_or_d_type) \
     BOOST_PP_LPAREN() \
-      WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYCONSTREF(e_or_d_type) \
-      WG_PP_FORWARDER_TYPE_CTOR_PARAMVARNAME(varrootname, indx) \
+      WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYCONSTREF( \
+        e_or_d_type, \
+        WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_ISTPL(data)) \
+      WG_PP_FORWARDER_TYPE_CTOR_PARAMVARNAME( \
+        WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_VARROOTNAME(data), indx) \
     BOOST_PP_RPAREN()
 
 //--------------
@@ -274,11 +293,13 @@
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_FORWARDER_TYPE_CTOR_INITLISTENTRY( \
-  r, varrootname, indx, ignore_elem) \
+  r, data, indx, ignore_elem) \
     BOOST_PP_LPAREN() \
-      WG_PP_FORWARDER_TYPE_MEMBERVARNAME(varrootname, indx) \
+      WG_PP_FORWARDER_TYPE_MEMBERVARNAME( \
+        WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_VARROOTNAME(data), indx) \
       BOOST_PP_LPAREN() \
-        WG_PP_FORWARDER_TYPE_CTOR_PARAMVARNAME(varrootname, indx) \
+        WG_PP_FORWARDER_TYPE_CTOR_PARAMVARNAME( \
+          WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_VARROOTNAME(data), indx) \
       BOOST_PP_RPAREN() \
     BOOST_PP_RPAREN()
 
@@ -295,15 +316,21 @@
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_FORWARDER_TYPE_ACCESSORDCLN_REF( \
-  r, varrootname, indx, e_or_d_type) \
-    WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYREF(e_or_d_type) \
-    WG_PP_FORWARDER_TYPE_ACCESSORDCLN_SIGANDBODY(varrootname, indx)
+  r, data, indx, e_or_d_type) \
+    WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYREF( \
+      e_or_d_type, \
+      WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_ISTPL(data)) \
+    WG_PP_FORWARDER_TYPE_ACCESSORDCLN_SIGANDBODY( \
+      WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_VARROOTNAME(data), indx)
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_FORWARDER_TYPE_ACCESSORDCLN_CONSTREF( \
-  r, varrootname, indx, e_or_d_type) \
-    WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYCONSTREF(e_or_d_type) \
-    WG_PP_FORWARDER_TYPE_ACCESSORDCLN_SIGANDBODY(varrootname, indx)
+  r, data, indx, e_or_d_type) \
+    WG_PP_FORWARDER_TYPE_MEMBERTYPE_FWDBYCONSTREF( \
+      e_or_d_type, \
+      WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_ISTPL(data)) \
+    WG_PP_FORWARDER_TYPE_ACCESSORDCLN_SIGANDBODY( \
+      WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_VARROOTNAME(data), indx)
 
 #define WG_PP_FORWARDER_TYPE_ACCESSORDCLN_SIGANDBODY( \
   varrootname, indx) \

@@ -28,13 +28,14 @@
 #define WG_PP_AUTOFUNCTOR_IMPL(name, spec) \
   WG_PP_AUTOFUNCTOR_CODEGEN_START( \
     name, \
-    WG_PP_AUTOFUNCTOR_SYMBTABLE(WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE(spec, 0)))
+    WG_PP_AUTOFUNCTOR_SYMBTABLE(WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE(spec, 0), 0))
 
-#define WG_PP_AUTOFUNCTOR_SYMBTABLE(specseq) \
+#define WG_PP_AUTOFUNCTOR_SYMBTABLE(specseq, istpl) \
   WG_PP_AUTOFUNCTOR_EXPAND1( \
     WG_PP_AUTOFUNCTOR_SYMBTABLE2 \
     BOOST_PP_LPAREN() \
-      BOOST_PP_SEQ_ENUM(specseq) \
+      BOOST_PP_SEQ_ENUM(specseq) BOOST_PP_COMMA() \
+      istpl \
     BOOST_PP_RPAREN() )
 
 #define WG_PP_AUTOFUNCTOR_SYMBTABLE2( \
@@ -43,8 +44,10 @@
   m3, parambind_seq, \
   m4, paramset_seq, \
   m5, membind_seq, \
-  m6, memset_seq) \
+  m6, memset_seq, \
+  istpl) \
     WG_PP_AUTOFUNCTOR_SYMBOLTABLE_CREATE( \
+      istpl, \
       assignto_seq, \
       return_type, \
       parambind_seq, paramset_seq, \

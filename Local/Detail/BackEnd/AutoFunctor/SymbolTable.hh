@@ -11,6 +11,9 @@
 //Interface Impls.
 //################
 
+#define WG_PP_SYMBOLTABLE_ISTPL(symbtbl) \
+  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, ISTPL)
+
 //Returns: { BOOST_PP_NIL | (parsed-explicit-or-deduced-type) }
 #define WG_PP_SYMBOLTABLE_TYPESEQ_ASSIGNEE(symbtbl) \
   WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, TYPESEQ_ASSIGNEE)
@@ -158,6 +161,7 @@
 //-------
 //A SymbolTable whose values are accessible using the below macros.
 #define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_CREATE( \
+  istpl, \
   assignto_nrmlzd_tuple, \
   return_type, \
   parambind_nrmlzd_tupleseq, \
@@ -165,6 +169,7 @@
   membind_nrmlzd_tupleseq, \
   memset_nrmlzd_tupleseq) \
     WG_PP_AUTOFUNCTOR_ST_CREATE_IMPL1( \
+      istpl, \
       assignto_nrmlzd_tuple, \
       return_type, \
       parambind_nrmlzd_tupleseq, \
@@ -176,32 +181,34 @@
 //Impl Macros
 //###########
 
-#define WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_ASSIGNEE 0
-#define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_ASSIGNEE 1
-#define WG_PP_AUTOFUNCTOR_ST_INDX_EXISTS_ASSIGNEE 2
-#define WG_PP_AUTOFUNCTOR_ST_INDX_RETTYPE 3
+#define WG_PP_AUTOFUNCTOR_ST_INDX_ISTPL 0
 
-#define WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_BOUNDPARAM 4
-#define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_BOUNDPARAM 5
-#define WG_PP_AUTOFUNCTOR_ST_INDX_XXX_SIZE_BOUNDPARAM 6
-#define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_THISU_MARKER_BOUNDPARAM 7
+#define WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_ASSIGNEE 1
+#define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_ASSIGNEE 2
+#define WG_PP_AUTOFUNCTOR_ST_INDX_EXISTS_ASSIGNEE 3
+#define WG_PP_AUTOFUNCTOR_ST_INDX_RETTYPE 4
 
-#define WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_SETPARAM 8
-#define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_SETPARAM 9
-#define WG_PP_AUTOFUNCTOR_ST_INDX_VALUESEQ_SETPARAM 10
-#define WG_PP_AUTOFUNCTOR_ST_INDX_XXX_SIZE_SETPARAM 11
+#define WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_BOUNDPARAM 5
+#define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_BOUNDPARAM 6
+#define WG_PP_AUTOFUNCTOR_ST_INDX_XXX_SIZE_BOUNDPARAM 7
+#define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_THISU_MARKER_BOUNDPARAM 8
 
-#define WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_BOUNDMEM 12
-#define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_BOUNDMEM 13
-#define WG_PP_AUTOFUNCTOR_ST_INDX_XXX_SIZE_BOUNDMEM 14
-#define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_THISU_MARKER_BOUNDMEM 15
+#define WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_SETPARAM 9
+#define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_SETPARAM 10
+#define WG_PP_AUTOFUNCTOR_ST_INDX_VALUESEQ_SETPARAM 11
+#define WG_PP_AUTOFUNCTOR_ST_INDX_XXX_SIZE_SETPARAM 12
 
-#define WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_SETMEM 16
-#define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_SETMEM 17
-#define WG_PP_AUTOFUNCTOR_ST_INDX_VALUESEQ_SETMEM 18
-#define WG_PP_AUTOFUNCTOR_ST_INDX_XXX_SIZE_SETMEM 19
+#define WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_BOUNDMEM 13
+#define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_BOUNDMEM 14
+#define WG_PP_AUTOFUNCTOR_ST_INDX_XXX_SIZE_BOUNDMEM 15
+#define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_THISU_MARKER_BOUNDMEM 16
 
-#define WG_PP_AUTOFUNCTOR_ST_INDX_TOTALXXX_SIZE 20
+#define WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_SETMEM 17
+#define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_SETMEM 18
+#define WG_PP_AUTOFUNCTOR_ST_INDX_VALUESEQ_SETMEM 19
+#define WG_PP_AUTOFUNCTOR_ST_INDX_XXX_SIZE_SETMEM 20
+
+#define WG_PP_AUTOFUNCTOR_ST_INDX_TOTALXXX_SIZE 21
 
 // suffix: must match one of the following: WG_PP_AUTOFUNCTOR_ST_INDX_<suffix>
 #define WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, suffix) \
@@ -214,6 +221,7 @@
 //---------------
 
 #define WG_PP_AUTOFUNCTOR_ST_CREATE_IMPL1( \
+  istpl, \
   assignto_nrmlzd_tuple, \
   return_type, \
   parambind_nrmlzd_tupleseq, \
@@ -221,6 +229,7 @@
   membind_nrmlzd_tupleseq, \
   memset_nrmlzd_tupleseq) \
     WG_PP_AUTOFUNCTOR_ST_CREATE_IMPL2( \
+      istpl, \
       WG_PP_STUTIL_BOUNDTUPLESEQ_TO_TYPESEQ(assignto_nrmlzd_tuple), \
       WG_PP_STUTIL_BOUNDTUPLESEQ_TO_OBJSEQ(assignto_nrmlzd_tuple), \
       return_type, \
@@ -233,9 +242,10 @@
       WG_PP_STUTIL_BOUNDTUPLESEQ_TO_OBJSEQ(membind_nrmlzd_tupleseq), \
       WG_PP_STUTIL_SETTUPLESEQ_TO_TYPESEQ(memset_nrmlzd_tupleseq), \
       WG_PP_STUTIL_SETTUPLESEQ_TO_OBJSEQ(memset_nrmlzd_tupleseq), \
-      WG_PP_STUTIL_SETTUPLESEQ_TO_VALUESEQ(memset_nrmlzd_tupleseq) )
+      WG_PP_STUTIL_SETTUPLESEQ_TO_VALUESEQ(memset_nrmlzd_tupleseq))
 
 #define WG_PP_AUTOFUNCTOR_ST_CREATE_IMPL2( \
+  istpl, \
   assignto_type_seq, assignto_ob_seq, \
   return_type, \
   parambind_type_seq, parambind_obj_seq, \
@@ -243,8 +253,9 @@
   membind_type_seq, membind_obj_seq, \
   memset_type_seq, memset_obj_seq, memset_value_seq) \
     WG_PP_AUTOFUNCTOR_ST_CREATE_IMPL3( \
-      (20, \
-        (assignto_type_seq, \
+      (21, \
+        (istpl, \
+        assignto_type_seq, \
         assignto_ob_seq, \
         WG_PP_SEQ_SIZE(assignto_type_seq), \
         return_type, \
