@@ -22,8 +22,10 @@
 //   (memset) { (BOOST_PP_NIL) | ( {normalized-set-tuple}+ ) }
 //
 // (For definition of terms see SymbolTable documentation.)
-#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE(spec) \
-  WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_IMPL(spec BOOST_PP_NIL)
+#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE(spec, istpl) \
+  WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_IMPL( \
+    spec BOOST_PP_NIL, \
+    WG_PP_AUTOFUNCTOR_SPEC_OPTIONS_MAKE(istpl))
 
 //###########
 //Impl Macros
@@ -38,19 +40,29 @@
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_EXPAND5(x) x
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_EXPAND6(x) x
 
-#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_IMPL(spec) \
+#define WG_PP_AUTOFUNCTOR_SPEC_OPTIONS_MAKE(istpl) istpl
+#define WG_PP_AUTOFUNCTOR_SPEC_OPTIONS_ISTPL(specoptions) specoptions
+
+#define WG_PP_AUTOFUNCTOR_SPEC_CHOOSE_TPL(macro, specoptions) \
+  BOOST_PP_IIF( \
+    WG_PP_AUTOFUNCTOR_SPEC_OPTIONS_ISTPL(specoptions), \
+    BOOST_PP_CAT(macro, _TPL), \
+    macro)
+
+#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_IMPL(spec, specoptions) \
   WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_ASSIGNTO( \
     BOOST_PP_IIF( \
       WG_PP_TOKENS_STARTWITH_VOID(spec), \
       WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
-      spec) )
+      spec), \
+    specoptions)
 
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACRONAME( \
   spec, currentkeyword, nextkeyword) \
     BOOST_PP_CAT( \
       WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACRONAME_IMPL, \
       BOOST_PP_CAT(WG_PP_TOKENS_STARTWITH_, currentkeyword) (spec)) \
-      (spec, currentkeyword, nextkeyword)
+    (spec, currentkeyword, nextkeyword)
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACRONAME_IMPL0( \
   spec, currentkeyword, nextkeyword) \
     BOOST_PP_CAT( \
@@ -62,17 +74,18 @@
     BOOST_PP_CAT(WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_, currentkeyword)
 
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS( \
-  spec, currentkeyword, nextkeyword) \
+  spec, specoptions, currentkeyword, nextkeyword) \
     BOOST_PP_CAT( \
       WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS_IMPL, \
       BOOST_PP_CAT(WG_PP_TOKENS_STARTWITH_, currentkeyword) (spec)) \
-      (spec, currentkeyword, nextkeyword)
+    (spec, specoptions, currentkeyword, nextkeyword)
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS_IMPL0( \
-  spec, currentkeyword, nextkeyword) \
-    (spec)
+  spec, specoptions, currentkeyword, nextkeyword) \
+    (spec, specoptions)
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS_IMPL1( \
-  spec, currentkeyword, nextkeyword) \
+  spec, specoptions, currentkeyword, nextkeyword) \
     (spec, \
+     specoptions, \
      BOOST_PP_CAT( \
       WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_, \
       nextkeyword))
@@ -92,133 +105,156 @@
 //   the tokens because it will result in an eventual recursive call of itself.
 //------------------------------------------------------------------------------
 
-#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_ASSIGNTO(spec) \
+#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_ASSIGNTO(spec, specoptions) \
   (assignto) \
   WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_EXPAND1( \
     WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACRONAME(spec, ASSIGNTO, RETURN) \
-    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS(spec, ASSIGNTO, RETURN) )
+    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS( \
+      spec, specoptions, ASSIGNTO, RETURN) )
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_NOTFOUNDHOOK_ASSIGNTO() \
   (BOOST_PP_NIL)
-#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_ASSIGNTO(spec, nexttransform) \
-  WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_ASSIGNTO2( \
-    WG_PP_SPLITHEADTUPLEFROMTOKENS( \
-      1, \
-      WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
-      WG_PP_BOUNDVARDCLN_NORMALIZE, \
-      WG_PP_TUPLIZE, \
-      WG_PP_TUPLIZE), \
-    nexttransform)
+#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_ASSIGNTO( \
+  spec, specoptions, nexttransform) \
+    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_ASSIGNTO2( \
+      WG_PP_SPLITHEADTUPLEFROMTOKENS( \
+        1, \
+        WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
+        WG_PP_AUTOFUNCTOR_SPEC_CHOOSE_TPL( \
+          WG_PP_BOUNDVARDCLN_NORMALIZE, specoptions), \
+        WG_PP_TUPLIZE, \
+        WG_PP_TUPLIZE), \
+      nexttransform, \
+      specoptions)
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_ASSIGNTO2( \
-  head_rest_tuple, nexttransform) \
+  head_rest_tuple, nexttransform, specoptions) \
     ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
-    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) )
+    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) , specoptions )
 
-#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_RETURN(spec) \
+#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_RETURN(spec, specoptions) \
   (return) \
   WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_EXPAND2( \
     WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACRONAME(spec, RETURN, PARAMBIND) \
-    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS(spec, RETURN, PARAMBIND) )
+    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS( \
+      spec, specoptions, RETURN, PARAMBIND) )
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_NOTFOUNDHOOK_RETURN() \
   (BOOST_PP_NIL)
-#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_RETURN(spec, nexttransform) \
-  WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_RETURN2( \
-    WG_PP_SPLITHEADTUPLEFROMTOKENS( \
-      1, \
-      WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
-      WG_PP_IDENTITY, \
-      WG_PP_TUPLIZE, \
-      WG_PP_TUPLIZE), \
-    nexttransform)
+#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_RETURN( \
+  spec, specoptions, nexttransform) \
+    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_RETURN2( \
+      WG_PP_SPLITHEADTUPLEFROMTOKENS( \
+        1, \
+        WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
+        WG_PP_IDENTITY, \
+        WG_PP_TUPLIZE, \
+        WG_PP_TUPLIZE), \
+      nexttransform, \
+      specoptions)
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_RETURN2( \
-  head_rest_tuple, nexttransform) \
+  head_rest_tuple, nexttransform, specoptions) \
     ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
-    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) )
+    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) , specoptions )
 
-#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_PARAMBIND(spec) \
+#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_PARAMBIND(spec, specoptions) \
   (parambind) \
   WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_EXPAND3( \
     WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACRONAME(spec, PARAMBIND, PARAMSET) \
-    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS(spec, PARAMBIND, PARAMSET) )
+    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS( \
+      spec, specoptions, PARAMBIND, PARAMSET) )
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_NOTFOUNDHOOK_PARAMBIND() \
   (BOOST_PP_NIL)
-#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_PARAMBIND(spec, nexttransform) \
-  WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_PARAMBIND2( \
-    WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
-      1, \
-      WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
-      WG_PP_BOUNDVARDCLN_NORMALIZE, \
-      WG_PP_TUPLIZE, \
-      WG_PP_TUPLIZE), \
-    nexttransform)
+#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_PARAMBIND( \
+  spec, specoptions, nexttransform) \
+    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_PARAMBIND2( \
+      WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
+        1, \
+        WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
+        WG_PP_AUTOFUNCTOR_SPEC_CHOOSE_TPL( \
+          WG_PP_BOUNDVARDCLN_NORMALIZE, specoptions), \
+        WG_PP_TUPLIZE, \
+        WG_PP_TUPLIZE), \
+      nexttransform, \
+      specoptions)
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_PARAMBIND2( \
-  head_rest_tuple, nexttransform) \
+  head_rest_tuple, nexttransform, specoptions) \
     ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
-    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) )
+    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) , specoptions )
 
-#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_PARAMSET(spec) \
+#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_PARAMSET(spec, specoptions) \
   (paramset) \
   WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_EXPAND4( \
     WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACRONAME(spec, PARAMSET, MEMBIND) \
-    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS(spec, PARAMSET, MEMBIND) )
+    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS( \
+      spec, specoptions, PARAMSET, MEMBIND) )
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_NOTFOUNDHOOK_PARAMSET() \
   (BOOST_PP_NIL)
-#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_PARAMSET(spec, nexttransform) \
-  WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_PARAMSET2( \
-    WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
-      2, \
-      WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
-      WG_PP_SETVARDCLNNORMALIZE, \
-      WG_PP_TUPLIZE, \
-      WG_PP_TUPLIZE), \
-    nexttransform)
+#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_PARAMSET( \
+  spec, specoptions, nexttransform) \
+    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_PARAMSET2( \
+      WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
+        2, \
+        WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
+        WG_PP_AUTOFUNCTOR_SPEC_CHOOSE_TPL( \
+          WG_PP_SETVARDCLN_NORMALIZE, specoptions), \
+        WG_PP_TUPLIZE, \
+        WG_PP_TUPLIZE), \
+      nexttransform, \
+      specoptions)
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_PARAMSET2( \
-  head_rest_tuple, nexttransform) \
+  head_rest_tuple, nexttransform, specoptions) \
     ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
-    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) )
+    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) , specoptions )
 
-#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_MEMBIND(spec) \
+#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_MEMBIND(spec, specoptions) \
   (membind) \
   WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_EXPAND5( \
     WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACRONAME(spec, MEMBIND, MEMSET) \
-    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS(spec, MEMBIND, MEMSET) )
+    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS( \
+      spec, specoptions, MEMBIND, MEMSET) )
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_NOTFOUNDHOOK_MEMBIND() \
   (BOOST_PP_NIL)
-#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_MEMBIND(spec, nexttransform) \
-  WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_MEMBIND2( \
-    WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
-      1, \
-      WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
-      WG_PP_BOUNDVARDCLN_NORMALIZE, \
-      WG_PP_TUPLIZE, \
-      WG_PP_TUPLIZE), \
-    nexttransform)
+#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_MEMBIND( \
+  spec, specoptions, nexttransform) \
+    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_MEMBIND2( \
+      WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
+        1, \
+        WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
+        WG_PP_AUTOFUNCTOR_SPEC_CHOOSE_TPL( \
+          WG_PP_BOUNDVARDCLN_NORMALIZE, specoptions), \
+        WG_PP_TUPLIZE, \
+        WG_PP_TUPLIZE), \
+      nexttransform, \
+      specoptions)
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_MEMBIND2( \
-  head_rest_tuple, nexttransform) \
+  head_rest_tuple, nexttransform, specoptions) \
     ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
-    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) )
+    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) , specoptions)
 
-#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_MEMSET(spec) \
+#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_MEMSET(spec, specoptions) \
   (memset) \
   WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_EXPAND6( \
     WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACRONAME(spec, MEMSET, ENDSPEC) \
-    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS(spec, MEMSET, ENDSPEC) )
+    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZEIMPL_MACROPARAMS( \
+      spec, specoptions, MEMSET, ENDSPEC) )
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_NOTFOUNDHOOK_MEMSET() \
   (BOOST_PP_NIL)
-#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_MEMSET(spec, nexttransform) \
-  WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_MEMSET2( \
-    WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
-      2, \
-      WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
-      WG_PP_SETVARDCLNNORMALIZE, \
-      WG_PP_TUPLIZE, \
-      WG_PP_TUPLIZE), \
-    nexttransform)
+#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_MEMSET( \
+  spec, specoptions, nexttransform) \
+    WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_MEMSET2( \
+      WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
+        2, \
+        WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
+        WG_PP_AUTOFUNCTOR_SPEC_CHOOSE_TPL( \
+          WG_PP_SETVARDCLN_NORMALIZE, specoptions), \
+        WG_PP_TUPLIZE, \
+        WG_PP_TUPLIZE), \
+      nexttransform, \
+      specoptions)
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_SEQ_MEMSET2( \
-  head_rest_tuple, nexttransform) \
+  head_rest_tuple, nexttransform, specoptions) \
     ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
-    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) )
+    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) , specoptions)
 
-#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_ENDSPEC(spec) \
+#define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_ENDSPEC(spec, specoptions) \
   WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_VALIDATESPEC(spec)
 
 // To be called after an attempt to parse the complete spec.

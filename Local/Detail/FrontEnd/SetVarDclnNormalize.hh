@@ -14,18 +14,26 @@
 //   {(parsed-explicit-type) (var-name) (value-expr)}+
 //
 // (For definition of terms see SymbolTable documentation.)
-#define WG_PP_SETVARDCLNNORMALIZE(typevardcln, valueexpr) \
-  WG_PP_TYPEVARDCLN_NORMALIZE_IMPL(typevardcln, valueexpr) \
+#define WG_PP_SETVARDCLN_NORMALIZE(typevardcln, valueexpr) \
+  WG_PP_SETVARDCLN_NORMALIZE_IMPL(typevardcln, valueexpr, 0) \
+  WG_PP_TUPLIZE(valueexpr)
+
+// Expands to the following:
+//   {(parsed-explicit-type) (var-name) (value-expr)}+
+//
+// (For definition of terms see SymbolTable documentation.)
+#define WG_PP_SETVARDCLN_NORMALIZE_TPL(typevardcln, valueexpr) \
+  WG_PP_SETVARDCLN_NORMALIZE_IMPL(typevardcln, valueexpr, 1) \
   WG_PP_TUPLIZE(valueexpr)
 
 //###########
 //Impl Macros
 //###########
 
-#define WG_PP_TYPEVARDCLN_NORMALIZE_EXPAND1(x) x
+#define WG_PP_SETVARDCLN_NORMALIZE_EXPAND1(x) x
 
-#define WG_PP_TYPEVARDCLN_NORMALIZE_IMPL(typevardcln, valueexpr) \
-  WG_PP_TYPEVARDCLN_NORMALIZE_EXPAND1( \
+#define WG_PP_SETVARDCLN_NORMALIZE_IMPL(typevardcln, valueexpr, istpl) \
+  WG_PP_SETVARDCLN_NORMALIZE_EXPAND1( \
     BOOST_PP_IIF( \
       WG_PP_VARDCLN_ISEXPLICIT(typevardcln), \
       WG_PP_VARDCLNEXPLICIT_TUPLIZE, \
@@ -33,7 +41,7 @@
     BOOST_PP_IIF( \
       WG_PP_VARDCLN_ISEXPLICIT(typevardcln), \
       (typevardcln), \
-      (typevardcln, valueexpr) ))
+      (typevardcln, valueexpr, istpl) ))
 
 /*
 //Unit Tests.
@@ -43,9 +51,9 @@
 
 #include <boost/preprocessor/expand.hpp>
 
-BOOST_PP_EXPAND(WG_PP_SETVARDCLNNORMALIZE S1)
-BOOST_PP_EXPAND(WG_PP_SETVARDCLNNORMALIZE S2)
-BOOST_PP_EXPAND(WG_PP_SETVARDCLNNORMALIZE S3)
+BOOST_PP_EXPAND(WG_PP_SETVARDCLN_NORMALIZE S1)
+BOOST_PP_EXPAND(WG_PP_SETVARDCLN_NORMALIZE S2)
+BOOST_PP_EXPAND(WG_PP_SETVARDCLN_NORMALIZE S3)
 
 //EXPECTED:
 //(T const *) (var1) (&this->m_Foo)

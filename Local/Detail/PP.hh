@@ -73,6 +73,15 @@
 #define WG_PP_IS_MOD3_R2(num) \
   BOOST_PP_EQUAL(BOOST_PP_MOD(num,3), 2)
 
+#define WG_PP_ADDTYPENAME(istpl) \
+  BOOST_PP_EXPR_IIF(istpl, typename)
+
+#define WG_PP_TYPEOF(istpl, expr) \
+  BOOST_PP_IIF( \
+    istpl, \
+    BOOST_TYPEOF_TPL, \
+    BOOST_TYPEOF) (expr)
+
 //###########
 //Impl Macros
 //###########
