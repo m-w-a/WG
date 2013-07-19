@@ -9,6 +9,7 @@
 //Public APIs
 //###########
 
+// Evaluates to exactly 0 or 1.
 // tokens:
 //   a sequence of tokens that does not contain comma(s) nor begins with any
 //   non-alphanumeric-underscore characters.
@@ -21,6 +22,7 @@
 #define WG_PP_TOKENMATCH_BEGINSWITH(tokens, frontmatcher) \
   WG_PP_TOKENMATCH_BEGINSWITH_IMPL(tokens, frontmatcher)
 
+// Evaluates exactly to 0 or 1.
 // tokens:
 //   a sequence of tokens that does not contain comma(s) nor ends in
 //   non-alphanumeric-underscore characters.
@@ -33,6 +35,7 @@
 #define WG_PP_TOKENMATCH_ENDSWITH(tokens, endmatcher) \
   WG_PP_TOKENMATCH_ENDSWITH_IMPL(tokens, endmatcher)
 
+// Evaluates exactly to 0 or 1.
 // tokenXs:
 //   1) either a single token, or
 //   2) a sequence of tokens that does not contain comma(s) nor begins with any

@@ -2,7 +2,7 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
 
-TEST(wg_autofunctor_recursive, fibonacci)
+TEST(wg_autofunctor_recursive, Fibonacci)
 {
   try
   {
@@ -10,7 +10,7 @@ TEST(wg_autofunctor_recursive, fibonacci)
 
     WG_AUTOFUNCTOR
     (calculateFibonacci,
-      assignto ((int &) fib)
+      assignto (ref fib)
       return (int)
       paramset ((int) input, 4) )
     {

@@ -67,7 +67,7 @@ TEST(wg_autofunctor_assignto, OkIfLocalRef)
       int value;
     } obj = {0};
 
-    WG_AUTOFUNCTOR(assign, assignto (localref(SomeLocalType &) obj) )
+    WG_AUTOFUNCTOR(assign, assignto (local(SomeLocalType) ref obj) )
     {
       static SomeLocalType toRet = {1};
 
@@ -79,3 +79,51 @@ TEST(wg_autofunctor_assignto, OkIfLocalRef)
   }
   WG_GTEST_CATCH
 }
+
+// TODO.
+// Should result in a compiler error.
+//TEST(wg_autofunctor_assignto, notOkIfLocalConst)
+//{
+//  try
+//  {
+//    struct SomeLocalType
+//    {
+//      int value;
+//    } obj = {0};
+//
+//    WG_AUTOFUNCTOR(assign, assignto (local(SomeLocalType) const obj) )
+//    {
+//      static SomeLocalType toRet = {1};
+//
+//      return toRet;
+//    }
+//    WG_AUTOFUNCTOR_END;
+//
+//    EXPECT_EQ(obj.value, 1);
+//  }
+//  WG_GTEST_CATCH
+//}
+
+// TODO.
+// Should result in a compiler error.
+//TEST(wg_autofunctor_assignto, notOkIfLocalConstRef)
+//{
+//  try
+//  {
+//    struct SomeLocalType
+//    {
+//      int value;
+//    } obj = {0};
+//
+//    WG_AUTOFUNCTOR(assign, assignto (local(SomeLocalType) const ref obj) )
+//    {
+//      static SomeLocalType toRet = {1};
+//
+//      return toRet;
+//    }
+//    WG_AUTOFUNCTOR_END;
+//
+//    EXPECT_EQ(obj.value, 1);
+//  }
+//  WG_GTEST_CATCH
+//}

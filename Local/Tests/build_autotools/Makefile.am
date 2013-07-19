@@ -13,16 +13,9 @@ noinst_PROGRAMS = \
     test_pp_vardcln_implicit \
     test_pp_vardcln_explicit \
     test_pp_parsedtype \
-    test_autofunctor.v1 \
     test_autofunctor
-    
-TEST_BIN_DIR = $(abs_top_builddir)/bin/
 
-TEST_WG_AUTOFUNCTORV1_APPNAME = test_autofunctor.v1$(EXEEXT)
-TEST_WG_AUTOFUNCTORV1_APPALTPATH = \
-    $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTORV1_APPNAME)
-TEST_WG_AUTOFUNCTORV1_APPBUILDLOC = \
-    $(abs_builddir)/$(TEST_WG_AUTOFUNCTORV1_APPNAME)
+TEST_BIN_DIR = $(abs_top_builddir)/bin/
 
 TEST_WG_AUTOFUNCTOR_APPNAME = test_autofunctor$(EXEEXT)
 TEST_WG_AUTOFUNCTOR_APPALTPATH = \
@@ -33,17 +26,10 @@ TEST_WG_AUTOFUNCTOR_APPBUILDLOC = \
 #Custom init.
 all-local : \
     $(TEST_BIN_DIR) \
-    $(TEST_WG_AUTOFUNCTORV1_APPALTPATH) \
     $(TEST_WG_AUTOFUNCTOR_APPALTPATH)
     
 $(TEST_BIN_DIR) :
 	$(MKDIR_P) $(TEST_BIN_DIR)
-
-$(TEST_WG_AUTOFUNCTORV1_APPALTPATH) : $(TEST_WG_AUTOFUNCTORV1_APPBUILDLOC)
-	( cd $(TEST_BIN_DIR); \
-      $(LN_S) -f \
-          $(TEST_WG_AUTOFUNCTORV1_APPBUILDLOC) \
-          $(TEST_WG_AUTOFUNCTORV1_APPNAME); )
 
 $(TEST_WG_AUTOFUNCTOR_APPALTPATH) : $(TEST_WG_AUTOFUNCTOR_APPBUILDLOC)
 	( cd $(TEST_BIN_DIR); \
@@ -53,7 +39,6 @@ $(TEST_WG_AUTOFUNCTOR_APPALTPATH) : $(TEST_WG_AUTOFUNCTOR_APPBUILDLOC)
 
 #Custom finalize.
 clean-local : \
-    rm -rf $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTORV1_APPNAME) \
     rm -rf $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTOR_APPNAME)
 
 ##############################
@@ -61,7 +46,6 @@ clean-local : \
 ##############################
 # Don't add test_pp_* to TESTS since they're compile-only tests.
 TESTS = \
-    $(TEST_WG_AUTOFUNCTORV1_APPNAME) \
     $(TEST_WG_AUTOFUNCTOR_APPNAME)
 
 test_pp_pp_SOURCES = ../../Detail/Tests/PPUnitTest.cc
@@ -70,24 +54,62 @@ test_pp_tokenmatch_SOURCES = ../../Detail/Tests/TokenMatchUnitTest.cc
 test_pp_vardcln_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnUnitTest.cc
 test_pp_vardcln_implicit_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnImplicitUnitTest.cc
 test_pp_vardcln_explicit_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnExplicitUnitTest.cc
-test_pp_parsedtype_SOURCES = ../../Detail/BackEnd/Tests/TypeUnitTest.cc
-
-test_autofunctor_v1_SOURCES = \
-    ../AutoFunctorV1/TestMain.cc \
-    ../AutoFunctorV1/UnitTest.cc
+test_pp_parsedtype_SOURCES = ../../Detail/BackEnd/Tests/TypeExtractorUnitTest.cc
 
 test_autofunctor_SOURCES = \
     ../AutoFunctor/TestMain.cc \
+    ../AutoFunctor/AllCombo.cc \
+    ../AutoFunctor/AllComboTpl.cc \
     ../AutoFunctor/AssignTo.cc \
+    ../AutoFunctor/AssignToTpl.cc \
     ../AutoFunctor/ParamBindExplicit.cc \
+    ../AutoFunctor/ParamBindExplicitTpl.cc \
     ../AutoFunctor/ParamBindImplicit.cc \
+    ../AutoFunctor/ParamBindImplicitTpl.cc \
     ../AutoFunctor/ParamBindExplicitAndImplicit.cc \
+    ../AutoFunctor/ParamBindExplicitAndImplicitTpl.cc \
     ../AutoFunctor/ParamSetExplicit.cc \
+    ../AutoFunctor/ParamSetExplicitTpl.cc \
+    ../AutoFunctor/ParamSetImplicit.cc \
+    ../AutoFunctor/ParamSetImplicitTpl.cc \
+    ../AutoFunctor/ParamSetExplicitAndImplicit.cc \
+    ../AutoFunctor/ParamSetExplicitAndImplicitTpl.cc \
     ../AutoFunctor/ParamBindExplicitAndParamSetExplicit.cc \
+    ../AutoFunctor/ParamBindExplicitAndParamSetExplicitTpl.cc \
+    ../AutoFunctor/ParamBindExplicitAndParamSetImplicit.cc \
+    ../AutoFunctor/ParamBindExplicitAndParamSetImplicitTpl.cc \
     ../AutoFunctor/ParamBindImplicitAndParamSetExplicit.cc \
+    ../AutoFunctor/ParamBindImplicitAndParamSetExplicitTpl.cc \
+    ../AutoFunctor/ParamBindImplicitAndParamSetImplicit.cc \
+    ../AutoFunctor/ParamBindImplicitAndParamSetImplicitTpl.cc \
+    ../AutoFunctor/MemBindExplicit.cc \
+    ../AutoFunctor/MemBindExplicitTpl.cc \
+    ../AutoFunctor/MemBindImplicit.cc \
+    ../AutoFunctor/MemBindImplicitTpl.cc \
+    ../AutoFunctor/MemBindExplicitAndImplicit.cc \
+    ../AutoFunctor/MemBindExplicitAndImplicitTpl.cc \
+    ../AutoFunctor/MemSetExplicit.cc \
+    ../AutoFunctor/MemSetExplicitTpl.cc \
+    ../AutoFunctor/MemSetImplicit.cc \
+    ../AutoFunctor/MemSetImplicitTpl.cc \
+    ../AutoFunctor/MemSetExplicitAndImplicit.cc \
+    ../AutoFunctor/MemSetExplicitAndImplicitTpl.cc \
+    ../AutoFunctor/MemBindExplicitAndMemSetExplicit.cc \
+    ../AutoFunctor/MemBindExplicitAndMemSetExplicitTpl.cc \
+    ../AutoFunctor/MemBindExplicitAndMemSetImplicit.cc \
+    ../AutoFunctor/MemBindExplicitAndMemSetImplicitTpl.cc \
+    ../AutoFunctor/MemBindImplicitAndMemSetExplicit.cc \
+    ../AutoFunctor/MemBindImplicitAndMemSetExplicitTpl.cc \
+    ../AutoFunctor/MemBindImplicitAndMemSetImplicit.cc \
+    ../AutoFunctor/MemBindImplicitAndMemSetImplicitTpl.cc \
     ../AutoFunctor/NoSpec.cc \
+    ../AutoFunctor/NoSpecTpl.cc \
     ../AutoFunctor/Nested.cc \
-    ../AutoFunctor/Recursive.cc
+    ../AutoFunctor/NestedTpl.cc \
+    ../AutoFunctor/Recursive.cc \
+    ../AutoFunctor/RecursiveTpl.cc \
+    ../AutoFunctor/SelfType.cc \
+    ../AutoFunctor/SelfTypeTpl.cc
 
 EXTRA_DIST = 
 
@@ -95,7 +117,8 @@ EXTRA_DIST =
 #Preprocessor Flags.
 ####################
 
-AM_CPPFLAGS += \
+test_autofunctor_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
     $(GTEST_CPPFLAGS)
 
 ################
@@ -105,9 +128,6 @@ AM_CPPFLAGS += \
 AM_CXXFLAGS += \
     -pedantic
 
-test_autofunctor_v1_CXXFLAGS = \
-    -pedantic
-
 test_autofunctor_CXXFLAGS = \
     -pedantic
 
@@ -115,5 +135,8 @@ test_autofunctor_CXXFLAGS = \
 #Linker Flags.
 ##############
 
-LDADD = \
+GTEST_LTLIB = \
     $(top_builddir)/WG/ExternalLibsNoInstall/build_autotools/libgtest.la
+
+test_autofunctor_LDADD = $(GTEST_LTLIB)
+    

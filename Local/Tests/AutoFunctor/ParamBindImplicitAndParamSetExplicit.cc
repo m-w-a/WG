@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
+#include <boost/typeof/typeof.hpp>
+#include <WG/Local/Tests/TestHelper.hh>
 
 TEST(wg_autofunctor_parambindimplicitandparamsetexplicit, OkIfUsing21Combo)
 {
@@ -14,9 +16,16 @@ TEST(wg_autofunctor_parambindimplicitandparamsetexplicit, OkIfUsing21Combo)
 
     WG_AUTOFUNCTOR
     (calculateVolume,
-      parambind (ref volume) (pressure)
+      parambind (ref volume) (const pressure)
       paramset ((int const) numerator, numMoles * R * temp) )
     {
+      WG_PP_TESTHELPER_IS_SAME_TYPE(
+        int &, BOOST_TYPEOF(volume) &);
+      WG_PP_TESTHELPER_IS_SAME_TYPE(
+        int const, BOOST_TYPEOF(pressure) const);
+      WG_PP_TESTHELPER_IS_SAME_TYPE(
+        int const, BOOST_TYPEOF(numerator) const);
+
       volume = numerator / pressure;
     }
     WG_AUTOFUNCTOR_END;

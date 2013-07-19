@@ -1,0 +1,28 @@
+//http://gcc.gnu.org/bugzilla/show_bug.cgi?id=52688#c7
+//
+//Link error: undefined reference to `newValue'
+
+template <typename T>
+struct Foo
+{
+  static void run()
+  {
+    static int newValue = 0;
+    
+    struct Bar
+    {
+      void run()
+      {
+        newValue = 1;
+      }
+    } b;
+    b.run();
+  }
+};
+
+int main()
+{
+    Foo<bool>::run();
+    
+    return 0;
+}
