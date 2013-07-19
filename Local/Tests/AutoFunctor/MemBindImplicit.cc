@@ -41,11 +41,11 @@ TEST(wg_autofunctor_membindimplicit, OkIf3ArgsOfVaryingMutabilityBound)
 
 namespace
 {
-struct SomeNonLocalClass
+struct OkIfKeywordThisUBound
 {
   bool didBindThis;
 
-  SomeNonLocalClass()
+  OkIfKeywordThisUBound()
   : didBindThis(false)
   {
     WG_AUTOFUNCTOR(bindThisU, membind (this_) )
@@ -56,12 +56,11 @@ struct SomeNonLocalClass
   }
 };
 }
-
 TEST(wg_autofunctor_membindimplicit, OkIfKeywordThisUBound)
 {
   try
   {
-    SomeNonLocalClass someObj;
+    OkIfKeywordThisUBound someObj;
     EXPECT_TRUE(someObj.didBindThis);
   }
   WG_GTEST_CATCH

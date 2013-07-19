@@ -53,17 +53,17 @@ TEST(wg_autofunctor_parambindimplicit, OkIf3ArgsOfVaryingMutabilityBound)
 
 namespace
 {
-struct SomeNonLocalClass
+struct OkIfKeywordThisUBound
 {
   bool didBindThis;
 
-  SomeNonLocalClass()
+  OkIfKeywordThisUBound()
   : didBindThis(false)
   {
     WG_AUTOFUNCTOR(bindThisU, parambind (this_) )
     {
       WG_PP_TESTHELPER_IS_SAME_TYPE(
-        SomeNonLocalClass * const, BOOST_TYPEOF(this_) const);
+        OkIfKeywordThisUBound * const, BOOST_TYPEOF(this_) const);
 
       this_->didBindThis = true;
     }
@@ -76,7 +76,7 @@ TEST(wg_autofunctor_parambindimplicit, OkIfKeywordThisUBound)
 {
   try
   {
-    SomeNonLocalClass someObj;
+    OkIfKeywordThisUBound someObj;
     EXPECT_TRUE(someObj.didBindThis);
   }
   WG_GTEST_CATCH

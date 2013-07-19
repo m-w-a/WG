@@ -62,18 +62,26 @@ test_autofunctor_SOURCES = \
     ../AutoFunctor/AssignTo.cc \
     ../AutoFunctor/AssignToTpl.cc \
     ../AutoFunctor/ParamBindExplicit.cc \
+    ../AutoFunctor/ParamBindExplicitTpl.cc \
     ../AutoFunctor/ParamBindImplicit.cc \
+    ../AutoFunctor/ParamBindImplicitTpl.cc \
     ../AutoFunctor/ParamBindExplicitAndImplicit.cc \
+    ../AutoFunctor/ParamBindExplicitAndImplicitTpl.cc \
     ../AutoFunctor/ParamSetExplicit.cc \
+    ../AutoFunctor/ParamSetExplicitTpl.cc \
     ../AutoFunctor/ParamSetImplicit.cc \
+    ../AutoFunctor/ParamSetImplicitTpl.cc \
     ../AutoFunctor/ParamSetExplicitAndImplicit.cc \
     ../AutoFunctor/ParamBindExplicitAndParamSetExplicit.cc \
     ../AutoFunctor/ParamBindExplicitAndParamSetImplicit.cc \
     ../AutoFunctor/ParamBindImplicitAndParamSetExplicit.cc \
     ../AutoFunctor/ParamBindImplicitAndParamSetImplicit.cc \
     ../AutoFunctor/MemBindExplicit.cc \
+    ../AutoFunctor/MemBindExplicitTpl.cc \
     ../AutoFunctor/MemBindImplicit.cc \
+    ../AutoFunctor/MemBindImplicitTpl.cc \
     ../AutoFunctor/MemBindExplicitAndImplicit.cc \
+    ../AutoFunctor/MemBindExplicitAndImplicitTpl.cc \
     ../AutoFunctor/MemSetExplicit.cc \
     ../AutoFunctor/MemSetImplicit.cc \
     ../AutoFunctor/MemSetExplicitAndImplicit.cc \

@@ -4,7 +4,7 @@
 #include <WG/Local/Tests/TestHelper.hh>
 #include <boost/typeof/typeof.hpp>
 
-TEST(wg_autofunctor_paramsetexplicit, ensureTypeOfNotUsed)
+TEST(wg_autofunctor_paramsetexplicit, EnsureTypeOfNotUsed)
 {
   try
   {
