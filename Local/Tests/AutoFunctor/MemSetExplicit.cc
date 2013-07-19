@@ -2,7 +2,7 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
 
-TEST(wg_autofunctor_memsetexplicit, ensureTypeOfNotUsed)
+TEST(wg_autofunctor_memsetexplicit, EnsureTypeOfNotUsed)
 {
   try
   {

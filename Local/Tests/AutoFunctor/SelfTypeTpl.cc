@@ -2,23 +2,26 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
 
-TEST(wg_autofunctor_selftype, TwoLevel)
+namespace
 {
-  try
+template <typename T>
+struct TwoLevel
+{
+  static void run()
   {
-    int count = 0;
+    T count = 0;
 
-    WG_AUTOFUNCTOR(oneStep, membind (ref count) )
+    WG_AUTOFUNCTOR_TPL(oneStep, membind (ref count) )
     {
       ++count;
 
-      WG_AUTOFUNCTOR
+      WG_AUTOFUNCTOR_TPL
       (twoStep,
         memset (local(WG_AUTOFUNCTOR_TYPE(oneStep) *) const parent, this) )
       {
         parent->count += 2;
 
-        WG_AUTOFUNCTOR
+        WG_AUTOFUNCTOR_TPL
         (threeStep,
           memset (local(WG_AUTOFUNCTOR_TYPE(twoStep) *) const parent, this) )
         {
@@ -31,6 +34,14 @@ TEST(wg_autofunctor_selftype, TwoLevel)
     WG_AUTOFUNCTOR_END;
 
     EXPECT_EQ(count, 6);
+  }
+};
+}
+TEST(wg_autofunctor_selftypetpl, TwoLevel)
+{
+  try
+  {
+    TwoLevel<int>::run();
   }
   WG_GTEST_CATCH
 }

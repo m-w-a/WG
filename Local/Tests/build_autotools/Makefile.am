@@ -59,6 +59,7 @@ test_pp_parsedtype_SOURCES = ../../Detail/BackEnd/Tests/TypeExtractorUnitTest.cc
 test_autofunctor_SOURCES = \
     ../AutoFunctor/TestMain.cc \
     ../AutoFunctor/AllCombo.cc \
+    ../AutoFunctor/AllComboTpl.cc \
     ../AutoFunctor/AssignTo.cc \
     ../AutoFunctor/AssignToTpl.cc \
     ../AutoFunctor/ParamBindExplicit.cc \
@@ -72,10 +73,15 @@ test_autofunctor_SOURCES = \
     ../AutoFunctor/ParamSetImplicit.cc \
     ../AutoFunctor/ParamSetImplicitTpl.cc \
     ../AutoFunctor/ParamSetExplicitAndImplicit.cc \
+    ../AutoFunctor/ParamSetExplicitAndImplicitTpl.cc \
     ../AutoFunctor/ParamBindExplicitAndParamSetExplicit.cc \
+    ../AutoFunctor/ParamBindExplicitAndParamSetExplicitTpl.cc \
     ../AutoFunctor/ParamBindExplicitAndParamSetImplicit.cc \
+    ../AutoFunctor/ParamBindExplicitAndParamSetImplicitTpl.cc \
     ../AutoFunctor/ParamBindImplicitAndParamSetExplicit.cc \
+    ../AutoFunctor/ParamBindImplicitAndParamSetExplicitTpl.cc \
     ../AutoFunctor/ParamBindImplicitAndParamSetImplicit.cc \
+    ../AutoFunctor/ParamBindImplicitAndParamSetImplicitTpl.cc \
     ../AutoFunctor/MemBindExplicit.cc \
     ../AutoFunctor/MemBindExplicitTpl.cc \
     ../AutoFunctor/MemBindImplicit.cc \
@@ -83,16 +89,27 @@ test_autofunctor_SOURCES = \
     ../AutoFunctor/MemBindExplicitAndImplicit.cc \
     ../AutoFunctor/MemBindExplicitAndImplicitTpl.cc \
     ../AutoFunctor/MemSetExplicit.cc \
+    ../AutoFunctor/MemSetExplicitTpl.cc \
     ../AutoFunctor/MemSetImplicit.cc \
+    ../AutoFunctor/MemSetImplicitTpl.cc \
     ../AutoFunctor/MemSetExplicitAndImplicit.cc \
+    ../AutoFunctor/MemSetExplicitAndImplicitTpl.cc \
     ../AutoFunctor/MemBindExplicitAndMemSetExplicit.cc \
+    ../AutoFunctor/MemBindExplicitAndMemSetExplicitTpl.cc \
     ../AutoFunctor/MemBindExplicitAndMemSetImplicit.cc \
+    ../AutoFunctor/MemBindExplicitAndMemSetImplicitTpl.cc \
     ../AutoFunctor/MemBindImplicitAndMemSetExplicit.cc \
+    ../AutoFunctor/MemBindImplicitAndMemSetExplicitTpl.cc \
     ../AutoFunctor/MemBindImplicitAndMemSetImplicit.cc \
+    ../AutoFunctor/MemBindImplicitAndMemSetImplicitTpl.cc \
     ../AutoFunctor/NoSpec.cc \
+    ../AutoFunctor/NoSpecTpl.cc \
     ../AutoFunctor/Nested.cc \
+    ../AutoFunctor/NestedTpl.cc \
     ../AutoFunctor/Recursive.cc \
-    ../AutoFunctor/SelfType.cc
+    ../AutoFunctor/RecursiveTpl.cc \
+    ../AutoFunctor/SelfType.cc \
+    ../AutoFunctor/SelfTypeTpl.cc
 
 EXTRA_DIST = 
 

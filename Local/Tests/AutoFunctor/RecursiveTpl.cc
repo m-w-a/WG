@@ -2,17 +2,20 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
 
-TEST(wg_autofunctor_recursive, Fibonacci)
+namespace
 {
-  try
+template <typename T>
+struct Fibonacci
+{
+  static void run()
   {
-    int fib = 0;
+    T fib = 0;
 
-    WG_AUTOFUNCTOR
+    WG_AUTOFUNCTOR_TPL
     (calculateFibonacci,
-      assignto (ref fib)
-      return (int)
-      paramset ((int) input, 4) )
+      assignto (fib)
+      return (T)
+      paramset ((T) input, 4) )
     {
       if(input > 1)
       {
@@ -24,7 +27,13 @@ TEST(wg_autofunctor_recursive, Fibonacci)
 
     EXPECT_EQ(fib, 3);
   }
+};
+}
+TEST(wg_autofunctor_recursivetpl, Fibonacci)
+{
+  try
+  {
+    Fibonacci<int>::run();
+  }
   WG_GTEST_CATCH
 }
-
-//TODO: ...

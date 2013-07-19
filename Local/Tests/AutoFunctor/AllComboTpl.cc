@@ -4,20 +4,23 @@
 #include <boost/typeof/typeof.hpp>
 #include <WG/Local/Tests/TestHelper.hh>
 
-TEST(wg_autofunctor_allcombo, Test)
+namespace
 {
-  try
+template <typename T1, typename T2, typename T3>
+struct TestTpl
+{
+  static void run()
   {
-    bool success = false;
+    T1 success = false;
 
-    bool pinchOfSalt = true;
-    int dashOfSugar = 0;
+    T2 pinchOfSalt = true;
+    T3 dashOfSugar = 0;
 
-    WG_AUTOFUNCTOR
+    WG_AUTOFUNCTOR_TPL
     (makeGingerBreadCookie,
       assignto (success)
       return (int)
-      parambind (pinchOfSalt) ((bool) dashOfSugar)
+      parambind (pinchOfSalt) ((T3) dashOfSugar)
       paramset (temperature, 450.0f) ((double) bakingTime, 0.5)
       membind (pinchOfSalt) ((bool) dashOfSugar)
       memset (temperature, 450.0f) ((double) bakingTime, 0.5) )
@@ -31,6 +34,14 @@ TEST(wg_autofunctor_allcombo, Test)
     WG_AUTOFUNCTOR_END;
 
     EXPECT_TRUE(success);
+  }
+};
+}
+TEST(wg_autofunctor_allcombotpl, Test)
+{
+  try
+  {
+    TestTpl<bool, bool, int>::run();
   }
   WG_GTEST_CATCH
 }

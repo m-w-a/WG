@@ -2,7 +2,7 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
 
-TEST(wg_autofunctor_nested, onelevel)
+TEST(wg_autofunctor_nested, OneLevel)
 {
   try
   {
@@ -25,7 +25,7 @@ TEST(wg_autofunctor_nested, onelevel)
   WG_GTEST_CATCH
 }
 
-TEST(wg_autofunctor_nested, twolevel)
+TEST(wg_autofunctor_nested, TwoLevel)
 {
   try
   {
