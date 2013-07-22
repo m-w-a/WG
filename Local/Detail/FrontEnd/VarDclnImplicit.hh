@@ -116,8 +116,6 @@
   WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_THISU_ERRMSG()
 
 #define WG_PP_VARDCLNIMPLICIT_TUPLIZE_TYPE_THISU_ERRMSG() \
-  BOOST_PP_ASSERT_MSG( \
-    0, \
-    "ERROR: ref keyword cannot be used in conjunction with this_ keyword.")
+  ERROR_ref_keyword_cannot_be_used_with_thisu_keyword
 
 #endif //WG_PP_VARDCLNIMPLICIT_HH_

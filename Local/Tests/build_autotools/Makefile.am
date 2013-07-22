@@ -62,6 +62,8 @@ test_autofunctor_SOURCES = \
     ../AutoFunctor/AllComboTpl.cc \
     ../AutoFunctor/AssignTo.cc \
     ../AutoFunctor/AssignToTpl.cc \
+    ../AutoFunctor/Qualifiers.cc \
+    ../AutoFunctor/QualifiersTpl.cc \
     ../AutoFunctor/ParamBindExplicit.cc \
     ../AutoFunctor/ParamBindExplicitTpl.cc \
     ../AutoFunctor/ParamBindImplicit.cc \
