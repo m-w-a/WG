@@ -1,4 +1,4 @@
-#include "test.h"
+#include <WG/Local/Tests/test.h>
 #include <WG/Local/Detail/TokenMatching.hh>
 
 //---------------------------

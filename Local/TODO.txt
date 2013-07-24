@@ -2,10 +2,10 @@ AutoFunctor
 -----------
 granularize pp includes ??
 
-optimize IIF -> by splitting branches
+x) optimize IIF -> by splitting branches
 x) finish pp unit tests.
   do SetVarDclnNormalize.hh - do compile time array comparisons exist?
-simplify LOCALOPERANDSYNTAXCHECK error msg.
+x) simplify LOCALOPERANDSYNTAXCHECK error msg.
 
 Better Syntax Error Checking/Reporting:
   BOOST_PP_ASSERT_MSG

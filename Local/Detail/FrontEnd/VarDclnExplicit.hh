@@ -28,8 +28,12 @@
   BOOST_PP_CAT( \
     WG_PP_VARDCLNEXPLICIT_TUPLIZE_IMPL_, \
     BOOST_PP_EXPR_IIF(WG_PP_ISNEXTTOKEN_A_TUPLE(1, explicitvardcln), NONLOCAL) \
-    BOOST_PP_EXPR_IIF(WG_PP_TOKENS_STARTWITH_LOCAL(explicitvardcln), LOCAL) ) \
+    BOOST_PP_EXPR_IIF(WG_PP_TOKENS_STARTWITH_LOCAL(explicitvardcln), LOCAL) \
+    BOOST_PP_EMPTY) () \
   (explicitvardcln)
+
+#define WG_PP_VARDCLNEXPLICIT_TUPLIZE_IMPL_BOOST_PP_EMPTY() \
+  ( WG_PP_ERROR ERROR_missing_type_in_explicit_type_var_dcln )
 
 // NOTE: can't use WG_PP_SPLITHEADTUPLEFROMTOKENS in implementation because
 //   this macro will/might be called via a WG_PP_SPLITHEADTUPLEFROMTOKENS

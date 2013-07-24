@@ -20,6 +20,7 @@
 //   (paramset) { (BOOST_PP_NIL) | ( {normalized-set-tuple}+ ) }
 //   (membind) { (BOOST_PP_NIL) | ( {normalized-bound-tuple}+ ) }
 //   (memset) { (BOOST_PP_NIL) | ( {normalized-set-tuple}+ ) }
+//   (errors) { (BOOST_PP_NIL) | (WG_PP_ERROR ...) }
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE(spec, istpl) \
@@ -261,12 +262,14 @@
 //   If the remaining spec is not BOOST_PP_NIL, then the head token(s) should
 //   be a good indicator of where things went wrong.
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_VALIDATESPEC(spec) \
-  BOOST_PP_EXPR_IIF( \
-    BOOST_PP_NOT( \
-      WG_PP_TOKENS_START_WITH_BOOST_PP_NIL(spec)), \
-    BOOST_PP_ASSERT_MSG( \
-      0, "ERROR: Invalid token(s): (Excluding trailing BOOST_PP_NIL)" \
-    BOOST_PP_ASSERT_MSG( \
-      0, BOOST_PP_STRINGIZE(spec)) ))
+  (errors) \
+  ( \
+    BOOST_PP_IIF( \
+      WG_PP_TOKENS_START_WITH_BOOST_PP_NIL(spec), \
+      BOOST_PP_NIL BOOST_PP_EMPTY, \
+      WG_PP_ERROR WG_PP_ID_CAT( \
+        ERROR_Invalid_tokens, \
+        WG_PP_TOKENS_EATTAILTOKEN_BOOST_PP_NIL(spec) BOOST_PP_EMPTY) ) () \
+  )
 
 #endif /* WG_PP_AUTOFUNCTOR_SPECNORMALIZE_HH_ */
