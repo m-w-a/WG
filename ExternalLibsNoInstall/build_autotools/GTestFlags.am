@@ -1,0 +1,3 @@
+GTEST_CPPFLAGS = \
+    -I$(abs_top_srcdir)/WG/ExternalLibsNoInstall/gtest/include \
+    -I$(abs_top_srcdir)/WG/ExternalLibsNoInstall/gtest	
