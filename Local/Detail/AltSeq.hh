@@ -83,14 +83,13 @@
   TRANSFORM, \
   TRANSFORM_REST) \
     TRANSFORM head_tuple \
-    BOOST_PP_IIF( \
+    BOOST_PP_EXPR_IIF( \
       WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
         BOOST_PP_CAT(WG_PP_MAP_TO_TRUETOKEN_ARG, tuple_seq_rest)), \
       TRANSFORM_REST( \
         BOOST_PP_CAT( \
           WG_PP_TUPLIZE_, \
-          tuple_seq_rest)) BOOST_PP_EMPTY, \
-       BOOST_PP_EMPTY) ()
+          tuple_seq_rest)) BOOST_PP_EMPTY) ()
 
 //----------------
 //ALTSEQ_LINEARIZE

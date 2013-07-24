@@ -13,6 +13,8 @@ noinst_PROGRAMS = \
     test_pp_vardcln_implicit \
     test_pp_vardcln_explicit \
     test_pp_parsedtype \
+    test_pp_errorreporting_invalidnamedparameters \
+    test_pp_errorreporting_refthisu \
     test_autofunctor
 
 TEST_BIN_DIR = $(abs_top_builddir)/bin/
@@ -55,6 +57,10 @@ test_pp_vardcln_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnUnitTest.cc
 test_pp_vardcln_implicit_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnImplicitUnitTest.cc
 test_pp_vardcln_explicit_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnExplicitUnitTest.cc
 test_pp_parsedtype_SOURCES = ../../Detail/BackEnd/Tests/TypeExtractorUnitTest.cc
+test_pp_errorreporting_invalidnamedparameters_SOURCES = \
+  ../../Tests/AutoFunctor/ErrorReporting/InvalidNamedParameters.cc
+test_pp_errorreporting_refthisu_SOURCES = \
+  ../../Tests/AutoFunctor/ErrorReporting/RefThisU.cc
 
 test_autofunctor_SOURCES = \
     ../AutoFunctor/TestMain.cc \
@@ -62,6 +68,8 @@ test_autofunctor_SOURCES = \
     ../AutoFunctor/AllComboTpl.cc \
     ../AutoFunctor/AssignTo.cc \
     ../AutoFunctor/AssignToTpl.cc \
+    ../AutoFunctor/Qualifiers.cc \
+    ../AutoFunctor/QualifiersTpl.cc \
     ../AutoFunctor/ParamBindExplicit.cc \
     ../AutoFunctor/ParamBindExplicitTpl.cc \
     ../AutoFunctor/ParamBindImplicit.cc \

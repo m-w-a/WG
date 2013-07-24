@@ -2,15 +2,15 @@ AutoFunctor
 -----------
 granularize pp includes ??
 
-optimize IIF -> by splitting branches
-finish pp unit tests.
+x) optimize IIF -> by splitting branches
+x) finish pp unit tests.
   do SetVarDclnNormalize.hh - do compile time array comparisons exist?
-simplicify LOCALOPERANDSYNTAXCHECK error msg.
+x) simplify LOCALOPERANDSYNTAXCHECK error msg.
 
-Better Syntax Error Checking/Reporting:
-  BOOST_PP_ASSERT_MSG
-  empty spec
-  ref thisu
+x) Better Syntax Error Checking/Reporting:
+  x) BOOST_PP_ASSERT_MSG
+  x) empty spec
+  x) ref thisu
   missing type in explicit-type-var-dcln
   missing var in "..."
   missing type in implicit-type-var-dcln

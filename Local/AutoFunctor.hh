@@ -2,6 +2,7 @@
 #define WG_AUTOFUNCTOR_HH_
 
 #include <boost/preprocessor.hpp>
+#include <WG/Local/Detail/FrontEnd/ErrorReporter.hh>
 #include <WG/Local/Detail/FrontEnd/AutoFunctor/SpecNormalize.hh>
 #include <WG/Local/Detail/BackEnd/AutoFunctor/SymbolTable.hh>
 #include <WG/Local/Detail/BackEnd/AutoFunctor/CodeGen.hh>
@@ -29,37 +30,92 @@
 #define WG_PP_AUTOFUNCTOR_EXPAND1(x) x
 
 #define WG_PP_AUTOFUNCTOR_IMPL(name, spec) \
-  WG_PP_AUTOFUNCTOR_CODEGEN_START( \
-    name, \
-    WG_PP_AUTOFUNCTOR_SYMBTABLE(WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE(spec, 0), 0))
+  WG_PP_AUTOFUNCTOR_TPL_CMNIMPL(name, 0, spec)
 
 #define WG_PP_AUTOFUNCTOR_TPL_IMPL(name, spec) \
-  WG_PP_AUTOFUNCTOR_CODEGEN_START( \
-    name, \
-    WG_PP_AUTOFUNCTOR_SYMBTABLE(WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE(spec, 1), 1))
+  WG_PP_AUTOFUNCTOR_TPL_CMNIMPL(name, 1, spec)
 
-#define WG_PP_AUTOFUNCTOR_SYMBTABLE(specseq, istpl) \
+#define WG_PP_AUTOFUNCTOR_TPL_CMNIMPL(name, istpl, spec) \
   WG_PP_AUTOFUNCTOR_EXPAND1( \
-    WG_PP_AUTOFUNCTOR_SYMBTABLE2 \
+    WG_PP_AUTOFUNCTOR_TPL_CMNIMPL2 \
     BOOST_PP_LPAREN() \
-      BOOST_PP_SEQ_ENUM(specseq) BOOST_PP_COMMA() \
-      istpl \
+      name BOOST_PP_COMMA() \
+      istpl BOOST_PP_COMMA() \
+      BOOST_PP_SEQ_ENUM(WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE(spec, istpl)) \
     BOOST_PP_RPAREN() )
 
-#define WG_PP_AUTOFUNCTOR_SYMBTABLE2( \
+#define WG_PP_AUTOFUNCTOR_TPL_CMNIMPL2( \
+  name, \
+  istpl, \
   m1, assignto_seq, \
   m2, return_type, \
   m3, parambind_seq, \
   m4, paramset_seq, \
   m5, membind_seq, \
   m6, memset_seq, \
-  istpl) \
-    WG_PP_AUTOFUNCTOR_SYMBOLTABLE_CREATE( \
+  errors, error_seq) \
+    WG_PP_AUTOFUNCTOR_TPL_CMNIMPL3( \
+      name, \
       istpl, \
       assignto_seq, \
       return_type, \
       parambind_seq, paramset_seq, \
-      membind_seq, memset_seq)
+      membind_seq, memset_seq, \
+      WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ(assignto_seq) \
+      WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ(parambind_seq) \
+      WG_PP_ERRORREPORTER_REPORT_NRMLZDSETTUPLESEQ(paramset_seq) \
+      WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ(membind_seq) \
+      WG_PP_ERRORREPORTER_REPORT_NRMLZDSETTUPLESEQ(memset_seq) \
+      WG_PP_ERRORREPORTER_REPORT_ERRORSEQ(error_seq) BOOST_PP_NIL)
+
+#define WG_PP_AUTOFUNCTOR_TPL_CMNIMPL3(\
+  name, \
+  istpl, \
+  assignto_seq, \
+  return_type, \
+  parambind_seq, paramset_seq, \
+  membind_seq, memset_seq, \
+  psbl_error_tokens) \
+    BOOST_PP_IIF( \
+      WG_PP_TOKENS_START_WITH_BOOST_PP_NIL(psbl_error_tokens), \
+      WG_PP_AUTOFUNCTOR_TPL_CMNIMPL_STARTCODEGEN, \
+      WG_PP_AUTOFUNCTOR_TPL_CMNIMPL_REPORTERRORS) \
+      ( \
+        name, \
+        istpl, \
+        assignto_seq, \
+        return_type, \
+        parambind_seq, paramset_seq, \
+        membind_seq, memset_seq, \
+        psbl_error_tokens \
+      )
+
+#define WG_PP_AUTOFUNCTOR_TPL_CMNIMPL_REPORTERRORS( \
+  name, \
+  istpl, \
+  assignto_seq, \
+  return_type, \
+  parambind_seq, paramset_seq, \
+  membind_seq, memset_seq, \
+  psbl_error_tokens) \
+    psbl_error_tokens
+
+#define WG_PP_AUTOFUNCTOR_TPL_CMNIMPL_STARTCODEGEN( \
+  name, \
+  istpl, \
+  assignto_seq, \
+  return_type, \
+  parambind_seq, paramset_seq, \
+  membind_seq, memset_seq, \
+  psbl_error_tokens) \
+    WG_PP_AUTOFUNCTOR_CODEGEN_START( \
+      name, \
+      WG_PP_AUTOFUNCTOR_SYMBOLTABLE_CREATE( \
+        istpl, \
+        assignto_seq, \
+        return_type, \
+        parambind_seq, paramset_seq, \
+        membind_seq, memset_seq) )
 
 #define WG_AUTOFUNCTOR_END_IMPL() \
   WG_PP_AUTOFUNCTOR_CODEGEN_END()

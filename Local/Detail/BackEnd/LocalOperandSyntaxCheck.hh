@@ -48,9 +48,7 @@
 
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN_IMPL( \
   syntaxcheckername, symbtbl, specseq) \
-    struct WG_PP_ID_CAT( \
-      syntaxcheckername, \
-      ERROR_local_operand_is_a_reference_or_is_const_qualified) \
+    struct syntaxcheckername \
     { \
       BOOST_PP_SEQ_FOR_EACH( \
         WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN, \

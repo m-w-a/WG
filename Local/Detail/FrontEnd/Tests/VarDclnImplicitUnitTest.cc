@@ -1,4 +1,4 @@
-#include <WG/Local/Detail/Tests/test.h>
+#include <WG/Local/Tests/test.h>
 #include <WG/Local/Detail/PP.hh>
 #include "../VarDclnImplicit.hh"
 #include <boost/preprocessor.hpp>
