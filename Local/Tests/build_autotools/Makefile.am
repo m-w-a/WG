@@ -57,10 +57,13 @@ test_pp_vardcln_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnUnitTest.cc
 test_pp_vardcln_implicit_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnImplicitUnitTest.cc
 test_pp_vardcln_explicit_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnExplicitUnitTest.cc
 test_pp_parsedtype_SOURCES = ../../Detail/BackEnd/Tests/TypeExtractorUnitTest.cc
-test_pp_errorreporting_invalidnamedparameters_SOURCES = \
-  ../../Tests/AutoFunctor/ErrorReporting/InvalidNamedParameters.cc
-test_pp_errorreporting_refthisu_SOURCES = \
-  ../../Tests/AutoFunctor/ErrorReporting/RefThisU.cc
+
+if DO_NOT_BUILD
+    test_pp_errorreporting_invalidnamedparameters_SOURCES = \
+      ../../Tests/AutoFunctor/ErrorReporting/InvalidNamedParameters.cc
+    test_pp_errorreporting_refthisu_SOURCES = \
+      ../../Tests/AutoFunctor/ErrorReporting/RefThisU.cc
+endif
 
 test_autofunctor_SOURCES = \
     ../AutoFunctor/TestMain.cc \

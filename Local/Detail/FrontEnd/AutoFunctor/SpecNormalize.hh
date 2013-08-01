@@ -23,6 +23,8 @@
 //   (errors) { (BOOST_PP_NIL) | (WG_PP_ERROR ...) }
 //
 // (For definition of terms see SymbolTable documentation.)
+// EXCEPTION: every tuple in normalized-bound-tuple or normalized-set-tuple
+//   maybe replaced with "WG_PP_ERROR ..." tokens.
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE(spec, istpl) \
   WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_IMPL( \
     spec BOOST_PP_NIL, \

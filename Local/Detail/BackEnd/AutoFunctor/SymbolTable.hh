@@ -11,120 +11,128 @@
 //Interface Impls.
 //################
 
-#define WG_PP_SYMBOLTABLE_ISTPL(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, ISTPL)
+// Since PP interfaces require the use of generic macro names, have to ensure
+// that multiple interfaces don't accidentally end up in the same TU.
+#ifdef WG_PP_SYMBOLTABLE_INTERFACE
+  #error "ERROR: Duplicate WG_PP_SYMBOLTABLE interfaces encountered."
+#else
+  #define WG_PP_SYMBOLTABLE_INTERFACE
 
-//Returns: { BOOST_PP_NIL | (parsed-explicit-or-deduced-type) }
-#define WG_PP_SYMBOLTABLE_TYPESEQ_ASSIGNEE(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, TYPESEQ_ASSIGNEE)
+  #define WG_PP_SYMBOLTABLE_ISTPL(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, ISTPL)
 
-//Returns: { BOOST_PP_NIL | (var-name) }
-#define WG_PP_SYMBOLTABLE_OBJSEQ_ASSIGNEE(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, OBJSEQ_ASSIGNEE)
+  //Returns: { BOOST_PP_NIL | (parsed-explicit-or-deduced-type) }
+  #define WG_PP_SYMBOLTABLE_TYPESEQ_ASSIGNEE(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, TYPESEQ_ASSIGNEE)
 
-//See WG_PP_SYMBOLTABLE_OBJSEQ_ASSIGNEE.
-#define WG_PP_SYMBOLTABLE_VALUESEQ_ASSIGNEE(symbtbl) \
-  WG_PP_SYMBOLTABLE_OBJSEQ_ASSIGNEE(symbtbl)
+  //Returns: { BOOST_PP_NIL | (var-name) }
+  #define WG_PP_SYMBOLTABLE_OBJSEQ_ASSIGNEE(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, OBJSEQ_ASSIGNEE)
 
-//Returns: { 0 | 1 }
-#define WG_PP_SYMBOLTABLE_EXISTS_ASSIGNEE(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, EXISTS_ASSIGNEE)
+  //See WG_PP_SYMBOLTABLE_OBJSEQ_ASSIGNEE.
+  #define WG_PP_SYMBOLTABLE_VALUESEQ_ASSIGNEE(symbtbl) \
+    WG_PP_SYMBOLTABLE_OBJSEQ_ASSIGNEE(symbtbl)
 
-#define WG_PP_SYMBOLTABLE_XXX_SIZE_ASSIGNEE(symbtbl) \
-  WG_PP_SYMBOLTABLE_EXISTS_ASSIGNEE(symbtbl)
+  //Returns: { 0 | 1 }
+  #define WG_PP_SYMBOLTABLE_EXISTS_ASSIGNEE(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, EXISTS_ASSIGNEE)
 
-//Returns: { BOOST_PP_NIL | return-type  }
-#define WG_PP_SYMBOLTABLE_RETTYPE(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, RETTYPE)
+  #define WG_PP_SYMBOLTABLE_XXX_SIZE_ASSIGNEE(symbtbl) \
+    WG_PP_SYMBOLTABLE_EXISTS_ASSIGNEE(symbtbl)
 
-//Returns: { 0 | 1 }
-#define WG_PP_SYMBOLTABLE_EXISTS_RETTYPE(symbtbl) \
-  BOOST_PP_NOT( \
-    WG_PP_TOKENS_START_WITH_BOOST_PP_NIL( \
-      WG_PP_SYMBOLTABLE_RETTYPE(symbtbl) ))
+  //Returns: { BOOST_PP_NIL | return-type  }
+  #define WG_PP_SYMBOLTABLE_RETTYPE(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, RETTYPE)
 
-//Returns: { BOOST_PP_NIL | {(parsed-explicit-or-deduced-type)}+ }
-#define WG_PP_SYMBOLTABLE_TYPESEQ_BOUNDPARAM(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, TYPESEQ_BOUNDPARAM)
+  //Returns: { 0 | 1 }
+  #define WG_PP_SYMBOLTABLE_EXISTS_RETTYPE(symbtbl) \
+    BOOST_PP_NOT( \
+      WG_PP_TOKENS_START_WITH_BOOST_PP_NIL( \
+        WG_PP_SYMBOLTABLE_RETTYPE(symbtbl) ))
 
-//Returns: { BOOST_PP_NIL | {(var-name)}+ }
-#define WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDPARAM(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, OBJSEQ_BOUNDPARAM)
+  //Returns: { BOOST_PP_NIL | {(parsed-explicit-or-deduced-type)}+ }
+  #define WG_PP_SYMBOLTABLE_TYPESEQ_BOUNDPARAM(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, TYPESEQ_BOUNDPARAM)
 
-//See WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDPARAM.
-#define WG_PP_SYMBOLTABLE_VALUESEQ_BOUNDPARAM(symbtbl) \
-  WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDPARAM(symbtbl)
+  //Returns: { BOOST_PP_NIL | {(var-name)}+ }
+  #define WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDPARAM(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, OBJSEQ_BOUNDPARAM)
 
-//Returns: { integer }
-#define WG_PP_SYMBOLTABLE_XXX_SIZE_BOUNDPARAM(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, XXX_SIZE_BOUNDPARAM)
+  //See WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDPARAM.
+  #define WG_PP_SYMBOLTABLE_VALUESEQ_BOUNDPARAM(symbtbl) \
+    WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDPARAM(symbtbl)
 
-//Returns: { BOOST_PP_NIL | integer }
-#define WG_PP_SYMBOLTABLE_OBJSEQ_THISU_MARKER_BOUNDPARAM(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, OBJSEQ_THISU_MARKER_BOUNDPARAM)
+  //Returns: { integer }
+  #define WG_PP_SYMBOLTABLE_XXX_SIZE_BOUNDPARAM(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, XXX_SIZE_BOUNDPARAM)
 
-//Returns: { BOOST_PP_NIL | {(parsed-explicit-type)}+ }
-#define WG_PP_SYMBOLTABLE_TYPESEQ_SETPARAM(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, TYPESEQ_SETPARAM)
+  //Returns: { BOOST_PP_NIL | integer }
+  #define WG_PP_SYMBOLTABLE_OBJSEQ_THISU_MARKER_BOUNDPARAM(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, OBJSEQ_THISU_MARKER_BOUNDPARAM)
 
-//Returns: { BOOST_PP_NIL | {(var-name)}+ }
-#define WG_PP_SYMBOLTABLE_OBJSEQ_SETPARAM(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, OBJSEQ_SETPARAM)
+  //Returns: { BOOST_PP_NIL | {(parsed-explicit-type)}+ }
+  #define WG_PP_SYMBOLTABLE_TYPESEQ_SETPARAM(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, TYPESEQ_SETPARAM)
 
-//Returns: { BOOST_PP_NIL | {(value-expr)}+ }
-#define WG_PP_SYMBOLTABLE_VALUESEQ_SETPARAM(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, VALUESEQ_SETPARAM)
+  //Returns: { BOOST_PP_NIL | {(var-name)}+ }
+  #define WG_PP_SYMBOLTABLE_OBJSEQ_SETPARAM(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, OBJSEQ_SETPARAM)
 
-//Returns: { integer }
-#define WG_PP_SYMBOLTABLE_XXX_SIZE_SETPARAM(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, XXX_SIZE_SETPARAM)
+  //Returns: { BOOST_PP_NIL | {(value-expr)}+ }
+  #define WG_PP_SYMBOLTABLE_VALUESEQ_SETPARAM(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, VALUESEQ_SETPARAM)
 
-//Returns: { BOOST_PP_NIL | {(parsed-explicit-or-deduced-type)}+ }
-#define WG_PP_SYMBOLTABLE_TYPESEQ_BOUNDMEM(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, TYPESEQ_BOUNDMEM)
+  //Returns: { integer }
+  #define WG_PP_SYMBOLTABLE_XXX_SIZE_SETPARAM(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, XXX_SIZE_SETPARAM)
 
-//Returns: { BOOST_PP_NIL | {(var-name)}+ }
-#define WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDMEM(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, OBJSEQ_BOUNDMEM)
+  //Returns: { BOOST_PP_NIL | {(parsed-explicit-or-deduced-type)}+ }
+  #define WG_PP_SYMBOLTABLE_TYPESEQ_BOUNDMEM(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, TYPESEQ_BOUNDMEM)
 
-//Returns: { integer }
-#define WG_PP_SYMBOLTABLE_XXX_SIZE_BOUNDMEM(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, XXX_SIZE_BOUNDMEM)
+  //Returns: { BOOST_PP_NIL | {(var-name)}+ }
+  #define WG_PP_SYMBOLTABLE_OBJSEQ_BOUNDMEM(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, OBJSEQ_BOUNDMEM)
 
-//Returns: { BOOST_PP_NIL | integer }
-#define WG_PP_SYMBOLTABLE_OBJSEQ_THISU_MARKER_BOUNDMEM(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, OBJSEQ_THISU_MARKER_BOUNDMEM)
+  //Returns: { integer }
+  #define WG_PP_SYMBOLTABLE_XXX_SIZE_BOUNDMEM(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, XXX_SIZE_BOUNDMEM)
 
-//Returns: { BOOST_PP_NIL | {(parsed-explicit-type)}+ }
-#define WG_PP_SYMBOLTABLE_TYPESEQ_SETMEM(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, TYPESEQ_SETMEM)
+  //Returns: { BOOST_PP_NIL | integer }
+  #define WG_PP_SYMBOLTABLE_OBJSEQ_THISU_MARKER_BOUNDMEM(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, OBJSEQ_THISU_MARKER_BOUNDMEM)
 
-//Returns: { BOOST_PP_NIL | {(var-name)}+ }
-#define WG_PP_SYMBOLTABLE_OBJSEQ_SETMEM(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, OBJSEQ_SETMEM)
+  //Returns: { BOOST_PP_NIL | {(parsed-explicit-type)}+ }
+  #define WG_PP_SYMBOLTABLE_TYPESEQ_SETMEM(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, TYPESEQ_SETMEM)
 
-//Returns: { BOOST_PP_NIL | {(value-expr)}+ }
-#define WG_PP_SYMBOLTABLE_VALUESEQ_SETMEM(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, VALUESEQ_SETMEM)
+  //Returns: { BOOST_PP_NIL | {(var-name)}+ }
+  #define WG_PP_SYMBOLTABLE_OBJSEQ_SETMEM(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, OBJSEQ_SETMEM)
 
-//Returns: { integer }
-#define WG_PP_SYMBOLTABLE_XXX_SIZE_SETMEM(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, XXX_SIZE_SETMEM)
+  //Returns: { BOOST_PP_NIL | {(value-expr)}+ }
+  #define WG_PP_SYMBOLTABLE_VALUESEQ_SETMEM(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, VALUESEQ_SETMEM)
 
-//Returns: { integer }
-#define WG_PP_SYMBOLTABLE_TOTALXXX_SIZE(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, TOTALXXX_SIZE)
+  //Returns: { integer }
+  #define WG_PP_SYMBOLTABLE_XXX_SIZE_SETMEM(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, XXX_SIZE_SETMEM)
 
-#define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_ASSIGNEE \
-  WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_ASSIGNEE
-#define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_BOUNDPARAM \
-  WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_BOUNDPARAM
-#define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_SETPARAM \
-  WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_SETPARAM
-#define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_BOUNDMEM \
-  WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_BOUNDMEM
-#define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_SETMEM \
-  WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_SETMEM
+  //Returns: { integer }
+  #define WG_PP_SYMBOLTABLE_TOTALXXX_SIZE(symbtbl) \
+    WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, TOTALXXX_SIZE)
+
+  #define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_ASSIGNEE \
+    WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_ASSIGNEE
+  #define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_BOUNDPARAM \
+    WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_BOUNDPARAM
+  #define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_SETPARAM \
+    WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_SETPARAM
+  #define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_BOUNDMEM \
+    WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_BOUNDMEM
+  #define WG_PP_SYMBOLTABLE_INDX_TYPESEQ_SETMEM \
+    WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_SETMEM
+#endif
 
 //###########
 //Public APIs

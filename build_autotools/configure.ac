@@ -54,6 +54,9 @@ AC_PROG_LN_S  #To use $(LN_S)
 
 m4_include([m4/wg.m4])
 
+# To be used for programs that should not be default built.
+AM_CONDITIONAL([DO_NOT_BUILD], [test "xno" = "xyes"])
+
 ###############################
 # Checks for library functions.
 ###############################

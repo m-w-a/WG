@@ -1,6 +1,5 @@
 WG_AUTOFUNCTOR_TYPE(name)
-  Expands to the implementation dependent type name of the autofunctor named
-  "name".
+  Expands to the implementation dependent type of the autofunctor named "name".
 
 //----------
 //Semantics:
@@ -18,7 +17,7 @@ return:
   3) else if not present and assignto is not present then the return type of the
     functor is void.
 
-local()
+local():
   Rationale:
   bound vars need to be forwarded to their destination via a temporary cntnr,
   for purposes of efficiency this is done using the add_reference metafunction. 
@@ -31,7 +30,8 @@ local()
   may then be qualified via the keywords const, ref, or const ref as demonstrated
   in the BNF section.
   
-  IMPL detail: in C++11 treat such types as regular types for the purposes of codegen?
+  IMPL detail: in C++11 treat such types as regular types for the purposes of 
+    codegen? (TODO.)
 
 this_:
   1) If encountered as a bound variable name, then it will bind to the "this" 
@@ -71,7 +71,17 @@ special symbols:
   [...] specifies an optional BNF expression.
 terminals : assignto return parambind paramset membind memset const ref
 
-autofunction-spec :=
+autofunctor-usage := 
+  autofunctor-start-macro ( autofunctor-spec ) 
+  cv-qualifier-seq exception-specification
+  function-body
+  WG_AUTOFUNCTOR_END [;]
+
+autofunctor-start-macro :=
+    WG_AUTOFUNCTOR
+  | WG_AUTOFUNCTOR_TPL
+
+autofunctor-spec :=
     void
   | [assignto assignto-tuple]
     [return return-tuple]
@@ -131,6 +141,9 @@ local-type :=
     local(local-nonconst-nonref-type)
   | local(local-nonconst-nonref-type) lib-type-qualifiers
 
+cv-qualifier-seq := See C++ standard.
+exception-specification := See C++ standard.
+function-body := See C++ standard.
 type := A C++ type.
 var-name := A C++ variable name.
 local-nonconst-nonref-type := 

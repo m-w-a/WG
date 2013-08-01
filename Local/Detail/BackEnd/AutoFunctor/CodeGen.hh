@@ -146,6 +146,7 @@
     {} \
     void operator()(WG_PP_AUTOFUNCTOR_CG_FRWDR_TYPENAME() const & frwdr) \
     { \
+      /* To suppress unused var warnings. */ \
       static_cast<void>(frwdr); \
       BOOST_PP_EXPR_IIF( \
         WG_PP_SYMBOLTABLE_EXISTS_ASSIGNEE(symbtbl), \
