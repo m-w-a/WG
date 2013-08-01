@@ -1,0 +1,68 @@
+WG_LCLFUNCTION_TYPE(name)
+  Expands to the implementation dependent type of the object named "name".
+  
+Note: All terms not defined here should be referenced in AutoFunctorSpec.txt
+  
+//----------
+//Semantics:
+//----------
+  
+return:
+  1) If present then indicates the return type of the function,
+  2) else if not present then the return type of the function is void.
+
+//---
+//BNF
+//---
+
+special symbols:
+  [...] specifies an optional BNF expression.
+terminals : return params varbind varset const ref
+
+lclfunction-usage :=
+  lclfunction-start-macro ( lclfunction-spec )
+  function-body
+  WG_LCLFUNCTION_END [;]
+
+lclfunction-spec :=
+    void
+  | [return nlt-return-tuple]
+    [params dble-wrapped-param-dcln-clause]
+    [varbind varbind-seq]
+    [varset varset-seq]
+
+nlt-return-tuple := (non-local-type)
+
+dble-wrapped-param-dcln-clause := (( parameter-declaration-clause ))
+
+varbind-seq := nlt-bound-tuple-seq
+varset-seq := nlt-set-tuple-seq
+
+nlt-bound-tuple-seq :=
+    nlt-bound-tuple
+  | nlt-bound-tuple-seq nlt-bound-tuple
+
+nlt-set-tuple-seq :=
+    nlt-set-tuple
+  | nlt-set-tuple-seq nlt-set-tuple
+
+nlt-bound-tuple :=
+  ( nlt-bound-var-dcln )
+
+nlt-set-tuple :=
+  ( nlt-set-var-dcln )
+
+nlt-bound-var-dcln := nlt-type-var-dcln
+
+nlt-set-var-dcln := nlt-type-var-dcln , value-expr
+
+nlt-type-var-dcln :=
+    implicit-type-var-dcln
+  | nlt-explicit-type-var-dcln
+
+nlt-explicit-type-var-dcln :=
+  nlt-explicit-type var-name
+
+nlt-explicit-type := ( non-local-type )
+
+parameter-declaration-clause := See C++ standard.
