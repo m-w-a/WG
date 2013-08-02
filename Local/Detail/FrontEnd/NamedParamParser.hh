@@ -63,13 +63,14 @@
     (spec, moduleid, currentkeyword, nextkeyword)
 #define WG_PP_NAMEDPARAMPARSER_MACRONAME_IMPL0( \
   spec, moduleid, currentkeyword, nextkeyword) \
-    WG_PP_CAT4( \
-      WG_PP_NAMEDPARAMPARSER_PARSE_NOTFOUND_, moduleid, _, currentkeyword) () \
-    WG_PP_CAT4( \
-      WG_PP_NAMEDPARAMPARSER_PARSE_, moduleid, _, nextkeyword)
+    WG_PP_INTERFACE_CAT( \
+      WG_PP_NAMEDPARAMPARSER_PARSE_NOTFOUND, moduleid, currentkeyword) () \
+    WG_PP_INTERFACE_CAT( \
+      WG_PP_NAMEDPARAMPARSER_PARSE, moduleid, nextkeyword)
 #define WG_PP_NAMEDPARAMPARSER_MACRONAME_IMPL1( \
   spec, moduleid, currentkeyword, nextkeyword) \
-    WG_PP_CAT4(WG_PP_NAMEDPARAMPARSER_PARSE_FOUND_, moduleid, _, currentkeyword)
+    WG_PP_INTERFACE_CAT( \
+      WG_PP_NAMEDPARAMPARSER_PARSE_FOUND, moduleid, currentkeyword)
 
 //----------------------------------
 //WG_PP_NAMEDPARAMPARSER_MACROPARAMS
@@ -88,6 +89,7 @@
   spec, specoptions, moduleid, currentkeyword, nextkeyword) \
     (spec, \
      specoptions, \
-     WG_PP_CAT4(WG_PP_NAMEDPARAMPARSER_PARSE_, moduleid, _, nextkeyword))
+     WG_PP_INTERFACE_CAT( \
+       WG_PP_NAMEDPARAMPARSER_PARSE, moduleid, nextkeyword))
 
 #endif /* WG_PP_NAMEDPARAMPARSER_HH_ */

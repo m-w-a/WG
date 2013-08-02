@@ -55,6 +55,14 @@
 #define WG_PP_CAT4(a, b, c, d) \
   BOOST_PP_CAT(WG_PP_CAT3(a, b, c), d)
 
+#define WG_PP_CAT5(a, b, c, d, e) \
+  BOOST_PP_CAT(WG_PP_CAT4(a, b, c, d), e)
+
+// Expands to <base>_<moduleid>_<tail>.
+// Therfore neither of base, moduleid, or tail should end with an underscore.
+#define WG_PP_INTERFACE_CAT(base, moduleid, tail) \
+  WG_PP_CAT5(base, _, moduleid, _, tail)
+
 // tokens:
 //   A sequence of tokens whose head token is either a tuple of arity
 //   tuplearity, or not a tuple.
