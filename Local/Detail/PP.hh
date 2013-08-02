@@ -49,6 +49,12 @@
 #define WG_PP_1TUPLIZE_1(x) WG_PP_1TUPLIZE(x)
 #define WG_PP_1TUPLIZE_2(x, y) (x)(y)
 
+#define WG_PP_CAT3(a, b, c) \
+  BOOST_PP_CAT(BOOST_PP_CAT(a, b), c)
+
+#define WG_PP_CAT4(a, b, c, d) \
+  BOOST_PP_CAT(WG_PP_CAT3(a, b, c), d)
+
 // tokens:
 //   A sequence of tokens whose head token is either a tuple of arity
 //   tuplearity, or not a tuple.
