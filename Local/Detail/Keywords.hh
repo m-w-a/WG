@@ -45,7 +45,16 @@
 
 #define WG_PP_TOKENS_STARTWITH_REF(tokens) \
   WG_PP_TOKENS_STARTWITH_REF_IMPL(tokens)
-  
+
+#define WG_PP_TOKENS_STARTWITH_PARAMS(tokens) \
+  WG_PP_TOKENS_STARTWITH_PARAMS_IMPL(tokens)
+
+#define WG_PP_TOKENS_STARTWITH_VARBIND(tokens) \
+  WG_PP_TOKENS_STARTWITH_VARBIND_IMPL(tokens)
+
+#define WG_PP_TOKENS_STARTWITH_VARSET(tokens) \
+  WG_PP_TOKENS_STARTWITH_VARSET_IMPL(tokens)
+
 //###########
 //Impl Macros
 //###########
@@ -115,7 +124,25 @@
   BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
     tokens, \
     WG_PP_AUTOFUNCTOR_TOKEN_MATCHES_ref_)
-    
+
+#define WG_PP_AUTOFUNCTOR_TOKEN_MATCHES_params_params (1) /* unary */
+#define WG_PP_TOKENS_STARTWITH_PARAMS_IMPL(tokens) \
+  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
+    tokens, \
+    WG_PP_AUTOFUNCTOR_TOKEN_MATCHES_params_)
+
+#define WG_PP_AUTOFUNCTOR_TOKEN_MATCHES_varbind_varbind (1) /* unary */
+#define WG_PP_TOKENS_STARTWITH_VARBIND_IMPL(tokens) \
+  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
+    tokens, \
+    WG_PP_AUTOFUNCTOR_TOKEN_MATCHES_varbind_)
+
+#define WG_PP_AUTOFUNCTOR_TOKEN_MATCHES_varset_varset (1) /* unary */
+#define WG_PP_TOKENS_STARTWITH_VARSET_IMPL(tokens) \
+  BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
+    tokens, \
+    WG_PP_AUTOFUNCTOR_TOKEN_MATCHES_varset_)
+
 #define WG_PP_EAT_KEYWORD_void
 #define WG_PP_EAT_KEYWORD_thisu
 #define WG_PP_EAT_KEYWORD_local
@@ -127,5 +154,8 @@
 #define WG_PP_EAT_KEYWORD_memset
 #define WG_PP_EAT_KEYWORD_const
 #define WG_PP_EAT_KEYWORD_ref
+#define WG_PP_EAT_KEYWORD_params
+#define WG_PP_EAT_KEYWORD_varbind
+#define WG_PP_EAT_KEYWORD_varset
 
 #endif /* WG_PP_AUTOFUNCTOR_KEYWORDS_HH_ */
