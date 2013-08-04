@@ -24,6 +24,20 @@
 #define WG_PP_BOUNDVARDCLN_NORMALIZE_TPL(boundvardcln) \
   WG_PP_BOUNDVARDCLN_NORMALIZE_IMPL(boundvardcln, 1)
 
+// Expands to the following:
+//   {(parsed-explicit-non-local-type-or-deduced-type) (bound-var-name)}+
+//
+// (For definition of terms see SymbolTable documentation.)
+#define WG_PP_BOUNDVARDCLN_NLT_NORMALIZE(boundvardcln) \
+  WG_PP_BOUNDVARDCLN_NLT_NORMALIZE_IMPL(boundvardcln, 0)
+
+// Expands to the following:
+//   {(parsed-explicit-non-local-type-or-deduced-type) (bound-var-name)}+
+//
+// (For definition of terms see SymbolTable documentation.)
+#define WG_PP_BOUNDVARDCLN_NLT_NORMALIZE_TPL(boundvardcln) \
+  WG_PP_BOUNDVARDCLN_NLT_NORMALIZE_IMPL(boundvardcln, 1)
+
 //###########
 //Impl Macros
 //###########
@@ -34,11 +48,24 @@
   WG_PP_BOUNDVARDCLN_NORMALIZE_EXPAND1( \
     BOOST_PP_IIF( \
       WG_PP_VARDCLN_ISEXPLICIT(boundvardcln), \
-      WG_PP_VARDCLNEXPLICIT_TUPLIZE, \
-      WG_PP_VARDCLNIMPLICIT_TUPLIZE_1ARG) \
+      WG_PP_VARDCLN_EXPLICIT_TUPLIZE, \
+      WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG) \
     BOOST_PP_IIF( \
       WG_PP_VARDCLN_ISEXPLICIT(boundvardcln), \
       (boundvardcln), \
-      (boundvardcln, istpl) ))
+      (boundvardcln, istpl) ) )
+
+#define WG_PP_BOUNDVARDCLN_NORMALIZE_EXPAND2(x) x
+
+#define WG_PP_BOUNDVARDCLN_NLT_NORMALIZE_IMPL(boundvardcln, istpl) \
+  WG_PP_BOUNDVARDCLN_NORMALIZE_EXPAND2( \
+    BOOST_PP_IIF( \
+      WG_PP_VARDCLN_NLT_ISEXPLICIT(boundvardcln), \
+      WG_PP_VARDCLN_EXPLICIT_NLT_TUPLIZE, \
+      WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG) \
+    BOOST_PP_IIF( \
+      WG_PP_VARDCLN_NLT_ISEXPLICIT(boundvardcln), \
+      (boundvardcln), \
+      (boundvardcln, istpl) ) )
 
 #endif //WG_PP_BOUNDVARDCLNNORMALIZE_HH_

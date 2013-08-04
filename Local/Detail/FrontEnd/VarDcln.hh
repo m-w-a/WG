@@ -12,9 +12,8 @@
 #define WG_PP_VARDCLN_ISEXPLICIT(vardcln) \
   WG_PP_VARDCLN_ISEXPLICIT_IMPL(vardcln)
 
-#define WG_PP_VARDCLN_ISIMPLICIT(vardcln) \
-  BOOST_PP_NOT( \
-    WG_PP_VARDCLN_ISEXPLICIT(vardcln))
+#define WG_PP_VARDCLN_NLT_ISEXPLICIT(vardcln) \
+  WG_PP_VARDCLN_NLT_ISEXPLICIT_IMPL(vardcln)
 
 //###########
 //Impl Macros
@@ -25,6 +24,12 @@
     BOOST_PP_OR( \
       WG_PP_ISNEXTTOKEN_A_TUPLE(1, vardcln), \
       WG_PP_TOKENS_STARTWITH_LOCAL(vardcln)), \
+    1, \
+    0)
+
+#define WG_PP_VARDCLN_NLT_ISEXPLICIT_IMPL(vardcln) \
+  BOOST_PP_IIF( \
+    WG_PP_ISNEXTTOKEN_A_TUPLE(1, vardcln), \
     1, \
     0)
 

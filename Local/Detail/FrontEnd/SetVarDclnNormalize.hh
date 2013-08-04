@@ -26,6 +26,22 @@
   WG_PP_SETVARDCLN_NORMALIZE_IMPL(typevardcln, valueexpr, 1) \
   WG_PP_TUPLIZE(valueexpr)
 
+// Expands to the following:
+//   {(parsed-explicit-non-local-type) (var-name) (value-expr)}+
+//
+// (For definition of terms see SymbolTable documentation.)
+#define WG_PP_SETVARDCLN_NLT_NORMALIZE(typevardcln, valueexpr) \
+  WG_PP_SETVARDCLN_NLT_NORMALIZE_IMPL(typevardcln, valueexpr, 0) \
+  WG_PP_TUPLIZE(valueexpr)
+
+// Expands to the following:
+//   {(parsed-explicit-non-local-type) (var-name) (value-expr)}+
+//
+// (For definition of terms see SymbolTable documentation.)
+#define WG_PP_SETVARDCLN_NLT_NORMALIZE_TPL(typevardcln, valueexpr) \
+  WG_PP_SETVARDCLN_NLT_NORMALIZE_IMPL(typevardcln, valueexpr, 1) \
+  WG_PP_TUPLIZE(valueexpr)
+
 //###########
 //Impl Macros
 //###########
@@ -36,12 +52,25 @@
   WG_PP_SETVARDCLN_NORMALIZE_EXPAND1( \
     BOOST_PP_IIF( \
       WG_PP_VARDCLN_ISEXPLICIT(typevardcln), \
-      WG_PP_VARDCLNEXPLICIT_TUPLIZE, \
-      WG_PP_VARDCLNIMPLICIT_TUPLIZE_2ARG) \
+      WG_PP_VARDCLN_EXPLICIT_TUPLIZE, \
+      WG_PP_VARDCLN_IMPLICIT_TUPLIZE_2ARG) \
     BOOST_PP_IIF( \
       WG_PP_VARDCLN_ISEXPLICIT(typevardcln), \
       (typevardcln), \
       (typevardcln, valueexpr, istpl) ))
+
+#define WG_PP_SETVARDCLN_NORMALIZE_EXPAND2(x) x
+
+#define WG_PP_SETVARDCLN_NLT_NORMALIZE_IMPL(typevardcln, valueexpr, istpl) \
+  WG_PP_SETVARDCLN_NORMALIZE_EXPAND2( \
+    BOOST_PP_IIF( \
+        WG_PP_VARDCLN_NLT_ISEXPLICIT(typevardcln), \
+        WG_PP_VARDCLN_NLT_EXPLICIT_TUPLIZE, \
+        WG_PP_VARDCLN_IMPLICIT_TUPLIZE_2ARG) \
+      BOOST_PP_IIF( \
+        WG_PP_VARDCLN_NLT_ISEXPLICIT(typevardcln), \
+        (typevardcln), \
+        (typevardcln, valueexpr, istpl) )  )
 
 /*
 //Unit Tests.
