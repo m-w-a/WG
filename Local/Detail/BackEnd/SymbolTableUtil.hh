@@ -7,6 +7,39 @@
 #include <WG/Local/Detail/Keywords.hh>
 #include <WG/Local/Detail/BackEnd/TypeDeducer.hh>
 
+//----------------------------------------------------------------------------//
+// This is a "friend" of SymbolTable.
+// Therefore it is ok if it assumes SymbolTable is implemented as a pp array.
+//----------------------------------------------------------------------------//
+
+//################
+//Interface Impls.
+//################
+
+// Expands to <symbtbl-moduleid>_<objmacro>
+// symbtbl:
+//   The first element must be the moduleid.
+#define WG_PP_STUTIL_ACCESS(objmacro, symbtbl) \
+  WG_PP_UCAT(BOOST_PP_ARRAY_ELEM(0, symbtbl), objmacro)
+
+// Expands to <symbtbl-moduleid>_<objmacropt1>_<objmacropt2>
+// symbtbl:
+//   The first element must be the moduleid.
+#define WG_PP_STUTIL_ACCESS2(objmacropt1, objmacropt2, symbtbl) \
+  WG_PP_UCAT3(BOOST_PP_ARRAY_ELEM(0, symbtbl), objmacropt1, objmacropt2)
+
+// Expands to <symbtbl-moduleid>_<function>(symbtbl)
+// symbtbl:
+//   The first element must be the moduleid.
+#define WG_PP_STUTIL_CALL(function, symbtbl) \
+  WG_PP_UCAT(BOOST_PP_ARRAY_ELEM(0, symbtbl), function) (symbtbl)
+
+// Expands to <symbtbl-moduleid>_<functionpt1>_<functionpt2>(symbtbl)
+// symbtbl:
+//   The first element must be the moduleid.
+#define WG_PP_STUTIL_CALL2(functionpt1, functionpt2, symbtbl) \
+  WG_PP_UCAT3(BOOST_PP_ARRAY_ELEM(0, symbtbl), functionpt1, functionpt2) (symbtbl)
+
 //###########
 //Public APIs
 //###########
@@ -65,11 +98,11 @@
 //------
 //INPUT:
 //------
-//The symbol table created using WG_PP_SYMBOLTABLE_CREATE. This symbol table
-//must have the following defined:
-//  1) WG_PP_SYMBOLTABLE_ISTPL
-//  2) WG_PP_SYMBOLTABLE_INDX_TYPESEQ_<suffix>
-//  3) WG_PP_SYMBOLTABLE_TYPESEQ_<suffix>
+//The symbol table created using WG_PP_<moduleid>_SYMBOLTABLE_CREATE.
+//This symbol table must have the following defined:
+//  1) WG_PP_STUTIL_CALL(ISTPL, symbtbl)
+//  2) WG_PP_STUTIL_ACCESS2(INDX_TYPESEQ, <suffix>, symbtbl)
+//  3) WG_PP_STUTIL_ACCESS2(TYPESEQ, <suffix>, symbtbl)
 //where suffix is declared in specseq as defined in the TypeDeducer.hh
 //
 //-------
@@ -195,7 +228,7 @@
           typededucer_name, \
           specseq (BOOST_PP_NIL) )))
 
-//TODO: WORKAROUND
+// WORKAROUND for BOOST_PP_ARRAY_REPLACE bug.
 #ifndef BOOST_PP_TUPLE_REM_0
 #define BOOST_PP_TUPLE_REM_0() // nothing
 #endif
@@ -204,9 +237,8 @@
   symbtbl, typededucer_name, spec) \
     BOOST_PP_ARRAY_REPLACE( \
       symbtbl, \
-      BOOST_PP_CAT( \
-        WG_PP_SYMBOLTABLE_INDX_TYPESEQ_, \
-        WG_PP_TYPEDEDUCER_SPEC_SUFFIX(spec)), \
+      WG_PP_STUTIL_ACCESS2( \
+        INDX_TYPESEQ, WG_PP_TYPEDEDUCER_SPEC_SUFFIX(spec), symbtbl), \
       WG_PP_STUTIL_USETYPEDEDUCER_REPLACEMENTDEDUCEDTUPLESEQ( \
         symbtbl, \
         typededucer_name, \
@@ -216,10 +248,9 @@
   symbtbl, typededucer_name, spec) \
     WG_PP_SEQ_FOR_EACH_I( \
       WG_PP_STUTIL_USETYPEDEDUCER_REPLACEBOUNDTUPLEENTRY, \
-      (spec) (typededucer_name) (WG_PP_SYMBOLTABLE_ISTPL(symbtbl)), \
-      BOOST_PP_CAT( \
-        WG_PP_SYMBOLTABLE_TYPESEQ_, \
-        WG_PP_TYPEDEDUCER_SPEC_SUFFIX(spec)) (symbtbl) )
+      (spec) (typededucer_name) (WG_PP_STUTIL_CALL(ISTPL,symbtbl)), \
+      WG_PP_STUTIL_CALL2( \
+		TYPESEQ, WG_PP_TYPEDEDUCER_SPEC_SUFFIX(spec), symbtbl) )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_STUTIL_USETYPEDEDUCER_REPLACEBOUNDTUPLEENTRY( \

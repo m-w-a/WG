@@ -63,6 +63,18 @@
 #define WG_PP_INTERFACE_CAT(base, moduleid, tail) \
   WG_PP_CAT5(base, _, moduleid, _, tail)
 
+// Expands to <a>_<b>
+// Therefore a should not end in an underscore nor should b start with one.
+#define WG_PP_UCAT(a, b) \
+  WG_PP_CAT3(a, _, b)
+
+// Expands to <a>_<b>_<c>
+// a: should not end in an underscore.
+// b: should not begin or end in an underscore.
+// c: should not begin with an underscore.
+#define WG_PP_UCAT3(a, b, c) \
+  WG_PP_UCAT(WG_PP_UCAT(a,b), c)
+
 // tokens:
 //   A sequence of tokens whose head token is either a tuple of arity
 //   tuplearity, or not a tuple.

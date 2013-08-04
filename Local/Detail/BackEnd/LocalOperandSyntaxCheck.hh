@@ -4,16 +4,11 @@
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP.hh>
 #include <WG/Local/Detail/BackEnd/TypeExtractor.hh>
+#include <WG/Local/Detail/BackEnd/SymbolTableUtil.hh>
 
 //###########
 //Public APIs
 //###########
-
-//----------------------------------------------------------------------------//
-//#include <.../SymbolTable.hh>
-// Whereever this file is included, then the appropiate SymbolTable.hh must
-// also be included
-//----------------------------------------------------------------------------//
 
 // Creates a noop struct for checking the syntax of local operands.
 // This has to be done in the CodeGen phase since it's impossible to do in the
@@ -22,8 +17,8 @@
 //
 // symbtbl:
 //   must have the following defined:
-//     1) WG_PP_SYMBOLTABLE_TYPESEQ_<suffix>
-//     2) WG_PP_SYMBOLTABLE_OBJSEQ_<suffix>
+//     1) WG_PP_STUTIL_CALL2(TYPESEQ, <suffix>, symbtbl)
+//     2) WG_PP_STUTIL_CALL2(OBJSEQ, <suffix>, symbtbl)
 //   where suffix is declared in specseq.
 //
 // specseq:
@@ -59,12 +54,10 @@
 // BOOST_PP_SEQ_FOR_EACH functor.
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN(r, symbtbl, spec) \
   WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN2( \
-    BOOST_PP_CAT( \
-      WG_PP_SYMBOLTABLE_TYPESEQ_, \
-      WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec)) (symbtbl), \
-    BOOST_PP_CAT( \
-      WG_PP_SYMBOLTABLE_OBJSEQ_, \
-      WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec)) (symbtbl), \
+    WG_PP_STUTIL_CALL2( \
+      TYPESEQ, WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec), symbtbl), \
+    WG_PP_STUTIL_CALL2( \
+      OBJSEQ, WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec), symbtbl), \
     WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_VARROOTNAME(spec))
 
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN2( \

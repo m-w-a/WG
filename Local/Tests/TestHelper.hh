@@ -13,6 +13,7 @@
       expected_fptr_type expected_fptr = 0; \
       actual_fptr_type actual_fptr = 0; \
       expected_fptr = actual_fptr; \
+      (void)expected_fptr; \
     } \
   };
 
