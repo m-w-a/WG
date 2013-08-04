@@ -58,11 +58,6 @@
 #define WG_PP_CAT5(a, b, c, d, e) \
   BOOST_PP_CAT(WG_PP_CAT4(a, b, c, d), e)
 
-// Expands to <base>_<moduleid>_<tail>.
-// Therfore neither of base, moduleid, or tail should end with an underscore.
-#define WG_PP_INTERFACE_CAT(base, moduleid, tail) \
-  WG_PP_CAT5(base, _, moduleid, _, tail)
-
 // Expands to <a>_<b>
 // Therefore a should not end in an underscore nor should b start with one.
 #define WG_PP_UCAT(a, b) \
