@@ -53,9 +53,9 @@ TESTS = \
 test_pp_pp_SOURCES = ../../Detail/Tests/PPUnitTest.cc
 test_pp_wgseq_SOURCES = ../../Detail/Tests/SeqUnitTest.cc
 test_pp_tokenmatch_SOURCES = ../../Detail/Tests/TokenMatchUnitTest.cc
-test_pp_vardcln_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnUnitTest.cc
-test_pp_vardcln_implicit_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnImplicitUnitTest.cc
-test_pp_vardcln_explicit_SOURCES = ../../Detail/FrontEnd/Tests/VarDclnExplicitUnitTest.cc
+test_pp_vardcln_SOURCES = ../../Detail/FrontEnd/VarDclns/Tests/VarDclnUnitTest.cc
+test_pp_vardcln_implicit_SOURCES = ../../Detail/FrontEnd/VarDclns/Tests/VarDclnImplicitUnitTest.cc
+test_pp_vardcln_explicit_SOURCES = ../../Detail/FrontEnd/VarDclns/Tests/VarDclnExplicitUnitTest.cc
 test_pp_parsedtype_SOURCES = ../../Detail/BackEnd/Tests/TypeExtractorUnitTest.cc
 
 if DO_NOT_BUILD

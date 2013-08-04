@@ -2,9 +2,9 @@
 #define WG_PP_SETVARDCLNNORMALIZE_HH_
 
 #include <WG/Local/Detail/PP.hh>
-#include <WG/Local/Detail/FrontEnd/VarDcln.hh>
-#include <WG/Local/Detail/FrontEnd/VarDclnExplicit.hh>
-#include <WG/Local/Detail/FrontEnd/VarDclnImplicit.hh>
+#include <WG/Local/Detail/FrontEnd/VarDclns/VarDcln.hh>
+#include <WG/Local/Detail/FrontEnd/VarDclns/VarDclnExplicit.hh>
+#include <WG/Local/Detail/FrontEnd/VarDclns/VarDclnImplicit.hh>
 
 //###########
 //Public APIs
