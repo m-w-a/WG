@@ -3,7 +3,6 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP.hh>
-#include <WG/Local/Detail/Seq.hh>
 #include <WG/Local/Detail/Keywords.hh>
 #include <WG/Local/Detail/FrontEnd/NamedParamParser.hh>
 #include <WG/Local/Detail/FrontEnd/SplitHeadFromTokens.hh>

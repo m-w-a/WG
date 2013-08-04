@@ -64,11 +64,11 @@
 #define WG_PP_SETVARDCLN_NLT_NORMALIZE_IMPL(typevardcln, valueexpr, istpl) \
   WG_PP_SETVARDCLN_NORMALIZE_EXPAND2( \
     BOOST_PP_IIF( \
-        WG_PP_VARDCLN_NLT_ISEXPLICIT(typevardcln), \
-        WG_PP_VARDCLN_NLT_EXPLICIT_TUPLIZE, \
+        WG_PP_VARDCLN_ISEXPLICIT_NLT(typevardcln), \
+        WG_PP_VARDCLN_EXPLICIT_NLT_TUPLIZE, \
         WG_PP_VARDCLN_IMPLICIT_TUPLIZE_2ARG) \
       BOOST_PP_IIF( \
-        WG_PP_VARDCLN_NLT_ISEXPLICIT(typevardcln), \
+        WG_PP_VARDCLN_ISEXPLICIT_NLT(typevardcln), \
         (typevardcln), \
         (typevardcln, valueexpr, istpl) )  )
 

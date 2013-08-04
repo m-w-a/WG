@@ -60,11 +60,11 @@
 #define WG_PP_BOUNDVARDCLN_NLT_NORMALIZE_IMPL(boundvardcln, istpl) \
   WG_PP_BOUNDVARDCLN_NORMALIZE_EXPAND2( \
     BOOST_PP_IIF( \
-      WG_PP_VARDCLN_NLT_ISEXPLICIT(boundvardcln), \
+      WG_PP_VARDCLN_ISEXPLICIT_NLT(boundvardcln), \
       WG_PP_VARDCLN_EXPLICIT_NLT_TUPLIZE, \
       WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG) \
     BOOST_PP_IIF( \
-      WG_PP_VARDCLN_NLT_ISEXPLICIT(boundvardcln), \
+      WG_PP_VARDCLN_ISEXPLICIT_NLT(boundvardcln), \
       (boundvardcln), \
       (boundvardcln, istpl) ) )
 

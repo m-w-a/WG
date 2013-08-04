@@ -20,8 +20,6 @@ BOOST_PP_EXPAND(WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE(T6))
 
 /*
 //EXPECTED:
-//See WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE description.
-
 (assignto) (BOOST_PP_NIL) (return) (BOOST_PP_NIL) (parambind) (BOOST_PP_NIL) (paramset) (BOOST_PP_NIL) (membind) (BOOST_PP_NIL) (memset) (BOOST_PP_NIL)
 (assignto) ((BOOST_TYPEOF(x)) (x)) (return) (void) (parambind) (BOOST_PP_NIL) (paramset) (BOOST_PP_NIL) (membind) (BOOST_PP_NIL) (memset) (BOOST_PP_NIL)
 (assignto) (BOOST_PP_NIL) (return) (float) (parambind) (BOOST_PP_NIL) (paramset) (BOOST_PP_NIL) (membind) (BOOST_PP_NIL) (memset) (BOOST_PP_NIL)
@@ -30,5 +28,3 @@ BOOST_PP_EXPAND(WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE(T6))
 (assignto) (BOOST_PP_NIL) (return) (BOOST_PP_NIL) (parambind) (BOOST_PP_NIL) (paramset) ((int) (x) (7)) (membind) (BOOST_PP_NIL) (memset) (BOOST_PP_NIL)
 (assignto) (BOOST_PP_NIL) (return) (BOOST_PP_NIL) (parambind) (BOOST_PP_NIL) (paramset) ((int) (x) (7) (local(Callback)) ( y ) (8)) (membind) (BOOST_PP_NIL) (memset) (BOOST_PP_NIL)
 */
-
-//TODO
