@@ -2,7 +2,6 @@
 #define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/Detail/PP.hh>
 #include <WG/Local/Detail/Seq.hh>
 #include <WG/Local/Detail/Keywords.hh>
 #include <WG/Local/Detail/BackEnd/SymbolTableUtil.hh>
@@ -63,7 +62,7 @@
 #define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_OBJSEQ_THISU_MARKER_BOUNDPARAM(symbtbl) \
   WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, OBJSEQ_THISU_MARKER_BOUNDPARAM)
 
-//Returns: { BOOST_PP_NIL | {(parsed-explicit-type)}+ }
+//Returns: { BOOST_PP_NIL | {(parsed-explicit-type-or-deduced-type)}+ }
 #define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_TYPESEQ_SETPARAM(symbtbl) \
   WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, TYPESEQ_SETPARAM)
 
@@ -95,7 +94,7 @@
 #define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_OBJSEQ_THISU_MARKER_BOUNDMEM(symbtbl) \
   WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, OBJSEQ_THISU_MARKER_BOUNDMEM)
 
-//Returns: { BOOST_PP_NIL | {(parsed-explicit-type)}+ }
+//Returns: { BOOST_PP_NIL | {(parsed-explicit-type-or-deduced-type)}+ }
 #define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_TYPESEQ_SETMEM(symbtbl) \
   WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, TYPESEQ_SETMEM)
 
@@ -143,14 +142,15 @@
 //INPUT:
 //------
 //assignto_nrmlzd_tuple: { BOOST_PP_NIL | normalized-bound-tuple }
-//return_nrmlzd_type: { BOOST_PP_NIL | type }
+//return_type: { BOOST_PP_NIL | type }
 //parambind_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-bound-tuple}+ }
 //paramset_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-set-tuple}+ }
 //membind_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-bound-tuple}+ }
 //memset_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-set-tuple}+ }
 //
 //normalized-bound-tuple := (parsed-explicit-or-deduced-type)(var-name)
-//normalized-set-tuple := (parsed-explicit-type)(var-name)(value-expr)
+//normalized-set-tuple :=
+//  (parsed-explicit-type-or-deduced-type)(var-name)(value-expr)
 //parsed-explicit-or-deduced-type := parsed-explicit-type | parsed-deduced-type
 //parsed-explicit-type := parsed-local-type | non-local-type
 //parsed-local-type := local(some-token) lib-type-qualifier-seq
@@ -163,7 +163,7 @@
 //-------
 //OUTPUT:
 //-------
-//A SymbolTable whose values are accessible using the below macros.
+//A SymbolTable whose values are accessible using the public API.
 #define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_CREATE( \
   istpl, \
   assignto_nrmlzd_tuple, \
@@ -192,6 +192,7 @@
 #define WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_ASSIGNEE 2
 #define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_ASSIGNEE 3
 #define WG_PP_AUTOFUNCTOR_ST_INDX_EXISTS_ASSIGNEE 4
+
 #define WG_PP_AUTOFUNCTOR_ST_INDX_RETTYPE 5
 
 #define WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_BOUNDPARAM 6

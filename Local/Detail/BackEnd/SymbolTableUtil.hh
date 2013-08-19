@@ -98,7 +98,7 @@
 //------
 //INPUT:
 //------
-//The symbol table created using WG_PP_<moduleid>_SYMBOLTABLE_CREATE.
+//The symbol table created using <symbol-moduleid>_SYMBOLTABLE_CREATE.
 //This symbol table must have the following defined:
 //  1) WG_PP_STUTIL_CALL(ISTPL, symbtbl)
 //  2) WG_PP_STUTIL_ACCESS2(INDX_TYPESEQ, <suffix>, symbtbl)

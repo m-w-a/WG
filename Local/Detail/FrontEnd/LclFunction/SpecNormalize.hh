@@ -12,6 +12,17 @@
 //Public APIs
 //###########
 
+// Expands to the following:
+//   (return) { (BOOST_PP_NIL) | (type) }
+//   (params) { (BOOST_PP_NIL) | dble-wrapped-param-dcln-clause }
+//   (varbind) { (BOOST_PP_NIL) | ( {normalized-bound-nlt-tuple}+ ) }
+//   (varset) { (BOOST_PP_NIL) | ( {normalized-set-nlt-tuple}+ ) }
+//   (errors) { (BOOST_PP_NIL) | (WG_PP_ERROR ...) }
+//
+// (For definition of terms see SymbolTable documentation.)
+// EXCEPTION:
+//   every tuple in normalized-bound-nlt-tuple or
+//   normalized-set-nlt-tuple maybe replaced with "WG_PP_ERROR ..." tokens.
 #define WG_PP_LCLFUNCTION_SPEC_NORMALIZE(spec, istpl) \
   WG_PP_LCLFUNCTION_SPEC_NORMALIZE_IMPL( \
     spec BOOST_PP_NIL, \
