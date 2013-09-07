@@ -73,5 +73,3 @@ nlt-explicit-type-var-dcln :=
   nlt-explicit-type var-name
 
 nlt-explicit-type := ( non-local-type )
-
-parameter-declaration-clause := See C++ standard.
