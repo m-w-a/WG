@@ -2,8 +2,8 @@
 #define WG_PP_VARDCLN_IMPLICIT_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/Detail/Keywords.hh>
-#include <WG/Local/Detail/PP.hh>
+#include <WG/Local/Detail/PP/Keywords.hh>
+#include <WG/Local/Detail/PP/PP.hh>
 #include <boost/typeof/typeof.hpp>
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/add_const.hpp>

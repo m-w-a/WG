@@ -2,9 +2,9 @@
 #define WG_PP_VARDCLN_EXPLICIT_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/Detail/PP.hh>
-#include <WG/Local/Detail/Keywords.hh>
-#include <WG/Local/Detail/FrontEnd/SplitHeadFromTokens.hh>
+#include <WG/Local/Detail/PP/PP.hh>
+#include <WG/Local/Detail/PP/Keywords.hh>
+#include <WG/Local/Detail/PP/FrontEnd/SplitHeadFromTokens.hh>
 
 //###########
 //Public APIs

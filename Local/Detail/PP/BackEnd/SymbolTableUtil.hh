@@ -3,9 +3,9 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP.hh>
-#include <WG/Local/Detail/Seq.hh>
-#include <WG/Local/Detail/Keywords.hh>
-#include <WG/Local/Detail/BackEnd/TypeDeducer.hh>
+#include <WG/Local/Detail/PP/Seq.hh>
+#include <WG/Local/Detail/PP/Keywords.hh>
+#include <WG/Local/Detail/PP/BackEnd/TypeDeducer.hh>
 
 //----------------------------------------------------------------------------//
 // This is a "friend" of SymbolTable.

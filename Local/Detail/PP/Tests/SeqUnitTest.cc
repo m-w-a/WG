@@ -1,5 +1,5 @@
 #include <WG/Local/Tests/test.h>
-#include <WG/Local/Detail/Seq.hh>
+#include <WG/Local/Detail/PP/Seq.hh>
 
 int const BOOST_PP_NIL = 123456789;
 

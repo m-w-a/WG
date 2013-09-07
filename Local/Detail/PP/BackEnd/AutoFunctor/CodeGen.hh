@@ -2,13 +2,13 @@
 #define WG_PP_AUTOFUNCTOR_CODEGEN_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/Detail/BackEnd/AutoFunctor/SymbolTable.hh>
-#include <WG/Local/Detail/BackEnd/Forwarder.hh>
-#include <WG/Local/Detail/Seq.hh>
-#include <WG/Local/Detail/BackEnd/TypeDeducer.hh>
-#include <WG/Local/Detail/BackEnd/ID.hh>
-#include <WG/Local/Detail/BackEnd/LocalOperandSyntaxCheck.hh>
-#include <WG/Local/Detail/BackEnd/SymbolTableUtil.hh>
+#include <WG/Local/Detail/PP/BackEnd/AutoFunctor/SymbolTable.hh>
+#include <WG/Local/Detail/PP/BackEnd/Forwarder.hh>
+#include <WG/Local/Detail/PP/Seq.hh>
+#include <WG/Local/Detail/PP/BackEnd/TypeDeducer.hh>
+#include <WG/Local/Detail/PP/BackEnd/ID.hh>
+#include <WG/Local/Detail/PP/BackEnd/LocalOperandSyntaxCheck.hh>
+#include <WG/Local/Detail/PP/BackEnd/SymbolTableUtil.hh>
 
 //###########
 //Public APIs

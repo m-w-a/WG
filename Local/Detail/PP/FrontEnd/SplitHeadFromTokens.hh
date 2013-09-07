@@ -2,7 +2,7 @@
 #define WG_PP_SPLITHEADFROMTOKENS_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/Detail/PP.hh>
+#include <WG/Local/Detail/PP/PP.hh>
 
 //###########
 //Public APIs

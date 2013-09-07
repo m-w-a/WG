@@ -2,11 +2,11 @@
 #define WG_PP_LCLFUNCTION_SPECNORMALIZE_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/Detail/Keywords.hh>
-#include <WG/Local/Detail/FrontEnd/NamedParamParser.hh>
-#include <WG/Local/Detail/FrontEnd/SplitHeadFromTokens.hh>
-#include <WG/Local/Detail/FrontEnd/BoundVarDclnNormalize.hh>
-#include <WG/Local/Detail/FrontEnd/SetVarDclnNormalize.hh>
+#include <WG/Local/Detail/PP/Keywords.hh>
+#include <WG/Local/Detail/PP/FrontEnd/NamedParamParser.hh>
+#include <WG/Local/Detail/PP/FrontEnd/SplitHeadFromTokens.hh>
+#include <WG/Local/Detail/PP/FrontEnd/BoundVarDclnNormalize.hh>
+#include <WG/Local/Detail/PP/FrontEnd/SetVarDclnNormalize.hh>
 
 //###########
 //Public APIs

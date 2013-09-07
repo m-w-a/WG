@@ -2,8 +2,8 @@
 #define WG_PP_NAMEDPARAMPARSER_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/Detail/PP.hh>
-#include <WG/Local/Detail/Keywords.hh>
+#include <WG/Local/Detail/PP/PP.hh>
+#include <WG/Local/Detail/PP/Keywords.hh>
 
 //###########
 //Public APIs

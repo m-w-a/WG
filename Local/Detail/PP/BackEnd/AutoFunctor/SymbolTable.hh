@@ -2,9 +2,9 @@
 #define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/Detail/Seq.hh>
-#include <WG/Local/Detail/Keywords.hh>
-#include <WG/Local/Detail/BackEnd/SymbolTableUtil.hh>
+#include <WG/Local/Detail/PP/Seq.hh>
+#include <WG/Local/Detail/PP/Keywords.hh>
+#include <WG/Local/Detail/PP/BackEnd/SymbolTableUtil.hh>
 
 //################
 //Interface Impls.

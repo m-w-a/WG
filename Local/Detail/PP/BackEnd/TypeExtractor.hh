@@ -4,8 +4,8 @@
 #include <boost/preprocessor.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
-#include <WG/Local/Detail/PP.hh>
-#include <WG/Local/Detail/Keywords.hh>
+#include <WG/Local/Detail/PP/PP.hh>
+#include <WG/Local/Detail/PP/Keywords.hh>
 
 //----------------------------------------------------------------------------//
 // This file contains utilities for extracting the true cpp type from the parsed

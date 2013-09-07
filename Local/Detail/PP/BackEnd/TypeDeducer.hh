@@ -2,8 +2,8 @@
 #define WG_PP_TYPEDEDUCER_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/Detail/Seq.hh>
-#include <WG/Local/Detail/BackEnd/SymbolTableUtil.hh>
+#include <WG/Local/Detail/PP/Seq.hh>
+#include <WG/Local/Detail/PP/BackEnd/SymbolTableUtil.hh>
 
 //###########
 //Public APIs

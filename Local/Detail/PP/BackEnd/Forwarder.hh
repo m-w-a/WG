@@ -2,10 +2,10 @@
 #define WG_PP_FORWARDER_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/Detail/PP.hh>
-#include <WG/Local/Detail/BackEnd/TypeExtractor.hh>
-#include <WG/Local/Detail/BackEnd/ID.hh>
-#include <WG/Local/Detail/BackEnd/SymbolTableUtil.hh>
+#include <WG/Local/Detail/PP/PP.hh>
+#include <WG/Local/Detail/PP/BackEnd/TypeExtractor.hh>
+#include <WG/Local/Detail/PP/BackEnd/ID.hh>
+#include <WG/Local/Detail/PP/BackEnd/SymbolTableUtil.hh>
 
 //###########
 //Public APIs

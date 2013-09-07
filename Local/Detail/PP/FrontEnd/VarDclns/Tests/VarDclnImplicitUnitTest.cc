@@ -1,5 +1,5 @@
 #include <WG/Local/Tests/test.h>
-#include <WG/Local/Detail/PP.hh>
+#include <WG/Local/Detail/PP/PP.hh>
 #include "../VarDclnImplicit.hh"
 #include <boost/preprocessor.hpp>
 #include <boost/typeof/typeof.hpp>

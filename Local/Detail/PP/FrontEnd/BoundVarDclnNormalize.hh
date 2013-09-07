@@ -2,9 +2,9 @@
 #define WG_PP_BOUNDVARDCLNNORMALIZE_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/Detail/FrontEnd/VarDclns/VarDcln.hh>
-#include <WG/Local/Detail/FrontEnd/VarDclns/VarDclnExplicit.hh>
-#include <WG/Local/Detail/FrontEnd/VarDclns/VarDclnImplicit.hh>
+#include <WG/Local/Detail/PP/FrontEnd/VarDclns/VarDcln.hh>
+#include <WG/Local/Detail/PP/FrontEnd/VarDclns/VarDclnExplicit.hh>
+#include <WG/Local/Detail/PP/FrontEnd/VarDclns/VarDclnImplicit.hh>
 
 //###########
 //Public APIs

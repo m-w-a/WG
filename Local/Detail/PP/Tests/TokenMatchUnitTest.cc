@@ -1,5 +1,5 @@
 #include <WG/Local/Tests/test.h>
-#include <WG/Local/Detail/TokenMatching.hh>
+#include <WG/Local/Detail/PP/TokenMatching.hh>
 
 //---------------------------
 //WG_PP_TOKENMATCH_BEGINSWITH
