@@ -23,7 +23,7 @@
     WG_PP_TOKENS_START_WITH_BOOST_PP_NIL( \
       WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE(symbtbl) ))
 
-//RETURNS: { BOOST_PP_NIL | (parameter-declaration-clause) }
+//RETURNS: { BOOST_PP_NIL | (param-seq) }
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_PARAMS(symbtbl) \
   WG_PP_LCLFUNCTION_ST_GET(symbtbl, PARAMS)
 
@@ -86,7 +86,7 @@
 //------
 //
 //return_type: { BOOST_PP_NIL | type }
-//params: { BOOST_PP_NIL | dble-wrapped-param-dcln-clause }
+//params: { BOOST_PP_NIL | (param-seq) }
 //varbind_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-bound-nlt-tuple}+ }
 //varset_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-set-nlt-tuple}+ }
 //

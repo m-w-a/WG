@@ -14,7 +14,7 @@
 
 // Expands to the following:
 //   (return) { (BOOST_PP_NIL) | (type) }
-//   (params) { (BOOST_PP_NIL) | dble-wrapped-param-dcln-clause }
+//   (params) { (BOOST_PP_NIL) | (param-seq) }
 //   (varbind) { (BOOST_PP_NIL) | ( {normalized-bound-nlt-tuple}+ ) }
 //   (varset) { (BOOST_PP_NIL) | ( {normalized-set-nlt-tuple}+ ) }
 //   (errors) { (BOOST_PP_NIL) | (WG_PP_ERROR ...) }
@@ -102,10 +102,10 @@
 #define WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_FOUND_PARAMS( \
   spec, specoptions, nexttransform) \
     WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_FOUND_PARAMS2( \
-      WG_PP_SPLITHEADTUPLEFROMTOKENS( \
+      WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
         1, \
         WG_PP_TOKENS_EAT_HEADKEYWORD(spec), \
-        WG_PP_IDENTITY, \
+        WG_PP_TUPLIZE, \
         WG_PP_TUPLIZE, \
         WG_PP_TUPLIZE), \
       nexttransform, \

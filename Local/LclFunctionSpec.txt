@@ -15,6 +15,10 @@ return:
 //BNF
 //---
 
+//Note:
+//  1) params needs to be PP parseable because it needs to be prepended/appended
+//    to in codegen for the purpose of constructing the callback signature.
+
 special symbols:
   [...] specifies an optional BNF expression.
 terminals : return params varbind varset const ref
@@ -27,16 +31,21 @@ lclfunction-usage :=
 lclfunction-spec :=
     void
   | [return nlt-return-tuple]
-    [params dble-wrapped-param-dcln-clause]
+    [params param-seq]
     [varbind varbind-seq]
     [varset varset-seq]
 
 nlt-return-tuple := (non-local-type)
 
-dble-wrapped-param-dcln-clause := (( parameter-declaration-clause ))
+param-seq :=
+    param-tuple
+  | param-seq param-tuple
 
 varbind-seq := nlt-bound-tuple-seq
 varset-seq := nlt-set-tuple-seq
+
+param-tuple :=
+  (non-local-type var-name)
 
 nlt-bound-tuple-seq :=
     nlt-bound-tuple

@@ -15,6 +15,13 @@
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/int.hpp>
 
+namespace wg
+{
+namespace lclfunction
+{
+namespace detail
+{
+
 /* FUNCTORORVOID: The local functor type or void (C++11 vs. C++03)*/
 /* LCLFUNCTION: The specified local function type. */
 /* CAPTUREDVARS: A tuple of captured local variables, if any. */
@@ -114,6 +121,10 @@ private:
   mutable captured_types m_CapturedVars;
 };
 
+}
+}
+}
+
 int main()
 {
   int slope = 2;
@@ -124,7 +135,7 @@ int main()
   //Declare functor.
   //PP iterator over captured vars.
   //Expands to:
-  base_functor_type
+  wg::lclfunction::detail::base_functor_type
   <
     void, 
     RETURN_TYPE()PARAMS_NTUPLE(),
@@ -139,9 +150,12 @@ int main()
     /*--PP iterator over captured vars for template params.*/
     typedef boost::tuple<int const &> captured_types;
   
-    typedef 
-      base_functor_type<void,local_function_type, captured_types> 
-        functor_type;
+    typedef wg::lclfunction::detail::base_functor_type
+    <
+      void,
+      local_function_type, 
+      captured_types
+    > functor_type;
   
     /*--Don't FORGET the REFERENCE!!!!!*/
     functor_type & functor = LOCAL_FUNCTION_NAME();
@@ -150,11 +164,11 @@ int main()
     {
       void set_caller(functor_type & functor)
       {
-        functor.set_caller(&local_functor_type::user_impl);
+        functor.set_caller(&local_functor_type::user_callback);
       }
       
       /* This functions prototype should match functor_type::callback_type. */
-      static int user_impl(
+      static int user_callback(
         functor_type const & LOCAL_FUNCTION_NAME(), 
         int const & x, 
         int const & y, 

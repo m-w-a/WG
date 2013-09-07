@@ -9,8 +9,7 @@
 //###########
 
 // spec:
-//   a sequence of tokens prefixed by a tuple of arity "tuplearity", followed by
-//   at least another token.
+//   one or more tokens prefixed by a tuple of arity "tuplearity".
 // headelemtransform:
 //   a "tuplearity"-arg function macro to apply to the split head tuple 
 //   element(s).
@@ -28,8 +27,8 @@
       nexttransform)
 
 // spec: 
-//   a sequence of tokens prefixed by some number of tuples of the same 
-//   "tuplearity" arity, followed by a non-tuple.
+//   a series of tokens prefixed by some number of tuples of the same
+//   "tuplearity" arity, referred to here as the "head", followed by a non-tuple.
 // headelemtransform:
 //   a "tuplearity"-arg function macro to apply to each of the head tuple(s)' 
 //   element(s).
