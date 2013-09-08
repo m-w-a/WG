@@ -14,9 +14,13 @@ noinst_PROGRAMS = \
     test_pp_trnsltr_vardcln_implicit \
     test_pp_trnsltr_vardcln_explicit \
     test_pp_trnsltr_parsedtype \
-    test_autofunctor \
-    test_autofunctor_errorreporting_invalidnamedparameters \
-    test_autofunctor_errorreporting_refthisu
+    test_autofunctor
+
+if DO_NOT_BUILD
+    noinst_PROGRAMS += \
+        test_autofunctor_errorreporting_invalidnamedparameters \
+        test_autofunctor_errorreporting_refthisu
+endif
 
 TEST_BIN_DIR = $(abs_top_builddir)/bin/
 
@@ -60,7 +64,7 @@ test_pp_trnsltr_vardcln_implicit_SOURCES = ../../Detail/PP/Translator/FrontEnd/V
 test_pp_trnsltr_vardcln_explicit_SOURCES = ../../Detail/PP/Translator/FrontEnd/VarDclns/Tests/VarDclnExplicitUnitTest.cc
 test_pp_trnsltr_parsedtype_SOURCES = ../../Detail/PP/Translator/BackEnd/Tests/TypeExtractorUnitTest.cc
 
-if DO_NOT_BUILD
+if DO_NOT_BUILD    
     test_autofunctor_errorreporting_invalidnamedparameters_SOURCES = \
       ../../Tests/AutoFunctor/ErrorReporting/InvalidNamedParameters.cc
     test_autofunctor_errorreporting_refthisu_SOURCES = \

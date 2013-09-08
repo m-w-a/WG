@@ -1,7 +1,7 @@
 #ifndef WG_PP_SETVARDCLNNORMALIZE_HH_
 #define WG_PP_SETVARDCLNNORMALIZE_HH_
 
-#include <WG/Local/Detail/PP.hh>
+#include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/VarDclns/VarDcln.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/VarDclns/VarDclnExplicit.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/VarDclns/VarDclnImplicit.hh>

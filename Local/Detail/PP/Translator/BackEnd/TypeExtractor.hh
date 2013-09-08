@@ -6,7 +6,7 @@
 #include <boost/type_traits/add_reference.hpp>
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Translator/Keywords.hh>
-#include <WG/Local/Detail/Translator/Utils.hh>
+#include <WG/Local/Detail/PP/Translator/Utils.hh>
 
 //----------------------------------------------------------------------------//
 // This file contains utilities for extracting the true cpp type from the parsed

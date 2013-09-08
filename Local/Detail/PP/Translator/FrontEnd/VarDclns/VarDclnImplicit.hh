@@ -8,7 +8,7 @@
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_pointer.hpp>
-#include <WG/Local/Detail/Translator/Utils.hh>
+#include <WG/Local/Detail/PP/Translator/Utils.hh>
 
 //###########
 //Public APIs

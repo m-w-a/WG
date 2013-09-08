@@ -1,5 +1,5 @@
 #include <WG/Local/Tests/test.h>
-#include <WG/Local/Detail/Translator/Utils.hh>
+#include <WG/Local/Detail/PP/Translator/Utils.hh>
 
 // WG_PP_TRNSLTR_UTILS_START_WITH_WG_PP_DEDUCEDTYPE
 BEGIN WG_PP_TRNSLTR_UTILS_START_WITH_WG_PP_DEDUCEDTYPE(WG_PP_DEDUCEDTYPE foo) == 1 END

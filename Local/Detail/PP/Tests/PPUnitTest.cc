@@ -1,5 +1,8 @@
 #include <WG/Local/Tests/test.h>
-#include <WG/Local/Detail/PP.hh>
+#include <WG/Local/Detail/PP/PP.hh>
+
+// WG_PP_NOTHING
+BEGIN WG_PP_NOTHING 1 == 1 END
 
 // WG_PP_START_WITH_WG_PP_TRUE
 BEGIN WG_PP_START_WITH_WG_PP_TRUE(WG_PP_TRUE foo) == 1 END

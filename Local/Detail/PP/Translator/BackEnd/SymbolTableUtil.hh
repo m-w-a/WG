@@ -2,12 +2,12 @@
 #define WG_PP_SYMBOLTABLEUTIL_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/Detail/PP.hh>
+#include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/Keywords.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/TypeDeducer.hh>
-#include <WG/Local/Detail/Translator/Utils.hh>
-#include <WG/Local/Detail/Translator/Utils.hh>
+#include <WG/Local/Detail/PP/Translator/Utils.hh>
+#include <WG/Local/Detail/PP/Translator/Utils.hh>
 
 //----------------------------------------------------------------------------//
 // This is a "friend" of SymbolTable.

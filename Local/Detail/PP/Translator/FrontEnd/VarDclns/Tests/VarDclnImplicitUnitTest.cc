@@ -4,7 +4,7 @@
 #include <boost/preprocessor.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <WG/Local/Detail/Translator/Utils.hh>
+#include <WG/Local/Detail/PP/Translator/Utils.hh>
 
 //Unit Tests.
 #define VDI1 var1

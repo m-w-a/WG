@@ -8,6 +8,10 @@
 //Public APIs
 //###########
 
+// An object-like macro alternative to BOOST_PP_EMPTY.
+// So one doesn't have to deal with the hassle of appending "()".
+#define WG_PP_NOTHING
+
 #define WG_PP_START_WITH_WG_PP_TRUE(tokens) \
   WG_PP_START_WITH_WG_PP_TRUE_IMPL(tokens)
 
