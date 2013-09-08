@@ -51,8 +51,8 @@
 
 #define WG_PP_ERRORREPORTER_REPORT_ERRORSEQ_IMPL(psble_error) \
   BOOST_PP_EXPR_IIF( \
-    WG_PP_TOKENS_START_WITH_WG_PP_ERROR(psble_error), \
-    WG_PP_TOKENS_EATHEADTOKEN_WG_PP_ERROR(psble_error))
+    WG_PP_START_WITH_WG_PP_ERROR(psble_error), \
+    WG_PP_EATHEADTOKEN_WG_PP_ERROR(psble_error))
 
 //-------------------------------------------------
 //WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ_IMPL

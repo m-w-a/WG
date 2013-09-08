@@ -39,7 +39,7 @@
 //Returns: { 0 | 1 }
 #define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_EXISTS_RETTYPE(symbtbl) \
   BOOST_PP_NOT( \
-    WG_PP_TOKENS_START_WITH_BOOST_PP_NIL( \
+    WG_PP_START_WITH_BOOST_PP_NIL( \
       WG_PP_AUTOFUNCTOR_SYMBOLTABLE_RETTYPE(symbtbl) ))
 
 //Returns: { BOOST_PP_NIL | {(parsed-explicit-or-deduced-type)}+ }

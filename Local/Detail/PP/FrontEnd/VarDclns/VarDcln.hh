@@ -23,7 +23,7 @@
   BOOST_PP_IIF( \
     BOOST_PP_OR( \
       WG_PP_ISNEXTTOKEN_A_TUPLE(1, vardcln), \
-      WG_PP_TOKENS_STARTWITH_LOCAL(vardcln)), \
+      WG_PP_KEYWORDS_STARTWITH_LOCAL(vardcln)), \
     1, \
     0)
 

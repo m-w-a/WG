@@ -77,7 +77,7 @@
   membind_seq, memset_seq, \
   psbl_error_tokens) \
     BOOST_PP_IIF( \
-      WG_PP_TOKENS_START_WITH_BOOST_PP_NIL(psbl_error_tokens), \
+      WG_PP_START_WITH_BOOST_PP_NIL(psbl_error_tokens), \
       WG_PP_AUTOFUNCTOR_CMNIMPL_STARTCODEGEN, \
       WG_PP_AUTOFUNCTOR_CMNIMPL_REPORTERRORS) \
       ( \

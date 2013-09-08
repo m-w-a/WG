@@ -61,7 +61,7 @@
 // BOOST_PP_SEQ_FOR_EACH functor.
 #define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS(r, symbtbl, spec) \
   BOOST_PP_IIF( \
-    WG_PP_TOKENS_START_WITH_BOOST_PP_NIL( \
+    WG_PP_START_WITH_BOOST_PP_NIL( \
       WG_PP_STUTIL_CALL2( \
         TYPESEQ, WG_PP_TYPEDEDUCER_SPEC_SUFFIX(spec), symbtbl)), \
     WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS_NONE, \
@@ -79,12 +79,12 @@
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN(r, spec, indx, e_or_d_type) \
   BOOST_PP_EXPR_IIF( \
-    WG_PP_TOKENS_START_WITH_WG_PP_DEDUCEDTYPE(e_or_d_type), \
+    WG_PP_START_WITH_WG_PP_DEDUCEDTYPE(e_or_d_type), \
     WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN_IMPL(spec, indx, e_or_d_type) )
 
 #define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN_IMPL( \
   spec, indx, deduced_type) \
-    typedef WG_PP_TOKENS_EATHEADTOKEN_WG_PP_DEDUCEDTYPE(deduced_type) \
+    typedef WG_PP_EATHEADTOKEN_WG_PP_DEDUCEDTYPE(deduced_type) \
     WG_PP_TYPEDEDUCER_TYPENAME(spec, indx) ;
 
 #endif /* WG_PP_TYPEDEDUCER_HH_ */

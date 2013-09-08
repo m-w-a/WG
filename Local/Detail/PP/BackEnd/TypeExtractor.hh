@@ -58,22 +58,22 @@
 //-----
 
 #define WG_PP_PARSEDTYPE_ISLOCALTYPE(parsedtype) \
-  WG_PP_TOKENS_STARTWITH_LOCAL(parsedtype)
+  WG_PP_KEYWORDS_STARTWITH_LOCAL(parsedtype)
 
 #define WG_PP_PARSEDTYPE_ISNONLOCALTYPE(parsedtype) \
   BOOST_PP_NOT(WG_PP_PARSEDTYPE_ISLOCALTYPE(parsedtype))
 
 #define WG_PP_PARSEDTYPE_NONLOCALTYPE_ADDCONST(nonlocaltype, istpl) \
-  WG_PP_ADDTYPENAME(istpl) boost::add_const<WG_PP_IDENTITY(nonlocaltype)>::type
+  WG_PP_ADDTYPENAME(istpl) boost::add_const<WG_PP_IDENTITY_ARG1(nonlocaltype)>::type
 
 #define WG_PP_PARSEDTYPE_NONLOCALTYPE_ADDREFERENCE(nonlocaltype, istpl) \
   WG_PP_ADDTYPENAME(istpl) boost::add_reference< \
-    WG_PP_IDENTITY(nonlocaltype) >::type
+    WG_PP_IDENTITY_ARG1(nonlocaltype) >::type
 
 #define WG_PP_PARSEDTYPE_NONLOCALTYPE_ADDCONSTADDREFERENCE( \
   nonlocaltype, istpl) \
     WG_PP_ADDTYPENAME(istpl) boost::add_reference< \
-      WG_PP_ADDTYPENAME(istpl) boost::add_const<WG_PP_IDENTITY(nonlocaltype) \
+      WG_PP_ADDTYPENAME(istpl) boost::add_const<WG_PP_IDENTITY_ARG1(nonlocaltype) \
       >::type \
     >::type
 
@@ -93,7 +93,7 @@
 #define WG_PP_PARSEDTYPE_LOCALTYPE_PARSE2(operand, prefixed_qualseq, elem) \
   BOOST_PP_IIF( \
     elem, \
-    WG_PP_TOKENS_EATHEADTOKEN_BOOST_PP_NIL(prefixed_qualseq) BOOST_PP_EMPTY, \
+    WG_PP_EATHEADTOKEN_BOOST_PP_NIL(prefixed_qualseq) BOOST_PP_EMPTY, \
     operand BOOST_PP_EMPTY) ()
 
 //-------------------------------

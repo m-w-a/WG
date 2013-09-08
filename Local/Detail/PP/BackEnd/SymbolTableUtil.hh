@@ -20,25 +20,25 @@
 // symbtbl:
 //   The first element must be the moduleid.
 #define WG_PP_STUTIL_ACCESS(objmacro, symbtbl) \
-  WG_PP_UCAT(BOOST_PP_ARRAY_ELEM(0, symbtbl), objmacro)
+  WG_PP_UCAT_ARG2(BOOST_PP_ARRAY_ELEM(0, symbtbl), objmacro)
 
 // Expands to <symbtbl-moduleid>_<objmacropt1>_<objmacropt2>
 // symbtbl:
 //   The first element must be the moduleid.
 #define WG_PP_STUTIL_ACCESS2(objmacropt1, objmacropt2, symbtbl) \
-  WG_PP_UCAT3(BOOST_PP_ARRAY_ELEM(0, symbtbl), objmacropt1, objmacropt2)
+  WG_PP_UCAT_ARG3(BOOST_PP_ARRAY_ELEM(0, symbtbl), objmacropt1, objmacropt2)
 
 // Expands to <symbtbl-moduleid>_<function>(symbtbl)
 // symbtbl:
 //   The first element must be the moduleid.
 #define WG_PP_STUTIL_CALL(function, symbtbl) \
-  WG_PP_UCAT(BOOST_PP_ARRAY_ELEM(0, symbtbl), function) (symbtbl)
+  WG_PP_UCAT_ARG2(BOOST_PP_ARRAY_ELEM(0, symbtbl), function) (symbtbl)
 
 // Expands to <symbtbl-moduleid>_<functionpt1>_<functionpt2>(symbtbl)
 // symbtbl:
 //   The first element must be the moduleid.
 #define WG_PP_STUTIL_CALL2(functionpt1, functionpt2, symbtbl) \
-  WG_PP_UCAT3(BOOST_PP_ARRAY_ELEM(0, symbtbl), functionpt1, functionpt2) (symbtbl)
+  WG_PP_UCAT_ARG3(BOOST_PP_ARRAY_ELEM(0, symbtbl), functionpt1, functionpt2) (symbtbl)
 
 //###########
 //Public APIs
@@ -180,7 +180,7 @@
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_STUTIL_THISU_MARK_INDX(r, data, indx, elem) \
   BOOST_PP_EXPR_IIF( \
-    WG_PP_TOKENS_STARTWITH_THISU(elem), \
+    WG_PP_KEYWORDS_STARTWITH_THISU(elem), \
     (indx))
 
 //---------------------
@@ -257,7 +257,7 @@
   r, spec_typededucername_istpl, indx, entry) \
     BOOST_PP_LPAREN() \
       BOOST_PP_IIF( \
-        WG_PP_TOKENS_START_WITH_WG_PP_DEDUCEDTYPE(entry), \
+        WG_PP_START_WITH_WG_PP_DEDUCEDTYPE(entry), \
         WG_PP_STUTIL_USETYPEDEDUCER_REPLACEBOOSTYPEOF( \
           spec_typededucername_istpl, indx), \
         entry) \

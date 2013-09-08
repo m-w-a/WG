@@ -26,7 +26,7 @@
 //   the next expected named param.
 //
 // Preconditions:
-//   WG_PP_TOKENS_STARTWITH_<currentkeyword>(...) must be defined.
+//   WG_PP_KEYWORDS_STARTWITH_<currentkeyword>(...) must be defined.
 //
 // Expands to:
 //   1) <moduleid>_FOUND_<currentkeyword>(spec, specoptions, nexttransform)
@@ -58,15 +58,15 @@
   spec, moduleid, currentkeyword, nextkeyword) \
     BOOST_PP_CAT( \
       WG_PP_NAMEDPARAMPARSER_MACRONAME_IMPL, \
-      BOOST_PP_CAT(WG_PP_TOKENS_STARTWITH_, currentkeyword) (spec)) \
+      BOOST_PP_CAT(WG_PP_KEYWORDS_STARTWITH_, currentkeyword) (spec)) \
     (spec, moduleid, currentkeyword, nextkeyword)
 #define WG_PP_NAMEDPARAMPARSER_MACRONAME_IMPL0( \
   spec, moduleid, currentkeyword, nextkeyword) \
-    WG_PP_UCAT3(moduleid, NOTFOUND, currentkeyword) () \
-    WG_PP_UCAT(moduleid, nextkeyword)
+    WG_PP_UCAT_ARG3(moduleid, NOTFOUND, currentkeyword) () \
+    WG_PP_UCAT_ARG2(moduleid, nextkeyword)
 #define WG_PP_NAMEDPARAMPARSER_MACRONAME_IMPL1( \
   spec, moduleid, currentkeyword, nextkeyword) \
-    WG_PP_UCAT3(moduleid, FOUND, currentkeyword)
+    WG_PP_UCAT_ARG3(moduleid, FOUND, currentkeyword)
 
 //----------------------------------
 //WG_PP_NAMEDPARAMPARSER_MACROPARAMS
@@ -76,7 +76,7 @@
   spec, specoptions, moduleid, currentkeyword, nextkeyword) \
     BOOST_PP_CAT( \
       WG_PP_NAMEDPARAMPARSER_MACROPARAMS_IMPL, \
-      BOOST_PP_CAT(WG_PP_TOKENS_STARTWITH_, currentkeyword) (spec)) \
+      BOOST_PP_CAT(WG_PP_KEYWORDS_STARTWITH_, currentkeyword) (spec)) \
     (spec, specoptions, moduleid, currentkeyword, nextkeyword)
 #define WG_PP_NAMEDPARAMPARSER_MACROPARAMS_IMPL0( \
   spec, specoptions, moduleid, currentkeyword, nextkeyword) \
@@ -85,6 +85,6 @@
   spec, specoptions, moduleid, currentkeyword, nextkeyword) \
     (spec, \
      specoptions, \
-     WG_PP_UCAT(moduleid, nextkeyword))
+     WG_PP_UCAT_ARG2(moduleid, nextkeyword))
 
 #endif /* WG_PP_NAMEDPARAMPARSER_HH_ */

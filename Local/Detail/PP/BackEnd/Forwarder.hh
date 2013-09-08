@@ -67,12 +67,12 @@
     public: \
       WG_PP_FORWARDER_TYPE_CTOR_DCLN(frwdr_typename, symbtbl, specseq) \
       WG_PP_FORWARDER_TYPE_ACCESSORS(symbtbl, specseq) \
-    } WG_PP_IDENTITY(;) \
+    } WG_PP_IDENTITY_ARG1(;) \
     frwdr_typename const & frwdr_objname = \
       frwdr_typename \
       BOOST_PP_LPAREN() \
         WG_PP_FORWARDER_OBJ_INITLIST(symbtbl, specseq) \
-      BOOST_PP_RPAREN() WG_PP_IDENTITY(;)
+      BOOST_PP_RPAREN() WG_PP_IDENTITY_ARG1(;)
 
 //-----------------------------
 //WG_PP_FORWARDER_ACCESSORWGSEQ
@@ -189,7 +189,7 @@
       WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_ISTPL(data)) \
     WG_PP_FORWARDER_TYPE_MEMBERVARNAME( \
       WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_VARROOTNAME(data), indx) \
-    WG_PP_IDENTITY(;)
+    WG_PP_IDENTITY_ARG1(;)
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_FORWARDER_TYPE_MEMBERDCLN_CONSTREF( \
@@ -199,7 +199,7 @@
       WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_ISTPL(data)) \
     WG_PP_FORWARDER_TYPE_MEMBERVARNAME( \
       WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_VARROOTNAME(data), indx) \
-    WG_PP_IDENTITY(;)
+    WG_PP_IDENTITY_ARG1(;)
 
 //----------
 //Ctor Utils
@@ -279,7 +279,7 @@
 // There will be at least 1 entry, therefore no worries as to empty macro args
 //   to WG_PP_SEQ_ENUM
 #define WG_PP_FORWARDER_TYPE_CTOR_INITLIST_1(symbtbl, specseq) \
-  WG_PP_IDENTITY(:) \
+  WG_PP_IDENTITY_ARG1(:) \
   WG_PP_SEQ_ENUM( \
     WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM( \
       symbtbl, \

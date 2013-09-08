@@ -10,10 +10,10 @@
 //###########
 
 #define WG_PP_ALTSEQ_APPEND_COMMA_TO_HEAD_1(x) \
-  WG_PP_TUPLIZE_1(x) BOOST_PP_COMMA() 2
+  WG_PP_TUPLIZE_ARG1(x) BOOST_PP_COMMA() 2
 
 #define WG_PP_ALTSEQ_APPEND_COMMA_TO_HEAD_2(x, y) \
-  WG_PP_TUPLIZE_2(x, y) BOOST_PP_COMMA() 1
+  WG_PP_TUPLIZE_ARG2(x, y) BOOST_PP_COMMA() 1
 
 ///@brief head_tuple_kind
 ///@brief   an unsigned integer representing the kind of tuple the head tuple
@@ -39,7 +39,7 @@
     head_tuple_kind, \
     tuple_seq, \
     BOOST_PP_TUPLE_EAT(head_tuple_kind), \
-    WG_PP_IDENTITY)
+    WG_PP_IDENTITY_ARG1)
 
 ///@brief head_tuple_kind
 ///@brief   an unsigned integer representing the arity of the head tuple
@@ -48,7 +48,7 @@
   WG_PP_ALTSEQ_TRANSFORM( \
     head_tuple_kind, \
     tuple_seq, \
-    BOOST_PP_CAT(WG_PP_1TUPLIZE_, head_tuple_kind), \
+    BOOST_PP_CAT(WG_PP_ONETUPLIZE_ARG, head_tuple_kind), \
     BOOST_PP_TUPLE_EAT(1))
 
 #define WG_PP_ALTSEQ_LINEARIZE(tuple_seq) \
@@ -84,11 +84,11 @@
   TRANSFORM_REST) \
     TRANSFORM head_tuple \
     BOOST_PP_EXPR_IIF( \
-      WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
+      WG_PP_START_WITH_WG_PP_TRUE( \
         BOOST_PP_CAT(WG_PP_MAP_TO_TRUETOKEN_ARG, tuple_seq_rest)), \
       TRANSFORM_REST( \
         BOOST_PP_CAT( \
-          WG_PP_TUPLIZE_, \
+          WG_PP_TUPLIZE_ARG, \
           tuple_seq_rest)) BOOST_PP_EMPTY) ()
 
 //----------------
@@ -114,7 +114,7 @@
 
 #define WG_PP_ALTSEQ_LINEARIZE_INC_OP_IMPL1(indx, seq) \
   BOOST_PP_IIF( \
-    WG_PP_TOKENS_START_WITH_WG_PP_TRUE( \
+    WG_PP_START_WITH_WG_PP_TRUE( \
       BOOST_PP_CAT( \
         WG_PP_MAP_TO_TRUETOKEN_ARG, \
         WG_PP_ALTSEQ_LINEARIZE_GET_HEAD_ARITY((indx, seq))) seq), \

@@ -214,8 +214,8 @@
 #define WG_PP_AUTOFUNCTOR_CG_AUTOFNCTR_CTOR_INITLIST2(initseq) \
   BOOST_PP_EXPR_IIF( \
     BOOST_PP_NOT( \
-      WG_PP_TOKENS_START_WITH_BOOST_PP_NIL(initseq)), \
-      WG_PP_IDENTITY(:) ) \
+      WG_PP_START_WITH_BOOST_PP_NIL(initseq)), \
+      WG_PP_IDENTITY_ARG1(:) ) \
   WG_PP_SEQ_ENUM(initseq)
 
 //-----------------

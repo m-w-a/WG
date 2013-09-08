@@ -49,7 +49,7 @@ RESCAN_WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG(VDI6)
   BOOST_PP_SEQ_ELEM(1, implicittype_var_2tuple)
 
 #define TEST_DIDBIND_TYPE(expected, actual) \
-  TEST_DIDBIND_TYPE2(expected, WG_PP_TOKENS_EATHEADTOKEN_WG_PP_DEDUCEDTYPE(actual))
+  TEST_DIDBIND_TYPE2(expected, WG_PP_EATHEADTOKEN_WG_PP_DEDUCEDTYPE(actual))
 #define TEST_DIDBIND_TYPE2(expected, actual) \
   BEGIN \
     boost::is_same<expected, actual>::value == true \

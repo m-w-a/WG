@@ -75,12 +75,12 @@
 #define WG_PP_SEQ_IFNIL_THENCLEAR_IMPL(seq) \
   BOOST_PP_EXPR_IIF( \
     BOOST_PP_NOT( \
-      WG_PP_TOKENS_START_WITH_BOOST_PP_NIL(seq)), \
+      WG_PP_START_WITH_BOOST_PP_NIL(seq)), \
     seq)
 
 #define WG_PP_SEQ_IFNIL_THENMAPTO_IMPL(seq, value) \
   BOOST_PP_IIF( \
-    WG_PP_TOKENS_START_WITH_BOOST_PP_NIL(seq), \
+    WG_PP_START_WITH_BOOST_PP_NIL(seq), \
     value, \
     seq)
 
@@ -89,7 +89,7 @@
 #define WG_PP_SEQ_CAT_IMPL(seq) \
   BOOST_PP_CAT( \
     WG_PP_SEQ_CAT_IMPL_, \
-    BOOST_PP_NOT(WG_PP_TOKENS_START_WITH_BOOST_PP_NIL(seq))) (seq)
+    BOOST_PP_NOT(WG_PP_START_WITH_BOOST_PP_NIL(seq))) (seq)
 
 #define WG_PP_SEQ_FOR_EACH_IMPL_0(macro, data, seq) BOOST_PP_NIL
 #define WG_PP_SEQ_FOR_EACH_IMPL_1(macro, data, seq) \
@@ -139,7 +139,7 @@
     BOOST_PP_CAT( \
       WG_PP_SEQ_REPLACE_IMPL_, \
       WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)), \
-    BOOST_PP_NOT(WG_PP_TOKENS_START_WITH_BOOST_PP_NIL(indx))) \
+    BOOST_PP_NOT(WG_PP_START_WITH_BOOST_PP_NIL(indx))) \
   (seq, indx, elem)
 
 #define WG_PP_SEQ_ELEM_IMPL_00(indx, seq) BOOST_PP_NIL
@@ -150,7 +150,7 @@
   BOOST_PP_CAT( \
     BOOST_PP_CAT( \
       WG_PP_SEQ_ELEM_IMPL_, \
-      BOOST_PP_NOT(WG_PP_TOKENS_START_WITH_BOOST_PP_NIL(indx))), \
+      BOOST_PP_NOT(WG_PP_START_WITH_BOOST_PP_NIL(indx))), \
     WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) \
   (indx, seq)
 

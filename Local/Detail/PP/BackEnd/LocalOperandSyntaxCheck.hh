@@ -77,9 +77,9 @@
   r, varrootname_objseq, indx, type) \
     () \
     BOOST_PP_IIF( \
-      WG_PP_TOKENS_STARTWITH_LOCAL(type), \
+      WG_PP_KEYWORDS_STARTWITH_LOCAL(type), \
       WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN2, \
-      WG_PP_MAP_TO_NOTHING3) (varrootname_objseq, indx, type) \
+      WG_PP_MAP_TO_NOTHING_ARG3) (varrootname_objseq, indx, type) \
     BOOST_PP_EMPTY
 
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN2( \
