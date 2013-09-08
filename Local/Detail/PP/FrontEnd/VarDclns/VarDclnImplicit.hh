@@ -8,6 +8,7 @@
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_pointer.hpp>
+#include <WG/Local/Detail/Translator/Utils.hh>
 
 //###########
 //Public APIs
@@ -87,31 +88,31 @@
     (var)
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_00(expr, istpl) \
-  WG_PP_DEDUCEDTYPE WG_PP_TYPEOF(istpl, expr)
+  WG_PP_DEDUCEDTYPE WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr)
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_01(expr, istpl) \
   WG_PP_DEDUCEDTYPE \
-    WG_PP_ADDTYPENAME(istpl) \
-      boost::add_reference< WG_PP_TYPEOF(istpl, expr) >::type
+    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
+      boost::add_reference< WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) >::type
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_10(expr, istpl) \
   WG_PP_DEDUCEDTYPE \
-    WG_PP_ADDTYPENAME(istpl) \
-      boost::add_const< WG_PP_TYPEOF(istpl, expr) >::type
+    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
+      boost::add_const< WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) >::type
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_11(expr, istpl) \
   WG_PP_DEDUCEDTYPE \
-    WG_PP_ADDTYPENAME(istpl) boost::add_reference< \
-      WG_PP_ADDTYPENAME(istpl) boost::add_const< \
-        WG_PP_TYPEOF(istpl, expr) >::type >::type
+    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_reference< \
+      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_const< \
+        WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) >::type >::type
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_00(bvar, istpl) \
-  WG_PP_DEDUCEDTYPE WG_PP_TYPEOF(istpl, this)
+  WG_PP_DEDUCEDTYPE WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, this)
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_01(bvar, istpl) \
   WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_ERRMSG()
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_10(bvar, istpl) \
   WG_PP_DEDUCEDTYPE \
-    WG_PP_ADDTYPENAME(istpl) boost::add_const< \
-      WG_PP_ADDTYPENAME(istpl) boost::add_pointer< \
-        WG_PP_ADDTYPENAME(istpl) boost::add_const< \
-          WG_PP_TYPEOF(istpl, *this) >::type >::type >::type
+    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_const< \
+      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_pointer< \
+        WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_const< \
+          WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, *this) >::type >::type >::type
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_11(bvar, istpl) \
   WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_ERRMSG()
 

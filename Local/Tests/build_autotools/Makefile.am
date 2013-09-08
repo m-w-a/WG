@@ -9,6 +9,7 @@ noinst_PROGRAMS = \
     test_pp_pp \
     test_pp_wgseq \
     test_pp_tokenmatch \
+    test_pp_trnsltr_utils \
     test_pp_vardcln \
     test_pp_vardcln_implicit \
     test_pp_vardcln_explicit \
@@ -53,6 +54,7 @@ TESTS = \
 test_pp_pp_SOURCES = ../../Detail/Tests/PPUnitTest.cc
 test_pp_wgseq_SOURCES = ../../Detail/Tests/SeqUnitTest.cc
 test_pp_tokenmatch_SOURCES = ../../Detail/Tests/TokenMatchUnitTest.cc
+test_pp_trnsltr_utils_SOURCES = ../../Detail/PP/Translator/Tests/UtilsUnitTest.cc
 test_pp_vardcln_SOURCES = ../../Detail/FrontEnd/VarDclns/Tests/VarDclnUnitTest.cc
 test_pp_vardcln_implicit_SOURCES = ../../Detail/FrontEnd/VarDclns/Tests/VarDclnImplicitUnitTest.cc
 test_pp_vardcln_explicit_SOURCES = ../../Detail/FrontEnd/VarDclns/Tests/VarDclnExplicitUnitTest.cc

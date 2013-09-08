@@ -6,6 +6,8 @@
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Keywords.hh>
 #include <WG/Local/Detail/PP/BackEnd/TypeDeducer.hh>
+#include <WG/Local/Detail/Translator/Utils.hh>
+#include <WG/Local/Detail/Translator/Utils.hh>
 
 //----------------------------------------------------------------------------//
 // This is a "friend" of SymbolTable.
@@ -257,7 +259,7 @@
   r, spec_typededucername_istpl, indx, entry) \
     BOOST_PP_LPAREN() \
       BOOST_PP_IIF( \
-        WG_PP_START_WITH_WG_PP_DEDUCEDTYPE(entry), \
+        WG_PP_TRNSLTR_UTILS_START_WITH_WG_PP_DEDUCEDTYPE(entry), \
         WG_PP_STUTIL_USETYPEDEDUCER_REPLACEBOOSTYPEOF( \
           spec_typededucername_istpl, indx), \
         entry) \
@@ -273,7 +275,7 @@
 
 #define WG_PP_STUTIL_USETYPEDEDUCER_REPLACEBOOSTYPEOF2( \
   spec, typededucername, istpl, indx) \
-    WG_PP_ADDTYPENAME(istpl) \
+    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
       typededucername::WG_PP_TYPEDEDUCER_TYPENAME(spec, indx)
 
 #endif /* WG_PP_SYMBOLTABLEUTIL_HH_ */

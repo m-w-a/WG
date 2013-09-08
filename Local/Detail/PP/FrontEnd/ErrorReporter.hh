@@ -4,6 +4,7 @@
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Seq.hh>
+#include <WG/Local/Detail/Translator/Utils.hh>
 
 //###########
 //Public APIs
@@ -51,8 +52,8 @@
 
 #define WG_PP_ERRORREPORTER_REPORT_ERRORSEQ_IMPL(psble_error) \
   BOOST_PP_EXPR_IIF( \
-    WG_PP_START_WITH_WG_PP_ERROR(psble_error), \
-    WG_PP_EATHEADTOKEN_WG_PP_ERROR(psble_error))
+    WG_PP_TRNSLTR_UTILS_STARTS_WITH_WG_PP_ERROR(psble_error), \
+    WG_PP_TRNSLTR_UTILS_EATHEADTOKEN_WG_PP_ERROR(psble_error))
 
 //-------------------------------------------------
 //WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ_IMPL

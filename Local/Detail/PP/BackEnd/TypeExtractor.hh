@@ -6,6 +6,7 @@
 #include <boost/type_traits/add_reference.hpp>
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Keywords.hh>
+#include <WG/Local/Detail/Translator/Utils.hh>
 
 //----------------------------------------------------------------------------//
 // This file contains utilities for extracting the true cpp type from the parsed
@@ -64,16 +65,16 @@
   BOOST_PP_NOT(WG_PP_PARSEDTYPE_ISLOCALTYPE(parsedtype))
 
 #define WG_PP_PARSEDTYPE_NONLOCALTYPE_ADDCONST(nonlocaltype, istpl) \
-  WG_PP_ADDTYPENAME(istpl) boost::add_const<WG_PP_IDENTITY_ARG1(nonlocaltype)>::type
+  WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_const<WG_PP_IDENTITY_ARG1(nonlocaltype)>::type
 
 #define WG_PP_PARSEDTYPE_NONLOCALTYPE_ADDREFERENCE(nonlocaltype, istpl) \
-  WG_PP_ADDTYPENAME(istpl) boost::add_reference< \
+  WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_reference< \
     WG_PP_IDENTITY_ARG1(nonlocaltype) >::type
 
 #define WG_PP_PARSEDTYPE_NONLOCALTYPE_ADDCONSTADDREFERENCE( \
   nonlocaltype, istpl) \
-    WG_PP_ADDTYPENAME(istpl) boost::add_reference< \
-      WG_PP_ADDTYPENAME(istpl) boost::add_const<WG_PP_IDENTITY_ARG1(nonlocaltype) \
+    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_reference< \
+      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_const<WG_PP_IDENTITY_ARG1(nonlocaltype) \
       >::type \
     >::type
 
