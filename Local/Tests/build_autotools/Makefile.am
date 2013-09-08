@@ -10,13 +10,13 @@ noinst_PROGRAMS = \
     test_pp_wgseq \
     test_pp_tokenmatch \
     test_pp_trnsltr_utils \
-    test_pp_vardcln \
-    test_pp_vardcln_implicit \
-    test_pp_vardcln_explicit \
-    test_pp_parsedtype \
-    test_pp_errorreporting_invalidnamedparameters \
-    test_pp_errorreporting_refthisu \
-    test_autofunctor
+    test_pp_trnsltr_vardcln \
+    test_pp_trnsltr_vardcln_implicit \
+    test_pp_trnsltr_vardcln_explicit \
+    test_pp_trnsltr_parsedtype \
+    test_autofunctor \
+    test_autofunctor_errorreporting_invalidnamedparameters \
+    test_autofunctor_errorreporting_refthisu
 
 TEST_BIN_DIR = $(abs_top_builddir)/bin/
 
@@ -51,19 +51,19 @@ clean-local : \
 TESTS = \
     $(TEST_WG_AUTOFUNCTOR_APPNAME)
 
-test_pp_pp_SOURCES = ../../Detail/Tests/PPUnitTest.cc
-test_pp_wgseq_SOURCES = ../../Detail/Tests/SeqUnitTest.cc
-test_pp_tokenmatch_SOURCES = ../../Detail/Tests/TokenMatchUnitTest.cc
+test_pp_pp_SOURCES = ../../Detail/PP/Tests/PPUnitTest.cc
+test_pp_wgseq_SOURCES = ../../Detail/PP/Tests/SeqUnitTest.cc
+test_pp_tokenmatch_SOURCES = ../../Detail/PP/Tests/TokenMatchUnitTest.cc
 test_pp_trnsltr_utils_SOURCES = ../../Detail/PP/Translator/Tests/UtilsUnitTest.cc
-test_pp_vardcln_SOURCES = ../../Detail/FrontEnd/VarDclns/Tests/VarDclnUnitTest.cc
-test_pp_vardcln_implicit_SOURCES = ../../Detail/FrontEnd/VarDclns/Tests/VarDclnImplicitUnitTest.cc
-test_pp_vardcln_explicit_SOURCES = ../../Detail/FrontEnd/VarDclns/Tests/VarDclnExplicitUnitTest.cc
-test_pp_parsedtype_SOURCES = ../../Detail/BackEnd/Tests/TypeExtractorUnitTest.cc
+test_pp_trnsltr_vardcln_SOURCES = ../../Detail/PP/Translator/FrontEnd/VarDclns/Tests/VarDclnUnitTest.cc
+test_pp_trnsltr_vardcln_implicit_SOURCES = ../../Detail/PP/Translator/FrontEnd/VarDclns/Tests/VarDclnImplicitUnitTest.cc
+test_pp_trnsltr_vardcln_explicit_SOURCES = ../../Detail/PP/Translator/FrontEnd/VarDclns/Tests/VarDclnExplicitUnitTest.cc
+test_pp_trnsltr_parsedtype_SOURCES = ../../Detail/PP/Translator/BackEnd/Tests/TypeExtractorUnitTest.cc
 
 if DO_NOT_BUILD
-    test_pp_errorreporting_invalidnamedparameters_SOURCES = \
+    test_autofunctor_errorreporting_invalidnamedparameters_SOURCES = \
       ../../Tests/AutoFunctor/ErrorReporting/InvalidNamedParameters.cc
-    test_pp_errorreporting_refthisu_SOURCES = \
+    test_autofunctor_errorreporting_refthisu_SOURCES = \
       ../../Tests/AutoFunctor/ErrorReporting/RefThisU.cc
 endif
 

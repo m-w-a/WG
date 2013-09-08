@@ -3,8 +3,8 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/Seq.hh>
-#include <WG/Local/Detail/PP/Keywords.hh>
-#include <WG/Local/Detail/PP/BackEnd/SymbolTableUtil.hh>
+#include <WG/Local/Detail/PP/Translator/Keywords.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
 
 //################
 //Interface Impls.

@@ -3,8 +3,8 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/PP.hh>
-#include <WG/Local/Detail/PP/Keywords.hh>
-#include <WG/Local/Detail/PP/FrontEnd/SplitHeadFromTokens.hh>
+#include <WG/Local/Detail/PP/Translator/Keywords.hh>
+#include <WG/Local/Detail/PP/Translator/FrontEnd/SplitHeadFromTokens.hh>
 
 //###########
 //Public APIs

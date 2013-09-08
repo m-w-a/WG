@@ -3,11 +3,11 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/PP.hh>
-#include <WG/Local/Detail/PP/Keywords.hh>
-#include <WG/Local/Detail/PP/FrontEnd/NamedParamParser.hh>
-#include <WG/Local/Detail/PP/FrontEnd/SplitHeadFromTokens.hh>
-#include <WG/Local/Detail/PP/FrontEnd/BoundVarDclnNormalize.hh>
-#include <WG/Local/Detail/PP/FrontEnd/SetVarDclnNormalize.hh>
+#include <WG/Local/Detail/PP/Translator/Keywords.hh>
+#include <WG/Local/Detail/PP/Translator/FrontEnd/NamedParamParser.hh>
+#include <WG/Local/Detail/PP/Translator/FrontEnd/SplitHeadFromTokens.hh>
+#include <WG/Local/Detail/PP/Translator/FrontEnd/BoundVarDclnNormalize.hh>
+#include <WG/Local/Detail/PP/Translator/FrontEnd/SetVarDclnNormalize.hh>
 
 //###########
 //Public APIs

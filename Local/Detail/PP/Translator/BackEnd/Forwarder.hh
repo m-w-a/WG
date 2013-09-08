@@ -3,9 +3,9 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/PP.hh>
-#include <WG/Local/Detail/PP/BackEnd/TypeExtractor.hh>
-#include <WG/Local/Detail/PP/BackEnd/ID.hh>
-#include <WG/Local/Detail/PP/BackEnd/SymbolTableUtil.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/TypeExtractor.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/ID.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
 
 //###########
 //Public APIs

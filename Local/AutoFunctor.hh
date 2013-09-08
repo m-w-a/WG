@@ -2,10 +2,10 @@
 #define WG_AUTOFUNCTOR_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/Detail/FrontEnd/AutoFunctor/SpecNormalize.hh>
-#include <WG/Local/Detail/FrontEnd/ErrorReporter.hh>
-#include <WG/Local/Detail/BackEnd/AutoFunctor/SymbolTable.hh>
-#include <WG/Local/Detail/BackEnd/AutoFunctor/CodeGen.hh>
+#include <WG/Local/Detail/PP/Translator/FrontEnd/AutoFunctor/SpecNormalize.hh>
+#include <WG/Local/Detail/PP/Translator/FrontEnd/ErrorReporter.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/AutoFunctor/SymbolTable.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/AutoFunctor/CodeGen.hh>
 
 //###########
 //Public APIs
