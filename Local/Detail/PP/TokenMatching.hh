@@ -156,7 +156,11 @@
 //--------------------
 // Use our own version instead of BOOST_PP_CAT, since if BOOST_PP_CAT expands
 // to a macro that contains any of this files' public apis, those apis will be
-// disabled.
+// disabled. Example:
+//
+// #define FOO_BAR BOOST_PP_CAT(WG_PP_TOKEN, MATCH_BEGINSWITH(abc, def))
+// BOOST_PP_CAT(FOO, _BAR)
+//
 //--------------------
 
 # /* Copyright (C) 2001
