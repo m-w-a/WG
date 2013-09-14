@@ -10,6 +10,19 @@
 //Public APIs
 //###########
 
+//------------------------------------------------------------------------------
+//API Note:
+//  1) The pattern "_<keyword-to-match>_<keyword-to-match>" described below
+//    is required in order to distinguish between different tokens that appear
+//    adjacent to each other.
+//    For example, if both "const" and "ref" are keywords to match, and the
+//    pattern "_<keyword-to-match>" was used for the accompanying object like
+//    macro instead of the above, then
+//    <some-app-specific-id>_const and <some-app-specific-id>_ref will BOTH
+//    return true for the following series of tokens:
+//      const ref
+//------------------------------------------------------------------------------
+
 // Evaluates to exactly 0 or 1.
 // tokens:
 //   a series of tokens that does not contain comma(s) nor begins with any
