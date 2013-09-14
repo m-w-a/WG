@@ -15,6 +15,7 @@
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/int.hpp>
+#include <WG/Local/Detail/PP/LclFunction/BaseFunctorTypeCPP11.hh>
 
 namespace wg
 {
@@ -87,32 +88,34 @@ public:
   // Method const so as to be able to be called by const std::function.
   //--------------------------------------------------------------------------//
 
-  result_type operator()() const
-  {
-    BOOST_STATIC_ASSERT((base_functor_type::arity == 0));
-    return functor_type::user_callback(*this, m_CapturedVars);
-  }
+  //  result_type operator()() const
+  //  {
+  //    BOOST_STATIC_ASSERT((base_functor_type::arity == 0));
+  //    return functor_type::user_callback(*this, m_CapturedVars);
+  //  }
+  //
+  // /* int operator()(int const & arg0, int const & arg1) const */
+  //  result_type operator()(
+  //    typename boost::add_reference
+  //    <
+  //      typename boost::add_const
+  //      <
+  //        typename boost::mpl::at<parameter_types, boost::mpl::int_<0> >::type
+  //      >::type
+  //    >::type arg0,
+  //    typename boost::add_reference
+  //    <
+  //      typename boost::add_const
+  //      <
+  //        typename boost::mpl::at<parameter_types, boost::mpl::int_<1> >::type
+  //      >::type
+  //    >::type arg1) const
+  //  {
+  //    BOOST_STATIC_ASSERT((base_functor_type::arity == 2));
+  //    return functor_type::user_callback(*this, arg0, arg1, m_CapturedVars);
+  //  }
 
- /* int operator()(int const & arg0, int const & arg1) const */
-  result_type operator()(
-    typename boost::add_reference
-    <
-      typename boost::add_const
-      <
-        typename boost::mpl::at<parameter_types, boost::mpl::int_<0> >::type
-      >::type
-    >::type arg0,
-    typename boost::add_reference
-    <
-      typename boost::add_const
-      <
-        typename boost::mpl::at<parameter_types, boost::mpl::int_<1> >::type
-      >::type
-    >::type arg1) const
-  {
-    BOOST_STATIC_ASSERT((base_functor_type::arity == 2));
-    return functor_type::user_callback(*this, arg0, arg1, m_CapturedVars);
-  }
+  WG_PP_BASEFUNCTORTYPE_OPERATORS_CPP11()
 
 private:
   // Captured vars are mutable because their mutability is determined at the
