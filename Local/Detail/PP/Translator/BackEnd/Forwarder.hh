@@ -228,19 +228,15 @@
 #define WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST(symbtbl, specseq) \
   BOOST_PP_IF( \
     WG_PP_STUTIL_CALL_F1(TOTALXXX_SIZE, symbtbl), \
-    WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_1, \
-    WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_0) (symbtbl, specseq)
-
-#define WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_0(symbtbl, specseq)
-// There will be at least 1 entry, therefore no worries as to empty macro args
-//   to WG_PP_SEQ_ENUM
-#define WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_1(symbtbl, specseq) \
-  WG_PP_SEQ_ENUM( \
-    WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM( \
-      symbtbl, \
-      specseq, \
-      WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_ENTRY_REF, \
-      WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_ENTRY_CONSTREF) )
+    WG_PP_SEQ_ENUM, \
+    WG_PP_MAPTO_NOTHING_ARG1) \
+      ( \
+        WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM( \
+          symbtbl, \
+          specseq, \
+          WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_ENTRY_REF, \
+          WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_ENTRY_CONSTREF) \
+      )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST_ENTRY_REF( \
@@ -271,20 +267,15 @@
 #define WG_PP_FORWARDER_TYPE_CTOR_INITLIST(symbtbl, specseq) \
   BOOST_PP_IF( \
     WG_PP_STUTIL_CALL_F1(TOTALXXX_SIZE, symbtbl), \
-    WG_PP_FORWARDER_TYPE_CTOR_INITLIST_1, \
-    WG_PP_FORWARDER_TYPE_CTOR_INITLIST_0) (symbtbl, specseq)
-
-#define WG_PP_FORWARDER_TYPE_CTOR_INITLIST_0(symbtbl, specseq)
-// There will be at least 1 entry, therefore no worries as to empty macro args
-//   to WG_PP_SEQ_ENUM
-#define WG_PP_FORWARDER_TYPE_CTOR_INITLIST_1(symbtbl, specseq) \
-  WG_PP_IDENTITY_ARG1(:) \
-  WG_PP_SEQ_ENUM( \
-    WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM( \
-      symbtbl, \
-      specseq, \
-      WG_PP_FORWARDER_TYPE_CTOR_INITLISTENTRY, \
-      WG_PP_FORWARDER_TYPE_CTOR_INITLISTENTRY))
+    WG_PP_IDENTITY_ARG1(:) WG_PP_SEQ_ENUM, \
+    WG_PP_MAPTO_NOTHING_ARG1) \
+      ( \
+        WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM( \
+          symbtbl, \
+          specseq, \
+          WG_PP_FORWARDER_TYPE_CTOR_INITLISTENTRY, \
+          WG_PP_FORWARDER_TYPE_CTOR_INITLISTENTRY) \
+      )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_FORWARDER_TYPE_CTOR_INITLISTENTRY( \
