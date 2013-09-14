@@ -10,14 +10,21 @@ x) Better Syntax Error Checking/Reporting:
 
 Misc.
 -----
+x) PP:
+  >-> Translator/Utils.hh
+  
+x) Once done restructuring, test everything.
+
+x) TokenMatching:
+  test BOOST_PP_CAT(FOO_BAR) and docmnt.
+
+Move over to WG_PP_TOKENMATCH ...
+
+x) local_operands_syntaxcheck unit tests.
+
+KeywordsUnitTest.cc
+
 ExpandN:
   test
   AUTOFUNCTOR -> ...
 
-TokenMatching:
-  test BOOST_PP_CAT(FOO_BAR) and docmnt.
-
-PP:
-  >-> Translator/Utils.hh
-  
-Once done restructuring, test everything.

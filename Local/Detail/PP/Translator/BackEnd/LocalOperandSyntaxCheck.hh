@@ -3,6 +3,7 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/PP.hh>
+#include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/TypeExtractor.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
 
@@ -14,11 +15,13 @@
 // This has to be done in the CodeGen phase since it's impossible to do in the
 // front end without running into UB. Explicitly, one can't check for const or
 // & usage in local(SomeType *) without having to concat '&' or '*'.
+// Note that neither TMP techniques can be used for type checking since in
+// C++03 local types may not be used as template parameters.
 //
 // symbtbl:
 //   must have the following defined:
-//     1) WG_PP_STUTIL_CALL2(TYPESEQ, <suffix>, symbtbl)
-//     2) WG_PP_STUTIL_CALL2(OBJSEQ, <suffix>, symbtbl)
+//     1) WG_PP_STUTIL_CALL_F2(TYPESEQ, <suffix>, symbtbl)
+//     2) WG_PP_STUTIL_CALL_F2(OBJSEQ, <suffix>, symbtbl)
 //   where suffix is declared in specseq.
 //
 // specseq:
@@ -54,33 +57,26 @@
 // BOOST_PP_SEQ_FOR_EACH functor.
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN(r, symbtbl, spec) \
   WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN2( \
-    WG_PP_STUTIL_CALL2( \
+    WG_PP_STUTIL_CALL_F2( \
       TYPESEQ, WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec), symbtbl), \
-    WG_PP_STUTIL_CALL2( \
+    WG_PP_STUTIL_CALL_F2( \
       OBJSEQ, WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec), symbtbl), \
     WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_VARROOTNAME(spec))
 
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN2( \
   typeseq, objseq, varrootname) \
-    WG_PP_LOCALOPERANDSYNTAXCHECK_EXPAND1( \
-      BOOST_PP_EMPTY \
-      WG_PP_SEQ_IFNIL_THENMAPTO( \
-        WG_PP_SEQ_FOR_EACH_I( \
-          WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN, \
-          (varrootname)(objseq), \
-          typeseq), \
-        () BOOST_PP_EMPTY ) \
-      () )
+    WG_PP_SEQ_NOTHING_FOR_EACH_I( \
+      WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN, \
+      (varrootname)(objseq), \
+      typeseq )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN( \
   r, varrootname_objseq, indx, type) \
-    () \
     BOOST_PP_IIF( \
-      WG_PP_KEYWORDS_STARTWITH_LOCAL(type), \
+      WG_PP_KEYWORDS_STARTSWITH_LOCAL(type), \
       WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN2, \
-      WG_PP_MAP_TO_NOTHING_ARG3) (varrootname_objseq, indx, type) \
-    BOOST_PP_EMPTY
+      WG_PP_MAPTO_NOTHING_ARG3) (varrootname_objseq, indx, type)
 
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN2( \
   varrootname_objseq, indx, type) \

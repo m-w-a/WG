@@ -61,12 +61,10 @@
 
 #define WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ_IMPL( \
   psble_nrmlzd_bnd_tuple_seq) \
-    WG_PP_SEQ_IFNIL_THENMAPTO( \
-      WG_PP_SEQ_FOR_EACH_I( \
-        WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLE, \
-        ~, \
-        psble_nrmlzd_bnd_tuple_seq) BOOST_PP_EMPTY, \
-      BOOST_PP_EMPTY) ()
+    WG_PP_SEQ_NOTHING_FOR_EACH_I( \
+      WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLE, \
+      ~, \
+      psble_nrmlzd_bnd_tuple_seq)
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLE(r, data, indx, elem) \
@@ -94,12 +92,10 @@
 
 #define WG_PP_ERRORREPORTER_REPORT_NRMLZDSETTUPLESEQ_IMPL( \
   psble_nrmlzd_set_tuple_seq) \
-    WG_PP_SEQ_IFNIL_THENMAPTO( \
-      WG_PP_SEQ_FOR_EACH_I( \
-        WG_PP_ERRORREPORTER_REPORT_NRMLZDSETTUPLE, \
-        ~, \
-        psble_nrmlzd_set_tuple_seq) BOOST_PP_EMPTY, \
-      BOOST_PP_EMPTY) ()
+    WG_PP_SEQ_NOTHING_FOR_EACH_I( \
+      WG_PP_ERRORREPORTER_REPORT_NRMLZDSETTUPLE, \
+      ~, \
+      psble_nrmlzd_set_tuple_seq)
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_ERRORREPORTER_REPORT_NRMLZDSETTUPLE(r, data, indx, elem) \

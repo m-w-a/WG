@@ -23,7 +23,7 @@
 //
 // symbtbl:
 //   must have the following defined:
-//     1) WG_PP_STUTIL_CALL2(TYPESEQ, <suffix>, symbtbl)
+//     1) WG_PP_STUTIL_CALL_F2(TYPESEQ, <suffix>, symbtbl)
 //   where suffix is declared in specseq.
 //
 // specseq:
@@ -62,8 +62,8 @@
 // BOOST_PP_SEQ_FOR_EACH functor.
 #define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS(r, symbtbl, spec) \
   BOOST_PP_IIF( \
-    WG_PP_START_WITH_BOOST_PP_NIL( \
-      WG_PP_STUTIL_CALL2( \
+    WG_PP_SEQ_ISNIL( \
+      WG_PP_STUTIL_CALL_F2( \
         TYPESEQ, WG_PP_TYPEDEDUCER_SPEC_SUFFIX(spec), symbtbl)), \
     WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS_NONE, \
     WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLNS_PROCESS) (symbtbl, spec)
@@ -74,8 +74,8 @@
   WG_PP_SEQ_FOR_EACH_I( \
     WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN, \
     spec, \
-    WG_PP_STUTIL_CALL2( \
-	  TYPESEQ, WG_PP_TYPEDEDUCER_SPEC_SUFFIX(spec), symbtbl) )
+    WG_PP_STUTIL_CALL_F2( \
+      TYPESEQ, WG_PP_TYPEDEDUCER_SPEC_SUFFIX(spec), symbtbl) )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN(r, spec, indx, e_or_d_type) \

@@ -10,7 +10,7 @@
 //###########
 
 #define WG_PP_VARDCLN_ISEXPLICIT(vardcln) \
-  WG_PP_VARDCLN_ISEXPLICIT_IMPL(vardcln)
+  WG_PP_VARDCLN_ISEXPLICIT_IMPL1(vardcln)
 
 #define WG_PP_VARDCLN_ISEXPLICIT_NLT(vardcln) \
   WG_PP_VARDCLN_ISEXPLICIT_NLT_IMPL(vardcln)
@@ -19,11 +19,15 @@
 //Impl Macros
 //###########
 
-#define WG_PP_VARDCLN_ISEXPLICIT_IMPL(vardcln) \
+#define WG_PP_VARDCLN_ISEXPLICIT_IMPL1(vardcln) \
   BOOST_PP_IIF( \
-    BOOST_PP_OR( \
-      WG_PP_ISNEXTTOKEN_A_TUPLE(1, vardcln), \
-      WG_PP_KEYWORDS_STARTWITH_LOCAL(vardcln)), \
+    WG_PP_ISNEXTTOKEN_A_TUPLE(1, vardcln), \
+    WG_PP_MAP_TO_1_ARG1, \
+    WG_PP_VARDCLN_ISEXPLICIT_IMPL2) (vardcln)
+
+#define WG_PP_VARDCLN_ISEXPLICIT_IMPL2(vardcln) \
+  BOOST_PP_IIF( \
+    WG_PP_KEYWORDS_STARTSWITH_LOCAL(vardcln), \
     1, \
     0)
 

@@ -1,5 +1,6 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/Local/Tests/test.h>
+#include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
 
 #define \
   WG_PP_REFTHISU_MATCHES_ERROR_ref_keyword_cannot_be_used_with_thisu_keyword \

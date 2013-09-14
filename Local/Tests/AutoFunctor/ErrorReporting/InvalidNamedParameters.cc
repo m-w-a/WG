@@ -1,5 +1,6 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/Local/Tests/test.h>
+#include <boost/local_function/detail/preprocessor/keyword/facility/is.hpp>
 
 #define WG_PP_KEYWORDS_START_WITH_INVALIDNAMEDPARAMETERS_ERRMSG(tokens) \
   BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_IS_FRONT( \
@@ -13,7 +14,7 @@
 BEGIN WG_PP_KEYWORDS_START_WITH_INVALIDNAMEDPARAMETERS_ERRMSG( \
   WG_AUTOFUNCTOR(assign, assignTo ((bool) didAssign) ) ) == 1 END
 
-// Invalid named token in the middle.
+// Invalid named token "pAraMBInD" in the middle.
 #define \
   WG_PP_INVALIDNAMEDPARAMETERS_MATCHES_ERROR_Invalid_tokensXXXpAraMBInD \
     (1) /* unary */

@@ -84,7 +84,7 @@
   TRANSFORM_REST) \
     TRANSFORM head_tuple \
     BOOST_PP_EXPR_IIF( \
-      WG_PP_START_WITH_WG_PP_TRUE( \
+      WG_PP_STARTS_WITH_WG_PP_TRUE( \
         BOOST_PP_CAT(WG_PP_MAP_TO_WG_PP_TRUE_ARG, tuple_seq_rest)), \
       TRANSFORM_REST( \
         BOOST_PP_CAT( \
@@ -114,7 +114,7 @@
 
 #define WG_PP_ALTSEQ_LINEARIZE_INC_OP_IMPL1(indx, seq) \
   BOOST_PP_IIF( \
-    WG_PP_START_WITH_WG_PP_TRUE( \
+    WG_PP_STARTS_WITH_WG_PP_TRUE( \
       BOOST_PP_CAT( \
         WG_PP_MAP_TO_WG_PP_TRUE_ARG, \
         WG_PP_ALTSEQ_LINEARIZE_GET_HEAD_ARITY((indx, seq))) seq), \

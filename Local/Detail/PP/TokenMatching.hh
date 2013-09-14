@@ -12,8 +12,8 @@
 
 // Evaluates to exactly 0 or 1.
 // tokens:
-//   a sequence of tokens that does not contain comma(s) nor begins with any
-//   non-alphanumeric-underscore characters.
+//   a series of tokens that does not contain comma(s) nor begins with any
+//   non-alphanumeric, non-underscore characters.
 // frontmatcher:
 //   a token of the form:
 //     <some-app-specific-id>_<keyword-to-match>_
@@ -25,8 +25,8 @@
 
 // Evaluates exactly to 0 or 1.
 // tokens:
-//   a sequence of tokens that does not contain comma(s) nor ends in
-//   non-alphanumeric-underscore characters.
+//   a series of tokens that does not contain comma(s) nor ends in
+//   non-alphanumeric, non-underscore characters.
 // endmatcher:
 //   a token of the form:
 //     _<keyword-to-match>_<some-app-specific-id>
@@ -39,8 +39,8 @@
 // Evaluates exactly to 0 or 1.
 // tokenXs:
 //   1) either a single token, or
-//   2) a sequence of tokens that does not contain comma(s) nor begins with any
-//     non-alphanumeric-underscore characters.
+//   2) a series of tokens that does not contain comma(s) nor begins with any
+//     non-alphanumeric, non-underscore characters.
 // matcher:
 //   a token of the form:
 //     <some-app-specific-id>_<keyword-to-match>_

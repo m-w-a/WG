@@ -14,12 +14,16 @@ noinst_PROGRAMS = \
     test_pp_trnsltr_vardcln_implicit \
     test_pp_trnsltr_vardcln_explicit \
     test_pp_trnsltr_parsedtype \
-    test_autofunctor
+    test_autofunctor \
+    test_autofunctor_errorreporting_invalidnamedparameters \
+    test_autofunctor_errorreporting_refthisu 
 
+# Don't auto build test_autofunctor_cf_* since they're compile-failure tests.
 if DO_NOT_BUILD
     noinst_PROGRAMS += \
-        test_autofunctor_errorreporting_invalidnamedparameters \
-        test_autofunctor_errorreporting_refthisu
+        test_autofunctor_cf_localoperandssyntax_ref \
+        test_autofunctor_cf_localoperandssyntax_const \
+        test_autofunctor_cf_localoperandssyntax_const_ref
 endif
 
 TEST_BIN_DIR = $(abs_top_builddir)/bin/
@@ -51,7 +55,8 @@ clean-local : \
 ##############################
 #Automatically executed tests.
 ##############################
-# Don't add test_pp_* to TESTS since they're compile-only tests.
+# Don't add test_pp_* to TESTS since they're preprocessor compile-only tests.
+# Don't add test_autofunctor_cf_* to TESTS since they're compile-failure tests.
 TESTS = \
     $(TEST_WG_AUTOFUNCTOR_APPNAME)
 
@@ -63,13 +68,17 @@ test_pp_trnsltr_vardcln_SOURCES = ../../Detail/PP/Translator/FrontEnd/VarDclns/T
 test_pp_trnsltr_vardcln_implicit_SOURCES = ../../Detail/PP/Translator/FrontEnd/VarDclns/Tests/VarDclnImplicitUnitTest.cc
 test_pp_trnsltr_vardcln_explicit_SOURCES = ../../Detail/PP/Translator/FrontEnd/VarDclns/Tests/VarDclnExplicitUnitTest.cc
 test_pp_trnsltr_parsedtype_SOURCES = ../../Detail/PP/Translator/BackEnd/Tests/TypeExtractorUnitTest.cc
+test_autofunctor_errorreporting_invalidnamedparameters_SOURCES = \
+  ../../Tests/AutoFunctor/ErrorReporting/InvalidNamedParameters.cc
+test_autofunctor_errorreporting_refthisu_SOURCES = \
+  ../../Tests/AutoFunctor/ErrorReporting/RefThisU.cc
 
-if DO_NOT_BUILD    
-    test_autofunctor_errorreporting_invalidnamedparameters_SOURCES = \
-      ../../Tests/AutoFunctor/ErrorReporting/InvalidNamedParameters.cc
-    test_autofunctor_errorreporting_refthisu_SOURCES = \
-      ../../Tests/AutoFunctor/ErrorReporting/RefThisU.cc
-endif
+test_autofunctor_cf_localoperandssyntax_ref_SOURCES = \
+	../../Tests/AutoFunctor/LocalOperandsSyntaxCheck/RefQualifiedLocalType.cc
+test_autofunctor_cf_localoperandssyntax_const_SOURCES = \
+	../../Tests/AutoFunctor/LocalOperandsSyntaxCheck/ConstQualifiedLocalType.cc
+test_autofunctor_cf_localoperandssyntax_const_ref_SOURCES = \
+	../../Tests/AutoFunctor/LocalOperandsSyntaxCheck/ConstRefQualifiedLocalType.cc
 
 test_autofunctor_SOURCES = \
     ../AutoFunctor/TestMain.cc \

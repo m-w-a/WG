@@ -9,13 +9,10 @@
 //###########
 
 // Nil sequences are defined to be BOOST_PP_NIL.
-
-// Maps to nothing if seq is nil, else maps to seq.
-#define WG_PP_SEQ_IFNIL_THENCLEAR(seq) \
-  WG_PP_SEQ_IFNIL_THENCLEAR_IMPL(seq)
-
-#define WG_PP_SEQ_IFNIL_THENMAPTO(seq, value) \
-  WG_PP_SEQ_IFNIL_THENMAPTO_IMPL(seq, value)
+// If it can be determined that seq is not a WG-seq then will expand to
+// WG_PP_ERROR_INVALID_ARGUMENT, else it's UB.
+#define WG_PP_SEQ_ISNIL(seq) \
+  WG_PP_SEQ_ISNIL_IMPL1(seq)
 
 // seq_count as param instead of seq because want to encourage caching former.
 #define WG_PP_SEQ_IS_INDEX_LAST(seq_count, indx) \
@@ -32,12 +29,16 @@
 // NOTE: maps empty sequences to NOTHING!
 //   Rationale:
 //     SEQ_ENUM introduces commas into the token seq, therefore it's impossible
-//     to use with non-variadic WG_PP_SEQ_IFNIL_THENCLEAR.
+//     to use with non-variadic macros.
 #define WG_PP_SEQ_ENUM(seq) WG_PP_SEQ_ENUM_IMPL(seq)
 
 // Maps to BOOST_PP_NIL if seq is nil
 #define WG_PP_SEQ_FOR_EACH(macro, data, seq) \
   WG_PP_SEQ_FOR_EACH_IMPL(macro, data, seq)
+
+// Maps to nothing if seq is nil.
+#define WG_PP_SEQ_NOTHING_FOR_EACH_I(macro, data, seq) \
+  WG_PP_SEQ_NOTHING_FOR_EACH_I_IMPL(macro, data, seq)
 
 // Maps to BOOST_PP_NIL if seq is nil
 #define WG_PP_SEQ_FOR_EACH_I(macro, data, seq) \
@@ -72,24 +73,24 @@
 //Impl Macros
 //###########
 
-#define WG_PP_SEQ_IFNIL_THENCLEAR_IMPL(seq) \
-  BOOST_PP_EXPR_IIF( \
-    BOOST_PP_NOT( \
-      WG_PP_START_WITH_BOOST_PP_NIL(seq)), \
-    seq)
-
-#define WG_PP_SEQ_IFNIL_THENMAPTO_IMPL(seq, value) \
+#define WG_PP_SEQ_ISNIL_IMPL1(seq) \
   BOOST_PP_IIF( \
-    WG_PP_START_WITH_BOOST_PP_NIL(seq), \
-    value, \
-    seq)
+    WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq), \
+    WG_PP_MAP_TO_0_ARG1, \
+    WG_PP_SEQ_ISNIL_IMPL2) (seq)
+
+#define WG_PP_SEQ_ISNIL_IMPL2(seq) \
+  BOOST_PP_IIF( \
+    WG_PP_MATCHES_BOOST_PP_NIL(seq), \
+    1, \
+    WG_PP_ERROR_INVALID_ARGUMENT)
 
 #define WG_PP_SEQ_CAT_IMPL_0(seq) BOOST_PP_NIL
 #define WG_PP_SEQ_CAT_IMPL_1(seq) BOOST_PP_SEQ_CAT(seq)
 #define WG_PP_SEQ_CAT_IMPL(seq) \
   BOOST_PP_CAT( \
     WG_PP_SEQ_CAT_IMPL_, \
-    BOOST_PP_NOT(WG_PP_START_WITH_BOOST_PP_NIL(seq))) (seq)
+    BOOST_PP_NOT(WG_PP_SEQ_ISNIL(seq))) (seq)
 
 #define WG_PP_SEQ_FOR_EACH_IMPL_0(macro, data, seq) BOOST_PP_NIL
 #define WG_PP_SEQ_FOR_EACH_IMPL_1(macro, data, seq) \
@@ -97,6 +98,14 @@
 #define WG_PP_SEQ_FOR_EACH_IMPL(macro, data, seq) \
   BOOST_PP_CAT( \
     WG_PP_SEQ_FOR_EACH_IMPL_, \
+    WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) (macro, data, seq)
+
+#define WG_PP_SEQ_NOTHING_FOR_EACH_I_IMPL_0(macro, data, seq)
+#define WG_PP_SEQ_NOTHING_FOR_EACH_I_IMPL_1(macro, data, seq) \
+  BOOST_PP_SEQ_FOR_EACH_I(macro, data, seq)
+#define WG_PP_SEQ_NOTHING_FOR_EACH_I_IMPL(macro, data, seq) \
+  BOOST_PP_CAT( \
+    WG_PP_SEQ_NOTHING_FOR_EACH_I_IMPL_, \
     WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) (macro, data, seq)
 
 #define WG_PP_SEQ_FOR_EACH_I_IMPL_0(macro, data, seq) BOOST_PP_NIL
@@ -139,7 +148,7 @@
     BOOST_PP_CAT( \
       WG_PP_SEQ_REPLACE_IMPL_, \
       WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)), \
-    BOOST_PP_NOT(WG_PP_START_WITH_BOOST_PP_NIL(indx))) \
+    BOOST_PP_NOT(WG_PP_STARTS_WITH_BOOST_PP_NIL(indx))) \
   (seq, indx, elem)
 
 #define WG_PP_SEQ_ELEM_IMPL_00(indx, seq) BOOST_PP_NIL
@@ -150,7 +159,7 @@
   BOOST_PP_CAT( \
     BOOST_PP_CAT( \
       WG_PP_SEQ_ELEM_IMPL_, \
-      BOOST_PP_NOT(WG_PP_START_WITH_BOOST_PP_NIL(indx))), \
+      BOOST_PP_NOT(WG_PP_STARTS_WITH_BOOST_PP_NIL(indx))), \
     WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) \
   (indx, seq)
 

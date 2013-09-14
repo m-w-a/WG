@@ -56,7 +56,7 @@
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_IMPL(spec, specoptions) \
   WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_PARSE_ASSIGNTO( \
     BOOST_PP_IIF( \
-      WG_PP_KEYWORDS_STARTWITH_VOID(spec), \
+      WG_PP_KEYWORDS_STARTSWITH_VOID(spec), \
       WG_PP_KEYWORDS_EAT_HEADKEYWORD(spec), \
       spec), \
     specoptions)
@@ -235,7 +235,7 @@
   (errors) \
   ( \
     BOOST_PP_IIF( \
-      WG_PP_START_WITH_BOOST_PP_NIL(spec), \
+      WG_PP_STARTS_WITH_BOOST_PP_NIL(spec), \
       BOOST_PP_NIL BOOST_PP_EMPTY, \
       WG_PP_ERROR WG_PP_ID_CAT( \
         ERROR_Invalid_tokens, \
