@@ -32,13 +32,13 @@
 
 // BOOST_PP_ENUM functor.
 #define WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP11_PARAMLIST_ENTRY(z, indx, data) \
-    typename boost::add_reference \
+  typename boost::add_reference \
+  < \
+    typename boost::add_const \
     < \
-      typename boost::add_const \
-      < \
-        typename boost::mpl::at<parameter_types, boost::mpl::int_<indx> >::type \
-      >::type \
-    >::type BOOST_PP_CAT(arg, indx)
+      typename boost::mpl::at<parameter_types, boost::mpl::int_<indx> >::type \
+    >::type \
+  >::type BOOST_PP_CAT(arg, indx)
 
 //--------------
 //Operator Body.

@@ -22,8 +22,8 @@ namespace lclfunction
 namespace detail
 {
 
-/* LCLFUNCTION: The specified local function type. */
-/* CAPTUREDVARS: A tuple of captured local variables, if any. */
+// LCLFUNCTION: The specified local function type.
+// CAPTUREDVARS: A tuple of captured local variables, if any.
 template<
   typename LCLFUNCTION,
   typename CAPTUREDVARS>
@@ -36,8 +36,8 @@ public:
 private:
   // Synthesize the call back type. It's prototype should be:
   //
-  // typedef typename result_type<LCLFUNCTION>::type (*callback_type)(
-  // base_functor_type const &, param_types<LCLFUNCTION>, CAPTUREDVARS &);
+  //   typedef typename result_type<LCLFUNCTION>::type (*callback_type)(
+  //     base_functor_type const &, param_types<LCLFUNCTION>, CAPTUREDVARS &);
   typedef
     typename boost::mpl::push_back
     <
@@ -84,7 +84,7 @@ public:
   //--------------------------------------------------------------------------//
   // PP generate operator() methods up to WG_PP_LCLFUNCTION_MAX_ARGS params.
   // add_const add_ref params until very end.
-  // method const so as to be able to be called by const std::function.
+  // Method const so as to be able to be called by const std::function.
   //--------------------------------------------------------------------------//
 
   //  result_type operator()() const

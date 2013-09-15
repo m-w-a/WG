@@ -1,5 +1,5 @@
-#ifndef WG_LCLFUNCTION_DETAIL_BASEFUNCTORTYPE_HH_
-#define WG_LCLFUNCTION_DETAIL_BASEFUNCTORTYPE_HH_
+#ifndef WG_LCLFUNCTION_DETAIL_BASEFUNCTORTYPECPP11_HH_
+#define WG_LCLFUNCTION_DETAIL_BASEFUNCTORTYPECPP11_HH_
 
 #include <boost/mpl/vector.hpp>
 #include <boost/mpl/push_front.hpp>
@@ -42,7 +42,7 @@ private:
   // Synthesize the call back type. It's prototype should be:
   //
   //   typedef typename result_type<LCLFUNCTION>::type (*callback_type)(
-  //   base_functor_type const &, param_types<LCLFUNCTION>, CAPTUREDVARS &);
+  //     base_functor_type const &, param_types<LCLFUNCTION>, CAPTUREDVARS &);
   typedef
     typename boost::mpl::push_back
     <
@@ -126,4 +126,4 @@ private:
 }
 }
 
-#endif /* WG_LCLFUNCTION_DETAIL_BASEFUNCTORTYPE_HH_ */
+#endif /* WG_LCLFUNCTION_DETAIL_BASEFUNCTORTYPECPP11_HH_ */
