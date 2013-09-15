@@ -16,7 +16,8 @@ noinst_PROGRAMS = \
     test_pp_trnsltr_parsedtype \
     test_autofunctor \
     test_autofunctor_errorreporting_invalidnamedparameters \
-    test_autofunctor_errorreporting_refthisu 
+    test_autofunctor_errorreporting_refthisu \
+    test_lclfunction_codegenspec_cpp03
 
 # Don't auto build test_autofunctor_cf_* since they're compile-failure tests.
 if DO_NOT_BUILD
@@ -34,10 +35,19 @@ TEST_WG_AUTOFUNCTOR_APPALTPATH = \
 TEST_WG_AUTOFUNCTOR_APPBUILDLOC = \
     $(abs_builddir)/$(TEST_WG_AUTOFUNCTOR_APPNAME)
 
+TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPNAME = \
+    test_lclfunction_codegenspec_cpp03$(EXEEXT)
+TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPALTPATH = \
+    $(TEST_BIN_DIR)/$(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPNAME)
+TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPBUILDLOC = \
+    $(abs_builddir)/$(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPNAME)
+
+
 #Custom init.
 all-local : \
     $(TEST_BIN_DIR) \
-    $(TEST_WG_AUTOFUNCTOR_APPALTPATH)
+    $(TEST_WG_AUTOFUNCTOR_APPALTPATH) \
+    $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPALTPATH)
     
 $(TEST_BIN_DIR) :
 	$(MKDIR_P) $(TEST_BIN_DIR)
@@ -48,9 +58,16 @@ $(TEST_WG_AUTOFUNCTOR_APPALTPATH) : $(TEST_WG_AUTOFUNCTOR_APPBUILDLOC)
           $(TEST_WG_AUTOFUNCTOR_APPBUILDLOC) \
           $(TEST_WG_AUTOFUNCTOR_APPNAME); )
 
+$(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPALTPATH) : $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPBUILDLOC)
+	( cd $(TEST_BIN_DIR); \
+      $(LN_S) -f \
+          $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPBUILDLOC) \
+          $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPNAME); )
+
 #Custom finalize.
 clean-local : \
-    rm -rf $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTOR_APPNAME)
+    rm -rf $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTOR_APPNAME) \
+    rm -rf $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPNAME)
 
 ##############################
 #Automatically executed tests.
@@ -69,16 +86,16 @@ test_pp_trnsltr_vardcln_implicit_SOURCES = ../../Detail/PP/Translator/FrontEnd/V
 test_pp_trnsltr_vardcln_explicit_SOURCES = ../../Detail/PP/Translator/FrontEnd/VarDclns/Tests/VarDclnExplicitUnitTest.cc
 test_pp_trnsltr_parsedtype_SOURCES = ../../Detail/PP/Translator/BackEnd/Tests/TypeExtractorUnitTest.cc
 test_autofunctor_errorreporting_invalidnamedparameters_SOURCES = \
-  ../../Tests/AutoFunctor/ErrorReporting/InvalidNamedParameters.cc
+    ../../Tests/AutoFunctor/ErrorReporting/InvalidNamedParameters.cc
 test_autofunctor_errorreporting_refthisu_SOURCES = \
-  ../../Tests/AutoFunctor/ErrorReporting/RefThisU.cc
+    ../../Tests/AutoFunctor/ErrorReporting/RefThisU.cc
 
 test_autofunctor_cf_localoperandssyntax_ref_SOURCES = \
-	../../Tests/AutoFunctor/LocalOperandsSyntaxCheck/RefQualifiedLocalType.cc
+    ../../Tests/AutoFunctor/LocalOperandsSyntaxCheck/RefQualifiedLocalType.cc
 test_autofunctor_cf_localoperandssyntax_const_SOURCES = \
-	../../Tests/AutoFunctor/LocalOperandsSyntaxCheck/ConstQualifiedLocalType.cc
+    ../../Tests/AutoFunctor/LocalOperandsSyntaxCheck/ConstQualifiedLocalType.cc
 test_autofunctor_cf_localoperandssyntax_const_ref_SOURCES = \
-	../../Tests/AutoFunctor/LocalOperandsSyntaxCheck/ConstRefQualifiedLocalType.cc
+    ../../Tests/AutoFunctor/LocalOperandsSyntaxCheck/ConstRefQualifiedLocalType.cc
 
 test_autofunctor_SOURCES = \
     ../AutoFunctor/TestMain.cc \
@@ -137,6 +154,9 @@ test_autofunctor_SOURCES = \
     ../AutoFunctor/SelfType.cc \
     ../AutoFunctor/SelfTypeTpl.cc
 
+test_lclfunction_codegenspec_cpp03_SOURCES = \
+    ../../Detail/PP/Translator/BackEnd/LclFunction/Specs/C++03Spec.cc
+
 EXTRA_DIST = 
 
 ####################
@@ -144,6 +164,10 @@ EXTRA_DIST =
 ####################
 
 test_autofunctor_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
+    $(GTEST_CPPFLAGS)
+
+test_lclfunction_codegenspec_cpp03_CPPFLAGS = \
     $(AM_CPPFLAGS) \
     $(GTEST_CPPFLAGS)
 
@@ -157,6 +181,10 @@ AM_CXXFLAGS += \
 test_autofunctor_CXXFLAGS = \
     -pedantic
 
+test_lclfunction_codegenspec_cpp03_CXXFLAGS = \
+    $(AM_CXXFLAGS) \
+    -std=gnu++98
+
 ##############
 #Linker Flags.
 ##############
@@ -165,4 +193,4 @@ GTEST_LTLIB = \
     $(top_builddir)/WG/ExternalLibsNoInstall/build_autotools/libgtest.la
 
 test_autofunctor_LDADD = $(GTEST_LTLIB)
-    
+test_lclfunction_codegenspec_cpp03_LDADD = $(GTEST_LTLIB)

@@ -25,28 +25,20 @@
 //--------------------
 
 #define WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP11_PARAMLIST(argcount) \
-  BOOST_PP_IF( \
+  BOOST_PP_ENUM( \
     argcount, \
-    BOOST_PP_ENUM, \
-    WG_PP_MAPTO_NOTHING_ARG1) \
-      ( \
-        BOOST_PP_REPEAT( \
-          argcount, \
-          WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP11_PARAMLIST_ENTRY, \
-          ~) \
-      )
+    WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP11_PARAMLIST_ENTRY, \
+    ~)
 
-// BOOST_PP_REPEAT functor.
+// BOOST_PP_ENUM functor.
 #define WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP11_PARAMLIST_ENTRY(z, indx, data) \
-  ( \
     typename boost::add_reference \
     < \
       typename boost::add_const \
       < \
         typename boost::mpl::at<parameter_types, boost::mpl::int_<indx> >::type \
       >::type \
-    >::type BOOST_PP_CAT(arg, indx) \
-  )
+    >::type BOOST_PP_CAT(arg, indx)
 
 //--------------
 //Operator Body.
