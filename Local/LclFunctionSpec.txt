@@ -11,6 +11,10 @@ return:
   1) If present then indicates the return type of the function,
   2) else if not present then the return type of the function is void.
 
+param-seq:
+  1) Limit: min(WG_PP_LCLFUNCTION_MAX_ARGS, BOOST_PP_LIMIT_REPEAT)
+    Currently, WG_PP_LCLFUNCTION_MAX_ARGS is set to 15
+
 //---
 //BNF
 //---
