@@ -56,7 +56,7 @@
       WG_PP_VARDCLN_IMPLICIT_TUPLIZE_2ARG) \
     BOOST_PP_IIF( \
       WG_PP_VARDCLN_ISEXPLICIT(typevardcln), \
-      (typevardcln), \
+      (typevardcln, istpl), \
       (typevardcln, valueexpr, istpl) ))
 
 #define WG_PP_SETVARDCLN_NORMALIZE_EXPAND2(x) x
@@ -69,7 +69,7 @@
         WG_PP_VARDCLN_IMPLICIT_TUPLIZE_2ARG) \
       BOOST_PP_IIF( \
         WG_PP_VARDCLN_ISEXPLICIT_NLT(typevardcln), \
-        (typevardcln), \
+        (typevardcln, istpl), \
         (typevardcln, valueexpr, istpl) )  )
 
 /*

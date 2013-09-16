@@ -42,30 +42,18 @@
 //Impl Macros
 //###########
 
-#define WG_PP_BOUNDVARDCLN_NORMALIZE_EXPAND1(x) x
-
 #define WG_PP_BOUNDVARDCLN_NORMALIZE_IMPL(boundvardcln, istpl) \
-  WG_PP_BOUNDVARDCLN_NORMALIZE_EXPAND1( \
-    BOOST_PP_IIF( \
-      WG_PP_VARDCLN_ISEXPLICIT(boundvardcln), \
-      WG_PP_VARDCLN_EXPLICIT_TUPLIZE, \
-      WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG) \
-    BOOST_PP_IIF( \
-      WG_PP_VARDCLN_ISEXPLICIT(boundvardcln), \
-      (boundvardcln), \
-      (boundvardcln, istpl) ) )
-
-#define WG_PP_BOUNDVARDCLN_NORMALIZE_EXPAND2(x) x
+  BOOST_PP_IIF( \
+    WG_PP_VARDCLN_ISEXPLICIT(boundvardcln), \
+    WG_PP_VARDCLN_EXPLICIT_TUPLIZE, \
+    WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG) \
+  (boundvardcln, istpl)
 
 #define WG_PP_BOUNDVARDCLN_NLT_NORMALIZE_IMPL(boundvardcln, istpl) \
-  WG_PP_BOUNDVARDCLN_NORMALIZE_EXPAND2( \
-    BOOST_PP_IIF( \
-      WG_PP_VARDCLN_ISEXPLICIT_NLT(boundvardcln), \
-      WG_PP_VARDCLN_EXPLICIT_NLT_TUPLIZE, \
-      WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG) \
-    BOOST_PP_IIF( \
-      WG_PP_VARDCLN_ISEXPLICIT_NLT(boundvardcln), \
-      (boundvardcln), \
-      (boundvardcln, istpl) ) )
+  BOOST_PP_IIF( \
+    WG_PP_VARDCLN_ISEXPLICIT_NLT(boundvardcln), \
+    WG_PP_VARDCLN_EXPLICIT_NLT_TUPLIZE, \
+    WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG) \
+  (boundvardcln, istpl)
 
 #endif //WG_PP_BOUNDVARDCLNNORMALIZE_HH_

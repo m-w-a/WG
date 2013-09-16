@@ -9,9 +9,19 @@
 //Public APIs
 //###########
 
+// vardcln:
+//   type-var-dcln
+//
+// (For definition of terms see SymbolTable documentation.)
 #define WG_PP_VARDCLN_ISEXPLICIT(vardcln) \
   WG_PP_VARDCLN_ISEXPLICIT_IMPL1(vardcln)
 
+// NLT:
+//   Stands for non-local type.
+// vardcln:
+//   type-var-dcln
+//
+// (For definition of terms see SymbolTable documentation.)
 #define WG_PP_VARDCLN_ISEXPLICIT_NLT(vardcln) \
   WG_PP_VARDCLN_ISEXPLICIT_NLT_IMPL(vardcln)
 
@@ -27,7 +37,9 @@
 
 #define WG_PP_VARDCLN_ISEXPLICIT_IMPL2(vardcln) \
   BOOST_PP_IIF( \
-    WG_PP_KEYWORDS_STARTSWITH_LOCAL(vardcln), \
+    BOOST_PP_OR( \
+      WG_PP_KEYWORDS_STARTSWITH_LOCAL(vardcln), \
+      WG_PP_KEYWORDS_STARTSWITH_PPESCAPE(vardcln) ), \
     1, \
     0)
 

@@ -14,6 +14,8 @@
 //Public APIs
 //###########
 
+// implicitvardcln:
+//   implicit-type-var-dcln
 // Expands to the following:
 //   (parsed-deduced-type) (var-name)
 //
@@ -21,6 +23,10 @@
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG(implicitvardcln, istpl) \
   WG_PP_VARDCLN_IMPLICIT_TUPLIZE(implicitvardcln, 0, BOOST_PP_NIL, istpl)
 
+// implicitvardcln:
+//   implicit-type-var-dcln
+// valueexpr:
+//   value-expr
 // Expands to the following:
 //   (parsed-deduced-type) (var-name)
 //

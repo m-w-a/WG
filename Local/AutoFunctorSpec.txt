@@ -17,6 +17,16 @@ return:
   3) else if not present and assignto is not present then the return type of the
     functor is void.
 
+ppescape(()):
+  NOTE: the use of double parenthesis is required!
+  Rationale:
+  The preprocessor uses the comma token to delimit macro parameters. If a type
+  that had an embedded comma, such as std::pair<int, long>, appeared in a macro
+  parameter list it would be interpreted as two parameters to that macro, 
+  namely "std::pair<ing" and "long>". Thus it's impossible to directly use 
+  such types as macro parameters if we wish to strictly stay C++03 conformant, 
+  since variadic macros are not part of the that standard.
+
 local():
   Rationale:
   bound vars need to be forwarded to their destination via a temporary cntnr,
@@ -69,7 +79,7 @@ set-variables:
 
 special symbols:
   [...] specifies an optional BNF expression.
-terminals : assignto return parambind paramset membind memset const ref
+terminals : assignto return parambind paramset membind memset const ref ppescape
 
 autofunctor-usage := 
   autofunctor-start-macro ( autofunctor-spec ) 
@@ -136,6 +146,7 @@ lib-type-qualifiers := const | ref | const ref
 explicit-type := 
     local-type
   | ( non-local-type )
+  | ppescape(( non-local-type ))
 
 local-type :=
     local(local-nonconst-nonref-type)
