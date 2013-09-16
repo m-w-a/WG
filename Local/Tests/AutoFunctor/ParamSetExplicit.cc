@@ -3,6 +3,8 @@
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/TestHelper.hh>
 #include <boost/typeof/typeof.hpp>
+#include <utility>
+#include <boost/utility/identity_type.hpp>
 
 TEST(wg_autofunctor_paramsetexplicit, EnsureTypeOfNotUsed)
 {
@@ -38,6 +40,28 @@ TEST(wg_autofunctor_paramsetexplicit, OkIf1ArgSet)
     WG_AUTOFUNCTOR_END;
 
     EXPECT_TRUE(proxy.didAssign);
+  }
+  WG_GTEST_CATCH
+}
+
+TEST(wg_autofunctor_paramsetexplicit, OkIfPPEscaped1ArgSet)
+{
+  try
+  {
+    std::pair<bool, int> didAssign = std::make_pair(false, 0);
+
+    WG_AUTOFUNCTOR
+    (oneArgAutoFunctor,
+      paramset (ppescape((std::pair<bool, int> &)) assigner, didAssign) )
+    {
+      WG_PP_TESTHELPER_IS_SAME_TYPE(
+        BOOST_IDENTITY_TYPE((std::pair<bool, int> &)),
+        BOOST_TYPEOF(assigner) &);
+      assigner.first = true;
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_TRUE(didAssign.first);
   }
   WG_GTEST_CATCH
 }

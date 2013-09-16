@@ -5,7 +5,6 @@
 #include <boost/utility/identity_type.hpp>
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Translator/Keywords.hh>
-#include <WG/Local/Detail/PP/Translator/FrontEnd/SplitHeadFromTokens.hh>
 #include <WG/Local/Detail/PP/Translator/Utils.hh>
 
 //###########
@@ -36,7 +35,6 @@
 
 #define WG_PP_VARDCLN_EXPLICIT_EXPAND1(x) x
 #define WG_PP_VARDCLN_EXPLICIT_EXPAND2(x) x
-#define WG_PP_VARDCLN_EXPLICIT_EXPAND3(x) x
 
 #define WG_PP_VARDCLN_EXPLICIT_ISNONLOCALTYPE(explicitvardcln) \
   BOOST_PP_IIF( \

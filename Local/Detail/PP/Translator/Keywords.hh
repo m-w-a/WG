@@ -154,6 +154,7 @@
 
 #define WG_PP_KEYWORDS_EAT_void
 #define WG_PP_KEYWORDS_EAT_thisu
+#define WG_PP_KEYWORDS_EAT_ppescape
 #define WG_PP_KEYWORDS_EAT_local
 #define WG_PP_KEYWORDS_EAT_assignto
 #define WG_PP_KEYWORDS_EAT_return

@@ -9,6 +9,10 @@ assignto:
   1) if obj type is qualified const then a compiler error will result.
     Rationale:
     It's impossible to assign to an object of a const qualified type.
+  2) obj type ref qualification is redundant.
+    Rationale:
+    The assignee should always be captured by reference, else no assignment 
+    would take place.
 
 return:
   1) If present then indicates the return type of the functor,
@@ -103,8 +107,9 @@ autofunctor-spec :=
 assignto-tuple := bound-tuple
 
 return-tuple := 
-    (non-local-type)
-  | (local-type)
+    ( non-local-type-with-no-embedded-commas )
+  | ( ppescape(( non-local-type-unrestricted-syntax )) )
+  | ( local-type )
 
 parambind-seq := bound-tuple-seq
 paramset-seq := set-tuple-seq
@@ -143,10 +148,13 @@ implicit-type := lib-type-qualifiers | empty-string
 
 lib-type-qualifiers := const | ref | const ref
 
-explicit-type := 
-    local-type
-  | ( non-local-type )
-  | ppescape(( non-local-type ))
+explicit-type :=
+    non-local-type 
+  | local-type
+
+non-local-type := 
+    ( non-local-type-with-no-embedded-commas )
+  | ppescape(( non-local-type-unrestricted-syntax ))
 
 local-type :=
     local(local-nonconst-nonref-type)
@@ -159,5 +167,8 @@ type := A C++ type.
 var-name := A C++ variable name.
 local-nonconst-nonref-type := 
   A C++ type declaration specifying a non-const, non-reference local type.
-non-local-type := A C++ type declaration specifying a non-local type.
+non-local-type-with-no-embedded-commas := 
+  A C++ type declaration specifying a non-local type that contains no commas.
+non-local-type-unrestricted-syntax := 
+  A C++ type declaration specifying a non-local type.
 value-expr := A C++ expression evaluating to some value.

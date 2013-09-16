@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
+#include <utility>
 
 TEST(wg_autofunctor_memsetexplicit, EnsureTypeOfNotUsed)
 {
@@ -33,6 +34,25 @@ TEST(wg_autofunctor_memsetexplicit, OkIf1ArgSet)
     WG_AUTOFUNCTOR_END;
 
     EXPECT_TRUE(proxy.didAssign);
+  }
+  WG_GTEST_CATCH
+}
+
+TEST(wg_autofunctor_memsetexplicit, OkIfPPEscaped1ArgSet)
+{
+  try
+  {
+    std::pair<bool, int> didAssign = std::make_pair(true, 0);
+
+    WG_AUTOFUNCTOR
+    (oneArgAutoFunctor,
+      memset (ppescape((std::pair<bool, int> &)) assigner, didAssign) )
+    {
+      this->assigner.first = true;
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_TRUE(didAssign.first);
   }
   WG_GTEST_CATCH
 }

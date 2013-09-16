@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
+#include <utility>
 
 namespace
 {
@@ -55,6 +56,35 @@ TEST(wg_autofunctor_membindexplicittpl, OkIf1ArgBound)
   try
   {
     OkIf1ArgBound<bool>::run();
+  }
+  WG_GTEST_CATCH
+}
+
+namespace
+{
+template <typename T1, typename T2>
+struct OkIfPPEscaped1ArgBound
+{
+  static void run()
+  {
+    std::pair<T1, T2> didArgumentBind = std::make_pair(false, 0);
+    WG_AUTOFUNCTOR_TPL
+    (oneArgAutoFunctor,
+      membind (ppescape((std::pair<T1, T2> &)) didArgumentBind) )
+    {
+      this->didArgumentBind = std::make_pair(true, 1);
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_TRUE(didArgumentBind.first);
+  }
+};
+}
+TEST(wg_autofunctor_membindexplicittpl, OkIfPPEscaped1ArgBound)
+{
+  try
+  {
+    OkIfPPEscaped1ArgBound<bool, int>::run();
   }
   WG_GTEST_CATCH
 }

@@ -39,7 +39,9 @@ lclfunction-spec :=
     [varbind varbind-seq]
     [varset varset-seq]
 
-nlt-return-tuple := (non-local-type)
+nlt-return-tuple :=
+    ( non-local-type-with-no-embedded-commas )
+  | ( ppescape(( non-local-type-unrestricted-syntax )) )
 
 param-seq :=
     param-tuple
@@ -76,4 +78,4 @@ nlt-type-var-dcln :=
 nlt-explicit-type-var-dcln :=
   nlt-explicit-type var-name
 
-nlt-explicit-type := ( non-local-type )
+nlt-explicit-type := non-local-type

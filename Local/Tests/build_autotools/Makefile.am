@@ -166,6 +166,8 @@ test_autofunctor_SOURCES = \
     ../AutoFunctor/NestedTpl.cc \
     ../AutoFunctor/Recursive.cc \
     ../AutoFunctor/RecursiveTpl.cc \
+    ../AutoFunctor/Return.cc \
+    ../AutoFunctor/ReturnTpl.cc \
     ../AutoFunctor/SelfType.cc \
     ../AutoFunctor/SelfTypeTpl.cc
 

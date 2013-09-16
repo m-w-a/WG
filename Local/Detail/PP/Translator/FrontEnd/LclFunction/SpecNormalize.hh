@@ -7,6 +7,7 @@
 #include <WG/Local/Detail/PP/Translator/FrontEnd/SplitHeadFromTokens.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/BoundVarDclnNormalize.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/SetVarDclnNormalize.hh>
+#include <WG/Local/Detail/PP/Translator/FrontEnd/ReturnTypeNormalize.hh>
 
 //###########
 //Public APIs
@@ -80,7 +81,8 @@
       WG_PP_SPLITHEADTUPLEFROMTOKENS( \
         1, \
         WG_PP_KEYWORDS_EAT_HEADKEYWORD(spec), \
-        WG_PP_IDENTITY_ARG1, \
+        WG_PP_AUTOFUNCTOR_SPEC_CHOOSE_TPL( \
+          WG_PP_RETURNTYPE_NORMALIZE, specoptions), \
         WG_PP_TUPLIZE_ARG1, \
         WG_PP_TUPLIZE_ARG1), \
       nexttransform, \

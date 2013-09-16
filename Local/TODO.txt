@@ -23,6 +23,7 @@ LclFunction:
 
 AutoFunction:
   1) Test (std::pair<foo, bar>)
+  2) Test ppescape.
 
 Why not BOOST_IDENTITY_TYPE_TPL?
-ppescape tests.
+ 
