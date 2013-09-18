@@ -7,7 +7,7 @@
 #include <WG/Local/Detail/PP/Translator/Keywords.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/TypeDeducer.hh>
 #include <WG/Local/Detail/PP/Translator/Utils.hh>
-#include <WG/Local/Detail/PP/Translator/Utils.hh>
+#include <WG/Local/Detail/PP/Translator/Markers.hh>
 
 //----------------------------------------------------------------------------//
 // This is a "friend" of SymbolTable.
@@ -100,21 +100,28 @@
 //------
 //INPUT:
 //------
-//The symbol table created using <symbol-moduleid>_SYMBOLTABLE_CREATE.
-//This symbol table must have the following defined:
-//  1) WG_PP_STUTIL_CALL_F1(ISTPL, symbtbl)
-//  2) WG_PP_STUTIL_ACCESS2(INDX_TYPESEQ, <suffix>, symbtbl)
-//  3) WG_PP_STUTIL_ACCESS2(TYPESEQ, <suffix>, symbtbl)
-//where suffix is declared in specseq as defined in the TypeDeducer.hh
+// The symbol table created using <symbol-moduleid>_SYMBOLTABLE_CREATE.
+// This symbol table must have the following defined:
+//   1) WG_PP_STUTIL_CALL_F1(ISTPL, symbtbl)
+//   2) WG_PP_STUTIL_ACCESS2(INDX_TYPESEQ, <suffix>, symbtbl)
+//   3) WG_PP_STUTIL_ACCESS2(TYPESEQ, <suffix>, symbtbl)
+// where suffix is declared in specseq as defined in the TypeDeducer.hh
 //
 //-------
 //OUTPUT:
 //-------
-//A symbol table where all occurrences of parsed-deduced-type are mapped to
-//their typededucer counterparts.
-//Note: the new definition of parsed-deduced-type:
+// A symbol table where all occurrences of parsed-deduced-type are mapped to
+// their typededucer counterparts, and where WG_PP_NOOP markers in type sequences
+// are mapped to the nothing.
+// Note: the new definition of parsed-deduced-type:
 //
-//parsed-deduced-type := <typededucer_name>::<some_typedef_name>
+// parsed-deduced-type := <typededucer_name>::<some_typedef_name>
+//
+// Impl Note:
+//   Do not use typededucer for wholesale aliasing of captured variables' types,
+//   since some of those captured types maybe local, and that information needs
+//   to be preserved for later codegen passes, where we have to choose between
+//   PPMP and TMP techniques to const/ref qualify these captured types.
 #define WG_PP_STUTIL_REPLACETYPEMARKERS(symbtbl, typededucer_name, specseq) \
   WG_PP_STUTIL_REPLACETYPEMARKERS_IMPL(symbtbl, typededucer_name, specseq)
 
@@ -257,13 +264,13 @@
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_STUTIL_REPLACETYPEMARKERS_REPLACEBOUNDTUPLEENTRY( \
   r, spec_typededucername_istpl, indx, entry) \
-    BOOST_PP_LPAREN() \
+    ( \
       BOOST_PP_IIF( \
-        WG_PP_TRNSLTR_UTILS_STARTSWITH_WG_PP_DEDUCEDTYPE(entry), \
+        WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_DEDUCEDTYPE(entry), \
         WG_PP_STUTIL_REPLACETYPEMARKERS_REPLACEBOOSTYPEOF( \
           spec_typededucername_istpl, indx), \
-        entry) \
-    BOOST_PP_RPAREN()
+        WG_PP_TRNSLTR_MARKERS_EATHEADMARKER(entry) ) \
+    )
 
 #define WG_PP_STUTIL_REPLACETYPEMARKERS_REPLACEBOOSTYPEOF( \
   spec_typededucername_istpl, indx) \

@@ -5,6 +5,7 @@
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/Utils.hh>
+#include <WG/Local/Detail/PP/Translator/Markers.hh>
 
 //###########
 //Public APIs
@@ -52,8 +53,8 @@
 
 #define WG_PP_ERRORREPORTER_REPORT_ERRORSEQ_IMPL(psble_error) \
   BOOST_PP_EXPR_IIF( \
-    WG_PP_TRNSLTR_UTILS_STARTSWITH_WG_PP_ERROR(psble_error), \
-    WG_PP_TRNSLTR_UTILS_EATHEADTOKEN_WG_PP_ERROR(psble_error))
+    WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_ERROR(psble_error), \
+    WG_PP_TRNSLTR_MARKERS_EATHEADMARKER(psble_error))
 
 //-------------------------------------------------
 //WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ_IMPL

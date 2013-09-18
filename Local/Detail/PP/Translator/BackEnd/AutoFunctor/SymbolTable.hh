@@ -151,12 +151,13 @@
 //normalized-bound-tuple := (parsed-explicit-or-deduced-type)(var-name)
 //normalized-set-tuple :=
 //  (parsed-explicit-type-or-deduced-type)(var-name)(value-expr)
-//parsed-explicit-or-deduced-type := parsed-explicit-type | parsed-deduced-type
+//parsed-explicit-or-deduced-type :=
+//    WG_PP_NOOP parsed-explicit-type
+//  | WG_PP_DEDUCEDTYPE parsed-deduced-type
 //parsed-explicit-type := parsed-local-type | non-local-type
 //parsed-local-type := local(some-token) lib-type-qualifier-seq
 //lib-type-qualifier-seq := (const) | (ref) | (const)(ref)
 //parsed-deduced-type :=
-//  WG_PP_DEDUCEDTYPE
 //  { BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> > }
 //BT := BOOST_TYPEOF(some-token)
 //

@@ -4,7 +4,7 @@
 #include <boost/preprocessor.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <WG/Local/Detail/PP/Translator/Utils.hh>
+#include <WG/Local/Detail/PP/Translator/Markers.hh>
 
 //Unit Tests.
 #define VDI1 var1
@@ -50,7 +50,7 @@ RESCAN_WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG(VDI6)
   BOOST_PP_SEQ_ELEM(1, implicittype_var_2tuple)
 
 #define TEST_DIDBIND_TYPE(expected, actual) \
-  TEST_DIDBIND_TYPE2(expected, WG_PP_TRNSLTR_UTILS_EATHEADTOKEN_WG_PP_DEDUCEDTYPE(actual))
+  TEST_DIDBIND_TYPE2(expected, WG_PP_TRNSLTR_MARKERS_EATHEADMARKER(actual))
 #define TEST_DIDBIND_TYPE2(expected, actual) \
   BEGIN \
     boost::is_same<expected, actual>::value == true \

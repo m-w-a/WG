@@ -5,6 +5,7 @@
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
 #include <WG/Local/Detail/PP/Translator/Utils.hh>
+#include <WG/Local/Detail/PP/Translator/Markers.hh>
 
 //###########
 //Public APIs
@@ -79,12 +80,12 @@
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN(r, spec, indx, e_or_d_type) \
   BOOST_PP_EXPR_IIF( \
-    WG_PP_TRNSLTR_UTILS_STARTSWITH_WG_PP_DEDUCEDTYPE(e_or_d_type), \
+    WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_DEDUCEDTYPE(e_or_d_type), \
     WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN_IMPL(spec, indx, e_or_d_type) )
 
 #define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN_IMPL( \
   spec, indx, deduced_type) \
-    typedef WG_PP_TRNSLTR_UTILS_EATHEADTOKEN_WG_PP_DEDUCEDTYPE(deduced_type) \
+    typedef WG_PP_TRNSLTR_MARKERS_EATHEADMARKER(deduced_type) \
     WG_PP_TYPEDEDUCER_TYPENAME(spec, indx) ;
 
 #endif /* WG_PP_TYPEDEDUCER_HH_ */

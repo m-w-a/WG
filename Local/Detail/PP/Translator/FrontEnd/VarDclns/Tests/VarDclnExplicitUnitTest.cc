@@ -7,6 +7,7 @@
 #include <boost/typeof/typeof.hpp>
 #include <boost/utility/identity_type.hpp>
 #include <utility>
+#include <WG/Local/Detail/PP/Translator/Markers.hh>
 
 //Unit Tests.
 #define SG1 (SomeGlobalType const *) sgvar1
@@ -43,7 +44,8 @@ WG_PP_VARDCLN_EXPLICIT_TUPLIZE(SPE3, 1)
 //-----
 
 #define EXTRACT_PARSEDTYPE(explicittype_var_2tuple) \
-  BOOST_PP_SEQ_ELEM(0, explicittype_var_2tuple)
+  WG_PP_TRNSLTR_MARKERS_EATHEADMARKER( \
+    BOOST_PP_SEQ_ELEM(0, explicittype_var_2tuple) )
 
 #define EXTRACT_VAR(explicittype_var_2tuple) \
   BOOST_PP_SEQ_ELEM(1, explicittype_var_2tuple)
