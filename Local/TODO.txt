@@ -8,6 +8,10 @@ x) Better Syntax Error Checking/Reporting:
   missing type in implicit-type-var-dcln ?
   missing var in "..." ?
 
+x) Embedded comma syntax.
+  x) Test (std::pair<foo, bar>)
+  x) Test ppescape.
+
 Misc.
 -----
 
@@ -19,11 +23,9 @@ ExpandN:
 
 LclFunction:
   1) compile fail tests for wrong number of operands to function, ie lin().
-  2) add C++11Spec.cc to Makefile.am
-
-AutoFunction:
-  1) Test (std::pair<foo, bar>)
-  2) Test ppescape.
+  x) add C++11Spec.cc to Makefile.am
+  3) Spec -> params do ppescape processing
+  4) take care of WG_PP_DEDUCEDTYPE
 
 Why not BOOST_IDENTITY_TYPE_TPL?
  

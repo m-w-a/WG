@@ -45,16 +45,14 @@
   WG_PP_SEQ_FOR_EACH_I_IMPL(macro, data, seq)
 
 //Maps to BOOST_PP_NIL iff all params are nil sequences.
-#define WG_PP_SEQ_JOIN(x, y) \
-  WG_PP_SEQ_JOIN_IMPL(x, y)
-#define WG_PP_SEQ_JOIN2(a, b) \
-  WG_PP_SEQ_JOIN(a,b)
-#define WG_PP_SEQ_JOIN3(a, b, c) \
-  WG_PP_SEQ_JOIN2(a, WG_PP_SEQ_JOIN2(b,c))
-#define WG_PP_SEQ_JOIN4(a, b, c, d) \
-  WG_PP_SEQ_JOIN3(a, b, WG_PP_SEQ_JOIN2(c,d))
-#define WG_PP_SEQ_JOIN5(a, b, c, d, e) \
-  WG_PP_SEQ_JOIN4(a, b, c, WG_PP_SEQ_JOIN2(d,e))
+#define WG_PP_SEQ_JOIN_ARG2(a, b) \
+  WG_PP_SEQ_JOIN_IMPL(a,b)
+#define WG_PP_SEQ_JOIN_ARG3(a, b, c) \
+  WG_PP_SEQ_JOIN_ARG2(a, WG_PP_SEQ_JOIN_ARG2(b,c))
+#define WG_PP_SEQ_JOIN_ARG4(a, b, c, d) \
+  WG_PP_SEQ_JOIN_ARG3(a, b, WG_PP_SEQ_JOIN_ARG2(c,d))
+#define WG_PP_SEQ_JOIN_ARG5(a, b, c, d, e) \
+  WG_PP_SEQ_JOIN_ARG4(a, b, c, WG_PP_SEQ_JOIN_ARG2(d,e))
 
 // Maps to BOOST_PP_NIL if seq is nil.
 // Maps to seq if indx is BOOST_PP_NIL.

@@ -20,6 +20,8 @@
 //Impl Macros
 //###########
 
+#define WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP03_USERARGROOTNAME() arg
+
 //--------------------
 //Operator Param List.
 //--------------------
@@ -38,7 +40,9 @@
     < \
       typename boost::mpl::at<parameter_types, boost::mpl::int_<indx> >::type \
     >::type \
-  >::type BOOST_PP_CAT(arg, indx)
+  >::type \
+    BOOST_PP_CAT( \
+      WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP03_USERARGROOTNAME(), indx)
 
 //--------------
 //Operator Body.
@@ -46,10 +50,12 @@
 
 #define WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP03_BODY(argcount) \
   BOOST_STATIC_ASSERT((base_functor_type::arity == argcount)); \
-  return m_CallBack( \
+  return this->m_CallBack( \
     *this \
-    BOOST_PP_ENUM_TRAILING_PARAMS(argcount, arg) \
-    , m_CapturedVars);
+    BOOST_PP_ENUM_TRAILING_PARAMS( \
+      argcount, \
+      WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP03_USERARGROOTNAME()) \
+    , this->m_CapturedVars);
 
 //--------
 //Operator

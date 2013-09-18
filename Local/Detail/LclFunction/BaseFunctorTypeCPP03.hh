@@ -22,22 +22,25 @@ namespace lclfunction
 namespace detail
 {
 
-// LCLFUNCTION: The specified local function type.
-// CAPTUREDVARS: A tuple of captured local variables, if any.
+// LCLFUNCTIONTYPE: The specified local function type.
+// CAPTUREDVARTYPES: A tuple of captured local variables, if any.
 template<
-  typename LCLFUNCTION,
-  typename CAPTUREDVARS>
+  typename LCLFUNCTIONTYPE,
+  typename CAPTUREDVARTYPES>
 class base_functor_type
 {
 public:
-  typedef LCLFUNCTION local_function_type;
-  typedef CAPTUREDVARS captured_types;
+  typedef LCLFUNCTIONTYPE local_function_type;
+  typedef CAPTUREDVARTYPES captured_var_types;
 
 private:
   // Synthesize the call back type. It's prototype should be:
   //
-  //   typedef typename result_type<LCLFUNCTION>::type (*callback_type)(
-  //     base_functor_type const &, param_types<LCLFUNCTION>, CAPTUREDVARS &);
+  //   typedef typename result_type<local_function_type>::type
+  //     (*callback_type)(
+  //       base_functor_type const &,
+  //       param_types<local_function_type>,
+  //       CAPTUREDVARTYPES &);
   typedef
     typename boost::mpl::push_back
     <
@@ -51,7 +54,9 @@ private:
         >::type,
         typename boost::function_types::result_type<local_function_type>::type
       >::type,
-      typename boost::add_reference<captured_types>::type
+      // TODO.
+      //typename boost::add_reference<captured_var_types>::type
+      captured_var_types const &
     >::type mpl_callback_type;
 
 public:
@@ -60,14 +65,14 @@ public:
       callback_type;
 
 public:
-  explicit base_functor_type(captured_types const & vars)
+  explicit base_functor_type(captured_var_types const & vars)
   : m_CallBack(0),
     m_CapturedVars(vars)
   {}
 
   void set_caller(callback_type const callback)
   {
-    m_CallBack = callback;
+    this->m_CallBack = callback;
   }
 
   typedef
@@ -118,9 +123,11 @@ public:
 
 private:
   callback_type m_CallBack;
-  // Captured vars are mutable because their mutability is determined at the
-  // point of their capture, and not by class methods.
-  mutable captured_types m_CapturedVars;
+  // Note: the const-ness of m_CapturedVars will not propogate to it's member
+  //   types if said types are references, since add_const<T &>::type is T.
+  //   Hence no compile time errors will ensue when unpacking data to each
+  //   individual captured var.
+  captured_var_types const m_CapturedVars;
 };
 
 }

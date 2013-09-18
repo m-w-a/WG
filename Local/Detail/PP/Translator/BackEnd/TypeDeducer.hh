@@ -11,8 +11,7 @@
 //###########
 
 //----------------------------------------------------------------------------//
-//#include <.../SymbolTable.hh>
-// Whereever this file is included, then the appropiate SymbolTable.hh must
+// Whereever this file is included the appropiate SymbolTable.hh must
 // also be included
 //----------------------------------------------------------------------------//
 
@@ -80,7 +79,7 @@
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN(r, spec, indx, e_or_d_type) \
   BOOST_PP_EXPR_IIF( \
-    WG_PP_TRNSLTR_UTILS_START_WITH_WG_PP_DEDUCEDTYPE(e_or_d_type), \
+    WG_PP_TRNSLTR_UTILS_STARTSWITH_WG_PP_DEDUCEDTYPE(e_or_d_type), \
     WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN_IMPL(spec, indx, e_or_d_type) )
 
 #define WG_PP_TYPEDEDUCER_DEDUCEDTYPEDCLN_IMPL( \

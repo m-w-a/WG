@@ -32,6 +32,10 @@ lclfunction-usage :=
   function-body
   WG_LCLFUNCTION_END [;]
 
+lclfunction-start-macro := 
+    WG_LCLFUNCTION
+  | WG_LCLFUNCTION_TPL
+
 lclfunction-spec :=
     void
   | [return nlt-return-tuple]

@@ -95,7 +95,8 @@
 //normalized-set-nlt-tuple :=
 //  (parsed-explicit-non-local-type-or-deduced-type)(var-name)(value-expr)
 //parsed-explicit-non-local-type-or-deduced-type: =
-//  (non-local-type)(parsed-deduced-type)
+//    (non-local-type)
+//  | (parsed-deduced-type)
 //parsed-deduced-type :=
 //  WG_PP_DEDUCEDTYPE
 //  { BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> > }

@@ -21,6 +21,41 @@ return:
   3) else if not present and assignto is not present then the return type of the
     functor is void.
 
+parambind:
+  1) parameters that are auto-passed to the functor when and only when
+     it's auto-called.
+  2) For more info see bound-variables section.
+
+paramset:
+  1) parameters that are auto-passed to the functor when and only when
+     it's auto-called.
+  2) For more info see set-variables section.
+
+membind:
+memset:
+  1) Member variables of the functor.
+  2) For more info see bound-variables and set-variables sections.
+
+bound-variables:
+  1) Variables whose values are bound to variables of the same name from 
+    the enclosing scope(s).
+  2) If implicitly typed, the types of such variables are determined by the
+    type of the variables they are bound to via BOOST_TYPEOF. Hence, this will
+    always be remove_reference<remove_const<type-of-boundee>::type>::type.
+    (*) Therefore, if you want something bound by reference always use the ref
+    keyword and if you want something bound by const always use the const 
+    keyword.
+  3) If explicitly typed, the types of such variables must be "implicitly
+    convertible to" from the type of the variable that they respectively bind in
+    their outer scope.
+
+set-variables:
+  1) Variables whose values are determined by user specified expressions.
+  2) If implicitly typed, the types of such variables are determined by the
+    type of the expression they are set to via BOOST_TYPEOF. Such an expression 
+    may contain identifiers from the enclosing scope(s). If such an 
+    expression is a variable, then the caveats of b-v 2) apply.
+
 ppescape(()):
   NOTE: the use of double parenthesis is required!
   Rationale:
@@ -58,24 +93,6 @@ this_:
       Therefore the const keyword would be redundant if applied to the "outer 
       type". The above semantics are provided as an alternative shortcut 
       to explicitly typing "this_" and const qualifying the pointed-to-type.
-
-bound-variables:
-  1) variables designated as such are bound to variables of the same name from 
-    the enclosing scope.
-  2) If implicitly typed, the types of such variables are determined by the
-    type of the variables they are bound to via BOOST_TYPEOF. Hence, this will
-    always be remove_reference<remove_const<type-of-boundee>::type>::type.
-    (*) Therefore, if you want something bound by reference always use the ref
-    keyword and if you want something bound by const always use the const 
-    keyword.
-  3) If explicitly typed, the types of such variables must be "implicitly
-    convertible to" from the type of the variable that they respectively bind in
-    their outer scope.
-
-set-variables:
-  1) If implicitly typed, the types of such variables are determined by the
-    type of the expression they are set to via BOOST_TYPEOF. If such an 
-    expression is a variable, then the caveats of b-v 2) apply.
 
 //---
 //BNF

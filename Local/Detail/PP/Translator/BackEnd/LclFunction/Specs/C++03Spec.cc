@@ -23,54 +23,63 @@ TEST(wg_lclfunction_codegenspec, cpp03)
 {
   int slope = 2;
 
+  //Declare functor.
+  //
+  //WG_LCLFUNCTION
+  //(lin,
+  //  return (int)
+  //  params (int const & x, int const & y)
+  //  varbind (const ref slope) )
+  //{
+  //  return x + slope * y;
+  //}
+  //WG_LCLFUNCTION_END;
 #define LOCAL_FUNCTION_NAME() lin
 #define RETURN_TYPE() int
 #define PARAMS_NTUPLE() (int const &, int const &)
-  //Declare functor.
-  //PP iterator over captured vars.
+#define CAPTURED_VAR_TYPE1 int const &
   //Expands to:
-  wg::lclfunction::detail::base_functor_type
+
+  /* PP iterator over captured var types for template params. */
+  typedef boost::tuple<CAPTURED_VAR_TYPE1> captured_vars_typeXXX32;
+  typedef RETURN_TYPE()(local_function_typeXXX32)PARAMS_NTUPLE() ;
+
+  typedef wg::lclfunction::detail::base_functor_type
   <
-    RETURN_TYPE()PARAMS_NTUPLE(),
-    boost::tuple<int const &>
-    /* Note: double parenthesis around ctor param to prevent most vexing parse
-       error. */
-    /*--PP iterator over captured vars for both template params and ctor 
-        params.*/
-  > LOCAL_FUNCTION_NAME()(( boost::tuple<int const &>(slope) ));
+    local_function_typeXXX32,
+    captured_vars_typeXXX32
+  > base_functor_typeXXX32;
+  /* Note: double parenthesis around ctor param to prevent most vexing parse
+     error. */
+  /* PP iterator over captured vars for ctor params. */
+  base_functor_typeXXX32 LOCAL_FUNCTION_NAME()(( captured_vars_typeXXX32(slope) ));
   {
-    typedef RETURN_TYPE()(local_function_type)PARAMS_NTUPLE() ;
-    /*--PP iterator over captured vars for template params.*/
-    typedef boost::tuple<int const &> captured_types;
-  
-    typedef wg::lclfunction::detail::base_functor_type
-    <
-      local_function_type, 
-      captured_types
-    > functor_type;
-  
-    /*--Don't FORGET the REFERENCE!!!!!*/
-    functor_type & functor = LOCAL_FUNCTION_NAME();
+    /* Don't FORGET the REFERENCE!!!!! */
+    base_functor_typeXXX32 & functor = LOCAL_FUNCTION_NAME();
     
     struct local_functor_type
     {
-      void set_caller(functor_type & functor)
+      typedef captured_vars_typeXXX32 captured_vars_type;
+      typedef base_functor_typeXXX32 base_functor_type;
+
+      void set_caller(base_functor_type & functor)
       {
         functor.set_caller(&local_functor_type::user_callback);
       }
     
     private:
-      /* This functions prototype should match functor_type::callback_type. */
+      /* This functions prototype should match base_functor_type::callback_type. */
       static int user_callback(
-        functor_type const & LOCAL_FUNCTION_NAME(), 
+        base_functor_type const & LOCAL_FUNCTION_NAME(),
         int const & x, 
         int const & y, 
-        captured_types & capturedvars)
+        captured_vars_type const & capturedvars)
       {
         /* To avoid unused var warnings. */
         (void)(LOCAL_FUNCTION_NAME());
         
-        int const & slope(capturedvars.get<0>());
+        boost::tuples::element<0, captured_vars_type>::type
+          slope(capturedvars.get<0>());
         
         /* User provided definition.*/
         {

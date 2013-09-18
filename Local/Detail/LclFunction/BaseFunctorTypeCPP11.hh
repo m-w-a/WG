@@ -26,23 +26,26 @@ namespace cpp11
 
 // FUNCTOR: The local functor type (C++11).
 // LCLFUNCTION: The specified local function type.
-// CAPTUREDVARS: A tuple of captured local variables, if any.
+// CAPTUREDVARTYPES: A tuple of captured local variables, if any.
 template<
   typename FUNCTOR,
   typename LCLFUNCTION,
-  typename CAPTUREDVARS>
+  typename CAPTUREDVARTYPES>
 class base_functor_type
 {
 public:
   typedef FUNCTOR functor_type;
   typedef LCLFUNCTION local_function_type;
-  typedef CAPTUREDVARS captured_types;
+  typedef CAPTUREDVARTYPES captured_var_types;
 
 private:
   // Synthesize the call back type. It's prototype should be:
   //
-  //   typedef typename result_type<LCLFUNCTION>::type (*callback_type)(
-  //     base_functor_type const &, param_types<LCLFUNCTION>, CAPTUREDVARS &);
+  //   typedef typename result_type<local_function_type>::type
+  //     (*callback_type)(
+  //       base_functor_type const &,
+  //       param_types<local_function_type>,
+  //       captured_var_types &);
   typedef
     typename boost::mpl::push_back
     <
@@ -56,7 +59,7 @@ private:
         >::type,
         typename boost::function_types::result_type<local_function_type>::type
       >::type,
-      typename boost::add_reference<captured_types>::type
+      typename boost::add_reference<captured_var_types>::type
     >::type mpl_callback_type;
 
 public:
@@ -65,7 +68,7 @@ public:
       callback_type;
 
 public:
-  explicit base_functor_type(captured_types const & vars)
+  explicit base_functor_type(captured_var_types const & vars)
   : m_CapturedVars(vars)
   {}
 
@@ -116,9 +119,10 @@ public:
   WG_PP_BASEFUNCTORTYPE_OPERATORS_CPP11()
 
 private:
+  // TODO:
   // Captured vars are mutable because their mutability is determined at the
   // point of their capture, and not by class methods.
-  mutable captured_types m_CapturedVars;
+  mutable captured_var_types m_CapturedVars;
 };
 
 }

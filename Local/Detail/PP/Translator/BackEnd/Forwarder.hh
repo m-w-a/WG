@@ -332,7 +332,7 @@
 #define WG_PP_FORWARDER_OBJ_INITLIST(symbtbl, specseq) \
   WG_PP_SEQ_ENUM( \
     WG_PP_FORWARDER_EXPAND1( \
-      BOOST_PP_CAT(WG_PP_SEQ_JOIN, WG_PP_SEQ_SIZE(specseq)) \
+      BOOST_PP_CAT(WG_PP_SEQ_JOIN_ARG, WG_PP_SEQ_SIZE(specseq)) \
       BOOST_PP_LPAREN() \
         BOOST_PP_SEQ_ENUM( \
           BOOST_PP_SEQ_FOR_EACH( \
