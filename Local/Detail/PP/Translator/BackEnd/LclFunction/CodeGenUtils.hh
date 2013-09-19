@@ -4,7 +4,8 @@
 #include <boost/preprocessor.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <WG/Local/DetailPP/Translator/BackEnd/LclFunction/SymbolTable.hh>
-#include <WG/Local/Detail/PP/Translator/Seq.hh>
+#include <WG/Local/Detail/PP/Seq.hh>
+#include <WG/Local/Detail/PP/Translator/Markers.hh>
 
 //###########
 //Public APIs

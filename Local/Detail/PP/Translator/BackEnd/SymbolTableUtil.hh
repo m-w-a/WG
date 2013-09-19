@@ -5,7 +5,7 @@
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/Keywords.hh>
-#include <WG/Local/Detail/PP/Translator/BackEnd/TypeDeducer.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/TypeAliaser.hh>
 #include <WG/Local/Detail/PP/Translator/Utils.hh>
 #include <WG/Local/Detail/PP/Translator/Markers.hh>
 
@@ -105,25 +105,22 @@
 //   1) WG_PP_STUTIL_CALL_F1(ISTPL, symbtbl)
 //   2) WG_PP_STUTIL_ACCESS2(INDX_TYPESEQ, <suffix>, symbtbl)
 //   3) WG_PP_STUTIL_ACCESS2(TYPESEQ, <suffix>, symbtbl)
-// where suffix is declared in specseq as defined in the TypeDeducer.hh
+// where suffix is declared in specseq as defined in the TypeAliaser.hh
+//
+// kind:
+//   As defined in WG_PP_TYPEALIASER_DCLN in TypeAliaser.hh
 //
 //-------
 //OUTPUT:
 //-------
-// A symbol table where all occurrences of parsed-deduced-type are mapped to
-// their typededucer counterparts, and where WG_PP_NOOP markers in type sequences
+// A symbol table where all occurrences of "kind" captured types are mapped to
+// their typealiaser counterparts, and all other markers in type sequences
 // are mapped to the nothing.
-// Note: the new definition of parsed-deduced-type:
 //
-// parsed-deduced-type := <typededucer_name>::<some_typedef_name>
-//
-// Impl Note:
-//   Do not use typededucer for wholesale aliasing of captured variables' types,
-//   since some of those captured types maybe local, and that information needs
-//   to be preserved for later codegen passes, where we have to choose between
-//   PPMP and TMP techniques to const/ref qualify these captured types.
-#define WG_PP_STUTIL_REPLACETYPEMARKERS(symbtbl, typededucer_name, specseq) \
-  WG_PP_STUTIL_REPLACETYPEMARKERS_IMPL(symbtbl, typededucer_name, specseq)
+// kind:
+//   a token from the following the set: {ALLTYPES, IMPLICITTYPES}
+#define WG_PP_STUTIL_USETYPEALIASER(symbtbl, typealiasername, kind, specseq) \
+  WG_PP_STUTIL_USETYPEALIASER_IMPL(symbtbl, typealiasername, kind, specseq)
 
 //###########
 //Impl Macros
@@ -196,45 +193,50 @@
 //UseTypeDeducer Macros
 //---------------------
 
-#define WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_STATE_INIT( \
-  symbtbl, typededucer_name, specseq) \
-    (specseq, typededucer_name, symbtbl)
-#define WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_STATE_ELEM(indx, state) \
-  BOOST_PP_TUPLE_ELEM(3, indx, state)
-#define WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_STATE_SPECSEQ(state) \
-  WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_STATE_ELEM(0, state)
-#define WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_STATE_TDNAME(state) \
-  WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_STATE_ELEM(1, state)
-#define WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_STATE_SYMBTBL(state) \
-  WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_STATE_ELEM(2, state)
+#define WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_INIT( \
+  symbtbl, typealiasername, kind, specseq) \
+    (specseq, typealiasername, symbtbl, kind)
+#define WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_ELEM(indx, state) \
+  BOOST_PP_TUPLE_ELEM(4, indx, state)
+#define WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_SPECSEQ(state) \
+  WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_ELEM(0, state)
+#define WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_TDNAME(state) \
+  WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_ELEM(1, state)
+#define WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_SYMBTBL(state) \
+  WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_ELEM(2, state)
+#define WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_KIND(state) \
+  WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_ELEM(3, state)
 
-#define WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_PRED(d, state) \
+#define WG_PP_STUTIL_USETYPEALIASER_WHILE_PRED(d, state) \
   BOOST_PP_GREATER( \
     BOOST_PP_SEQ_SIZE(\
-      WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_STATE_SPECSEQ(state)), \
+      WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_SPECSEQ(state)), \
     1)
 
-#define WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_OP(d, state) \
+#define WG_PP_STUTIL_USETYPEALIASER_WHILE_OP(d, state) \
   ( \
     BOOST_PP_SEQ_POP_FRONT( \
-      WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_STATE_SPECSEQ(state)), \
-    WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_STATE_TDNAME(state), \
-    WG_PP_STUTIL_REPLACETYPEMARKERS_REPLACEDEDUCEDTUPLESEQ( \
-      WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_STATE_SYMBTBL(state), \
-      WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_STATE_TDNAME(state), \
+      WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_SPECSEQ(state)), \
+    WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_TDNAME(state), \
+    WG_PP_STUTIL_USETYPEALIASER_REPLACEDEDUCEDTUPLESEQ( \
+      WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_SYMBTBL(state), \
+      WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_TDNAME(state), \
+      WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_KIND(state), \
       BOOST_PP_SEQ_HEAD( \
-        WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_STATE_SPECSEQ(state)) ) \
+        WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_SPECSEQ(state)) ), \
+      WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_KIND(state) \
   )
 
-#define WG_PP_STUTIL_REPLACETYPEMARKERS_IMPL( \
-  symbtbl, typededucer_name, specseq) \
-    WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_STATE_SYMBTBL( \
+#define WG_PP_STUTIL_USETYPEALIASER_IMPL( \
+  symbtbl, typealiasername, kind, specseq) \
+    WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_SYMBTBL( \
       BOOST_PP_WHILE( \
-        WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_PRED, \
-        WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_OP, \
-        WG_PP_STUTIL_REPLACETYPEMARKERS_WHILE_STATE_INIT( \
+        WG_PP_STUTIL_USETYPEALIASER_WHILE_PRED, \
+        WG_PP_STUTIL_USETYPEALIASER_WHILE_OP, \
+        WG_PP_STUTIL_USETYPEALIASER_WHILE_STATE_INIT( \
           symbtbl, \
-          typededucer_name, \
+          typealiasername, \
+          kind, \
           specseq (BOOST_PP_NIL) )))
 
 // WORKAROUND for BOOST_PP_ARRAY_REPLACE bug.
@@ -242,47 +244,58 @@
 #define BOOST_PP_TUPLE_REM_0() // nothing
 #endif
 
-#define WG_PP_STUTIL_REPLACETYPEMARKERS_REPLACEDEDUCEDTUPLESEQ( \
-  symbtbl, typededucer_name, spec) \
+#define WG_PP_STUTIL_USETYPEALIASER_REPLACEDEDUCEDTUPLESEQ( \
+  symbtbl, typealiasername, kind, spec) \
     BOOST_PP_ARRAY_REPLACE( \
       symbtbl, \
       WG_PP_STUTIL_ACCESS2( \
-        INDX_TYPESEQ, WG_PP_TYPEDEDUCER_SPEC_SUFFIX(spec), symbtbl), \
-      WG_PP_STUTIL_REPLACETYPEMARKERS_REPLACEMENTDEDUCEDTUPLESEQ( \
+        INDX_TYPESEQ, WG_PP_TYPEALIASER_SPEC_SUFFIX(spec), symbtbl), \
+      WG_PP_STUTIL_USETYPEALIASER_REPLACEMENTDEDUCEDTUPLESEQ( \
         symbtbl, \
-        typededucer_name, \
+        typealiasername, \
+        kind, \
         spec) )
 
-#define WG_PP_STUTIL_REPLACETYPEMARKERS_REPLACEMENTDEDUCEDTUPLESEQ( \
-  symbtbl, typededucer_name, spec) \
+#define WG_PP_STUTIL_USETYPEALIASER_REPLACEMENTDEDUCEDTUPLESEQ( \
+  symbtbl, typealiasername, kind, spec) \
     WG_PP_SEQ_FOR_EACH_I( \
-      WG_PP_STUTIL_REPLACETYPEMARKERS_REPLACEBOUNDTUPLEENTRY, \
-      (spec) (typededucer_name) (WG_PP_STUTIL_CALL_F1(ISTPL,symbtbl)), \
+      BOOST_PP_CAT( \
+        WG_PP_STUTIL_USETYPEALIASER_REPLACEBOUNDTUPLEENTRY_, \
+        kind), \
+      (spec) (typealiasername) (WG_PP_STUTIL_CALL_F1(ISTPL,symbtbl)), \
       WG_PP_STUTIL_CALL_F2( \
-        TYPESEQ, WG_PP_TYPEDEDUCER_SPEC_SUFFIX(spec), symbtbl) )
+        TYPESEQ, WG_PP_TYPEALIASER_SPEC_SUFFIX(spec), symbtbl) )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_STUTIL_REPLACETYPEMARKERS_REPLACEBOUNDTUPLEENTRY( \
-  r, spec_typededucername_istpl, indx, entry) \
+#define WG_PP_STUTIL_USETYPEALIASER_REPLACEBOUNDTUPLEENTRY_IMPLICITTYPES( \
+  r, spec_typealiasername_istpl, indx, entry) \
     ( \
       BOOST_PP_IIF( \
         WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_DEDUCEDTYPE(entry), \
-        WG_PP_STUTIL_REPLACETYPEMARKERS_REPLACEBOOSTYPEOF( \
-          spec_typededucername_istpl, indx), \
+        WG_PP_STUTIL_USETYPEALIASER_REPLACEWITHALIASEDTYPE( \
+          spec_typealiasername_istpl, indx), \
         WG_PP_TRNSLTR_MARKERS_EATHEADMARKER(entry) ) \
     )
 
-#define WG_PP_STUTIL_REPLACETYPEMARKERS_REPLACEBOOSTYPEOF( \
-  spec_typededucername_istpl, indx) \
-    WG_PP_STUTIL_REPLACETYPEMARKERS_REPLACEBOOSTYPEOF2( \
-      BOOST_PP_SEQ_ELEM(0, spec_typededucername_istpl), \
-      BOOST_PP_SEQ_ELEM(1, spec_typededucername_istpl), \
-      BOOST_PP_SEQ_ELEM(2, spec_typededucername_istpl), \
+// WG_PP_SEQ_FOR_EACH_I functor.
+#define WG_PP_STUTIL_USETYPEALIASER_REPLACEBOUNDTUPLEENTRY_ALLTYPES( \
+  r, spec_typealiasername_istpl, indx, entry) \
+    ( \
+      WG_PP_STUTIL_USETYPEALIASER_REPLACEWITHALIASEDTYPE( \
+        spec_typealiasername_istpl, indx) \
+    )
+
+#define WG_PP_STUTIL_USETYPEALIASER_REPLACEWITHALIASEDTYPE( \
+  spec_typealiasername_istpl, indx) \
+    WG_PP_STUTIL_USETYPEALIASER_REPLACEWITHALIASEDTYPE2( \
+      BOOST_PP_SEQ_ELEM(0, spec_typealiasername_istpl), \
+      BOOST_PP_SEQ_ELEM(1, spec_typealiasername_istpl), \
+      BOOST_PP_SEQ_ELEM(2, spec_typealiasername_istpl), \
       indx)
 
-#define WG_PP_STUTIL_REPLACETYPEMARKERS_REPLACEBOOSTYPEOF2( \
-  spec, typededucername, istpl, indx) \
+#define WG_PP_STUTIL_USETYPEALIASER_REPLACEWITHALIASEDTYPE2( \
+  spec, typealiasername, istpl, indx) \
     WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-      typededucername::WG_PP_TYPEDEDUCER_TYPENAME(spec, indx)
+      typealiasername::WG_PP_TYPEALIASER_VARTYPENAME(spec, indx)
 
 #endif /* WG_PP_SYMBOLTABLEUTIL_HH_ */

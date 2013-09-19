@@ -5,7 +5,7 @@
 #include <WG/Local/Detail/PP/Translator/BackEnd/AutoFunctor/SymbolTable.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/Forwarder.hh>
 #include <WG/Local/Detail/PP/Seq.hh>
-#include <WG/Local/Detail/PP/Translator/BackEnd/TypeDeducer.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/TypeAliaser.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/ID.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LocalOperandSyntaxCheck.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
@@ -41,8 +41,8 @@
 #define WG_PP_AUTOFUNCTOR_CG_LOCALOPERANDSYNTAXCHECKER_NAME() \
   WG_PP_AUTOFUNCTOR_CG_FORMATNAME(localoperandsyntaxchecker)
 
-#define WG_PP_AUTOFUNCTOR_CG_TYPEDEDUCER_NAME() \
-  WG_PP_AUTOFUNCTOR_CG_FORMATNAME(typededucer)
+#define WG_PP_AUTOFUNCTOR_CG_TYPEALIASER_NAME() \
+  WG_PP_AUTOFUNCTOR_CG_FORMATNAME(typealiaser)
 
 #define WG_PP_AUTOFUNCTOR_CG_FRWDR_TYPENAME() \
   WG_PP_AUTOFUNCTOR_CG_FORMATNAME(frwdr_type)
@@ -109,15 +109,21 @@
       WG_PP_AUTOFUNCTOR_CG_LOCALOPERANDSYNTAXCHECKER_NAME(), \
       symbtbl, \
       WG_PP_AUTOFUNCTOR_CODEGEN_LOPRNDSYNTAXCHECK_SPECSEQ()) \
-    WG_PP_TYPEDEDUCER_DCLN( \
-      WG_PP_AUTOFUNCTOR_CG_TYPEDEDUCER_NAME(), \
+    WG_PP_TYPEALIASER_DCLN( \
+      WG_PP_AUTOFUNCTOR_CG_TYPEALIASER_NAME(), \
+      IMPLICITTYPES, \
       symbtbl, \
       WG_PP_AUTOFUNCTOR_CODEGEN_TYPEDDCR_SPECSEQ()) \
     WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL2( \
       name, \
-      WG_PP_STUTIL_REPLACETYPEMARKERS( \
+     /* Do not use typealiaser for wholesale aliasing of captured variables' types, */ \
+     /* since some of those captured types maybe local, and that information needs  */ \
+     /* to be preserved for later codegen passes, where we have to choose between   */ \
+     /* PPMP and TMP techniques to const/ref qualify these captured types.          */ \
+      WG_PP_STUTIL_USETYPEALIASER( \
         symbtbl, \
-        WG_PP_AUTOFUNCTOR_CG_TYPEDEDUCER_NAME(), \
+        WG_PP_AUTOFUNCTOR_CG_TYPEALIASER_NAME(), \
+        IMPLICITTYPES, \
         WG_PP_AUTOFUNCTOR_CODEGEN_TYPEDDCR_SPECSEQ()) )
 
 #define WG_PP_AUTOFUNCTOR_CODEGEN_START_IMPL2(name, symbtbl) \
