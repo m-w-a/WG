@@ -15,6 +15,11 @@ param-seq:
   1) Limit: min(WG_PP_LCLFUNCTION_MAX_ARGS, BOOST_PP_LIMIT_REPEAT)
     Currently, WG_PP_LCLFUNCTION_MAX_ARGS is set to 15
 
+varbind:
+varspec:
+  Captured variables in the enclosing scope(s). Note that each call of the 
+  local function gets a clean captured by-value state.
+
 //---
 //BNF
 //---

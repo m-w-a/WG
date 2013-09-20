@@ -23,15 +23,15 @@ namespace detail
 {
 
 // LCLFUNCTIONTYPE: The specified local function type.
-// CAPTUREDVARTYPES: A tuple of captured local variables, if any.
+// CAPTUREDVARSTYPE: A tuple of captured local variables, if any.
 template<
   typename LCLFUNCTIONTYPE,
-  typename CAPTUREDVARTYPES>
+  typename CAPTUREDVARSTYPE>
 class base_functor_type
 {
 public:
   typedef LCLFUNCTIONTYPE local_function_type;
-  typedef CAPTUREDVARTYPES captured_var_types;
+  typedef CAPTUREDVARSTYPE captured_var_types;
 
 private:
   // Synthesize the call back type. It's prototype should be:
@@ -40,7 +40,7 @@ private:
   //     (*callback_type)(
   //       base_functor_type const &,
   //       param_types<local_function_type>,
-  //       CAPTUREDVARTYPES &);
+  //       CAPTUREDVARSTYPE &);
   typedef
     typename boost::mpl::push_back
     <

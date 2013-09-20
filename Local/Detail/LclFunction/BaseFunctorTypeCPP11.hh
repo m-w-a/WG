@@ -26,17 +26,17 @@ namespace cpp11
 
 // FUNCTOR: The local functor type (C++11).
 // LCLFUNCTION: The specified local function type.
-// CAPTUREDVARTYPES: A tuple of captured local variables, if any.
+// CAPTUREDVARSTYPE: A tuple of captured local variables, if any.
 template<
   typename FUNCTOR,
   typename LCLFUNCTION,
-  typename CAPTUREDVARTYPES>
+  typename CAPTUREDVARSTYPE>
 class base_functor_type
 {
 public:
   typedef FUNCTOR functor_type;
   typedef LCLFUNCTION local_function_type;
-  typedef CAPTUREDVARTYPES captured_var_types;
+  typedef CAPTUREDVARSTYPE captured_var_types;
 
 private:
   // Synthesize the call back type. It's prototype should be:

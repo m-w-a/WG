@@ -3,48 +3,131 @@
 
 #include <boost/preprocessor.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <WG/Local/Detail/PP/Translator/BackEnd/ID.hh>
 #include <WG/Local/DetailPP/Translator/BackEnd/LclFunction/SymbolTable.hh>
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/Markers.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/TypeAliaser.hh>
 
 //###########
 //Public APIs
 //###########
 
-#define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVARSTYPE_DCLN( \
-  symbtbl, captured_types_name) \
-    WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVARSTYPE_DCLN_IMPL( \
-      symbtbl, captured_types_name)
+// Expands to:
+//   Line specific id.
+#define WG_PP_LCLFUNCTION_CGUTILS_BASEFUNCTORTYPE_NAME() \
+  WG_PP_LCLFUNCTION_CGUTILS_BASEFUNCTORTYPE_NAME_IMPL()
 
-#define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVARSTYPE_DCLN( \
-  symbtbl, captured_vars_typename, captured_vars_objname) \
-    WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVARSTYPE_DCLN_IMPL( \
-      symbtbl, captured_vars_typename, captured_vars_objname)
+//------------
+//TypesAliaser
+//------------
 
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTIONTYPENAME_DCLN( \
+// Expands to:
+//   Line specific id.
+#define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_NAME() \
+  WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_NAME_IMPL()
+
+#define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_DCLN(symbtbl) \
+    WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_DCLN_IMPL(symbtbl)
+
+// For specs:
+//   see WG_PP_STUTIL_USETYPEALIASER(...)
+#define WG_PP_LCLFUNCTION_USETYPEALIASER(symbtbl) \
+  WG_PP_LCLFUNCTION_USETYPEALIASER_IMPL(symbtbl)
+
+//--------------
+//CapturedValues
+//--------------
+
+#define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME() \
+  WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME_IMPL()
+
+#define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN(symbtbl) \
+    WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN_IMPL(symbtbl)
+
+#define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN( \
+  symbtbl, captured_values_typename, captured_values_objname) \
+    WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN_IMPL( \
+      symbtbl, captured_values_typename, captured_values_objname)
+
+//-------------
+//LocalFunction
+//-------------
+
+// Expands to:
+//   Line specific id.
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME() \
+  WG_PP_LCLFUNCTION_CGUTILS_FORMATNAME(local_function_type)
+
+// Expands to:
+//   The typedefed alias of the user specified local function with name:
+//   WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME().
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPEDCLN( \
   symbtbl, local_function_type_name) \
-    WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTIONTYPENAME_DCLN_IMPL( \
+    WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPEDCLN_IMPL( \
       symbtbl, local_function_type_name)
 
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTIONTYPE_PARAMLIST(symbtbl) \
-  WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTIONTYPE_PARAMLIST_IMPL(symbtbl)
+// Expands to:
+//   Comma seperated parameter list of the user specified local function.
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMLIST(symbtbl) \
+  WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMLIST_IMPL(symbtbl)
 
 //###########
 //Impl Macros
 //###########
 
-//----------------
-//CapturedVarsType
-//----------------
+//-----
+//Utils
+//-----
 
-#define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVARSTYPE_DCLN_IMPL( \
-  symbtbl, captured_types_name) \
-    typedef WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDTYPES_TYPE(symbtbl) \
-      captured_types_name ;
+#define WG_PP_LCLFUNCTION_CGUTILS_GLOBALID() WG_PP_ID_MAKE_GLOBAL(lclfunction)
+
+#define WG_PP_LCLFUNCTION_CGUTILS_FORMATNAME(name) \
+  WG_PP_ID_CAT( \
+    WG_PP_ID_CAT(WG_PP_LCLFUNCTION_CGUTILS_GLOBALID(), name), \
+    __LINE__)
+
+#define  WG_PP_LCLFUNCTION_CGUTILS_BASEFUNCTORTYPE_NAME_IMPL() \
+  WG_PP_LCLFUNCTION_CGUTILS_FORMATNAME(base_functor_type)
+
+//------------
+//TypesAliaser
+//------------
+
+#define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_NAME_IMPL() \
+  WG_PP_LCLFUNCTION_CGUTILS_FORMATNAME(captured_types_aliaser)
+
+#define WG_PP_LCLFUNCTION_CG_TYPEALIASER_SPECSEQ() \
+  ( (BOUNDVAR)(varbind) )( (SETVAR)(varset) )
+
+#define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_DCLN_IMPL(symbtbl) \
+  WG_PP_TYPEALIASER_DCLN( \
+    WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_NAME(), \
+    ALLTYPES, \
+    symbtbl, \
+    WG_PP_LCLFUNCTION_CG_TYPEALIASER_SPECSEQ() )
+
+#define WG_PP_LCLFUNCTION_USETYPEALIASER_IMPL(symbtbl) \
+  WG_PP_STUTIL_USETYPEALIASER( \
+    symbtbl, \
+    WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_NAME(), \
+    ALLTYPES, \
+    WG_PP_LCLFUNCTION_CG_TYPEALIASER_SPECSEQ() )
+
+//--------------
+//CapturedValues
+//--------------
+
+#define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME_IMPL() \
+  captured_values_type
+
+#define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN_IMPL(symbtbl) \
+    typedef WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPE(symbtbl) \
+      WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME() ;
 
 // Do not implicitly capture variables by reference since each call of a
 // local function should get a clean captured-by-value state.
-#define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDTYPES_TYPE(symbtbl) \
+#define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPE(symbtbl) \
   boost::tuple \
   < \
     WG_PP_SEQ_ENUM( \
@@ -53,22 +136,18 @@
         WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_SETVAR(symbtbl) )) \
   >
 
-//------------------------
-//UnpackedCapturedVarsDcln
-//------------------------
-
-#define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVARSTYPE_DCLN_IMPL( \
-  symbtbl, captured_vars_typename, captured_vars_objname) \
+#define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN_IMPL( \
+  symbtbl, captured_values_typename, captured_values_objname) \
     WG_PP_SEQ_FOR_EACH_I( \
-      WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVARSTYPE_DCLN_ENTRY, \
+      WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN_ENTRY, \
       ( WG_PP_LCLFUNCTION_SYMBOLTABLE_ISTPL(symbtbl) ) \
-        (captured_vars_typename)(captured_vars_objname), \
+        (captured_values_typename)(captured_values_objname), \
       WG_PP_SEQ_JOIN_ARG2( \
         WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_BOUNDVAR(symbtbl), \
         WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_SETVAR(symbtbl) ) )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVARSTYPE_DCLN_ENTRY( \
+#define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN_ENTRY( \
   r, istpl_cvtype_cvobj, indx, varname) \
     WG_PP_TRNSLTR_UTILS_ADDTYPENAME( \
       BOOST_PP_SEQ_ELEM(0, istpl_cvtype_cvobj)) \
@@ -78,11 +157,11 @@
       BOOST_PP_SEQ_ELEM(1, istpl_cvtype_cvobj) \
     >::type varname( BOOST_PP_SEQ_ELEM(2, istpl_cvtype_cvobj) .get<indx>() )
 
-//---------------------------
-//LocalFunctionType Name Dcln
-//---------------------------
+//-------------
+//LocalFunction
+//-------------
 
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTIONTYPENAME_DCLN_IMPL( \
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPEDCLN_IMPL( \
   symbtbl, local_function_type_name) \
     typedef \
       WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE(symbtbl) \
@@ -92,14 +171,10 @@
           WG_PP_LCLFUNCTION_SYMBOLTABLE_PARAMS(symtbl)) \
       ) ;
 
-//---------------------------
-//LocalFunctionType ParamList
-//---------------------------
-
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTIONTYPE_PARAMLIST_IMPL(symbtbl) \
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMLIST_IMPL(symbtbl) \
   WG_PP_SEQ_ENUM( \
     WG_PP_SEQ_FOR_EACH_I( \
-      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTIONTYPE_PARAMLIST_ENTRY, \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMLIST_ENTRY, \
       WG_PP_SEQ_JOIN_ARG2( \
         WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_BOUNDVAR(symbtbl), \
         WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_SETVAR(symbtbl)), \
@@ -108,7 +183,7 @@
         WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_SETVAR(symbtbl)) ) )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTIONTYPE_PARAMLIST_ENTRY( \
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMLIST_ENTRY( \
   r, typeseq, indx, varname) \
     ( WG_PP_SEQ_ELEM(indx, typeseq) varname )
 
