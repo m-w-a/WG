@@ -24,8 +24,8 @@ ExpandN:
 LclFunction:
   1) compile fail tests for wrong number of operands to function, ie lin().
   x) add C++11Spec.cc to Makefile.am
-  3) Spec -> params do ppescape processing
-  4) take care of WG_PP_DEDUCEDTYPE
+  x) Spec -> params do ppescape processing
+  x) take care of WG_PP_DEDUCEDTYPE
   5) update spec for varbind/varset, see AutoFunctorSpec.txt
 
 Why not BOOST_IDENTITY_TYPE_TPL?

@@ -8,6 +8,7 @@
 #include <WG/Local/Detail/PP/Translator/FrontEnd/BoundVarDclnNormalize.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/SetVarDclnNormalize.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/ReturnTypeNormalize.hh>
+#include <WG/Local/Detail/PP/Translator/FrontEnd/LclFunction/ParamDclnNormalize.hh>
 
 //###########
 //Public APIs
@@ -81,7 +82,7 @@
       WG_PP_SPLITHEADTUPLEFROMTOKENS( \
         1, \
         WG_PP_KEYWORDS_EAT_HEADKEYWORD(spec), \
-        WG_PP_AUTOFUNCTOR_SPEC_CHOOSE_TPL( \
+        WG_PP_LCLFUNCTION_SPEC_CHOOSE_TPL( \
           WG_PP_RETURNTYPE_NORMALIZE, specoptions), \
         WG_PP_TUPLIZE_ARG1, \
         WG_PP_TUPLIZE_ARG1), \
@@ -107,7 +108,8 @@
       WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
         1, \
         WG_PP_KEYWORDS_EAT_HEADKEYWORD(spec), \
-        WG_PP_TUPLIZE_ARG1, \
+        WG_PP_LCLFUNCTION_SPEC_CHOOSE_TPL( \
+          WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE, specoptions), \
         WG_PP_TUPLIZE_ARG1, \
         WG_PP_TUPLIZE_ARG1), \
       nexttransform, \
