@@ -11,6 +11,9 @@
 //Public APIs
 //###########
 
+#define WG_AUTOFUNCTOR_TYPE(name) \
+  WG_PP_AUTOFUNCTOR_CODEGEN_TYPENAME(name)
+
 #define WG_AUTOFUNCTOR(name, spec) \
   WG_PP_AUTOFUNCTOR_IMPL(name, spec)
 
@@ -18,10 +21,7 @@
   WG_PP_AUTOFUNCTOR_TPL_IMPL(name, spec)
 
 #define WG_AUTOFUNCTOR_END \
-  WG_AUTOFUNCTOR_END_IMPL()
-
-#define WG_AUTOFUNCTOR_TYPE(name) \
-  WG_PP_AUTOFUNCTOR_CODEGEN_TYPENAME(name)
+  WG_PP_AUTOFUNCTOR_END_IMPL()
 
 //###########
 //Impl Macros
@@ -54,7 +54,7 @@
   m5, membind_seq, \
   m6, memset_seq, \
   errors, error_seq) \
-    WG_PP_AUTOFUNCTOR_CMNIMPL_REPORTERRORORCONTINUE( \
+    WG_PP_AUTOFUNCTOR_CMNIMPL_REPORTERROR_OR_CONTINUE( \
       name, \
       istpl, \
       assignto_seq, \
@@ -68,7 +68,7 @@
       WG_PP_ERRORREPORTER_REPORT_NRMLZDSETTUPLESEQ(memset_seq) \
       WG_PP_ERRORREPORTER_REPORT_ERRORSEQ(error_seq) BOOST_PP_NIL)
 
-#define WG_PP_AUTOFUNCTOR_CMNIMPL_REPORTERRORORCONTINUE(\
+#define WG_PP_AUTOFUNCTOR_CMNIMPL_REPORTERROR_OR_CONTINUE(\
   name, \
   istpl, \
   assignto_seq, \
@@ -80,15 +80,15 @@
       WG_PP_STARTS_WITH_BOOST_PP_NIL(psbl_error_tokens), \
       WG_PP_AUTOFUNCTOR_CMNIMPL_STARTCODEGEN, \
       WG_PP_AUTOFUNCTOR_CMNIMPL_REPORTERRORS) \
-      ( \
-        name, \
-        istpl, \
-        assignto_seq, \
-        return_type, \
-        parambind_seq, paramset_seq, \
-        membind_seq, memset_seq, \
-        psbl_error_tokens \
-      )
+    ( \
+      name, \
+      istpl, \
+      assignto_seq, \
+      return_type, \
+      parambind_seq, paramset_seq, \
+      membind_seq, memset_seq, \
+      psbl_error_tokens \
+    )
 
 #define WG_PP_AUTOFUNCTOR_CMNIMPL_REPORTERRORS( \
   name, \
@@ -117,7 +117,7 @@
         parambind_seq, paramset_seq, \
         membind_seq, memset_seq) )
 
-#define WG_AUTOFUNCTOR_END_IMPL() \
+#define WG_PP_AUTOFUNCTOR_END_IMPL() \
   WG_PP_AUTOFUNCTOR_CODEGEN_END()
 
 #endif /* WG_AUTOFUNCTOR_HH_ */

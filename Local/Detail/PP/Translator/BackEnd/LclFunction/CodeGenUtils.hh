@@ -57,7 +57,7 @@
 // Expands to:
 //   Line specific id.
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME() \
-  WG_PP_LCLFUNCTION_CGUTILS_FORMATNAME(local_function_type)
+  WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME_IMPL()
 
 // Expands to:
 //   The typedefed alias of the user specified local function with name:
@@ -152,7 +152,7 @@
     WG_PP_TRNSLTR_UTILS_ADDTYPENAME( \
       BOOST_PP_SEQ_ELEM(0, istpl_cvtype_cvobj)) \
     boost::tuples::element \
-    <
+    < \
       indx, \
       BOOST_PP_SEQ_ELEM(1, istpl_cvtype_cvobj) \
     >::type varname( BOOST_PP_SEQ_ELEM(2, istpl_cvtype_cvobj) .get<indx>() )
@@ -160,6 +160,9 @@
 //-------------
 //LocalFunction
 //-------------
+
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME_IMPL() \
+  WG_PP_LCLFUNCTION_CGUTILS_FORMATNAME(local_function_type)
 
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPEDCLN_IMPL( \
   symbtbl, local_function_type_name) \

@@ -2,7 +2,7 @@
 #define WG_PP_LCLFUNCTION_CODEGENCPP03_HH_
 
 #include <boost/preprocessor.hpp>
-#include <WG/Local/DetailPP/Translator/BackEnd/LclFunction/SymbolTable.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/SymbolTable.hh>
 #include <WG/Local/Detail/LclFunction/BaseFunctorTypeCPP03.hh>
 #include <WG/Local/Detail/PP/Translator/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/CodeGenUtils.hh>
