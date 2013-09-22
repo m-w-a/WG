@@ -22,10 +22,10 @@ namespace lclfunction
 namespace detail
 {
 
-WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_BASECLASS_DCLNS()
+WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_DCLNS()
 
 #define FUNCTIONOPERATORTYPE \
-  WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_BASECLASS_NAME() \
+  WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_NAME() \
   < \
     global_functor_type<LCLFUNCTIONTYPE, CAPTUREDVARSTYPE>, \
     LCLFUNCTIONTYPE, \
@@ -94,6 +94,17 @@ public:
   // Method const so as to be able to be called by const std::function.
   //--------------------------------------------------------------------------//
 
+  //  typedef
+  //    typename boost::function_types::result_type<local_function_type>::type
+  //      result_type;
+  //
+  //  typedef
+  //    boost::function_types::parameter_types<local_function_type>
+  //      parameter_types;
+  //
+  //  static int const arity =
+  //    boost::function_types::function_arity<local_function_type>::value;
+  //
   //  result_type operator()() const
   //  {
   //    BOOST_STATIC_ASSERT((global_functor_type::arity == 0));
