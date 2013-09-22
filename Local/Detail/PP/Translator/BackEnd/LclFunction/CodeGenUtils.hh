@@ -91,7 +91,7 @@
     __LINE__)
 
 #define  WG_PP_LCLFUNCTION_CGUTILS_BASEFUNCTORTYPE_NAME_IMPL() \
-  WG_PP_LCLFUNCTION_CGUTILS_FORMATNAME(base_functor_type)
+  WG_PP_LCLFUNCTION_CGUTILS_FORMATNAME(global_functor_type)
 
 //------------
 //TypesAliaser

@@ -44,33 +44,33 @@ TEST(wg_lclfunction_codegenspec, cpp03)
   typedef boost::tuple<CAPTURED_VAR_TYPE1> captured_vars_typeXXX32;
   typedef RETURN_TYPE()(local_function_typeXXX32)PARAMS_NTUPLE() ;
 
-  typedef wg::lclfunction::detail::base_functor_type
+  typedef wg::lclfunction::detail::global_functor_type
   <
     local_function_typeXXX32,
     captured_vars_typeXXX32
-  > base_functor_typeXXX32;
+  > global_functor_typeXXX32;
   /* Note: double parenthesis around ctor param to prevent most vexing parse
      error. */
   /* PP iterator over captured vars for ctor params. */
-  base_functor_typeXXX32 LOCAL_FUNCTION_NAME()(( captured_vars_typeXXX32(slope) ));
+  global_functor_typeXXX32 LOCAL_FUNCTION_NAME()(( captured_vars_typeXXX32(slope) ));
   {
     /* Don't FORGET the REFERENCE!!!!! */
-    base_functor_typeXXX32 & functor = LOCAL_FUNCTION_NAME();
+    global_functor_typeXXX32 & functor = LOCAL_FUNCTION_NAME();
     
     struct local_functor_type
     {
       typedef captured_vars_typeXXX32 captured_vars_type;
-      typedef base_functor_typeXXX32 base_functor_type;
+      typedef global_functor_typeXXX32 global_functor_type;
 
-      void set_caller(base_functor_type & functor)
+      void set_caller(global_functor_type & functor)
       {
         functor.set_caller(&local_functor_type::user_callback);
       }
     
     private:
-      /* This functions prototype should match base_functor_type::callback_type. */
+      /* This functions prototype should match global_functor_type::callback_type. */
       static int user_callback(
-        base_functor_type const & LOCAL_FUNCTION_NAME(),
+        global_functor_type const & LOCAL_FUNCTION_NAME(),
         int const & x, 
         int const & y, 
         captured_vars_type const & capturedvars)

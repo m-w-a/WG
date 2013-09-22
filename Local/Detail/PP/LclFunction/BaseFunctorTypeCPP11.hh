@@ -49,7 +49,7 @@
 //--------------
 
 #define WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP11_BODY(argcount) \
-  BOOST_STATIC_ASSERT((base_functor_type::arity == argcount)); \
+  BOOST_STATIC_ASSERT((global_functor_type::arity == argcount)); \
   return functor_type::user_callback( \
     *this \
     BOOST_PP_ENUM_TRAILING_PARAMS( \

@@ -22,13 +22,35 @@ namespace lclfunction
 namespace detail
 {
 
+WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_DCLNS()
+
 // LCLFUNCTIONTYPE: The specified local function type.
 // CAPTUREDVARSTYPE: A tuple of captured local variables, if any.
 template<
   typename LCLFUNCTIONTYPE,
   typename CAPTUREDVARSTYPE>
-class base_functor_type
+class global_functor_type :
+  private WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_NAME()
+  <
+    global_functor_type<LCLFUNCTIONTYPE, CAPTUREDVARSTYPE>,
+    LCLFUNCTIONTYPE,
+    boost::function_types::function_arity<LCLFUNCTIONTYPE>::value
+  >
 {
+  typedef WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_NAME()
+  <
+    global_functor_type<LCLFUNCTIONTYPE, CAPTUREDVARSTYPE>,
+    LCLFUNCTIONTYPE,
+    boost::function_types::function_arity<LCLFUNCTIONTYPE>::value
+  > base_type;
+
+  friend class WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_NAME()
+  <
+    global_functor_type<LCLFUNCTIONTYPE, CAPTUREDVARSTYPE>,
+    LCLFUNCTIONTYPE,
+    boost::function_types::function_arity<LCLFUNCTIONTYPE>::value
+  >;
+
 public:
   typedef LCLFUNCTIONTYPE local_function_type;
   typedef CAPTUREDVARSTYPE captured_var_types;
@@ -38,7 +60,7 @@ private:
   //
   //   typedef typename result_type<local_function_type>::type
   //     (*callback_type)(
-  //       base_functor_type const &,
+  //       global_functor_type const &,
   //       param_types<local_function_type>,
   //       CAPTUREDVARSTYPE &);
   typedef
@@ -50,7 +72,7 @@ private:
         <
           boost::function_types::parameter_types<local_function_type>,
           //const issue.
-          base_functor_type const &
+          global_functor_type const &
         >::type,
         typename boost::function_types::result_type<local_function_type>::type
       >::type,
@@ -63,7 +85,7 @@ public:
       callback_type;
 
 public:
-  explicit base_functor_type(captured_var_types const & vars)
+  explicit global_functor_type(captured_var_types const & vars)
   : m_CallBack(0),
     m_CapturedVars(vars)
   {}
@@ -73,16 +95,16 @@ public:
     this->m_CallBack = callback;
   }
 
-  typedef
-    typename boost::function_types::result_type<local_function_type>::type
-      result_type;
-
-  typedef
-    boost::function_types::parameter_types<local_function_type>
-      parameter_types;
-
-  static int const arity =
-    boost::function_types::function_arity<local_function_type>::value;
+//  typedef
+//    typename boost::function_types::result_type<local_function_type>::type
+//      result_type;
+//
+//  typedef
+//    boost::function_types::parameter_types<local_function_type>
+//      parameter_types;
+//
+//  static int const arity =
+//    boost::function_types::function_arity<local_function_type>::value;
 
   //--------------------------------------------------------------------------//
   // PP generate operator() methods up to WG_PP_LCLFUNCTION_MAX_ARGS params.
@@ -92,7 +114,7 @@ public:
 
   //  result_type operator()() const
   //  {
-  //    BOOST_STATIC_ASSERT((base_functor_type::arity == 0));
+  //    BOOST_STATIC_ASSERT((global_functor_type::arity == 0));
   //    return m_CallBack(*this, m_CapturedVars);
   //  }
   //
@@ -113,11 +135,11 @@ public:
   //      >::type
   //    >::type arg1) const
   //  {
-  //    BOOST_STATIC_ASSERT((base_functor_type::arity == 2));
+  //    BOOST_STATIC_ASSERT((global_functor_type::arity == 2));
   //    return m_CallBack(*this, arg0, arg1, m_CapturedVars);
   //  }
 
-  WG_PP_BASEFUNCTORTYPE_OPERATORS_CPP03()
+  using base_type::operator();
 
 private:
   callback_type m_CallBack;

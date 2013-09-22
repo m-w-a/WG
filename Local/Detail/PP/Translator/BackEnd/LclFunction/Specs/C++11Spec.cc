@@ -45,28 +45,28 @@ TEST(wg_lclfunction_codegenspec, cpp11)
   typedef RETURN_TYPE()(local_function_typeXXX128)PARAMS_NTUPLE() ;
 
   struct local_functor_typeXXX128;
-  typedef wg::lclfunction::detail::cpp11::base_functor_type
+  typedef wg::lclfunction::detail::cpp11::global_functor_type
   <
     local_functor_typeXXX128,
     local_function_typeXXX128, 
     captured_var_typesXXX128
-  > base_functor_typeXXX128;
+  > global_functor_typeXXX128;
   
   /* Note: double parenthesis around ctor param to prevent most vexing parse
      error. */
   /*--PP iterator over captured vars for both template params and ctor 
       params.*/
-  base_functor_typeXXX128
+  global_functor_typeXXX128
     LOCAL_FUNCTION_NAME()(( captured_var_typesXXX128(slope) ));
     
   struct local_functor_typeXXX128
   {
     typedef captured_var_typesXXX128 captured_var_types;
-    typedef base_functor_typeXXX128 base_functor_type;
+    typedef global_functor_typeXXX128 global_functor_type;
     
-    /* This functions prototype should match base_functor_type::callback_type. */
+    /* This functions prototype should match global_functor_type::callback_type. */
     static int user_callback(
-      base_functor_type const & LOCAL_FUNCTION_NAME(),
+      global_functor_type const & LOCAL_FUNCTION_NAME(),
       int const & x, 
       int const & y, 
       captured_var_types & capturedvars)

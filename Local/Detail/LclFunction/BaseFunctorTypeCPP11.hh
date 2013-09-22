@@ -31,7 +31,7 @@ template<
   typename FUNCTOR,
   typename LCLFUNCTION,
   typename CAPTUREDVARSTYPE>
-class base_functor_type
+class global_functor_type
 {
 public:
   typedef FUNCTOR functor_type;
@@ -43,7 +43,7 @@ private:
   //
   //   typedef typename result_type<local_function_type>::type
   //     (*callback_type)(
-  //       base_functor_type const &,
+  //       global_functor_type const &,
   //       param_types<local_function_type>,
   //       captured_var_types &);
   typedef
@@ -55,7 +55,7 @@ private:
         <
           boost::function_types::parameter_types<local_function_type>,
           //const issue.
-          base_functor_type const &
+          global_functor_type const &
         >::type,
         typename boost::function_types::result_type<local_function_type>::type
       >::type,
@@ -68,7 +68,7 @@ public:
       callback_type;
 
 public:
-  explicit base_functor_type(captured_var_types const & vars)
+  explicit global_functor_type(captured_var_types const & vars)
   : m_CapturedVars(vars)
   {}
 
@@ -91,7 +91,7 @@ public:
 
   //  result_type operator()() const
   //  {
-  //    BOOST_STATIC_ASSERT((base_functor_type::arity == 0));
+  //    BOOST_STATIC_ASSERT((global_functor_type::arity == 0));
   //    return functor_type::user_callback(*this, m_CapturedVars);
   //  }
   //
@@ -112,7 +112,7 @@ public:
   //      >::type
   //    >::type arg1) const
   //  {
-  //    BOOST_STATIC_ASSERT((base_functor_type::arity == 2));
+  //    BOOST_STATIC_ASSERT((global_functor_type::arity == 2));
   //    return functor_type::user_callback(*this, arg0, arg1, m_CapturedVars);
   //  }
 

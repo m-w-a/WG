@@ -26,14 +26,14 @@
 //---------------
 
 #define WG_PP_LCLFUNCTION_CG_BASEFUNCTORTYPE_DCLN( \
-  symbtbl, base_functor_type_name) \
+  symbtbl, global_functor_type_name) \
     typedef WG_PP_LCLFUNCTION_CG_BASEFUNCTORTYPE_TYPE( \
-      symbtbl, base_functor_type_name) \
-        base_functor_type_name ;
+      symbtbl, global_functor_type_name) \
+        global_functor_type_name ;
 
 #define WG_PP_LCLFUNCTION_CG_BASEFUNCTORTYPE_TYPE( \
-  symbtbl, base_functor_type_name) \
-    wg::lclfunction::detail::base_functor_type \
+  symbtbl, global_functor_type_name) \
+    wg::lclfunction::detail::global_functor_type \
     < \
       WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME(), \
       WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME() \
@@ -68,19 +68,19 @@
   struct local_functor_type \
   { \
     typedef WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME() captured_values_type; \
-    typedef WG_PP_LCLFUNCTION_CGUTILS_BASEFUNCTORTYPE_NAME() base_functor_type; \
+    typedef WG_PP_LCLFUNCTION_CGUTILS_BASEFUNCTORTYPE_NAME() global_functor_type; \
     \
-    void set_caller(base_functor_type & functor) \
+    void set_caller(global_functor_type & functor) \
     { \
       functor.set_caller(&local_functor_type::user_callback); \
     } \
     \
   private: \
     /* This functions prototype should match */ \
-    /* base_functor_type::callback_type. */ \
+    /* global_functor_type::callback_type. */ \
     static WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
       user_callback( \
-        base_functor_type const & function_name \
+        global_functor_type const & function_name \
         WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST(symbtbl), \
         captured_values_type const & capturedvalues) \
     { \

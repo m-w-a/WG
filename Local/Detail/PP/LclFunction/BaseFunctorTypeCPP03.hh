@@ -8,33 +8,61 @@
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/int.hpp>
+#include <boost/function_types/result_type.hpp>
+#include <boost/function_types/parameter_types.hpp>
 
 //###########
 //Public APIs
 //###########
 
-// WG_PP_LCLFUNCTION_MAX_ARGS needs to be defined before this macro is invoked.
-#define WG_PP_BASEFUNCTORTYPE_OPERATORS_CPP03() \
-  WG_PP_BASEFUNCTORTYPE_OPERATORS_CPP03_IMPL()
+#define WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_NAME() \
+  WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_NAME_IMPL()
+
+#define WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_DCLNS() \
+  WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_DCLNS_IMPL()
 
 //###########
 //Impl Macros
 //###########
 
-#define WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP03_USERARGROOTNAME() arg
+#define WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_OPERATOR_USERARGROOTNAME() arg
+
+#define WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_NAME_IMPL() \
+  base_functor_type
+
+#define WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_DCLNS_IMPL() \
+  /* Declared and purposefully not defined. */ \
+  template \
+  < \
+    typename DERIVED, \
+    typename LCLFUNCTIONTYPE, \
+    int ARITY \
+  > \
+  struct WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_NAME() ; \
+  \
+  /* Begin partial specializations. */ \
+  BOOST_PP_REPEAT( \
+    WG_PP_LCLFUNCTION_MAX_ARGS, \
+    WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_DCLNS_ENTRY, \
+    ~)
+
+#define WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_DCLNS_ENTRY( \
+  z, argcount, data) \
+    WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS(argcount)
 
 //--------------------
 //Operator Param List.
 //--------------------
 
-#define WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP03_PARAMLIST(argcount) \
+#define WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_OPERATOR_PARAMLIST(argcount) \
   BOOST_PP_ENUM( \
     argcount, \
-    WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP03_PARAMLIST_ENTRY, \
+    WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_OPERATOR_PARAMLIST_ENTRY, \
     ~)
 
 // BOOST_PP_ENUM functor.
-#define WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP03_PARAMLIST_ENTRY(z, indx, data) \
+#define WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_OPERATOR_PARAMLIST_ENTRY( \
+  z, indx, data) \
   typename boost::add_reference \
   < \
     typename boost::add_const \
@@ -43,37 +71,59 @@
     >::type \
   >::type \
     BOOST_PP_CAT( \
-      WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP03_USERARGROOTNAME(), indx)
+      WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_OPERATOR_USERARGROOTNAME(), indx)
 
 //--------------
 //Operator Body.
 //--------------
 
-#define WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP03_BODY(argcount) \
-  BOOST_STATIC_ASSERT((base_functor_type::arity == argcount)); \
-  return this->m_CallBack( \
-    *this \
+#define WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_OPERATOR_BODY(argcount) \
+  derived_type const * const dptr = static_cast<derived_type const *>(this); \
+  return dptr->m_CallBack( \
+    *dptr \
     BOOST_PP_ENUM_TRAILING_PARAMS( \
       argcount, \
-      WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP03_USERARGROOTNAME()) \
-    , this->m_CapturedVars);
+      WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_OPERATOR_USERARGROOTNAME()) \
+    , dptr->m_CapturedVars);
 
 //--------
 //Operator
 //--------
 
-#define WG_PP_BASEFUNCTORTYPE_OPERATORS_CPP03_IMPL() \
-  BOOST_PP_REPEAT( \
-    WG_PP_LCLFUNCTION_MAX_ARGS, \
-    WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP03_OVERLOAD, \
-    ~)
-
-// BOOST_PP_REPEAT functor.
-#define WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP03_OVERLOAD(z, argcount, data) \
+#define WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_OPERATOR(argcount) \
   result_type operator()( \
-    WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP03_PARAMLIST(argcount) ) const \
+    WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_OPERATOR_PARAMLIST(argcount) ) const \
   { \
-    WG_PP_BASEFUNCTORTYPE_OPERATOR_CPP03_BODY(argcount) \
+    WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_OPERATOR_BODY(argcount) \
   }
+
+//-----
+//Class
+//-----
+
+#define WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS(argcount) \
+  template \
+  < \
+    typename DERIVED, \
+    typename LCLFUNCTIONTYPE \
+  > \
+  struct \
+    WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_NAME() \
+    <DERIVED, LCLFUNCTIONTYPE, argcount> \
+  { \
+    typedef DERIVED derived_type; \
+    typedef LCLFUNCTIONTYPE local_function_type; \
+    typedef \
+      typename boost::function_types::result_type<local_function_type>::type \
+        result_type; \
+    \
+    typedef \
+      boost::function_types::parameter_types<local_function_type> \
+        parameter_types; \
+    \
+    static int const arity = argcount; \
+    \
+    WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_OPERATOR(argcount) \
+  };
 
 #endif /* WG_PP_LOCAL_DETAIL_LCLFUNCTION_BASEFUNCTORTYPECPP03_HH_ */
