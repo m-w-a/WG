@@ -24,32 +24,26 @@ namespace detail
 
 WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_DCLNS()
 
+#define BASETYPE \
+  WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_NAME() \
+  < \
+    global_functor_type<LCLFUNCTIONTYPE, CAPTUREDVARSTYPE>, \
+    LCLFUNCTIONTYPE, \
+    boost::function_types::function_arity<LCLFUNCTIONTYPE>::value \
+  >
+
 // LCLFUNCTIONTYPE: The specified local function type.
 // CAPTUREDVARSTYPE: A tuple of captured local variables, if any.
 template<
   typename LCLFUNCTIONTYPE,
   typename CAPTUREDVARSTYPE>
 class global_functor_type :
-  private WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_NAME()
-  <
-    global_functor_type<LCLFUNCTIONTYPE, CAPTUREDVARSTYPE>,
-    LCLFUNCTIONTYPE,
-    boost::function_types::function_arity<LCLFUNCTIONTYPE>::value
-  >
+  private BASETYPE
 {
-  typedef WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_NAME()
-  <
-    global_functor_type<LCLFUNCTIONTYPE, CAPTUREDVARSTYPE>,
-    LCLFUNCTIONTYPE,
-    boost::function_types::function_arity<LCLFUNCTIONTYPE>::value
-  > base_type;
+  typedef BASETYPE base_type;
+  friend class BASETYPE;
 
-  friend class WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_NAME()
-  <
-    global_functor_type<LCLFUNCTIONTYPE, CAPTUREDVARSTYPE>,
-    LCLFUNCTIONTYPE,
-    boost::function_types::function_arity<LCLFUNCTIONTYPE>::value
-  >;
+#undef BASETYPE
 
 public:
   typedef LCLFUNCTIONTYPE local_function_type;
@@ -71,7 +65,6 @@ private:
         typename boost::mpl::push_front
         <
           boost::function_types::parameter_types<local_function_type>,
-          //const issue.
           global_functor_type const &
         >::type,
         typename boost::function_types::result_type<local_function_type>::type
@@ -94,17 +87,6 @@ public:
   {
     this->m_CallBack = callback;
   }
-
-//  typedef
-//    typename boost::function_types::result_type<local_function_type>::type
-//      result_type;
-//
-//  typedef
-//    boost::function_types::parameter_types<local_function_type>
-//      parameter_types;
-//
-//  static int const arity =
-//    boost::function_types::function_arity<local_function_type>::value;
 
   //--------------------------------------------------------------------------//
   // PP generate operator() methods up to WG_PP_LCLFUNCTION_MAX_ARGS params.
