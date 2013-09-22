@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 #include <WG/Local/LclFunction.hh>
 
 #include <boost/tuple/tuple.hpp>
-#include <WG/Local/Detail/LclFunction/BaseFunctorTypeCPP11.hh>
+#include <WG/Local/Detail/LclFunction/GlobalFunctorTypeCPP11.hh>
 
 TEST(wg_lclfunction_codegenspec, cpp11)
 {
@@ -41,7 +41,7 @@ TEST(wg_lclfunction_codegenspec, cpp11)
   //Expands to:
   
   /*PP iterator over captured vars for template params. */
-  typedef boost::tuple<CAPTURED_VAR_TYPE1> captured_var_typesXXX128;
+  typedef boost::tuple<CAPTURED_VAR_TYPE1> captured_vars_typeXXX128;
   typedef RETURN_TYPE()(local_function_typeXXX128)PARAMS_NTUPLE() ;
 
   struct local_functor_typeXXX128;
@@ -49,7 +49,7 @@ TEST(wg_lclfunction_codegenspec, cpp11)
   <
     local_functor_typeXXX128,
     local_function_typeXXX128, 
-    captured_var_typesXXX128
+    captured_vars_typeXXX128
   > global_functor_typeXXX128;
   
   /* Note: double parenthesis around ctor param to prevent most vexing parse
@@ -57,11 +57,11 @@ TEST(wg_lclfunction_codegenspec, cpp11)
   /*--PP iterator over captured vars for both template params and ctor 
       params.*/
   global_functor_typeXXX128
-    LOCAL_FUNCTION_NAME()(( captured_var_typesXXX128(slope) ));
+    LOCAL_FUNCTION_NAME()(( captured_vars_typeXXX128(slope) ));
     
   struct local_functor_typeXXX128
   {
-    typedef captured_var_typesXXX128 captured_var_types;
+    typedef captured_vars_typeXXX128 captured_vars_type;
     typedef global_functor_typeXXX128 global_functor_type;
     
     /* This functions prototype should match global_functor_type::callback_type. */
@@ -69,12 +69,12 @@ TEST(wg_lclfunction_codegenspec, cpp11)
       global_functor_type const & LOCAL_FUNCTION_NAME(),
       int const & x, 
       int const & y, 
-      captured_var_types & capturedvars)
+      captured_vars_type const & capturedvars)
     {
       /* To avoid unused var warnings. */
       (void)(LOCAL_FUNCTION_NAME());
       
-      boost::tuples::element<0, captured_var_types>::type
+      boost::tuples::element<0, captured_vars_type>::type
         slope(capturedvars.get<0>());
       
       /* User provided definition.*/

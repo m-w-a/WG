@@ -2,7 +2,11 @@ WG_LCLFUNCTION_TYPE(name)
   Expands to the implementation dependent type of the object named "name".
   
 Note: All terms not defined here should be referenced in AutoFunctorSpec.txt
-  
+
+Limitations: 
+  In C++03 may not be usable across library boundaries since local types lack
+  linkage. Hence, the necessary symbols may not be exported.
+
 //----------
 //Semantics:
 //----------
