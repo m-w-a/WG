@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 #include <WG/Local/LclFunction.hh>
 
 #include <boost/tuple/tuple.hpp>
-#include <WG/Local/Detail/LclFunction/BaseFunctorTypeCPP03.hh>
+#include <WG/Local/Detail/LclFunction/GlobalFunctorTypeCPP03.hh>
 
 TEST(wg_lclfunction_codegenspec, cpp03)
 {

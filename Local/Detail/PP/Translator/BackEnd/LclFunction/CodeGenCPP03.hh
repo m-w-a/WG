@@ -3,7 +3,7 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/SymbolTable.hh>
-#include <WG/Local/Detail/LclFunction/BaseFunctorTypeCPP03.hh>
+#include <WG/Local/Detail/LclFunction/GlobalFunctorTypeCPP03.hh>
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/CodeGenUtils.hh>
 

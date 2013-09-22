@@ -1,5 +1,5 @@
-#ifndef WG_LCLFUNCTION_DETAIL_BASEFUNCTORTYPECPP03_HH_
-#define WG_LCLFUNCTION_DETAIL_BASEFUNCTORTYPECPP03_HH_
+#ifndef WG_LCLFUNCTION_DETAIL_GLOBALFUNCTORTYPECPP03_HH_
+#define WG_LCLFUNCTION_DETAIL_GLOBALFUNCTORTYPECPP03_HH_
 
 #include <boost/mpl/vector.hpp>
 #include <boost/mpl/push_front.hpp>
@@ -13,7 +13,7 @@
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/int.hpp>
-#include <WG/Local/Detail/PP/LclFunction/BaseFunctorTypeCPP03.hh>
+#include <WG/Local/Detail/PP/LclFunction/FunctionOperatorTypeCPP03.hh>
 
 namespace wg
 {
@@ -22,10 +22,10 @@ namespace lclfunction
 namespace detail
 {
 
-WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_DCLNS()
+WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_BASECLASS_DCLNS()
 
-#define BASETYPE \
-  WG_PP_LCLFUNCTION_BASEFUNCTORTYPE_CPP03_BASECLASS_NAME() \
+#define FUNCTIONOPERATORTYPE \
+  WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_BASECLASS_NAME() \
   < \
     global_functor_type<LCLFUNCTIONTYPE, CAPTUREDVARSTYPE>, \
     LCLFUNCTIONTYPE, \
@@ -38,12 +38,12 @@ template<
   typename LCLFUNCTIONTYPE,
   typename CAPTUREDVARSTYPE>
 class global_functor_type :
-  private BASETYPE
+  private FUNCTIONOPERATORTYPE
 {
-  typedef BASETYPE base_type;
-  friend class BASETYPE;
+  friend class FUNCTIONOPERATORTYPE;
+  typedef FUNCTIONOPERATORTYPE function_operator_type;
 
-#undef BASETYPE
+#undef FUNCTIONOPERATORTYPE
 
 public:
   typedef LCLFUNCTIONTYPE local_function_type;
@@ -64,10 +64,10 @@ private:
       <
         typename boost::mpl::push_front
         <
-          boost::function_types::parameter_types<local_function_type>,
+          typename function_operator_type::parameter_types,
           global_functor_type const &
         >::type,
-        typename boost::function_types::result_type<local_function_type>::type
+        typename function_operator_type::result_type
       >::type,
       captured_var_types const &
     >::type mpl_callback_type;
@@ -121,7 +121,7 @@ public:
   //    return m_CallBack(*this, arg0, arg1, m_CapturedVars);
   //  }
 
-  using base_type::operator();
+  using function_operator_type::operator();
 
 private:
   callback_type m_CallBack;
@@ -136,4 +136,4 @@ private:
 }
 }
 
-#endif /* WG_LCLFUNCTION_DETAIL_BASEFUNCTORTYPECPP03_HH_ */
+#endif /* WG_LCLFUNCTION_DETAIL_GLOBALFUNCTORTYPECPP03_HH_ */
