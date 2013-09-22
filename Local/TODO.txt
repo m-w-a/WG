@@ -12,6 +12,8 @@ x) Embedded comma syntax.
   x) Test (std::pair<foo, bar>)
   x) Test ppescape.
 
+Tests: tpl -> _tpl
+
 Misc.
 -----
 
