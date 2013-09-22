@@ -5,7 +5,7 @@
 
 namespace
 {
-typedef float ignore_type;
+typedef float ignored_type;
 }
 
 namespace
@@ -119,7 +119,7 @@ TEST(wg_autofunctor_assigntotpl, OkIfLocal)
 {
   try
   {
-    OkIfLocal<ignore_type>::run();
+    OkIfLocal<ignored_type>::run();
   }
   WG_GTEST_CATCH
 }
@@ -152,7 +152,7 @@ TEST(wg_autofunctor_assigntotpl, OkIfLocalRef)
 {
   try
   {
-    OkIfLocalRef<ignore_type>::run();
+    OkIfLocalRef<ignored_type>::run();
   }
   WG_GTEST_CATCH
 }

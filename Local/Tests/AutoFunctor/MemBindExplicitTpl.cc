@@ -5,7 +5,7 @@
 
 namespace
 {
-typedef float ignore_type;
+typedef float ignored_type;
 }
 
 namespace
@@ -180,7 +180,7 @@ TEST(wg_autofunctor_membindexplicittpl, OkIfLocalTypeNoQualBound)
 {
   try
   {
-    OkIfLocalTypeNoQualBound<ignore_type>::run();
+    OkIfLocalTypeNoQualBound<ignored_type>::run();
   }
   WG_GTEST_CATCH
 }
@@ -212,7 +212,7 @@ TEST(wg_autofunctor_membindexplicittpl, OkIfLocalRefTypeBound)
 {
   try
   {
-    OkIfLocalRefTypeBound<ignore_type>::run();
+    OkIfLocalRefTypeBound<ignored_type>::run();
   }
   WG_GTEST_CATCH
 }
@@ -242,7 +242,7 @@ TEST(wg_autofunctor_membindexplicittpl, OkIfLocalConstTypeBound)
 {
   try
   {
-    OkIfLocalConstTypeBound<ignore_type>::run();
+    OkIfLocalConstTypeBound<ignored_type>::run();
   }
   WG_GTEST_CATCH
 }
@@ -272,7 +272,7 @@ TEST(wg_autofunctor_membindexplicittpl, OkIfLocalConstRefTypeBound)
 {
   try
   {
-    OkIfLocalConstRefTypeBound<ignore_type>::run();
+    OkIfLocalConstRefTypeBound<ignored_type>::run();
   }
   WG_GTEST_CATCH
 }
