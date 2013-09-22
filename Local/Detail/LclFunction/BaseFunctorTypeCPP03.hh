@@ -54,8 +54,6 @@ private:
         >::type,
         typename boost::function_types::result_type<local_function_type>::type
       >::type,
-      // TODO.
-      //typename boost::add_reference<captured_var_types>::type
       captured_var_types const &
     >::type mpl_callback_type;
 
@@ -127,7 +125,7 @@ private:
   //   types if said types are references, since add_const<T &>::type is T.
   //   Hence no compile time errors will ensue when unpacking data to each
   //   individual captured var.
-  captured_var_types const m_CapturedVars;
+  captured_var_types m_CapturedVars;
 };
 
 }

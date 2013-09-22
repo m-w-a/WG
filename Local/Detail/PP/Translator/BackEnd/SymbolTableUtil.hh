@@ -95,7 +95,7 @@
 //   The expansion of WG_PP_STUTIL_BOUNDTUPLESEQ_TO_OBJSEQ.
 // Returns: { BOOST_PP_NIL | integer }
 #define WG_PP_STUTIL_THISU_INDX(bound_obj_seq) \
-  WG_PP_STUTIL_THISU_INDX_IMPL0(bound_obj_seq)
+  WG_PP_STUTIL_THISU_INDX_IMPL1(bound_obj_seq)
 
 //------
 //INPUT:
@@ -170,10 +170,11 @@
 //Calculate this_ index.
 //----------------------
 
-#define WG_PP_STUTIL_THISU_INDX_IMPL0(bound_obj_seq) \
+#define WG_PP_STUTIL_THISU_INDX_IMPL1(bound_obj_seq) \
   WG_PP_STUTIL_THISU_INDX_IMPL( \
     (BOOST_PP_NIL) \
-    WG_PP_SEQ_FOR_EACH_I(WG_PP_STUTIL_THISU_MARK_INDX, ~, bound_obj_seq))
+    WG_PP_SEQ_NOTHING_FOR_EACH_I( \
+      WG_PP_STUTIL_THISU_MARK_INDX, ~, bound_obj_seq))
 
 #define WG_PP_STUTIL_THISU_INDX_IMPL_0 BOOST_PP_NIL
 #define WG_PP_STUTIL_THISU_INDX_IMPL_1(indx) indx

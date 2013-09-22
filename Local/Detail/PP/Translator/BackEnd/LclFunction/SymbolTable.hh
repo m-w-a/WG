@@ -23,9 +23,13 @@
     WG_PP_STARTS_WITH_BOOST_PP_NIL( \
       WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE(symbtbl) ))
 
-//RETURNS: { BOOST_PP_NIL | (param-seq) }
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_PARAMS(symbtbl) \
-  WG_PP_LCLFUNCTION_ST_GET(symbtbl, PARAMS)
+//Returns: { BOOST_PP_NIL | {(non-local-type)}+ }
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_PARAMS(symbtbl) \
+  WG_PP_LCLFUNCTION_ST_GET(symbtbl, TYPESEQ_PARAMS)
+
+//Returns: { BOOST_PP_NIL | {(var-name)}+ }
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_PARAMS(symbtbl) \
+  WG_PP_LCLFUNCTION_ST_GET(symbtbl, OBJSEQ_PARAMS)
 
 //Returns: { BOOST_PP_NIL | {(parsed-explicit-non-local-type-or-deduced-type)}+ }
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_BOUNDVAR(symbtbl) \
@@ -86,10 +90,13 @@
 //------
 //
 //return_type: { BOOST_PP_NIL | type }
-//params: { BOOST_PP_NIL | (param-seq) }
+//params_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-explicit-nlt-tuple}+ }
+//
 //varbind_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-bound-nlt-tuple}+ }
 //varset_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-set-nlt-tuple}+ }
 //
+//normalized-explicit-nlt-tuple :=
+//  (non-local-type)(var-name)
 //normalized-bound-nlt-tuple :=
 //  (parsed-explicit-non-local-type-or-deduced-type)(var-name)
 //normalized-set-nlt-tuple :=
@@ -105,16 +112,16 @@
 //OUTPUT:
 //-------
 //A SymbolTable whose values are accessible using the public API.
-#define WG_PP_LCLFUNCION_SYMBOLTABLE_CREATE( \
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_CREATE( \
   istpl, \
   return_type, \
-  params, \
+  params_nrmlzd_tupleseq, \
   varbind_nrmlzd_tupleseq, \
   varset_nrmlzd_tupleseq) \
     WG_PP_LCLFUNCION_SYMBOLTABLE_CREATE_IMPL1( \
       istpl, \
       return_type, \
-      params, \
+      params_nrmlzd_tupleseq, \
       varbind_nrmlzd_tupleseq, \
       varset_nrmlzd_tupleseq)
 
@@ -126,19 +133,21 @@
 
 #define WG_PP_LCLFUNCTION_ST_INDX_ISTPL 1
 
-#define WG_PP_LCLFUNCTION_ST_INDX_RETURN 2
+#define WG_PP_LCLFUNCTION_ST_INDX_RETTYPE 2
 
-#define WG_PP_LCLFUNCTION_ST_INDX_TYPESEQ_BOUNDVAR 3
-#define WG_PP_LCLFUNCTION_ST_INDX_OBJSEQ_BOUNDVAR 4
-#define WG_PP_LCLFUNCTION_ST_INDX_XXX_SIZE_BOUNDVAR 5
-#define WG_PP_LCLFUNCTION_ST_INDX_OBJSEQ_THISU_MARKER_BOUNDVAR 6
+#define WG_PP_LCLFUNCTION_ST_INDX_TYPESEQ_PARAMS 3
+#define WG_PP_LCLFUNCTION_ST_INDX_OBJSEQ_PARAMS 4
+#define WG_PP_LCLFUNCTION_ST_INDX_TYPESEQ_BOUNDVAR 5
+#define WG_PP_LCLFUNCTION_ST_INDX_OBJSEQ_BOUNDVAR 6
+#define WG_PP_LCLFUNCTION_ST_INDX_XXX_SIZE_BOUNDVAR 7
+#define WG_PP_LCLFUNCTION_ST_INDX_OBJSEQ_THISU_MARKER_BOUNDVAR 8
 
-#define WG_PP_LCLFUNCTION_ST_INDX_TYPESEQ_SETVAR 7
-#define WG_PP_LCLFUNCTION_ST_INDX_OBJSEQ_SETVAR 8
-#define WG_PP_LCLFUNCTION_ST_INDX_VALUESEQ_SETVAR 9
-#define WG_PP_LCLFUNCTION_ST_INDX_XXX_SIZE_SETVAR 10
+#define WG_PP_LCLFUNCTION_ST_INDX_TYPESEQ_SETVAR 9
+#define WG_PP_LCLFUNCTION_ST_INDX_OBJSEQ_SETVAR 10
+#define WG_PP_LCLFUNCTION_ST_INDX_VALUESEQ_SETVAR 11
+#define WG_PP_LCLFUNCTION_ST_INDX_XXX_SIZE_SETVAR 12
 
-#define WG_PP_LCLFUNCTION_ST_INDX_TOTALXXX_SIZE 11
+#define WG_PP_LCLFUNCTION_ST_INDX_TOTALXXX_SIZE 13
 
 // suffix: must match one of the following: WG_PP_AUTOFUNCTOR_ST_INDX_<suffix>
 #define WG_PP_LCLFUNCTION_ST_GET(symbtbl, suffix) \
@@ -153,12 +162,14 @@
 #define WG_PP_LCLFUNCION_SYMBOLTABLE_CREATE_IMPL1( \
   istpl, \
   return_type, \
-  params, \
+  params_nrmlzd_tupleseq, \
   varbind_nrmlzd_tupleseq, \
   varset_nrmlzd_tupleseq) \
     WG_PP_LCLFUNCTION_ST_CREATE_IMPL2( \
       istpl, \
       return_type, \
+      WG_PP_STUTIL_BOUNDTUPLESEQ_TO_TYPESEQ(params_nrmlzd_tupleseq), \
+      WG_PP_STUTIL_BOUNDTUPLESEQ_TO_OBJSEQ(params_nrmlzd_tupleseq), \
       WG_PP_STUTIL_BOUNDTUPLESEQ_TO_TYPESEQ(varbind_nrmlzd_tupleseq), \
       WG_PP_STUTIL_BOUNDTUPLESEQ_TO_OBJSEQ(varbind_nrmlzd_tupleseq), \
       WG_PP_STUTIL_SETTUPLESEQ_TO_TYPESEQ(varset_nrmlzd_tupleseq), \
@@ -168,14 +179,18 @@
 #define WG_PP_LCLFUNCTION_ST_CREATE_IMPL2( \
   istpl, \
   return_type, \
+  params_type_seq, params_obj_seq, \
   varbind_type_seq, varbind_obj_seq, \
   varset_type_seq, varset_obj_seq, varset_value_seq) \
     WG_PP_LCLFUNCTION_ST_CREATE_IMPL3( \
-      (10, \
+      (13, \
         (WG_PP_LCLFUNCTION_SYMBOLTABLE, \
         istpl, \
         return_type, \
-        varbind_type_seq, varbind_obj_seq, \
+        params_type_seq, \
+        params_obj_seq, \
+        varbind_type_seq, \
+        varbind_obj_seq, \
         WG_PP_SEQ_SIZE(varbind_type_seq), \
         WG_PP_STUTIL_THISU_INDX(varbind_obj_seq), \
         varset_type_seq, \

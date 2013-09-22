@@ -13,6 +13,7 @@
 //Public APIs
 //###########
 
+// WG_PP_LCLFUNCTION_MAX_ARGS needs to be defined before this macro is invoked.
 #define WG_PP_BASEFUNCTORTYPE_OPERATORS_CPP03() \
   WG_PP_BASEFUNCTORTYPE_OPERATORS_CPP03_IMPL()
 

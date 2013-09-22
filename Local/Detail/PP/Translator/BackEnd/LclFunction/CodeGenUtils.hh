@@ -4,7 +4,7 @@
 #include <boost/preprocessor.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <WG/Local/Detail/PP/Translator/BackEnd/ID.hh>
-#include <WG/Local/DetailPP/Translator/BackEnd/LclFunction/SymbolTable.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/SymbolTable.hh>
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/Markers.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/TypeAliaser.hh>
@@ -67,10 +67,13 @@
     WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPEDCLN_IMPL( \
       symbtbl, local_function_type_name)
 
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
+  WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE_IMPL(symbtbl)
+
 // Expands to:
 //   Comma seperated parameter list of the user specified local function.
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMLIST(symbtbl) \
-  WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMLIST_IMPL(symbtbl)
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST(symbtbl) \
+  WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_IMPL(symbtbl)
 
 //###########
 //Impl Macros
@@ -119,7 +122,7 @@
 //--------------
 
 #define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME_IMPL() \
-  captured_values_type
+  WG_PP_LCLFUNCTION_CGUTILS_FORMATNAME(captured_values_type)
 
 #define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN_IMPL(symbtbl) \
     typedef WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPE(symbtbl) \
@@ -138,7 +141,7 @@
 
 #define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN_IMPL( \
   symbtbl, captured_values_typename, captured_values_objname) \
-    WG_PP_SEQ_FOR_EACH_I( \
+    WG_PP_SEQ_NOTHING_FOR_EACH_I( \
       WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN_ENTRY, \
       ( WG_PP_LCLFUNCTION_SYMBOLTABLE_ISTPL(symbtbl) ) \
         (captured_values_typename)(captured_values_objname), \
@@ -164,30 +167,44 @@
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME_IMPL() \
   WG_PP_LCLFUNCTION_CGUTILS_FORMATNAME(local_function_type)
 
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE_IMPL(symbtbl) \
+  BOOST_PP_IIF( \
+    WG_PP_LCLFUNCTION_SYMBOLTABLE_EXISTS_RETTYPE(symbtbl), \
+    WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE(symbtbl), \
+    void)
+
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPEDCLN_IMPL( \
   symbtbl, local_function_type_name) \
     typedef \
-      WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE(symbtbl) \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
       ( local_function_type_name ) \
       ( \
-        WG_PP_SEQ_ENUM( \
-          WG_PP_LCLFUNCTION_SYMBOLTABLE_PARAMS(symtbl)) \
+          WG_PP_LCLFUNCTION_SYMBOLTABLE_PARAMSLIST(symbtbl) \
       ) ;
 
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMLIST_IMPL(symbtbl) \
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_PARAMSLIST(symbtbl) \
   WG_PP_SEQ_ENUM( \
     WG_PP_SEQ_FOR_EACH_I( \
-      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMLIST_ENTRY, \
-      WG_PP_SEQ_JOIN_ARG2( \
-        WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_BOUNDVAR(symbtbl), \
-        WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_SETVAR(symbtbl)), \
-      WG_PP_SEQ_JOIN_ARG2( \
-        WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_BOUNDVAR(symbtbl), \
-        WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_SETVAR(symbtbl)) ) )
+      WG_PP_LCLFUNCTION_SYMBOLTABLE_PARAMSLIST_ENTRY, \
+      WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_PARAMS(symbtbl), \
+      WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_PARAMS(symbtbl)) )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMLIST_ENTRY( \
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_PARAMSLIST_ENTRY( \
   r, typeseq, indx, varname) \
-    ( WG_PP_SEQ_ELEM(indx, typeseq) varname )
+    ( \
+      WG_PP_SEQ_ELEM(indx, typeseq) varname \
+    )
+
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_IMPL(symbtbl) \
+  WG_PP_SEQ_FOR_EACH_I( \
+    WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY, \
+    WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_PARAMS(symbtbl), \
+    WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_PARAMS(symbtbl) )
+
+// WG_PP_SEQ_FOR_EACH_I functor.
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY( \
+  r, typeseq, indx, varname) \
+    , WG_PP_SEQ_ELEM(indx, typeseq) varname
 
 #endif /* WG_PP_LCLFUNCTION_CODEGENUTILS_HH_ */

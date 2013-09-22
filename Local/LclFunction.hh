@@ -1,14 +1,17 @@
 #ifndef WG_LCLFUNCTION_HH_
 #define WG_LCLFUNCTION_HH_
 
-#include <boost/config.hpp>
+// This has to be defined before any LclFunction includes.
+#ifndef WG_PP_LCLFUNCTION_MAX_ARGS
+  #define WG_PP_LCLFUNCTION_MAX_ARGS 15
+#endif
 
-#if BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#include <boost/config.hpp>
+#ifdef BOOST_NO_CXX11_VARIADIC_TEMPLATES
   #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/CodeGenCPP03.hh>
 #else
   //#include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/CodeGenCPP11.hh>
 #endif
-
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/ErrorReporter.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/LclFunction/SpecNormalize.hh>
@@ -18,15 +21,14 @@
 //Public APIs
 //###########
 
-#ifndef WG_PP_LCLFUNCTION_MAX_ARGS
-  #define WG_PP_LCLFUNCTION_MAX_ARGS 15
-#endif
-
 #define WG_LCLFUNCTION(name, spec) \
   WG_PP_LCLFUNCTION_IMPL(name, spec)
 
 #define WG_LCLFUNCTION_TPL(name, spec) \
   WG_PP_LCLFUNCTION_TPL_IMPL(name, spec)
+
+#define WG_LCLFUNCTION_END \
+  WG_PP_LCLFUNCTION_END_IMPL()
 
 //###########
 //Impl Macros

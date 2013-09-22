@@ -4,7 +4,7 @@
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/SymbolTable.hh>
 #include <WG/Local/Detail/LclFunction/BaseFunctorTypeCPP03.hh>
-#include <WG/Local/Detail/PP/Translator/Seq.hh>
+#include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/CodeGenUtils.hh>
 
 //###########
@@ -14,8 +14,8 @@
 #define WG_PP_LCLFUNCTION_CODEGEN_START(name, symbtbl) \
   WG_PP_LCLFUNCTION_CODEGEN_START_IMPL(name, symbtbl)
 
-#define WG_PP_LCLFUNCTION_CODEGEN_END(name, symbtbl) \
-  WG_PP_LCLFUNCTION_CODEGEN_END_IMPL(name, symbtbl)
+#define WG_PP_LCLFUNCTION_CODEGEN_END() \
+  WG_PP_LCLFUNCTION_CODEGEN_END_IMPL()
 
 //###########
 //Impl Macros
@@ -44,7 +44,7 @@
 //----------------
 
 #define WG_PP_LCLFUNCTION_CG_LOCALFUNCTIONOBJ_DCLN(symbtbl, objname) \
-  WG_PP_LCLFUNCTION_CGUTILS_BASEFUNCTORTYPE_NAME() function_name \
+  WG_PP_LCLFUNCTION_CGUTILS_BASEFUNCTORTYPE_NAME() objname \
   /* Note: double parenthesis around ctor param to prevent most vexing parse */ \
   /* error. */ \
   (( \
@@ -78,13 +78,14 @@
   private: \
     /* This functions prototype should match */ \
     /* base_functor_type::callback_type. */ \
-    static WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE(symbtbl) user_callback( \
-      base_functor_type const & function_name, \
-      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMLIST(symbtbl), \
-      captured_values_type const & capturedvalues) \
+    static WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
+      user_callback( \
+        base_functor_type const & function_name \
+        WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST(symbtbl), \
+        captured_values_type const & capturedvalues) \
     { \
       /* To avoid unused var warnings. */ \
-      (void)( function_name ); \
+      static_cast<void>( function_name ); \
       \
       WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN( \
         symbtbl, captured_values_type, capturedvalues) \
@@ -127,10 +128,10 @@
     \
     WG_PP_LCLFUNCTION_CG_LOCALFUNCTORTYPE_START(symbtbl, function_name)
 
-#define WG_PP_LCLFUNCTION_CODEGEN_END_IMPL(name, symbtbl) \
+#define WG_PP_LCLFUNCTION_CODEGEN_END_IMPL() \
     WG_PP_LCLFUNCTION_CG_LOCALFUNCTORTYPE_END() \
     local_functor_type local_functor_obj; \
     local_functor_obj.set_caller( WG_PP_LCLFUNCTION_CG_SCOPEDFUNCTOROBJ() ); \
-  }
+  } //Block Scope.
 
 #endif /* WG_PP_LCLFUNCTION_CODEGENCPP03_HH_ */
