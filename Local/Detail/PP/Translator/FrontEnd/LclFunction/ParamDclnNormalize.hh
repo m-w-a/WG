@@ -5,6 +5,7 @@
 #include <boost/utility/identity_type.hpp>
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Translator/Utils.hh>
+#include <WG/Local/Detail/PP/Translator/Keywords.hh>
 
 //###########
 //Public APIs
@@ -26,8 +27,23 @@
   BOOST_PP_IIF( \
     WG_PP_ISNEXTTOKEN_A_TUPLE(1, paramdcln), \
     WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_NOPREFIX1, \
-    WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_PPESCAPE) \
+    WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_NONTUPLE) \
   (paramdcln, istpl)
+
+#define WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_NONTUPLE(paramdcln, istpl) \
+  BOOST_PP_IIF( \
+    WG_PP_KEYWORDS_STARTSWITH_PPESCAPE(paramdcln), \
+    WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_PPESCAPE, \
+    WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_NONTUPLE_ERROR) \
+  (paramdcln, istpl)
+
+#define WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_NONTUPLE_ERROR(paramdcln, ignored) \
+  ( \
+    WG_PP_ERROR \
+      BOOST_PP_CAT( \
+        ERROR_missing_type_in_params_dcln_near_token_, \
+        paramdcln) \
+  )
 
 #define WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_NOPREFIX1(paramdcln, ignore) \
   WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_EXPAND1( \
