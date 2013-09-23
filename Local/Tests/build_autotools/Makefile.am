@@ -207,6 +207,10 @@ test_autofunctor_SOURCES = \
 
 LCLFUNCTION_SRC = \
     ../LclFunction/TestMain.cc \
+    ../LclFunction/AllCombo.cc \
+    ../LclFunction/AllComboTpl.cc \
+    ../LclFunction/Nested.cc \
+    ../LclFunction/NestedTpl.cc \
     ../LclFunction/NoSpec.cc \
     ../LclFunction/NoSpecTpl.cc \
     ../LclFunction/Params.cc \
@@ -230,7 +234,11 @@ LCLFUNCTION_SRC = \
     ../LclFunction/VarBindImplicitAndVarSetExplicit.cc \
     ../LclFunction/VarBindImplicitAndVarSetExplicitTpl.cc \
     ../LclFunction/VarBindImplicitAndVarSetImplicit.cc \
-    ../LclFunction/VarBindImplicitAndVarSetImplicitTpl.cc
+    ../LclFunction/VarBindImplicitAndVarSetImplicitTpl.cc \
+    ../LclFunction/Return.cc \
+    ../LclFunction/ReturnTpl.cc \
+    ../LclFunction/Recursive.cc \
+    ../LclFunction/RecursiveTpl.cc
 
 test_lclfunction_cpp03_SOURCES = $(LCLFUNCTION_SRC)
 test_lclfunction_cpp11_SOURCES = $(LCLFUNCTION_SRC)
