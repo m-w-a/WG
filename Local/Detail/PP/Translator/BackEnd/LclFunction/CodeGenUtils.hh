@@ -163,7 +163,18 @@
     < \
       indx, \
       BOOST_PP_SEQ_ELEM(1, istpl_cvtype_cvobj) \
-    >::type varname( BOOST_PP_SEQ_ELEM(2, istpl_cvtype_cvobj) .get<indx>() ) ;
+    >::type varname \
+      ( \
+        WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_ACCESSVALUE( \
+          BOOST_PP_SEQ_ELEM(0, istpl_cvtype_cvobj), \
+          BOOST_PP_SEQ_ELEM(2, istpl_cvtype_cvobj), \
+          indx) \
+      ) ;
+
+#define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_ACCESSVALUE( \
+  istpl, cvobj, indx) \
+    cvobj . BOOST_PP_EXPR_IIF(istpl, template) get<indx>()
+
 
 //-------------
 //LocalFunction
@@ -234,7 +245,7 @@
             WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_BOUNDVAR(symbtbl), \
             WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_THISU_MARKER_BOUNDVAR(symbtbl), \
             this ), \
-          WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_SETVAR(symbtbl) )) \
+          WG_PP_LCLFUNCTION_SYMBOLTABLE_VALUESEQ_SETVAR(symbtbl) )) \
     ) \
   )) ;
 

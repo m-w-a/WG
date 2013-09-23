@@ -1,30 +1,30 @@
 #include <gtest/gtest.h>
-#include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
+#include <WG/Local/LclFunction.hh>
 #include <boost/typeof/typeof.hpp>
 #include <WG/Local/Tests/TestHelper.hh>
 
-TEST(wg_autofunctor_parambindimplicit, OkIf1ArgBound)
+TEST(wg_lclfunction_varbindimplicit, OkIf1VarBound)
 {
   try
   {
-    bool didArgumentBind = false;
+    bool didBind = false;
 
-    WG_AUTOFUNCTOR(oneArgAutoFunctor, parambind (ref didArgumentBind) )
+    WG_LCLFUNCTION(check, varbind (ref didBind) )
     {
       WG_PP_TESTHELPER_IS_SAME_TYPE(
-        bool &, BOOST_TYPEOF(didArgumentBind) &);
+        bool &, BOOST_TYPEOF(didBind) &);
+      didBind = true;
+    }WG_LCLFUNCTION_END;
 
-      didArgumentBind = true;
-    }
-    WG_AUTOFUNCTOR_END;
+    check();
 
-    EXPECT_TRUE(didArgumentBind);
+    EXPECT_TRUE(didBind);
   }
   WG_GTEST_CATCH
 }
 
-TEST(wg_autofunctor_parambindimplicit, OkIf3ArgsOfVaryingMutabilityBound)
+TEST(wg_lclfunction_varbindimplicit, OkIf3VarsOfVaryingMutabilityBound)
 {
   try
   {
@@ -32,8 +32,8 @@ TEST(wg_autofunctor_parambindimplicit, OkIf3ArgsOfVaryingMutabilityBound)
     int const mass = 10;
     int const velocity = 2;
 
-    WG_AUTOFUNCTOR
-    (calculateForce, parambind (ref force) (const mass) (const velocity) )
+    WG_LCLFUNCTION
+    (calculateForce, varbind (ref force) (const mass) (const velocity) )
     {
       WG_PP_TESTHELPER_IS_SAME_TYPE(
         int &, BOOST_TYPEOF(force) &);
@@ -44,7 +44,9 @@ TEST(wg_autofunctor_parambindimplicit, OkIf3ArgsOfVaryingMutabilityBound)
 
       force = mass * velocity;
     }
-    WG_AUTOFUNCTOR_END;
+    WG_LCLFUNCTION_END;
+
+    calculateForce();
 
     EXPECT_EQ(force, 20);
   }
@@ -60,23 +62,25 @@ struct OkIfKeywordThisUBound
   OkIfKeywordThisUBound()
   : didBindThis(false)
   {
-    WG_AUTOFUNCTOR(bindThisU, parambind (this_) )
+    WG_LCLFUNCTION(bindThisU, varbind (this_) )
     {
       WG_PP_TESTHELPER_IS_SAME_TYPE(
         OkIfKeywordThisUBound * const, BOOST_TYPEOF(this_) const);
 
       this_->didBindThis = true;
     }
-    WG_AUTOFUNCTOR_END;
+    WG_LCLFUNCTION_END;
+
+    bindThisU();
   }
 };
 }
-TEST(wg_autofunctor_parambindimplicit, OkIfKeywordThisUBound)
+TEST(wg_lclfunction_varbindimplicit, OkIfKeywordThisUBound)
 {
   try
   {
-    OkIfKeywordThisUBound someObj;
-    EXPECT_TRUE(someObj.didBindThis);
+    OkIfKeywordThisUBound obj;
+    EXPECT_TRUE(obj.didBindThis);
   }
   WG_GTEST_CATCH
 }

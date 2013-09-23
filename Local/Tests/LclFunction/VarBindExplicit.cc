@@ -65,3 +65,66 @@ TEST(wg_lclfunction_varbindexplicit, OkIfPPEscaped1VarBound)
   }
   WG_GTEST_CATCH
 }
+
+TEST(wg_lclfunction_varbindexplicit, OkIf3VarsOfVaryingMutabilityBound)
+{
+  try
+  {
+    int force = 0;
+    int const mass = 10;
+    int const velocity = 2;
+
+    WG_LCLFUNCTION
+    (calculateForce,
+      varbind ((int &) force) ((int const) mass) ((int const) velocity) )
+    {
+      WG_PP_TESTHELPER_IS_SAME_TYPE(
+        int &, BOOST_TYPEOF(force) &);
+      WG_PP_TESTHELPER_IS_SAME_TYPE(
+        int const, BOOST_TYPEOF(mass) const);
+      WG_PP_TESTHELPER_IS_SAME_TYPE(
+        int const, BOOST_TYPEOF(velocity) const);
+
+      force = mass * velocity;
+    }
+    WG_LCLFUNCTION_END;
+
+    calculateForce();
+
+    EXPECT_EQ(force, 20);
+  }
+  WG_GTEST_CATCH
+}
+
+namespace
+{
+struct OkIfKeywordThisUBound
+{
+  bool didBindThis;
+
+  void run()
+  {
+    didBindThis = false;
+
+    WG_LCLFUNCTION
+    (bindThisU, varbind ((OkIfKeywordThisUBound * const) this_) )
+    {
+      this_->didBindThis = true;
+    }
+    WG_LCLFUNCTION_END;
+
+    bindThisU();
+
+    EXPECT_TRUE(didBindThis);
+  }
+};
+}
+TEST(wg_lclfunction_varbindexplicit, OkIfKeywordThisUBound)
+{
+  try
+  {
+    OkIfKeywordThisUBound obj;
+    obj.run();
+  }
+  WG_GTEST_CATCH
+}
