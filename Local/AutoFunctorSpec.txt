@@ -1,6 +1,21 @@
 WG_AUTOFUNCTOR_TYPE(name)
   Expands to the implementation dependent type of the autofunctor named "name".
 
+Purpose:
+  1) A tool for conveying and enforcing the intent of block scopes.
+    Some Background: 
+    Block scopes
+    are used in C++ to enforce temporal constrains on automatic variables or to
+    partition code into logical units. Commented block scopes certainly do 
+    convey the intent of such logical units of code, but at times it's desirable
+    to also convey and enforce how these units interact with their enclosing 
+    scope. Autofunctor allows the programmer to do that with top most declarations
+    documenting and enforcing what and how enclosing scope(s) variables are 
+    accessed.
+  2) Many times local functions are only needed to be called once, yet this is 
+    often forgotten by programmers. With autofunctor, there is no need to call
+    the local function after it has been defined since it's auto-called.
+
 //----------
 //Semantics:
 //----------

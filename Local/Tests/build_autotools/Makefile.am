@@ -218,7 +218,19 @@ LCLFUNCTION_SRC = \
     ../LclFunction/VarSetExplicit.cc \
     ../LclFunction/VarSetExplicitTpl.cc \
     ../LclFunction/VarSetImplicit.cc \
-    ../LclFunction/VarSetImplicitTpl.cc
+    ../LclFunction/VarSetImplicitTpl.cc \
+    ../LclFunction/VarBindExplicitAndImplicit.cc \
+    ../LclFunction/VarBindExplicitAndImplicitTpl.cc \
+    ../LclFunction/VarSetExplicitAndImplicit.cc \
+    ../LclFunction/VarSetExplicitAndImplicitTpl.cc \
+    ../LclFunction/VarBindExplicitAndVarSetExplicit.cc \
+    ../LclFunction/VarBindExplicitAndVarSetExplicitTpl.cc \
+    ../LclFunction/VarBindExplicitAndVarSetImplicit.cc \
+    ../LclFunction/VarBindExplicitAndVarSetImplicitTpl.cc \
+    ../LclFunction/VarBindImplicitAndVarSetExplicit.cc \
+    ../LclFunction/VarBindImplicitAndVarSetExplicitTpl.cc \
+    ../LclFunction/VarBindImplicitAndVarSetImplicit.cc \
+    ../LclFunction/VarBindImplicitAndVarSetImplicitTpl.cc
 
 test_lclfunction_cpp03_SOURCES = $(LCLFUNCTION_SRC)
 test_lclfunction_cpp11_SOURCES = $(LCLFUNCTION_SRC)
