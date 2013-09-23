@@ -15,8 +15,8 @@
 
 // Expands to:
 //   Line specific id.
-#define WG_PP_LCLFUNCTION_CGUTILS_BASEFUNCTORTYPE_NAME() \
-  WG_PP_LCLFUNCTION_CGUTILS_BASEFUNCTORTYPE_NAME_IMPL()
+#define WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE(name) \
+  WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE_IMPL(name)
 
 //------------
 //TypesAliaser
@@ -75,6 +75,30 @@
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST(symbtbl) \
   WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_IMPL(symbtbl)
 
+//-------------
+//GlobalFunctor
+//-------------
+
+// Expands to:
+//   Line specific id.
+#define WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME() \
+  WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME_IMPL()
+
+#define WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTOROBJ_DCLN(symbtbl, objname) \
+  WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTOROBJ_DCLN_IMPL(symbtbl, objname)
+
+//------------
+//LocalFunctor
+//------------
+
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_USERCALLBACKMETHOD_START( \
+  symbtbl, function_name, global_functor_type_name, captured_values_type_name) \
+    WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_USERCALLBACKMETHOD_START_IMPL( \
+      symbtbl, function_name, global_functor_type_name, captured_values_type_name)
+
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_USERCALLBACKMETHOD_END() \
+  WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_USERCALLBACKMETHOD_END_IMPL()
+
 //###########
 //Impl Macros
 //###########
@@ -85,20 +109,17 @@
 
 #define WG_PP_LCLFUNCTION_CGUTILS_GLOBALID() WG_PP_ID_MAKE_GLOBAL(lclfunction)
 
-#define WG_PP_LCLFUNCTION_CGUTILS_FORMATNAME(name) \
+#define WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE_IMPL(name) \
   WG_PP_ID_CAT( \
     WG_PP_ID_CAT(WG_PP_LCLFUNCTION_CGUTILS_GLOBALID(), name), \
     __LINE__)
-
-#define  WG_PP_LCLFUNCTION_CGUTILS_BASEFUNCTORTYPE_NAME_IMPL() \
-  WG_PP_LCLFUNCTION_CGUTILS_FORMATNAME(global_functor_type)
 
 //------------
 //TypesAliaser
 //------------
 
 #define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_NAME_IMPL() \
-  WG_PP_LCLFUNCTION_CGUTILS_FORMATNAME(captured_types_aliaser)
+  WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE(captured_types_aliaser)
 
 #define WG_PP_LCLFUNCTION_CG_TYPEALIASER_SPECSEQ() \
   ( (BOUNDVAR)(varbind) )( (SETVAR)(varset) )
@@ -122,7 +143,7 @@
 //--------------
 
 #define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME_IMPL() \
-  WG_PP_LCLFUNCTION_CGUTILS_FORMATNAME(captured_values_type)
+  WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE(captured_values_type)
 
 #define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN_IMPL(symbtbl) \
     typedef WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPE(symbtbl) \
@@ -165,7 +186,7 @@
 //-------------
 
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME_IMPL() \
-  WG_PP_LCLFUNCTION_CGUTILS_FORMATNAME(local_function_type)
+  WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE(local_function_type)
 
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE_IMPL(symbtbl) \
   BOOST_PP_IIF( \
@@ -206,5 +227,57 @@
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY( \
   r, typeseq, indx, varname) \
     , WG_PP_SEQ_ELEM(indx, typeseq) varname
+
+//-------------
+//GlobalFunctor
+//-------------
+
+#define  WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME_IMPL() \
+  WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE(global_functor_type)
+
+#define WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTOROBJ_DCLN_IMPL(symbtbl, objname) \
+  WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME() objname \
+  /* Note: double parenthesis around ctor param to prevent most vexing parse */ \
+  /* error. */ \
+  (( \
+    WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME() \
+    ( \
+      WG_PP_SEQ_ENUM( \
+        WG_PP_SEQ_JOIN_ARG2( \
+          WG_PP_SEQ_REPLACE( \
+            WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_BOUNDVAR(symbtbl), \
+            WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_THISU_MARKER_BOUNDVAR(symbtbl), \
+            this ), \
+          WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_SETVAR(symbtbl) )) \
+    ) \
+  )) ;
+
+//------------
+//LocalFunctor
+//------------
+
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_USERCALLBACKMETHOD_START_IMPL( \
+  symbtbl, \
+  function_name, \
+  global_functor_type_name, \
+  captured_values_type_name) \
+    /* This functions prototype should match */ \
+    /* global_functor_type::callback_type. */ \
+    static WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
+      user_callback( \
+        global_functor_type_name const & function_name \
+        WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST(symbtbl), \
+        captured_values_type_name const & capturedvalues) \
+    { \
+      /* To avoid unused var warnings. */ \
+      static_cast<void>( function_name ); \
+      \
+      WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN( \
+        symbtbl, captured_values_type_name, capturedvalues) \
+      \
+      /* User provided definition.*/
+
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_USERCALLBACKMETHOD_END_IMPL() \
+    }
 
 #endif /* WG_PP_LCLFUNCTION_CODEGENUTILS_HH_ */

@@ -52,7 +52,8 @@ TEST(wg_lclfunction_codegenspec, cpp03)
   /* Note: double parenthesis around ctor param to prevent most vexing parse
      error. */
   /* PP iterator over captured vars for ctor params. */
-  global_functor_typeXXX32 LOCAL_FUNCTION_NAME()(( captured_vars_typeXXX32(slope) ));
+  global_functor_typeXXX32
+    LOCAL_FUNCTION_NAME()(( captured_vars_typeXXX32(slope) ));
   {
     /* Don't FORGET the REFERENCE!!!!! */
     global_functor_typeXXX32 & functor = LOCAL_FUNCTION_NAME();
