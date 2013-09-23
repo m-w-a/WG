@@ -46,16 +46,18 @@
   BOOST_PP_IIF( \
     WG_PP_VARDCLN_EXPLICIT_ISNONLOCALTYPE(explicitvardcln), \
     WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONLOCAL, \
-    WG_PP_VARDCLN_EXPLICIT_TUPLIZE_IMPL2) (explicitvardcln, istpl)
+    WG_PP_VARDCLN_EXPLICIT_TUPLIZE_LOCAL_OR_SPITERROR) (explicitvardcln, istpl)
 
-#define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_IMPL2(explicitvardcln, ignore) \
+#define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_LOCAL_OR_SPITERROR(explicitvardcln, ignore) \
   BOOST_PP_IIF( \
     WG_PP_KEYWORDS_STARTSWITH_LOCAL(explicitvardcln), \
     WG_PP_VARDCLN_EXPLICIT_TUPLIZE_LOCAL, \
-    WG_PP_VARDCLN_EXPLICIT_TUPLIZE_MISSING_TYPE_ERRMSG) (explicitvardcln)
+    WG_PP_VARDCLN_EXPLICIT_TUPLIZE_MISSING_TYPE_ERROR) (explicitvardcln)
 
-#define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_MISSING_TYPE_ERRMSG(explicitvardcln) \
-  ( WG_PP_ERROR ERROR_missing_type_in_explicit_type_var_dcln )
+#define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_MISSING_TYPE_ERROR(explicitvardcln) \
+  ( \
+    WG_PP_ERROR ERROR_missing_type_in_explicit_type_var_dcln \
+  )
 
 //-----------------------
 // Non-Local Type Macros.
