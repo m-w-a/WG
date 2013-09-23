@@ -22,11 +22,6 @@
 //TypesAliaser
 //------------
 
-// Expands to:
-//   Line specific id.
-#define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_NAME() \
-  WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_NAME_IMPL()
-
 #define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_DCLN(symbtbl) \
     WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_DCLN_IMPL(symbtbl)
 
@@ -45,11 +40,6 @@
 #define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN(symbtbl) \
     WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN_IMPL(symbtbl)
 
-#define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN( \
-  symbtbl, captured_values_typename, captured_values_objname) \
-    WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN_IMPL( \
-      symbtbl, captured_values_typename, captured_values_objname)
-
 //-------------
 //LocalFunction
 //-------------
@@ -66,14 +56,6 @@
   symbtbl, local_function_type_name) \
     WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPEDCLN_IMPL( \
       symbtbl, local_function_type_name)
-
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
-  WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE_IMPL(symbtbl)
-
-// Expands to:
-//   Comma seperated parameter list of the user specified local function.
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST(symbtbl) \
-  WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_IMPL(symbtbl)
 
 //-------------
 //GlobalFunctor
@@ -118,7 +100,9 @@
 //TypesAliaser
 //------------
 
-#define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_NAME_IMPL() \
+// Expands to:
+//   Line specific id.
+#define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_NAME() \
   WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE(captured_types_aliaser)
 
 #define WG_PP_LCLFUNCTION_CG_TYPEALIASER_SPECSEQ() \
@@ -160,7 +144,7 @@
         WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_SETVAR(symbtbl) )) \
   >
 
-#define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN_IMPL( \
+#define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN( \
   symbtbl, captured_values_typename, captured_values_objname) \
     WG_PP_SEQ_NOTHING_FOR_EACH_I( \
       WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN_ENTRY, \
@@ -188,7 +172,7 @@
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME_IMPL() \
   WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE(local_function_type)
 
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE_IMPL(symbtbl) \
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
   BOOST_PP_IIF( \
     WG_PP_LCLFUNCTION_SYMBOLTABLE_EXISTS_RETTYPE(symbtbl), \
     WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE(symbtbl), \
@@ -217,7 +201,9 @@
       WG_PP_SEQ_ELEM(indx, typeseq) varname \
     )
 
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_IMPL(symbtbl) \
+// Expands to:
+//   Comma seperated parameter list of the user specified local function.
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST(symbtbl) \
   WG_PP_SEQ_NOTHING_FOR_EACH_I( \
     WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY, \
     WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_PARAMS(symbtbl), \
