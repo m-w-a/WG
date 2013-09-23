@@ -27,9 +27,9 @@
 
 #define WG_PP_LCLFUNCTION_CG_CPP11_GLOBALFUNCTORTYPE_DCLN( \
   symbtbl, global_functor_type_name, local_functor_type_name) \
-    typedef WG_PP_LCLFUNCTION_CG_CPP11_GLOBALFUNCTORTYPE_TYPE( \
-      symbtbl, global_functor_type_name) \
-        global_functor_type_name ;
+  typedef WG_PP_LCLFUNCTION_CG_CPP11_GLOBALFUNCTORTYPE_TYPE( \
+    symbtbl, local_functor_type_name) \
+      global_functor_type_name ;
 
 #define WG_PP_LCLFUNCTION_CG_CPP11_GLOBALFUNCTORTYPE_TYPE( \
   symbtbl, local_functor_type_name) \

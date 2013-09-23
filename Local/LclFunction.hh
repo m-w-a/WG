@@ -10,7 +10,7 @@
 #ifdef BOOST_NO_CXX11_VARIADIC_TEMPLATES
   #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/CodeGenCPP03.hh>
 #else
-  //#include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/CodeGenCPP11.hh>
+  #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/CodeGenCPP11.hh>
 #endif
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/ErrorReporter.hh>
