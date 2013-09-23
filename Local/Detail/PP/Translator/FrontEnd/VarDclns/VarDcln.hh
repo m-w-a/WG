@@ -23,7 +23,7 @@
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_VARDCLN_ISEXPLICIT_NLT(vardcln) \
-  WG_PP_VARDCLN_ISEXPLICIT_NLT_IMPL(vardcln)
+  WG_PP_VARDCLN_ISEXPLICIT_NLT_IMPL1(vardcln)
 
 //###########
 //Impl Macros
@@ -43,9 +43,15 @@
     1, \
     0)
 
-#define WG_PP_VARDCLN_ISEXPLICIT_NLT_IMPL(vardcln) \
+#define WG_PP_VARDCLN_ISEXPLICIT_NLT_IMPL1(vardcln) \
   BOOST_PP_IIF( \
     WG_PP_ISNEXTTOKEN_A_TUPLE(1, vardcln), \
+    WG_PP_MAP_TO_1_ARG1, \
+    WG_PP_VARDCLN_ISEXPLICIT_NLT_IMPL2) (vardcln)
+
+#define WG_PP_VARDCLN_ISEXPLICIT_NLT_IMPL2(vardcln) \
+  BOOST_PP_IIF( \
+    WG_PP_KEYWORDS_STARTSWITH_PPESCAPE(vardcln), \
     1, \
     0)
 

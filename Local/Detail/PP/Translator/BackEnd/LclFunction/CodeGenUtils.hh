@@ -163,7 +163,7 @@
     < \
       indx, \
       BOOST_PP_SEQ_ELEM(1, istpl_cvtype_cvobj) \
-    >::type varname( BOOST_PP_SEQ_ELEM(2, istpl_cvtype_cvobj) .get<indx>() )
+    >::type varname( BOOST_PP_SEQ_ELEM(2, istpl_cvtype_cvobj) .get<indx>() ) ;
 
 //-------------
 //LocalFunction
