@@ -54,7 +54,7 @@ private:
   //
   //   typedef typename result_type<local_function_type>::type
   //     (*callback_type)(
-  //       global_functor_type const &,
+  //       global_functor_type &,
   //       param_types<local_function_type>,
   //       CAPTUREDVARSTYPE &);
   typedef
@@ -65,11 +65,11 @@ private:
         typename boost::mpl::push_front
         <
           typename function_operator_type::parameter_types,
-          global_functor_type const &
+          global_functor_type &
         >::type,
         typename function_operator_type::result_type
       >::type,
-      captured_var_types const &
+      captured_var_types &
     >::type mpl_callback_type;
 
 public:
@@ -87,50 +87,6 @@ public:
   {
     this->m_CallBack = callback;
   }
-
-  //--------------------------------------------------------------------------//
-  // PP generate operator() methods up to WG_PP_LCLFUNCTION_MAX_ARGS params.
-  // add_const add_ref params until very end.
-  // Method const so as to be able to be called by const std::function.
-  //--------------------------------------------------------------------------//
-
-  //  typedef
-  //    typename boost::function_types::result_type<local_function_type>::type
-  //      result_type;
-  //
-  //  typedef
-  //    boost::function_types::parameter_types<local_function_type>
-  //      parameter_types;
-  //
-  //  static int const arity =
-  //    boost::function_types::function_arity<local_function_type>::value;
-  //
-  //  result_type operator()() const
-  //  {
-  //    BOOST_STATIC_ASSERT((global_functor_type::arity == 0));
-  //    return m_CallBack(*this, m_CapturedVars);
-  //  }
-  //
-  // /* int operator()(int const & arg0, int const & arg1) const */
-  //  result_type operator()(
-  //    typename boost::add_reference
-  //    <
-  //      typename boost::add_const
-  //      <
-  //        typename boost::mpl::at<parameter_types, boost::mpl::int_<0> >::type
-  //      >::type
-  //    >::type arg0,
-  //    typename boost::add_reference
-  //    <
-  //      typename boost::add_const
-  //      <
-  //        typename boost::mpl::at<parameter_types, boost::mpl::int_<1> >::type
-  //      >::type
-  //    >::type arg1) const
-  //  {
-  //    BOOST_STATIC_ASSERT((global_functor_type::arity == 2));
-  //    return m_CallBack(*this, arg0, arg1, m_CapturedVars);
-  //  }
 
   using function_operator_type::operator();
 

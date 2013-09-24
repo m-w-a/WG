@@ -83,7 +83,7 @@
 //--------------
 
 #define WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP11_OPERATOR_BODY(argcount) \
-  derived_type const * const dptr = static_cast<derived_type const *>(this); \
+  derived_type * const dptr = static_cast<derived_type *>(this); \
   return local_functor_type::user_callback( \
     *dptr \
     BOOST_PP_ENUM_TRAILING_PARAMS( \
@@ -97,7 +97,7 @@
 
 #define WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP11_OPERATOR_DCLN(argcount) \
   result_type operator()( \
-    WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP11_OPERATOR_PARAMLIST(argcount) ) const \
+    WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP11_OPERATOR_PARAMLIST(argcount) ) \
   { \
     WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP11_OPERATOR_BODY(argcount) \
   }
@@ -107,6 +107,7 @@
 //-----
 
 #define WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP11_CLASS(argcount) \
+  /* Partial specialize on function operator arity. */ \
   template \
   < \
     typename DERIVED, \
@@ -132,6 +133,9 @@
     \
     static int const arity = argcount; \
     \
+    /* The function operator that is exposed to the user and is the public */ \
+    /* interface of the local function object. */ \
+    /* This interface is created from WG_LCLFUNCTION's params specification. */ \
     WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP11_OPERATOR_DCLN(argcount) \
   };
 

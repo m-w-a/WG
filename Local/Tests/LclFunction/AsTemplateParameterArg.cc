@@ -23,6 +23,8 @@ TEST(wg_lclfunction_astemplateparameterarg, StdForEach)
     int const dataCount = 5;
     int data[dataCount] = { 0, 1, 2, 3, 4 };
 
+    std::for_each(data, data + dataCount, accumulate);
+
     EXPECT_EQ(20, sum);
   }
   WG_GTEST_CATCH

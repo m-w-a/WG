@@ -21,8 +21,10 @@ param-seq:
 
 varbind:
 varspec:
-  Captured variables in the enclosing scope(s). Note that each call of the 
-  local function gets a clean captured by-value state.
+  Captures variables in the enclosing scope(s). Note that each call of the 
+  same local function object gets the same capturing object. So, if a capturing 
+  object's state is changed for a given local function object, that change will 
+  be reflected in the next call of the *same* local function object.
 
 //---
 //BNF

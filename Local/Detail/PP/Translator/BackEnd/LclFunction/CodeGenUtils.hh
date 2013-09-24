@@ -3,6 +3,7 @@
 
 #include <boost/preprocessor.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <boost/type_traits/add_reference.hpp>
 #include <WG/Local/Detail/PP/Translator/BackEnd/ID.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/SymbolTable.hh>
 #include <WG/Local/Detail/PP/Seq.hh>
@@ -157,21 +158,28 @@
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN_ENTRY( \
   r, istpl_cvtype_cvobj, indx, varname) \
-    WG_PP_TRNSLTR_UTILS_ADDTYPENAME( \
-      BOOST_PP_SEQ_ELEM(0, istpl_cvtype_cvobj)) \
-    boost::tuples::element \
+    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(BOOST_PP_SEQ_ELEM(0, istpl_cvtype_cvobj)) \
+    boost::add_reference \
     < \
-      indx, \
-      BOOST_PP_SEQ_ELEM(1, istpl_cvtype_cvobj) \
-    >::type varname \
+      WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_TUPLEELEMENTTYPE( \
+        BOOST_PP_SEQ_ELEM(0, istpl_cvtype_cvobj), \
+        indx, \
+        BOOST_PP_SEQ_ELEM(1, istpl_cvtype_cvobj)) \
+    >::type \
+    varname \
       ( \
-        WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_ACCESSVALUE( \
+        WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_TUPLEELEMENTACCESS( \
           BOOST_PP_SEQ_ELEM(0, istpl_cvtype_cvobj), \
           BOOST_PP_SEQ_ELEM(2, istpl_cvtype_cvobj), \
           indx) \
       ) ;
 
-#define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_ACCESSVALUE( \
+#define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_TUPLEELEMENTTYPE( \
+  istpl, indx, tupletype) \
+    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
+    boost::tuples::element < indx, tupletype >::type
+
+#define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_TUPLEELEMENTACCESS( \
   istpl, cvobj, indx) \
     cvobj . BOOST_PP_EXPR_IIF(istpl, template) get<indx>()
 
@@ -262,9 +270,9 @@
     /* global_functor_type::callback_type. */ \
     static WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
       user_callback( \
-        global_functor_type_name const & function_name \
+        global_functor_type_name & function_name \
         WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST(symbtbl), \
-        captured_values_type_name const & capturedvalues) \
+        captured_values_type_name & capturedvalues) \
     { \
       /* To avoid unused var warnings. */ \
       static_cast<void>( function_name ); \
