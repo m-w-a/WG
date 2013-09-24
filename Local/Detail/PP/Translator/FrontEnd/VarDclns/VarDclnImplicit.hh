@@ -49,18 +49,19 @@
       WG_PP_VARDCLN_IMPLICIT_TUPLIZE2 \
       BOOST_PP_IIF( \
         WG_PP_KEYWORDS_STARTSWITH_CONST(implicitvardcln), \
-        ( 1, WG_PP_KEYWORDS_EAT_HEADKEYWORD(implicitvardcln), hasvalueexpr, valueexpr, istpl ), \
+        ( 1, WG_PP_KEYWORDS_EAT_HEADKEYWORD(implicitvardcln), hasvalueexpr, \
+          valueexpr, istpl ), \
         ( 0, implicitvardcln, hasvalueexpr, valueexpr, istpl ) ))
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE2( \
-  addconst, implicitvardcln, hasvalueexpr, valueexpr, istpl) \
+  isconstqualified, implicitvardcln, hasvalueexpr, valueexpr, istpl) \
     WG_PP_VARDCLN_IMPLICIT_EXPAND2( \
       BOOST_PP_IIF( \
         BOOST_PP_NOT(hasvalueexpr), \
         WG_PP_VARDCLN_IMPLICIT_TUPLIZE_BOUND, \
         WG_PP_VARDCLN_IMPLICIT_TUPLIZE_SET) \
       BOOST_PP_LPAREN() \
-        addconst BOOST_PP_COMMA() \
+        isconstqualified BOOST_PP_COMMA() \
         BOOST_PP_SEQ_ENUM( \
           BOOST_PP_IIF( \
             WG_PP_KEYWORDS_STARTSWITH_REF(implicitvardcln), \
@@ -73,23 +74,23 @@
       BOOST_PP_RPAREN() )
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_SET( \
-  addconst, addref, var, valueexpr, istpl) \
+  isconstqualified, isrefqualified, var, valueexpr, istpl) \
     ( \
       BOOST_PP_CAT( \
         WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_, \
-        BOOST_PP_CAT(addconst, addref) ) (valueexpr, istpl) \
+        BOOST_PP_CAT(isconstqualified, isrefqualified) ) (valueexpr, istpl) \
     ) \
     (var)
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_BOUND( \
-  addconst, addref, var, istpl) \
+  isconstqualified, isrefqualified, var, istpl) \
     ( \
       BOOST_PP_CAT( \
         BOOST_PP_IIF( \
           WG_PP_KEYWORDS_STARTSWITH_THISU(var), \
           WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_, \
           WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_), \
-        BOOST_PP_CAT(addconst, addref) ) (var, istpl) \
+        BOOST_PP_CAT(isconstqualified, isrefqualified) ) (var, istpl) \
     ) \
     (var)
 
@@ -110,7 +111,7 @@
         WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) >::type >::type
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_00(bvar, istpl) \
-  WG_PP_DEDUCEDTYPE WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, this)
+  WG_PP_DEDUCEDTYPE WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, this) const
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_01(bvar, istpl) \
   WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_ERRMSG()
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_10(bvar, istpl) \

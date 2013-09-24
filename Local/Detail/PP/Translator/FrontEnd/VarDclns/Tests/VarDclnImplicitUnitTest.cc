@@ -35,7 +35,7 @@ RESCAN_WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG(VDI6)
 //( add_const< BOOST_TYPEOF(var6) >::type ) (var2)
 //( add_reference< BOOST_TYPEOF(var5) >::type ) (var3)
 //( add_reference<add_const< BOOST_TYPEOF(var4) >::type>::type ) (var4)
-//( BOOST_TYPEOF(this) ) (this_)
+//( BOOST_TYPEOF(this) const) (this_)
 //( add_const<add_pointer<add_const<BOOST_TYPEOF(*this)>::type>::type>::type ) (this_)
 */
 
@@ -127,7 +127,7 @@ struct testNoQualThisUBind
     using namespace boost;
 #define RESULT RESCAN_WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG(VDI5)
     TEST_DIDBIND_TYPE(
-      BOOST_TYPEOF(this),
+      BOOST_TYPEOF(this) const,
       EXTRACT_TYPE(RESULT) )
     TEST_DIDBIND_OBJ( this_, EXTRACT_VAR(RESULT) )
 #undef RESULT
