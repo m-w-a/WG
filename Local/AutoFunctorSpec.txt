@@ -100,6 +100,9 @@ local():
 this_:
   1) If encountered as a bound variable name, then it will bind to the "this" 
     keyword.
+  ---------
+  Note: -->
+  ---------
   2) If encountered as a bound variable and implicitly typed and explicitly
     qualified with the keyword const, then the constness will apply to the
     pointed-to-type.
