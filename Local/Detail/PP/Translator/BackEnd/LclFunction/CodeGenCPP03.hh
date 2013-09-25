@@ -2,6 +2,7 @@
 #define WG_PP_LCLFUNCTION_CODEGENCPP03_HH_
 
 #include <boost/preprocessor.hpp>
+#include <boost/mpl/vector.hpp>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/SymbolTable.hh>
 #include <WG/Local/Detail/LclFunction/GlobalFunctorTypeCPP03.hh>
 #include <WG/Local/Detail/PP/Seq.hh>
@@ -35,7 +36,11 @@
   symbtbl, global_functor_type_name) \
     wg::lclfunction::detail::global_functor_type \
     < \
-      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME(), \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl), \
+      boost::mpl::vector \
+      < \
+        WG_PP_SEQ_ENUM( WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_PARAMS(symbtbl) ) \
+      >, \
       WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME() \
     >
 
@@ -77,10 +82,6 @@
 
 #define WG_PP_LCLFUNCTION_CG_CPP03_START_IMPL2(function_name, symbtbl) \
   WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN(symbtbl) \
-  \
-  WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPEDCLN( \
-    symbtbl, \
-    WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME() ) \
   \
   WG_PP_LCLFUNCTION_CG_CPP03_GLOBALFUNCTORTYPE_DCLN( \
     symbtbl, \

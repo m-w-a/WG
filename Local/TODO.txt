@@ -24,11 +24,12 @@ ExpandN:
   AUTOFUNCTOR -> ...
 
 LclFunction:
-  1) compile fail tests for wrong number of operands to function, ie lin().
+  x) compile fail tests for wrong number of operands to function, ie lin().
   x) add C++11Spec.cc to Makefile.am
   x) Spec -> params do ppescape processing
   x) take care of WG_PP_DEDUCEDTYPE
   5) update spec for varbind/varset, see AutoFunctorSpec.txt
+  6) remove local_function_type_dcln
 
 Why not BOOST_IDENTITY_TYPE_TPL?
  

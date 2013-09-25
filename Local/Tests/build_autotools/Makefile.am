@@ -210,6 +210,7 @@ LCLFUNCTION_SRC = \
     ../LclFunction/AllCombo.cc \
     ../LclFunction/AllComboTpl.cc \
     ../LclFunction/AsTemplateParameterArg.cc \
+    ../LclFunction/AsTemplateParameterArgTpl.cc \
     ../LclFunction/Nested.cc \
     ../LclFunction/NestedTpl.cc \
     ../LclFunction/NoSpec.cc \

@@ -66,10 +66,10 @@ TEST(wg_lclfunction_codegenspec, cpp11)
     
     /* This functions prototype should match global_functor_type::callback_type. */
     static int user_callback(
-      global_functor_type const & LOCAL_FUNCTION_NAME(),
+      global_functor_type & LOCAL_FUNCTION_NAME(),
       int const & x, 
       int const & y, 
-      captured_vars_type const & capturedvars)
+      captured_vars_type & capturedvars)
     {
       /* To avoid unused var warnings. */
       (void)(LOCAL_FUNCTION_NAME());

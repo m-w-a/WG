@@ -3,12 +3,7 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/PP.hh>
-#include <boost/type_traits/add_const.hpp>
-#include <boost/type_traits/add_reference.hpp>
-#include <boost/mpl/at.hpp>
-#include <boost/mpl/int.hpp>
-#include <boost/function_types/result_type.hpp>
-#include <boost/function_types/parameter_types.hpp>
+#include <WG/Local/Detail/PP/LclFunction/FunctionOperatorUtils.hh>
 
 //###########
 //Public APIs
@@ -34,7 +29,8 @@
   template \
   < \
     typename DERIVED, \
-    typename LCLFUNCTIONTYPE, \
+    typename LCLFUNCTION_RETTYPE, \
+    typename LCLFUNCTION_PARAMTYPES, \
     int ARITY \
   > \
   class WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_NAME() ; \
@@ -62,15 +58,7 @@
 // BOOST_PP_ENUM functor.
 #define WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_OPERATOR_PARAMLIST_ENTRY( \
   z, indx, data) \
-  /* For efficiency and safety, pass handle all user params as const */ \
-  /* references until they are forwarded to the local_functor obj. */ \
-  typename boost::add_reference \
-  < \
-    typename boost::add_const \
-    < \
-      typename boost::mpl::at<parameter_types, boost::mpl::int_<indx> >::type \
-    >::type \
-  >::type \
+    WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS_ARGTYPENAME(indx) \
     BOOST_PP_CAT( \
       WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_OPERATOR_ARGROOTNAME(), indx)
 
@@ -107,25 +95,18 @@
   template \
   < \
     typename DERIVED, \
-    typename LCLFUNCTIONTYPE \
+    typename LCLFUNCTION_RETTYPE, \
+    typename LCLFUNCTION_PARAMTYPES \
   > \
   class \
     WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_NAME() \
-    <DERIVED, LCLFUNCTIONTYPE, argcount> \
+    <DERIVED, LCLFUNCTION_RETTYPE, LCLFUNCTION_PARAMTYPES, argcount> \
   { \
     typedef DERIVED derived_type; \
-    typedef LCLFUNCTIONTYPE local_function_type; \
     \
   public: \
-    typedef \
-      typename boost::function_types::result_type<local_function_type>::type \
-        result_type; \
-    \
-    typedef \
-      boost::function_types::parameter_types<local_function_type> \
-        parameter_types; \
-    \
-    static int const arity = argcount; \
+    WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS_FUNCTORCOMPONENTDCLNS( \
+      LCLFUNCTION_RETTYPE, LCLFUNCTION_PARAMTYPES, argcount) \
     \
     /* The function operator that is exposed to the user and is the public */ \
     /* interface of the local function object. */ \

@@ -45,6 +45,9 @@
 //LocalFunction
 //-------------
 
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
+  WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE_IMPL(symbtbl)
+
 // Expands to:
 //   Line specific id.
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME() \
@@ -134,8 +137,6 @@
     typedef WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPE(symbtbl) \
       WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME() ;
 
-// Do not implicitly capture variables by reference since each call of a
-// local function should get a clean captured-by-value state.
 #define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPE(symbtbl) \
   boost::tuple \
   < \
@@ -191,7 +192,7 @@
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME_IMPL() \
   WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE(local_function_type)
 
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE_IMPL(symbtbl) \
   BOOST_PP_IIF( \
     WG_PP_LCLFUNCTION_SYMBOLTABLE_EXISTS_RETTYPE(symbtbl), \
     WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE(symbtbl), \
@@ -203,35 +204,51 @@
       WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
       ( local_function_type_name ) \
       ( \
-          WG_PP_LCLFUNCTION_SYMBOLTABLE_PARAMSLIST(symbtbl) \
+          WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMSLIST(symbtbl) \
       ) ;
 
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_PARAMSLIST(symbtbl) \
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMSLIST(symbtbl) \
   WG_PP_SEQ_ENUM( \
     WG_PP_SEQ_FOR_EACH_I( \
-      WG_PP_LCLFUNCTION_SYMBOLTABLE_PARAMSLIST_ENTRY, \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMSLIST_ENTRY, \
       WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_PARAMS(symbtbl), \
       WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_PARAMS(symbtbl)) )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_PARAMSLIST_ENTRY( \
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMSLIST_ENTRY( \
   r, typeseq, indx, varname) \
     ( \
       WG_PP_SEQ_ELEM(indx, typeseq) varname \
     )
 
 // Expands to:
-//   Comma seperated parameter list of the user specified local function.
+//   Comma seperated add_referenced parameter list of the user specified
+//   local function. The add_reference is for efficiency, since the parameter
+//   values are being forwarded from another function.
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST(symbtbl) \
   WG_PP_SEQ_NOTHING_FOR_EACH_I( \
-    WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY, \
+    BOOST_PP_CAT( \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY_, \
+      WG_PP_LCLFUNCTION_SYMBOLTABLE_ISTPL(symbtbl) ), \
     WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_PARAMS(symbtbl), \
     WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_PARAMS(symbtbl) )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY( \
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY_0( \
   r, typeseq, indx, varname) \
-    , WG_PP_SEQ_ELEM(indx, typeseq) varname
+    , WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY_CMN( \
+        typeseq, indx, varname)
+
+// WG_PP_SEQ_FOR_EACH_I functor.
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY_1( \
+  r, typeseq, indx, varname) \
+    , typename \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY_CMN( \
+        typeseq, indx, varname)
+
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY_CMN( \
+  typeseq, indx, varname) \
+    boost::add_reference< WG_PP_SEQ_ELEM(indx, typeseq) >::type varname
 
 //-------------
 //GlobalFunctor
@@ -266,8 +283,6 @@
   function_name, \
   global_functor_type_name, \
   captured_values_type_name) \
-    /* This functions prototype should match */ \
-    /* global_functor_type::callback_type. */ \
     static WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
       user_callback( \
         global_functor_type_name & function_name \

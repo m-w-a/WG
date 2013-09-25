@@ -1,13 +1,12 @@
 #ifndef WG_LCLFUNCTION_DETAIL_GLOBALFUNCTORTYPECPP03_HH_
 #define WG_LCLFUNCTION_DETAIL_GLOBALFUNCTORTYPECPP03_HH_
 
+#include <boost/mpl/transform.hpp>
 #include <boost/mpl/vector.hpp>
+#include <boost/mpl/size.hpp>
 #include <boost/mpl/push_front.hpp>
 #include <boost/mpl/push_back.hpp>
-#include <boost/function_types/result_type.hpp>
-#include <boost/function_types/parameter_types.hpp>
 #include <boost/function_types/function_pointer.hpp>
-#include <boost/function_types/function_arity.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
@@ -27,15 +26,28 @@ WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_DCLNS()
 #define FUNCTIONOPERATORTYPE \
   WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_NAME() \
   < \
-    global_functor_type<LCLFUNCTIONTYPE, CAPTUREDVARSTYPE>, \
-    LCLFUNCTIONTYPE, \
-    boost::function_types::function_arity<LCLFUNCTIONTYPE>::value \
+    global_functor_type \
+    < \
+      LCLFUNCTION_RETTYPE, \
+      LCLFUNCTION_PARAMTYPES, \
+      CAPTUREDVARSTYPE \
+    >, \
+    LCLFUNCTION_RETTYPE, \
+    LCLFUNCTION_PARAMTYPES, \
+    boost::mpl::size<LCLFUNCTION_PARAMTYPES>::value \
   >
 
-// LCLFUNCTIONTYPE: The specified local function type.
+// LCLFUNCTION_PARAMTYPES:
+//   An mpl vector of the specified local function param
+//   types.
 // CAPTUREDVARSTYPE: A tuple of captured local variables, if any.
+// NOTE:
+//   USERCALLBACK method type cannot be passed as a template parameter to
+//   this class because its signature contains the type of this class as a
+//   parameter. Hence, it has to be construct using TMP techniques.
 template<
-  typename LCLFUNCTIONTYPE,
+  typename LCLFUNCTION_RETTYPE,
+  typename LCLFUNCTION_PARAMTYPES,
   typename CAPTUREDVARSTYPE>
 class global_functor_type :
   private FUNCTIONOPERATORTYPE
@@ -46,17 +58,18 @@ class global_functor_type :
 #undef FUNCTIONOPERATORTYPE
 
 public:
-  typedef LCLFUNCTIONTYPE local_function_type;
   typedef CAPTUREDVARSTYPE captured_var_types;
 
 private:
-  // Synthesize the call back type. It's prototype should be:
-  //
-  //   typedef typename result_type<local_function_type>::type
-  //     (*callback_type)(
-  //       global_functor_type &,
-  //       param_types<local_function_type>,
-  //       CAPTUREDVARSTYPE &);
+  typedef
+    typename boost::mpl::transform
+    <
+      typename function_operator_type::parameter_types,
+      boost::add_reference<boost::mpl::_1>
+    >::type add_refd_param_types;
+  // Synthesize the call back type.
+  // This functions prototype should match
+  // local_functor_type_cpp03::user_callback.
   typedef
     typename boost::mpl::push_back
     <
@@ -64,7 +77,7 @@ private:
       <
         typename boost::mpl::push_front
         <
-          typename function_operator_type::parameter_types,
+          add_refd_param_types,
           global_functor_type &
         >::type,
         typename function_operator_type::result_type
