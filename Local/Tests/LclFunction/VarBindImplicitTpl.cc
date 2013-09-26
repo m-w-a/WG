@@ -110,12 +110,12 @@ struct OkIfLocalFunctionBound
   {
     T didBind = false;
 
-    WG_LCLFUNCTION(bindVar, varbind (ref didBind) )
+    WG_LCLFUNCTION_TPL(bindVar, varbind (ref didBind) )
     {
       didBind = true;
     }WG_LCLFUNCTION_END;
 
-    WG_LCLFUNCTION(bindFunc, varbind (ref bindVar) )
+    WG_LCLFUNCTION_TPL(bindFunc, varbind (ref bindVar) )
     {
       bindVar();
     }WG_LCLFUNCTION_END;
@@ -126,7 +126,7 @@ struct OkIfLocalFunctionBound
   }
 };
 }
-TEST(wg_lclfunction_varbindimplicit, OkIfLocalFunctionBound)
+TEST(wg_lclfunction_varbindimplicit_tpl, OkIfLocalFunctionBound)
 {
   try
   {
