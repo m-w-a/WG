@@ -6,7 +6,7 @@
 namespace
 {
 template <typename T>
-struct CopyAssignment
+struct OkIfCopyAssigned
 {
   static void run()
   {
@@ -21,11 +21,11 @@ struct CopyAssignment
   }
 };
 }
-TEST(wg_lclfunction_boost_function_tpl, CopyAssignment)
+TEST(wg_lclfunction_boost_function_tpl, OkIfCopyAssigned)
 {
   try
   {
-    CopyAssignment<int>::run();
+    OkIfCopyAssigned<int>::run();
   }
   WG_GTEST_CATCH
 }
@@ -33,7 +33,7 @@ TEST(wg_lclfunction_boost_function_tpl, CopyAssignment)
 namespace
 {
 template <typename T>
-struct ConstRefAssignment
+struct OkIfConstRefAssigned
 {
   static void run()
   {
@@ -48,11 +48,11 @@ struct ConstRefAssignment
   }
 };
 }
-TEST(wg_lclfunction_boost_function_tpl, ConstRefAssignment)
+TEST(wg_lclfunction_boost_function_tpl, OkIfConstRefAssigned)
 {
   try
   {
-    ConstRefAssignment<int>::run();
+    OkIfConstRefAssigned<int>::run();
   }
   WG_GTEST_CATCH
 }
@@ -60,7 +60,7 @@ TEST(wg_lclfunction_boost_function_tpl, ConstRefAssignment)
 namespace
 {
 template <typename T>
-struct ReturnFromFunction
+struct OkIfReturnedFromFunction
 {
   typedef boost::function<T (T)> square_type;
   static square_type run()
@@ -74,12 +74,12 @@ struct ReturnFromFunction
   }
 };
 }
-TEST(wg_lclfunction_boost_function_tpl, ReturnFromFunction)
+TEST(wg_lclfunction_boost_function_tpl, OkIfReturnedFromFunction)
 {
   try
   {
-    ReturnFromFunction<int>::square_type square =
-      ReturnFromFunction<int>::run();
+    OkIfReturnedFromFunction<int>::square_type square =
+      OkIfReturnedFromFunction<int>::run();
 
     EXPECT_EQ(16, square(4));
   }

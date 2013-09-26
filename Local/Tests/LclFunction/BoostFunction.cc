@@ -3,7 +3,7 @@
 #include <WG/Local/LclFunction.hh>
 #include <boost/function.hpp>
 
-TEST(wg_lclfunction_boost_function, CopyAssignment)
+TEST(wg_lclfunction_boost_function, OkIfCopyAssigned)
 {
   try
   {
@@ -19,7 +19,7 @@ TEST(wg_lclfunction_boost_function, CopyAssignment)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclfunction_boost_function, ConstRefAssignment)
+TEST(wg_lclfunction_boost_function, OkayIfConstRefAssigned)
 {
   try
   {
@@ -37,7 +37,7 @@ TEST(wg_lclfunction_boost_function, ConstRefAssignment)
 
 namespace
 {
-struct ReturnFromFunction
+struct OkIfReturnedFromFunction
 {
   typedef boost::function<int(int)> square_type;
   static square_type run()
@@ -51,11 +51,11 @@ struct ReturnFromFunction
   }
 };
 }
-TEST(wg_lclfunction_boost_function, ReturnFromFunction)
+TEST(wg_lclfunction_boost_function, OkIfReturnedFromFunction)
 {
   try
   {
-    ReturnFromFunction::square_type square = ReturnFromFunction::run();
+    OkIfReturnedFromFunction::square_type square = OkIfReturnedFromFunction::run();
 
     EXPECT_EQ(16, square(4));
   }
