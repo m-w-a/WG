@@ -9,6 +9,7 @@
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/Markers.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/TypeAliaser.hh>
+#include <WG/Local/Detail/PP/LclFunction/ConstInvariance.hh>
 
 //###########
 //Public APIs
@@ -285,7 +286,8 @@
   captured_values_type_name) \
     static WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
       user_callback( \
-        global_functor_type_name & function_name \
+        global_functor_type_name \
+          WG_PP_LCLFUNCTION_CONSTINVARIANCE_KEYWORD_CONST & function_name \
         WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST(symbtbl), \
         captured_values_type_name & capturedvalues) \
     { \

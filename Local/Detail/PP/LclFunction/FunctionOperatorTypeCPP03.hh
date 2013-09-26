@@ -4,6 +4,7 @@
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/LclFunction/FunctionOperatorUtils.hh>
+#include <WG/Local/Detail/PP/LclFunction/ConstInvariance.hh>
 
 //###########
 //Public APIs
@@ -67,7 +68,11 @@
 //--------------
 
 #define WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_OPERATOR_BODY(argcount) \
-  derived_type * const dptr = static_cast<derived_type *>(this); \
+  derived_type WG_PP_LCLFUNCTION_CONSTINVARIANCE_KEYWORD_CONST * const dptr = \
+    static_cast \
+    < \
+      derived_type WG_PP_LCLFUNCTION_CONSTINVARIANCE_KEYWORD_CONST * \
+    >(this); \
   return dptr->m_CallBack( \
     *dptr \
     BOOST_PP_ENUM_TRAILING_PARAMS( \
@@ -82,6 +87,7 @@
 #define WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_OPERATOR_DCLN(argcount) \
   result_type operator()( \
     WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_OPERATOR_PARAMLIST(argcount) ) \
+    WG_PP_LCLFUNCTION_CONSTINVARIANCE_KEYWORD_CONST \
   { \
     WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_OPERATOR_BODY(argcount) \
   }

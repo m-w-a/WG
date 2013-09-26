@@ -13,6 +13,7 @@
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/int.hpp>
 #include <WG/Local/Detail/PP/LclFunction/FunctionOperatorTypeCPP03.hh>
+#include <WG/Local/Detail/PP/LclFunction/ConstInvariance.hh>
 
 namespace wg
 {
@@ -78,7 +79,7 @@ private:
         typename boost::mpl::push_front
         <
           add_refd_param_types,
-          global_functor_type &
+          global_functor_type WG_PP_LCLFUNCTION_CONSTINVARIANCE_KEYWORD_CONST &
         >::type,
         typename function_operator_type::result_type
       >::type,
@@ -105,11 +106,9 @@ public:
 
 private:
   callback_type m_CallBack;
-  // Note: the const-ness of m_CapturedVars will not propogate to it's member
-  //   types if said types are references, since add_const<T &>::type is T.
-  //   Hence no compile time errors will ensue when unpacking data to each
-  //   individual captured var.
-  captured_var_types m_CapturedVars;
+  // Mutable to allow this obj to be used with const std::function.
+  WG_PP_LCLFUNCTION_CONSTINVARIANCE_KEYWORD_MUTABLE
+    captured_var_types m_CapturedVars;
 };
 
 }

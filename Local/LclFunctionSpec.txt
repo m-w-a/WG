@@ -7,6 +7,45 @@ Limitations:
   In C++03 may not be usable across library boundaries since local types lack
   linkage. Hence, the necessary symbols may not be exported.
 
+Boost::Function
+  Local function objects maybe assigned to boost::function objects. The const
+  qualification of such boost::function objects will not affect how the local
+  function object is called. This to allow the following use case:
+    struct signaler
+    {
+      typedef boost::function<void()> callback_type;
+      
+      explicit signaler(callback_type const & callback)
+      : m_callback(callback)
+      {}
+      
+      ~explicit()
+      {
+        m_callback();
+      }
+      
+      callback_type const m_callback;
+    };
+    
+    void listen()
+    {
+      bool didCall = false;
+      WG_LCLFUNCTION(lstnr, varbind (ref didcall) )
+      {
+        didCall = true;
+      }WG_LCLFUNCTION_END;
+      
+      {
+        signaler s(lstnr);
+      }
+      
+      BOOST_TEST(didCall == true);
+    }
+    
+  Clearly the intent of const qualifying signaler::m_callback is to prevent 
+  reassignment after ctor initialization, not to prevent lstnr from being
+  called because it captured didcall by non-const reference.
+
 //----------
 //Semantics:
 //----------

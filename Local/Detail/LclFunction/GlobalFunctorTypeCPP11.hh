@@ -61,11 +61,9 @@ public:
   using function_operator_type::operator();
 
 private:
-  // Note: the const-ness of m_CapturedVars will not propogate to it's member
-  //   types if said types are references, since add_const<T &>::type is T.
-  //   Hence no compile time errors will ensue when unpacking data to each
-  //   individual captured var.
-  captured_vars_type m_CapturedVars;
+  // Mutable to allow this obj to be used with const std::function.
+  WG_PP_LCLFUNCTION_CONSTINVARIANCE_KEYWORD_MUTABLE
+    captured_vars_type m_CapturedVars;
 };
 
 }
