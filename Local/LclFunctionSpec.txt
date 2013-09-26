@@ -1,11 +1,26 @@
 WG_LCLFUNCTION_TYPE(name)
   Expands to the implementation dependent type of the object named "name".
-  
-Note: All terms not defined here should be referenced in AutoFunctorSpec.txt
+
+Differences w/Boost.LocalFunction
+  x) This library allows the function name to be specified at and only at the 
+    top of the local function declaration, unlike Boost::LocalFunction.
+  x) This library allows local functions to maintain internal state without 
+    referencing external variables (via varset), unlike Boost::LocalFunction.
+  x) This library uses a different syntax.
+  x) This library does not have default parameters, unlike Boost::LocalFunction. 
+    In the author's view it adds too little expressivity to be worth the effort  
+    to implement.
 
 Limitations: 
   In C++03 may not be usable across library boundaries since local types lack
   linkage. Hence, the necessary symbols may not be exported.
+
+Standard Type Names
+  Withing the local function body, the following typenames are available:
+    result_type
+    arg1_type
+    arg2_type
+    ...
 
 Boost::Function
   Local function objects maybe assigned to boost::function objects. The const
@@ -49,7 +64,9 @@ Boost::Function
 //----------
 //Semantics:
 //----------
-  
+
+Note: All terms not defined here should be referenced in AutoFunctorSpec.txt
+
 return:
   1) If present then indicates the return type of the function,
   2) else if not present then the return type of the function is void.

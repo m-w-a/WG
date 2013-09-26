@@ -29,7 +29,8 @@ LclFunction:
   x) Spec -> params do ppescape processing
   x) take care of WG_PP_DEDUCEDTYPE
   5) update spec for varbind/varset, see AutoFunctorSpec.txt
-  6) remove local_function_type_dcln
+  x) remove local_function_type_dcln
+  7) what does const local function obj mean?
 
 Why not BOOST_IDENTITY_TYPE_TPL?
  

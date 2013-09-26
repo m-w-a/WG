@@ -101,3 +101,36 @@ TEST(wg_lclfunction_varbindimplicit_tpl, OkIfKeywordThisUBound)
   WG_GTEST_CATCH
 }
 
+namespace
+{
+template <typename T>
+struct OkIfLocalFunctionBound
+{
+  static void run()
+  {
+    T didBind = false;
+
+    WG_LCLFUNCTION(bindVar, varbind (ref didBind) )
+    {
+      didBind = true;
+    }WG_LCLFUNCTION_END;
+
+    WG_LCLFUNCTION(bindFunc, varbind (ref bindVar) )
+    {
+      bindVar();
+    }WG_LCLFUNCTION_END;
+
+    bindFunc();
+
+    EXPECT_TRUE(didBind);
+  }
+};
+}
+TEST(wg_lclfunction_varbindimplicit, OkIfLocalFunctionBound)
+{
+  try
+  {
+    OkIfLocalFunctionBound<bool>::run();
+  }
+  WG_GTEST_CATCH
+}

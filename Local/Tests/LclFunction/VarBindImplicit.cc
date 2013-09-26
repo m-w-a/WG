@@ -84,3 +84,22 @@ TEST(wg_lclfunction_varbindimplicit, OkIfKeywordThisUBound)
   }
   WG_GTEST_CATCH
 }
+
+TEST(wg_lclfunction_varbindimplicit, OkIfLocalFunctionBound)
+{
+  bool didBind = false;
+
+  WG_LCLFUNCTION(bindVar, varbind (ref didBind) )
+  {
+    didBind = true;
+  }WG_LCLFUNCTION_END;
+
+  WG_LCLFUNCTION(bindFunc, varbind (ref bindVar) )
+  {
+    bindVar();
+  }WG_LCLFUNCTION_END;
+
+  bindFunc();
+
+  EXPECT_TRUE(didBind);
+}
