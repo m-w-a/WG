@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
+#include <utility>
 
 TEST(wg_autofunctor_membindexplicit, EnsureTypeOfNotUsed)
 {
@@ -30,6 +31,25 @@ TEST(wg_autofunctor_membindexplicit, OkIf1ArgBound)
     WG_AUTOFUNCTOR_END;
 
     EXPECT_TRUE(didArgumentBind);
+  }
+  WG_GTEST_CATCH
+}
+
+TEST(wg_autofunctor_membindexplicit, OkIfPPEscaped1ArgBound)
+{
+  try
+  {
+    std::pair<bool, int> didArgumentBind = std::make_pair(false, 0);
+
+    WG_AUTOFUNCTOR
+    (oneArgAutoFunctor,
+      membind (ppescape((std::pair<bool, int> &)) didArgumentBind) )
+    {
+      this->didArgumentBind = std::make_pair(true, 1);
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_TRUE(didArgumentBind.first);
   }
   WG_GTEST_CATCH
 }

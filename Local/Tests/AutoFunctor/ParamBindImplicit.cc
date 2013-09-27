@@ -71,7 +71,6 @@ struct OkIfKeywordThisUBound
   }
 };
 }
-
 TEST(wg_autofunctor_parambindimplicit, OkIfKeywordThisUBound)
 {
   try

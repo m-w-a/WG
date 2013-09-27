@@ -4,7 +4,7 @@
 
 namespace
 {
-typedef float ignore_type;
+typedef float ignored_type;
 bool autoFunctionCalled = false;
 
 template <typename T>
@@ -25,7 +25,7 @@ TEST(wg_autofunctortpl, NoSpec)
 {
   try
   {
-    NoSpec<ignore_type>::run();
+    NoSpec<ignored_type>::run();
   }
   WG_GTEST_CATCH
 }

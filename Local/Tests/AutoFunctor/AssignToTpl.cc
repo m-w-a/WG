@@ -1,10 +1,11 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
+#include <utility>
 
 namespace
 {
-typedef float ignore_type;
+typedef float ignored_type;
 }
 
 namespace
@@ -15,7 +16,7 @@ struct OkIfNonLocalExplicit
   static void run()
   {
     T1 didAssign = 0;
-    WG_AUTOFUNCTOR(assign, assignto ((bool) didAssign) )
+    WG_AUTOFUNCTOR_TPL(assign, assignto ((bool) didAssign) )
     {
       return true;
     }
@@ -30,6 +31,35 @@ TEST(wg_autofunctor_assigntotpl, OkIfNonLocalExplicit)
   try
   {
     OkIfNonLocalExplicit<bool>::run();
+  }
+  WG_GTEST_CATCH
+}
+
+namespace
+{
+template <typename T1, typename T2>
+struct OkIfNonLocalExplicitPPEscaped
+{
+  static void run()
+  {
+    std::pair<T1, T2> didAssign = std::make_pair(false, 0);
+    WG_AUTOFUNCTOR_TPL
+    (assign,
+      assignto (ppescape((std::pair<T1, T2>)) didAssign) )
+    {
+      return std::make_pair(true, 1);
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_TRUE(didAssign.first);
+  }
+};
+}
+TEST(wg_autofunctor_assigntotpl, OkIfNonLocalExplicitPPEscaped)
+{
+  try
+  {
+    OkIfNonLocalExplicitPPEscaped<bool, int>::run();
   }
   WG_GTEST_CATCH
 }
@@ -89,7 +119,7 @@ TEST(wg_autofunctor_assigntotpl, OkIfLocal)
 {
   try
   {
-    OkIfLocal<ignore_type>::run();
+    OkIfLocal<ignored_type>::run();
   }
   WG_GTEST_CATCH
 }
@@ -122,7 +152,7 @@ TEST(wg_autofunctor_assigntotpl, OkIfLocalRef)
 {
   try
   {
-    OkIfLocalRef<ignore_type>::run();
+    OkIfLocalRef<ignored_type>::run();
   }
   WG_GTEST_CATCH
 }

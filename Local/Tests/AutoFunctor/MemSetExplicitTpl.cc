@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
+#include <utility>
 
 namespace
 {
@@ -55,6 +56,36 @@ TEST(wg_autofunctor_memsetexplicittpl, OkIf1ArgSet)
   try
   {
     OkIf1ArgSet<bool>::run();
+  }
+  WG_GTEST_CATCH
+}
+
+namespace
+{
+template <typename T1, typename T2>
+struct OkIfPPEscaped1ArgSet
+{
+  static void run()
+  {
+    std::pair<T1, T2> didAssign = std::make_pair(false, 0);
+
+    WG_AUTOFUNCTOR_TPL
+    (oneArgAutoFunctor,
+      memset (ppescape((std::pair<bool, int> &)) assigner, didAssign) )
+    {
+      this->assigner.first = true;
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_TRUE(didAssign.first);
+  }
+};
+}
+TEST(wg_autofunctor_memsetexplicittpl, OkIfPPEscaped1ArgSet)
+{
+  try
+  {
+    OkIfPPEscaped1ArgSet<bool, int>::run();
   }
   WG_GTEST_CATCH
 }

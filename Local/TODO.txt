@@ -2,17 +2,36 @@ AutoFunctor
 -----------
 granularize pp includes ??
 
-x) optimize IIF -> by splitting branches
-x) finish pp unit tests.
-  do SetVarDclnNormalize.hh - do compile time array comparisons exist?
-x) simplify LOCALOPERANDSYNTAXCHECK error msg.
-
 x) Better Syntax Error Checking/Reporting:
-  x) BOOST_PP_ASSERT_MSG
-  x) empty spec
-  x) ref thisu
-  missing type in explicit-type-var-dcln
-  missing var in "..."
-  missing type in implicit-type-var-dcln
-  missing var in "..."
+  missing type in explicit-type-var-dcln ?
+  missing var in "..." ?
+  missing type in implicit-type-var-dcln ?
+  missing var in "..." ?
 
+x) Embedded comma syntax.
+  x) Test (std::pair<foo, bar>)
+  x) Test ppescape.
+
+Tests: tpl -> _tpl
+
+Misc.
+-----
+
+KeywordsUnitTest.cc
+
+ExpandN:
+  test
+  AUTOFUNCTOR -> ...
+
+LclFunction:
+  x) compile fail tests for wrong number of operands to function, ie lin().
+  x) add C++11Spec.cc to Makefile.am
+  x) Spec -> params do ppescape processing
+  x) take care of WG_PP_DEDUCEDTYPE
+  x) update spec for varbind/varset, see AutoFunctorSpec.txt
+  x) remove local_function_type_dcln
+  x) what does const local function obj mean -> nothing
+  x) tests uniform naming scheme.
+
+Why not BOOST_IDENTITY_TYPE_TPL?
+ 
