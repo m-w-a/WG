@@ -45,7 +45,7 @@ class global_functor_type :
   public FUNCTIONOPERATORTYPE
 {
   friend class FUNCTIONOPERATORTYPE;
-  typedef FUNCTIONOPERATORTYPE function_operator_type;
+  typedef FUNCTIONOPERATORTYPE base_class_type;
 
 #undef FUNCTIONOPERATORTYPE
 
@@ -58,7 +58,7 @@ public:
   : m_CapturedVars(vars)
   {}
 
-  using function_operator_type::operator();
+  using base_class_type::operator();
 
 private:
   // Mutable to allow this obj to be used with const std::function.

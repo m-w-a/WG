@@ -23,7 +23,7 @@
 #define WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_OPERATOR_ARGROOTNAME() arg
 
 #define WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_NAME_IMPL() \
-  base_functor_type
+  function_operator_type
 
 #define WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_DCLNS_IMPL() \
   /* Declared and purposefully not defined. */ \

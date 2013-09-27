@@ -51,10 +51,10 @@ template<
   typename LCLFUNCTION_PARAMTYPES,
   typename CAPTUREDVARSTYPE>
 class global_functor_type :
-  private FUNCTIONOPERATORTYPE
+  public FUNCTIONOPERATORTYPE
 {
   friend class FUNCTIONOPERATORTYPE;
-  typedef FUNCTIONOPERATORTYPE function_operator_type;
+  typedef FUNCTIONOPERATORTYPE base_class_type;
 
 #undef FUNCTIONOPERATORTYPE
 
@@ -65,7 +65,7 @@ private:
   typedef
     typename boost::mpl::transform
     <
-      typename function_operator_type::parameter_types,
+      typename base_class_type::parameter_types,
       boost::add_reference<boost::mpl::_1>
     >::type add_refd_param_types;
   // Synthesize the call back type.
@@ -81,7 +81,7 @@ private:
           add_refd_param_types,
           global_functor_type WG_PP_LCLFUNCTION_CONSTINVARIANCE_KEYWORD_CONST &
         >::type,
-        typename function_operator_type::result_type
+        typename base_class_type::result_type
       >::type,
       captured_var_types &
     >::type mpl_callback_type;
@@ -102,7 +102,7 @@ public:
     this->m_CallBack = callback;
   }
 
-  using function_operator_type::operator();
+  using base_class_type::operator();
 
 private:
   callback_type m_CallBack;
