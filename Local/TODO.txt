@@ -30,7 +30,8 @@ LclFunction:
   x) take care of WG_PP_DEDUCEDTYPE
   5) update spec for varbind/varset, see AutoFunctorSpec.txt
   x) remove local_function_type_dcln
-  7) what does const local function obj mean?
+  x) what does const local function obj mean -> nothing
+  8) tests uniform naming scheme.
 
 Why not BOOST_IDENTITY_TYPE_TPL?
  

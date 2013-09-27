@@ -20,7 +20,7 @@ Standard Type Names
     result_type
     arg1_type
     arg2_type
-    ...
+    etc...
 
 Boost::Function
   Local function objects maybe assigned to boost::function objects. The const
@@ -59,7 +59,7 @@ Boost::Function
     
   Clearly the intent of const qualifying signaler::m_callback is to prevent 
   reassignment after ctor initialization, not to prevent lstnr from being
-  called because it captured didcall by non-const reference.
+  called because it captured "didcall" by non-const reference.
 
 //----------
 //Semantics:

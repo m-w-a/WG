@@ -40,7 +40,7 @@
   BOOST_PP_CAT( \
     arg, \
     BOOST_PP_CAT( \
-      indx, \
+      BOOST_PP_INC(indx), \
       _type))
 
 #define WG_PP_LCLFUNCTION_FUNCTIONOPERATORUTILS_ARGTYPEDCLNS(arity) \

@@ -9,6 +9,7 @@
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/Markers.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/TypeAliaser.hh>
+#include <WG/Local/Detail/PP/LclFunction/FunctionOperatorUtils.hh>
 #include <WG/Local/Detail/PP/LclFunction/ConstInvariance.hh>
 
 //###########
@@ -25,7 +26,7 @@
 //------------
 
 #define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_DCLN(symbtbl) \
-    WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_DCLN_IMPL(symbtbl)
+  WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_DCLN_IMPL(symbtbl)
 
 // For specs:
 //   see WG_PP_STUTIL_USETYPEALIASER(...)
@@ -40,7 +41,7 @@
   WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME_IMPL()
 
 #define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN(symbtbl) \
-    WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN_IMPL(symbtbl)
+  WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN_IMPL(symbtbl)
 
 //-------------
 //LocalFunction
@@ -48,19 +49,6 @@
 
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
   WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE_IMPL(symbtbl)
-
-// Expands to:
-//   Line specific id.
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME() \
-  WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME_IMPL()
-
-// Expands to:
-//   The typedefed alias of the user specified local function with name:
-//   WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME().
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPEDCLN( \
-  symbtbl, local_function_type_name) \
-    WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPEDCLN_IMPL( \
-      symbtbl, local_function_type_name)
 
 //-------------
 //GlobalFunctor
@@ -77,6 +65,11 @@
 //------------
 //LocalFunctor
 //------------
+
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN( \
+  symbtbl, global_functor_type_name) \
+    WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN_IMPL1( \
+      symbtbl, global_functor_type_name)
 
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_USERCALLBACKMETHOD_START( \
   symbtbl, function_name, global_functor_type_name, captured_values_type_name) \
@@ -190,37 +183,11 @@
 //LocalFunction
 //-------------
 
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPENAME_IMPL() \
-  WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE(local_function_type)
-
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE_IMPL(symbtbl) \
   BOOST_PP_IIF( \
     WG_PP_LCLFUNCTION_SYMBOLTABLE_EXISTS_RETTYPE(symbtbl), \
     WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE(symbtbl), \
     void)
-
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TYPEDCLN_IMPL( \
-  symbtbl, local_function_type_name) \
-    typedef \
-      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
-      ( local_function_type_name ) \
-      ( \
-          WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMSLIST(symbtbl) \
-      ) ;
-
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMSLIST(symbtbl) \
-  WG_PP_SEQ_ENUM( \
-    WG_PP_SEQ_FOR_EACH_I( \
-      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMSLIST_ENTRY, \
-      WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_PARAMS(symbtbl), \
-      WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_PARAMS(symbtbl)) )
-
-// WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_PARAMSLIST_ENTRY( \
-  r, typeseq, indx, varname) \
-    ( \
-      WG_PP_SEQ_ELEM(indx, typeseq) varname \
-    )
 
 // Expands to:
 //   Comma seperated add_referenced parameter list of the user specified
@@ -278,6 +245,30 @@
 //------------
 //LocalFunctor
 //------------
+
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN_IMPL1( \
+  symbtbl, global_functor_type_name) \
+    WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN_IMPL2( \
+      symbtbl, \
+      global_functor_type_name, \
+      WG_PP_LCLFUNCTION_SYMBOLTABLE_ISTPL(symbtbl) )
+
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN_IMPL2( \
+  symbtbl, global_functor_type_name, istpl) \
+    typedef WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
+      global_functor_type_name::result_type result_type ; \
+    BOOST_PP_REPEAT( \
+      WG_PP_SEQ_SIZE( \
+        WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_PARAMS(symbtbl)), \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN_ARGTYPES, \
+      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) global_functor_type_name )
+
+// BOOST_PP_REPEAT functor.
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN_ARGTYPES( \
+  z, indx, scope_prefix_tokens) \
+    typedef scope_prefix_tokens:: \
+      WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS_ARGTYPENAME(indx) \
+        WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS_ARGTYPENAME(indx) ;
 
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_USERCALLBACKMETHOD_START_IMPL( \
   symbtbl, \

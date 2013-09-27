@@ -54,6 +54,9 @@
     typedef WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME() captured_values_type; \
     typedef WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME() global_functor_type; \
     \
+    WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN( \
+      symbtbl, global_functor_type) \
+    \
     void set_caller(global_functor_type & functor) \
     { \
       functor.set_caller(&local_functor_type::user_callback); \

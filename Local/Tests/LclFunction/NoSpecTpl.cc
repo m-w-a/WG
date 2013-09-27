@@ -12,7 +12,7 @@ struct NoSpec
 {
   static void run()
   {
-    WG_LCLFUNCTION(nospec, void)
+    WG_LCLFUNCTION_TPL(nospec, void)
     {
       wasCalled = true;
     }WG_LCLFUNCTION_END;

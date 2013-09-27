@@ -61,6 +61,9 @@
       typedef WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME() \
         global_functor_type; \
       \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN( \
+        symbtbl, global_functor_type) \
+      \
       WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_USERCALLBACKMETHOD_START( \
         symbtbl, function_name, global_functor_type, captured_vars_type)
 
