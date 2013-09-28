@@ -1,0 +1,53 @@
+//---
+//BNF
+//---
+
+special symbols:
+  [...] specifies an optional BNF expression.
+terminals: with as varbind varset on_enter on_exit on_exception
+
+lclcontext-usage :=
+  lclcontext-start-macro ( lclcontext-spec )
+  compound-statement
+  WG_LCLCONTEXT_END [;]
+
+lclcontext-start-macro :=
+    WG_LCLCONTEXT
+  | WG_LCLCONTEXT_TPL
+
+with-decln-seq :=
+    with-decln-seq with-dcln
+  | with-dcln
+
+with-dcln :=
+  with ( context-manager-dcln ) [ as ( type-var-dcln ) ]
+
+context-manager-dcln :=
+    explicit-context-manager-dcln
+  | implicit-context-manager-dcln
+
+explicit-context-manager-dcln :=
+  explicit-non-qualified-type context-manager-expr
+
+implicit-context-manager-dcln :=
+  context-manager-expr
+
+explicit-non-qualified-type :=
+    non-local-non-qualified-type
+  | local-non-qualified-type
+
+non-local-non-qualified-type :=
+    ( non-local-non-qualified-type-with-no-embedded-commas )
+  | ppescape(( non-local-non-qualified-type-unrestricted-syntax ))
+
+local-non-qualified-type :=
+  local(local-nonconst-nonref-type)
+
+compound-statement := See C++ standard.
+context-manager-expr :=
+  An expression that is or produces a context manager object.
+non-local-non-qualified-type-with-no-embedded-commas :=
+  A C++ type declaration specifying a non-local, non-const, non-reference type 
+  that contains no commas.
+non-local-non-qualified-type-unrestricted-syntax :=
+  A C++ type declaration specifying a non-local, non-const, non-reference type.
