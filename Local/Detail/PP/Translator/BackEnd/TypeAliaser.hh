@@ -34,7 +34,7 @@
 //
 //   varrootname:
 //     the root name of the congruence class of variables whose types should
-//     be deduced.
+//     be aliased.
 #define WG_PP_TYPEALIASER_DCLN(typealiasername, kind, symbtbl, specseq) \
   WG_PP_TYPEALIASER_DCLN_IMPL(typealiasername, kind, symbtbl, specseq)
 

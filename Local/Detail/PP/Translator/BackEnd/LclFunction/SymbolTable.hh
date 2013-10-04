@@ -20,7 +20,7 @@
 //Returns: { 0 | 1 }
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_EXISTS_RETTYPE(symbtbl) \
   BOOST_PP_NOT( \
-    WG_PP_STARTS_WITH_BOOST_PP_NIL( \
+    WG_PP_STARTSWITH_BOOST_PP_NIL( \
       WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE(symbtbl) ))
 
 //Returns: { BOOST_PP_NIL | {(non-local-type)}+ }
@@ -149,7 +149,7 @@
 
 #define WG_PP_LCLFUNCTION_ST_INDX_TOTALXXX_SIZE 13
 
-// suffix: must match one of the following: WG_PP_AUTOFUNCTOR_ST_INDX_<suffix>
+// suffix: must match one of the following: WG_PP_LCLFUNCTION_ST_INDX_<suffix>
 #define WG_PP_LCLFUNCTION_ST_GET(symbtbl, suffix) \
   BOOST_PP_ARRAY_ELEM( \
     BOOST_PP_CAT(WG_PP_LCLFUNCTION_ST_INDX_, suffix), \

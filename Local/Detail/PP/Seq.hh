@@ -146,7 +146,7 @@
     BOOST_PP_CAT( \
       WG_PP_SEQ_REPLACE_IMPL_, \
       WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)), \
-    BOOST_PP_NOT(WG_PP_STARTS_WITH_BOOST_PP_NIL(indx))) \
+    BOOST_PP_NOT(WG_PP_STARTSWITH_BOOST_PP_NIL(indx))) \
   (seq, indx, elem)
 
 #define WG_PP_SEQ_ELEM_IMPL_00(indx, seq) BOOST_PP_NIL
@@ -157,7 +157,7 @@
   BOOST_PP_CAT( \
     BOOST_PP_CAT( \
       WG_PP_SEQ_ELEM_IMPL_, \
-      BOOST_PP_NOT(WG_PP_STARTS_WITH_BOOST_PP_NIL(indx))), \
+      BOOST_PP_NOT(WG_PP_STARTSWITH_BOOST_PP_NIL(indx))), \
     WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) \
   (indx, seq)
 

@@ -2,6 +2,7 @@
 #define WG_PP_LCLFUNCTION_SPECNORMALIZE_HH_
 
 #include <boost/preprocessor.hpp>
+#include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Translator/Keywords.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/NamedParamParser.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/SplitHeadFromTokens.hh>
@@ -181,11 +182,11 @@
   (errors) \
   ( \
     BOOST_PP_IIF( \
-    WG_PP_STARTS_WITH_BOOST_PP_NIL(spec), \
-    BOOST_PP_NIL BOOST_PP_EMPTY, \
-    WG_PP_ERROR WG_PP_ID_CAT( \
-      ERROR_Invalid_tokens, \
-      WG_PP_EATTAILTOKEN_BOOST_PP_NIL(spec) BOOST_PP_EMPTY) ) () \
+      WG_PP_STARTSWITH_BOOST_PP_NIL(spec), \
+      BOOST_PP_NIL BOOST_PP_EMPTY, \
+      WG_PP_ERROR WG_PP_ID_CAT( \
+        ERROR_Invalid_tokens, \
+        WG_PP_EATTAILTOKEN_BOOST_PP_NIL(spec) BOOST_PP_EMPTY) ) () \
   )
 
 #endif /* WG_PP_LCLFUNCTION_SPECNORMALIZE_HH_ */
