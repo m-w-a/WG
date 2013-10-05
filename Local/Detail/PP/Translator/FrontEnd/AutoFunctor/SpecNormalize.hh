@@ -237,7 +237,7 @@
   (errors) \
   ( \
     BOOST_PP_IIF( \
-      WG_PP_STARTS_WITH_BOOST_PP_NIL(spec), \
+      WG_PP_STARTSWITH_BOOST_PP_NIL(spec), \
       BOOST_PP_NIL BOOST_PP_EMPTY, \
       WG_PP_ERROR WG_PP_ID_CAT( \
         ERROR_Invalid_tokens, \

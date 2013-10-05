@@ -10,10 +10,18 @@ Differences w/Boost.LocalFunction
   x) This library does not have default parameters, unlike Boost::LocalFunction. 
     In the author's view it adds too little expressivity to be worth the effort  
     to implement.
+  x) This library has a much cleaner implementation. 
+    1) The preprocessor translator is partitioned into a front end and 
+      back end. 
+    2) A well-defined symbol table bridging the two translation layers.
+    3) A well-defined error-generating mechanism with a seperate error pass
+      before code generation. 
 
 Limitations: 
-  In C++03 may not be usable across library boundaries since local types lack
-  linkage. Hence, the necessary symbols may not be exported.
+  1) In C++03 may not be usable across library boundaries since local types lack
+    linkage. Hence, the necessary symbols may not be exported.
+  2) Local function bodies are in fact local class method bodies, so any language
+    limitations that apply the latter also apply to the former.
 
 Standard Type Names
   Withing the local function body, the following typenames are available:
@@ -81,6 +89,7 @@ varbind:
 varset:
   1) See captured-variables.
   2) See set-variables.
+  3) The order in which variables are set is undefined.
 
 captured-variables:
   Captures variables in the enclosing scope(s). Note that each call of the 
