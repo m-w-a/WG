@@ -89,6 +89,7 @@ varbind:
 varset:
   1) See captured-variables.
   2) See set-variables.
+  3) The order in which variables are set is undefined.
 
 captured-variables:
   Captures variables in the enclosing scope(s). Note that each call of the 
