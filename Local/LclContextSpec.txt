@@ -1,10 +1,25 @@
+//----------
+//Semantics:
+//----------
+
+Note: All terms not defined here should be referenced in LclFunctorSpec.txt
+
+explicit-type:
+  1) It does not make sense for an explicitly typed context manager to be 
+    qualified const since an object of this type will be used to call the 
+    non-const methods onenter and onexit. Hence any const qualifications will
+    result in a compile-time error.
+
+adhoc-context-handlers:
+  1) At least one handler must be specified.
+
 //---
 //BNF
 //---
 
 special symbols:
   [...] specifies an optional BNF expression.
-terminals: with as varbind varset on_enter on_exit on_exception
+terminals: with type assigns_to varbind varset on_enter on_exit on_exception
 
 lclcontext-usage :=
   lclcontext-start-macro ( lclcontext-spec )
@@ -14,40 +29,27 @@ lclcontext-usage :=
 lclcontext-start-macro :=
     WG_LCLCONTEXT
   | WG_LCLCONTEXT_TPL
+  | WG_LCLCONTEXT_NOEX
+  | WG_LCLCONTEXT_NOEX_TPL
+
+lclcontext-spec :=
+    with-decln-seq
+  | with-adhoc-seq
 
 with-decln-seq :=
     with-decln-seq with-dcln
   | with-dcln
 
 with-dcln :=
-  with ( context-manager-dcln ) [ as ( type-var-dcln ) ]
+  with( context-manager-expr ) 
+  [ type( explicit-type ) ] [ assigns_to( type-var-dcln ) ]
 
-context-manager-dcln :=
-    explicit-context-manager-dcln
-  | implicit-context-manager-dcln
+with-adhoc-seq :=
+  with_adhoc( varbind-seq varset-seq adhoc-context-handlers )
 
-explicit-context-manager-dcln :=
-  explicit-non-qualified-type context-manager-expr
-
-implicit-context-manager-dcln :=
-  context-manager-expr
-
-explicit-non-qualified-type :=
-    non-local-non-qualified-type
-  | local-non-qualified-type
-
-non-local-non-qualified-type :=
-    ( non-local-non-qualified-type-with-no-embedded-commas )
-  | ppescape(( non-local-non-qualified-type-unrestricted-syntax ))
-
-local-non-qualified-type :=
-  local(local-nonconst-nonref-type)
+adhoc-context-handlers :=
+  [onenter( statement )] [onexit( statement )] [onthrow( statement )]
 
 compound-statement := See C++ standard.
 context-manager-expr :=
   An expression that is or produces a context manager object.
-non-local-non-qualified-type-with-no-embedded-commas :=
-  A C++ type declaration specifying a non-local, non-const, non-reference type 
-  that contains no commas.
-non-local-non-qualified-type-unrestricted-syntax :=
-  A C++ type declaration specifying a non-local, non-const, non-reference type.
