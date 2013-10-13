@@ -118,10 +118,10 @@ this_:
 
 special symbols:
   [...] specifies an optional BNF expression.
-terminals : assignto return parambind paramset membind memset const ref ppescape
+terminals: assignto return parambind paramset membind memset const ref ppescape
 
 autofunctor-usage := 
-  autofunctor-start-macro ( autofunctor-spec ) 
+  autofunctor-start-macro ( name, autofunctor-spec ) 
   cv-qualifier-seq exception-specification
   function-body
   WG_AUTOFUNCTOR_END [;]
