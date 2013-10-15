@@ -17,7 +17,7 @@ Tests: tpl -> _tpl
 Misc.
 -----
 
-KeywordsUnitTest.cc
+NOT/AND/OR to their bit counter parts.
 
 ExpandN:
   test

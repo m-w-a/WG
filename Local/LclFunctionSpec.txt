@@ -107,10 +107,10 @@ captured-variables:
 
 special symbols:
   [...] specifies an optional BNF expression.
-terminals : return params varbind varset const ref
+terminals: return params varbind varset const ref
 
 lclfunction-usage :=
-  lclfunction-start-macro ( lclfunction-spec )
+  lclfunction-start-macro ( name , lclfunction-spec )
   function-body
   WG_LCLFUNCTION_END [;]
 
