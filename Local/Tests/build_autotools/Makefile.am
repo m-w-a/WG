@@ -21,7 +21,8 @@ noinst_PROGRAMS = \
     test_lclfunction_cpp03 \
     test_lclfunction_cpp11 \
     test_lclfunction_codegenspec_cpp03 \
-    test_lclfunction_codegenspec_cpp11
+    test_lclfunction_codegenspec_cpp11 \
+    test_pp_lclcontext_keywords
 
 # Don't auto build test_autofunctor_cf_* since they're compile-failure tests.
 if DO_NOT_BUILD
@@ -147,6 +148,9 @@ test_autofunctor_cf_localoperandssyntax_const_SOURCES = \
     ../../Tests/AutoFunctor/LocalOperandsSyntaxCheck/ConstQualifiedLocalType.cc
 test_autofunctor_cf_localoperandssyntax_const_ref_SOURCES = \
     ../../Tests/AutoFunctor/LocalOperandsSyntaxCheck/ConstRefQualifiedLocalType.cc
+
+test_pp_lclcontext_keywords_SOURCES = \
+    ../../Detail/PP/Translator/FrontEnd/LclContext/Tests/KeywordsUnitTest.cc
 
 test_autofunctor_SOURCES = \
     ../AutoFunctor/TestMain.cc \

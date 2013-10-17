@@ -1,0 +1,60 @@
+#ifndef WG_PP_LCLCONTEXT_SYMBOLTABLE_HH_
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_HH_
+
+#include <boost/preprocessor.hpp>
+
+(WG_PP_LCLCONTEXT_SYMBOLTABLE, \
+istpl, \
+isnoex, \
+with_seq, \
+as_seq, \
+with_seq_size)
+
+//################
+//Interface Impls.
+//################
+
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_ISTPL(symbtbl) \
+  WG_PP_LCLCONTEXT_ST_GET(symbtbl, ISPTL)
+
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_ISNOEX(symbtbl) \
+  WG_PP_LCLCONTEXT_ST_GET(symbtbl, NOEX)
+
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_TYPESEQ_WITH(symbtbl) \
+  WG_PP_LCLCONTEXT_ST_GET(symbtbl, TYPESEQ_WITH)
+
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXPRSEQ_WITH(symbtbl) \
+  WG_PP_LCLCONTEXT_ST_GET(symbtbl, EXPRSEQ_WITH)
+
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_TYPESEQ_AS(symbtbl) \
+  WG_PP_LCLCONTEXT_ST_GET(symbtbl, TYPESEQ_AS)
+
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_OBJSEQ_AS(symbtbl) \
+  WG_PP_LCLCONTEXT_ST_GET(symbtbl, OBJSEQ_AS)
+
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_XXX_SIZE_WITHAS(symbtbl) \
+  WG_PP_LCLCONTEXT_ST_GET(symbtbl, XXX_SIZE_WITHAS)
+
+//###########
+//Impl Macros
+//###########
+
+#define WG_PP_LCLCONTEXT_ST_INDX_MODULEID 0
+
+#define WG_PP_LCLCONTEXT_ST_INDX_ISTPL 1
+
+#define WG_PP_LCLCONTEXT_ST_INDX_ISNOEX 2
+
+#define WG_PP_LCLCONTEXT_ST_INDX_TYPESEQ_WITH 3
+#define WG_PP_LCLCONTEXT_ST_INDX_EXPRSEQ_WITH 4
+#define WG_PP_LCLCONTEXT_ST_INDX_TYPESEQ_AS 5
+#define WG_PP_LCLCONTEXT_ST_INDX_OBJSEQ_AS 6
+#define WG_PP_LCLCONTEXT_ST_INDX_XXX_SIZE_WITHAS 7
+
+// suffix: must match one of the following: WG_PP_LCLCONTEXT_ST_INDX_<suffix>
+#define WG_PP_LCLCONTEXT_ST_GET(symbtbl, suffix) \
+  BOOST_PP_ARRAY_ELEM( \
+    BOOST_PP_CAT(WG_PP_LCLCONTEXT_ST_INDX_, suffix), \
+    symbtbl)
+
+#endif /* WG_PP_LCLCONTEXT_SYMBOLTABLE_HH_ */
