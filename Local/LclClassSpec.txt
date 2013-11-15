@@ -4,7 +4,7 @@
 
 Note: All terms not defined here should be referenced in AutoFunctorSpec.txt
 
-memdup:
+memlike:
   1) When implicitly typed, the types of the declared member variables are 
     deduced from variables of the same name in the enclosing scope(s) using
     Boost.TypeOf
@@ -21,7 +21,7 @@ memset:
 
 special symbols:
   [...] specifies an optional BNF expression.
-terminals: derives memdup memset
+terminals: derives memlike memset
 
 lclclass-usage :=
   lclclass-start-macro ( name , lclclass-spec )
@@ -34,7 +34,7 @@ lclclass-start-macro :=
 
 lclclass-spec :=
   [derives derives-seq]
-  [memdup memdup-seq]
+  [memlike memlike-tuple-seq]
   [memset memset-seq]
 
 derives-seq := derives-tuple-seq
@@ -46,13 +46,11 @@ derives-tuple-seq :=
 derives-tuple :=
   ( base-specifier )
 
-memdup-seq := dup-tuple-seq
+memlike-tuple-seq :=
+    memlike-tuple
+  | memlike-tuple-seq memlike-tuple
 
-dup-tuple-seq :=
-    dup-tuple
-  | dup-tuple-seq
-
-dup-tuple :=
+memlike-tuple :=
   ( type-var-dcln )
 
 memset-seq := set-tuple-seq
