@@ -13,7 +13,9 @@ memlike:
 
 memset:
   1) Specifies the member variables of the local class that will be initialized 
-    to some value during construction.
+    to some expression during construction.
+  2) When implicitly typed, the types of the member variables are deduced from
+    the type of the expression each is set to via BOOST_TYPEOF.
 
 //---
 //BNF
