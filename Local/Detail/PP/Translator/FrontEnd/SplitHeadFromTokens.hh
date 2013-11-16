@@ -14,7 +14,7 @@
 //   a "tuplearity"-arg function macro to apply to the split head tuple 
 //   element(s).
 // headtransform:
-//   a 1-arg function macro to apply to the split head.
+//   a 1-arg function macro to apply to the split head tuple.
 // nexttransform:
 //   a 1-arg function macro to apply to the rest of spec after the split
 #define WG_PP_SPLITHEADTUPLEFROMTOKENS( \
@@ -30,10 +30,10 @@
 //   a series of tokens prefixed by some number of tuples of the same
 //   "tuplearity" arity, referred to here as the "head", followed by a non-tuple.
 // headelemtransform:
-//   a "tuplearity"-arg function macro to apply to each of the head tuple(s)' 
-//   element(s).
+//   a "tuplearity"-arg function macro to apply to each element of the split
+//   head tuple(s)' element(s).
 // headtransform:
-//   a 1-arg function macro to apply to the split head.
+//   a 1-arg function macro to apply to the split head tuple sequence.
 // nexttransform:
 //   a 1-arg function macro to apply to the rest of spec after the split
 #define WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
