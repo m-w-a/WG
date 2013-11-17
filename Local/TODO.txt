@@ -8,10 +8,6 @@ x) Better Syntax Error Checking/Reporting:
   missing type in implicit-type-var-dcln ?
   missing var in "..." ?
 
-x) Embedded comma syntax.
-  x) Test (std::pair<foo, bar>)
-  x) Test ppescape.
-
 Tests: tpl -> _tpl
 
 Misc.
@@ -26,7 +22,6 @@ ExpandN:
 LclFunction:
   x) compile fail tests for wrong number of operands to function, ie lin().
   x) add C++11Spec.cc to Makefile.am
-  x) Spec -> params do ppescape processing
   x) take care of WG_PP_DEDUCEDTYPE
   x) update spec for varbind/varset, see AutoFunctorSpec.txt
   x) remove local_function_type_dcln

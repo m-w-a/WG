@@ -15,9 +15,6 @@
 #define SL2 local(SomeLocalType *) const slvar2
 #define SL3 local(SomeLocalType *) ref slvar3
 #define SL4 local(SomeLocalType *) const ref slvar4
-#define SPE1 ppescape((int)) spevar1
-#define SPE2 ppescape((std::pair<int, long>)) spevar2
-#define SPE3 ppescape((std::pair<T, U>)) spevar3
 /*
 WG_PP_VARDCLN_EXPLICIT_TUPLIZE(SG1, 0)
 WG_PP_VARDCLN_EXPLICIT_TUPLIZE(SL1, 0)
@@ -113,42 +110,4 @@ void testLocalConstRefQual()
   TEST_DIDCAPTURE_TYPE(SomeLocalType * const &, EXTRACT_PARSEDTYPE(RESULT))
   TEST_DIDCAPTURE_OBJ(slvar4, EXTRACT_VAR(RESULT))
 #undef RESULT
-}
-
-void testPPEscapeInt()
-{
-  int spevar1;
-
-#define RESULT WG_PP_VARDCLN_EXPLICIT_TUPLIZE(SPE1, 0)
-  TEST_DIDCAPTURE_TYPE(BOOST_TYPEOF(spevar1), EXTRACT_PARSEDTYPE(RESULT))
-  TEST_DIDCAPTURE_OBJ(spevar1, EXTRACT_VAR(RESULT))
-#undef RESULT
-}
-
-void testPPEscapeStdPair()
-{
-  std::pair<int, long> spevar2;
-
-#define RESULT WG_PP_VARDCLN_EXPLICIT_TUPLIZE(SPE2, 0)
-  TEST_DIDCAPTURE_TYPE(BOOST_TYPEOF(spevar2), EXTRACT_PARSEDTYPE(RESULT))
-  TEST_DIDCAPTURE_OBJ(spevar2, EXTRACT_VAR(RESULT))
-#undef RESULT
-}
-
-template <typename T, typename U>
-struct testPPEscapeStdPairTplImpl
-{
-  static void run()
-  {
-    std::pair<T, U> spevar3;
-
-  #define RESULT WG_PP_VARDCLN_EXPLICIT_TUPLIZE(SPE3, 1)
-    TEST_DIDCAPTURE_TYPE(BOOST_TYPEOF_TPL(spevar3), EXTRACT_PARSEDTYPE(RESULT))
-    TEST_DIDCAPTURE_OBJ(spevar3, EXTRACT_VAR(RESULT))
-  #undef RESULT
-  }
-};
-void testPPEscapeStdPairTpl()
-{
-  testPPEscapeStdPairTplImpl<int, long>::run();
 }

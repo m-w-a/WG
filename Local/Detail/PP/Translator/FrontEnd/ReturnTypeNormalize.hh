@@ -30,11 +30,7 @@
 //###########
 
 #define WG_PP_RETURNTYPE_NORMALIZE_IMPL(returntype, istpl) \
-  BOOST_PP_IIF( \
-    WG_PP_KEYWORDS_STARTSWITH_PPESCAPE(returntype), \
-    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) BOOST_IDENTITY_TYPE \
-      WG_PP_KEYWORDS_EAT_HEADKEYWORD, \
-    WG_PP_IDENTITY_ARG1) (returntype)
+  returntype
 
 
 #endif /* WG_PP_RETURNTYPENORMALIZE_HH_ */

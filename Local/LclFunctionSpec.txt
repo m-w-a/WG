@@ -127,7 +127,6 @@ lclfunction-spec :=
 
 nlt-return-tuple :=
     ( non-local-type-with-no-embedded-commas )
-  | ( ppescape(( non-local-type-unrestricted-syntax )) )
 
 param-seq :=
     param-tuple
