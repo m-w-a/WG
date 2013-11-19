@@ -127,7 +127,6 @@ lclfunction-spec :=
 
 nlt-return-tuple :=
     ( non-local-type-with-no-embedded-commas )
-  | ( ppescape(( non-local-type-unrestricted-syntax )) )
 
 param-seq :=
     param-tuple
@@ -137,7 +136,7 @@ varbind-seq := nlt-bound-tuple-seq
 varset-seq := nlt-set-tuple-seq
 
 param-tuple :=
-  (non-local-type var-name)
+  (explicit-non-local-type-var-dcln)
 
 nlt-bound-tuple-seq :=
     nlt-bound-tuple
@@ -158,10 +157,11 @@ nlt-bound-var-dcln := nlt-type-var-dcln
 nlt-set-var-dcln := nlt-type-var-dcln , value-expr
 
 nlt-type-var-dcln :=
-    implicit-type-var-dcln
-  | nlt-explicit-type-var-dcln
+    implicit-non-local-type-var-dcln
+  | explicit-non-local-type-var-dcln
 
-nlt-explicit-type-var-dcln :=
-  nlt-explicit-type var-name
+implicit-non-local-type-var-dcln :=
+  implicit-type-var-dcln
 
-nlt-explicit-type := non-local-type
+explicit-non-local-type-var-dcln :=
+  explicit-non-local-type var-name

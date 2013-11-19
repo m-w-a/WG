@@ -16,27 +16,32 @@
 
 //################
 //Interface Impls.
+//  (Implements interfaces required by external macros.)
 //################
 
 // Expands to <symbtbl-moduleid>_<objmacro>
+//
 // symbtbl:
 //   The first element must be the moduleid.
 #define WG_PP_STUTIL_ACCESS(objmacro, symbtbl) \
   WG_PP_UCAT_ARG2(BOOST_PP_ARRAY_ELEM(0, symbtbl), objmacro)
 
 // Expands to <symbtbl-moduleid>_<objmacropt1>_<objmacropt2>
+//
 // symbtbl:
 //   The first element must be the moduleid.
 #define WG_PP_STUTIL_ACCESS2(objmacropt1, objmacropt2, symbtbl) \
   WG_PP_UCAT_ARG3(BOOST_PP_ARRAY_ELEM(0, symbtbl), objmacropt1, objmacropt2)
 
 // Expands to <symbtbl-moduleid>_<function>(symbtbl)
+//
 // symbtbl:
 //   The first element must be the moduleid.
 #define WG_PP_STUTIL_CALL_F1(function, symbtbl) \
   WG_PP_UCAT_ARG2(BOOST_PP_ARRAY_ELEM(0, symbtbl), function) (symbtbl)
 
 // Expands to <symbtbl-moduleid>_<functionpt1>_<functionpt2>(symbtbl)
+//
 // symbtbl:
 //   The first element must be the moduleid.
 #define WG_PP_STUTIL_CALL_F2(functionpt1, functionpt2, symbtbl) \
@@ -48,6 +53,7 @@
 
 // Expands to a sequence of all the types in the order in which they declared
 // in nrmlzd_bound_tuple_seq.
+//
 // nrmlzd_bound_tuple_seq:
 //   {normalized-bound-tuple}+
 //
@@ -57,6 +63,7 @@
 
 // Expands to a sequence of all the objects in the order in which they declared
 // in nrmlzd_bound_tuple_seq.
+//
 // nrmlzd_bound_tuple_seq:
 //   {normalized-bound-tuple}+
 //
@@ -66,6 +73,7 @@
 
 // Expands to a sequence of all the types in the order in which they declared
 // in nrmlzd_bound_tuple_seq.
+//
 // nrmlzd_set_tuple_seq:
 //   {normalized-set-tuple}+
 //
@@ -75,6 +83,7 @@
 
 // Expands to a sequence of all the objects in the order in which they declared
 // in nrmlzd_bound_tuple_seq.
+//
 // nrmlzd_set_tuple_seq:
 //   {normalized-set-tuple}+
 //
@@ -84,6 +93,7 @@
 
 // Expands to a sequence of all the value expressions in the order in which
 // they declared in nrmlzd_bound_tuple_seq.
+//
 // nrmlzd_set_tuple_seq:
 //   {normalized-set-tuple}+
 //
@@ -93,6 +103,7 @@
 
 // bound_obj_seq:
 //   The expansion of WG_PP_STUTIL_BOUNDTUPLESEQ_TO_OBJSEQ.
+//
 // Returns: { BOOST_PP_NIL | integer }
 #define WG_PP_STUTIL_THISU_INDX(bound_obj_seq) \
   WG_PP_STUTIL_THISU_INDX_IMPL1(bound_obj_seq)
@@ -117,8 +128,14 @@
 // their typealiaser counterparts, and all other markers in type sequences
 // are mapped to the nothing.
 //
+// typealiasername:
+//   This aliaser should only alias non-local types.
+//
 // kind:
 //   a token from the following the set: {ALLTYPES, IMPLICITTYPES}
+//   See WG_PP_TYPEALIASER_DCLN in TypeAliaser.hh for more info.
+//   Must match whatever "kind" that was used with WG_PP_TYPEALIASER_DCLN to
+//   create typealiasername.
 #define WG_PP_STUTIL_USETYPEALIASER(symbtbl, typealiasername, kind, specseq) \
   WG_PP_STUTIL_USETYPEALIASER_IMPL(symbtbl, typealiasername, kind, specseq)
 
@@ -296,7 +313,10 @@
 
 #define WG_PP_STUTIL_USETYPEALIASER_REPLACEWITHALIASEDTYPE2( \
   spec, typealiasername, istpl, indx) \
-    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-      typealiasername::WG_PP_TYPEALIASER_VARTYPENAME(spec, indx)
+    /* Remember to replace with expected SymbolTable format! */ \
+    ( \
+      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
+      typealiasername::WG_PP_TYPEALIASER_VARTYPENAME(spec, indx) \
+    )
 
 #endif /* WG_PP_SYMBOLTABLEUTIL_HH_ */

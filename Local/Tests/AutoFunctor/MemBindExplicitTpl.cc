@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
-#include <utility>
+#include <boost/tuple/tuple.hpp>
 
 namespace
 {
@@ -62,29 +62,29 @@ TEST(wg_autofunctor_membindexplicittpl, OkIf1ArgBound)
 
 namespace
 {
-template <typename T1, typename T2>
-struct OkIfPPEscaped1ArgBound
+template <typename T1>
+struct OkIfGloballyScoped1ArgBound
 {
   static void run()
   {
-    std::pair<T1, T2> didArgumentBind = std::make_pair(false, 0);
+    ::boost::tuple<T1> didArgumentBind = ::boost::make_tuple(false);
     WG_AUTOFUNCTOR_TPL
     (oneArgAutoFunctor,
-      membind (ppescape((std::pair<T1, T2> &)) didArgumentBind) )
+      membind ((::boost::tuple<T1> &) didArgumentBind) )
     {
-      this->didArgumentBind = std::make_pair(true, 1);
+      this->didArgumentBind = ::boost::make_tuple(true);
     }
     WG_AUTOFUNCTOR_END;
 
-    EXPECT_TRUE(didArgumentBind.first);
+    EXPECT_TRUE(didArgumentBind.template get<0>());
   }
 };
 }
-TEST(wg_autofunctor_membindexplicittpl, OkIfPPEscaped1ArgBound)
+TEST(wg_autofunctor_membindexplicittpl, OkIfGloballyScoped1ArgBound)
 {
   try
   {
-    OkIfPPEscaped1ArgBound<bool, int>::run();
+    OkIfGloballyScoped1ArgBound<bool>::run();
   }
   WG_GTEST_CATCH
 }

@@ -11,9 +11,17 @@
 //Public APIs
 //###########
 
+// Expands to the following:
+//   {normalized-explicit-nlt-tuple}+
+//
+// (For definition of terms see SymbolTable documentation.)
 #define WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE(paramdcln) \
   WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_IMPL(paramdcln, 0)
 
+// Expands to the following:
+//   {normalized-explicit-nlt-tuple}+
+//
+// (For definition of terms see SymbolTable documentation.)
 #define WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_TPL(paramdcln) \
   WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_IMPL(paramdcln, 1)
 
@@ -27,13 +35,6 @@
   BOOST_PP_IIF( \
     WG_PP_ISNEXTTOKEN_A_TUPLE(1, paramdcln), \
     WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_NOPREFIX1, \
-    WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_NONTUPLE) \
-  (paramdcln, istpl)
-
-#define WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_NONTUPLE(paramdcln, istpl) \
-  BOOST_PP_IIF( \
-    WG_PP_KEYWORDS_STARTSWITH_PPESCAPE(paramdcln), \
-    WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_PPESCAPE, \
     WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_NONTUPLE_ERROR) \
   (paramdcln, istpl)
 
@@ -52,15 +53,5 @@
 
 #define WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_NOPREFIX2(param) \
   (param) BOOST_PP_LPAREN()
-
-#define WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_PPESCAPE(paramdcln, istpl) \
-  BOOST_PP_LPAREN() \
-    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-    BOOST_PP_CAT(WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_, paramdcln) \
-  BOOST_PP_RPAREN()
-
-#define WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_ppescape(paren_wrapped_param) \
-  BOOST_IDENTITY_TYPE(paren_wrapped_param) \
-  BOOST_PP_RPAREN() BOOST_PP_LPAREN()
 
 #endif /* WG_PP_PARAMDCLNNORMALIZE_HH_ */

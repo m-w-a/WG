@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
-#include <utility>
+#include <boost/tuple/tuple.hpp>
 
 TEST(wg_autofunctor_assignto, OkIfNonLocalExplicit)
 {
@@ -20,21 +20,21 @@ TEST(wg_autofunctor_assignto, OkIfNonLocalExplicit)
   WG_GTEST_CATCH
 }
 
-TEST(wg_autofunctor_assignto, OkIfNonLocalExplicitPPEscaped)
+TEST(wg_autofunctor_assignto, OkIfNonLocalExplicitAndGloballyScoped)
 {
   try
   {
-    std::pair<bool, int> didAssign = std::make_pair(false, 0);
+    ::boost::tuple<bool> didAssign = boost::make_tuple(false);
 
     WG_AUTOFUNCTOR
     (assign,
-      assignto (ppescape((std::pair<bool, int>)) didAssign) )
+      assignto ((::boost::tuple<bool>) didAssign) )
     {
-      return std::make_pair(true, 1);
+      return boost::make_tuple(true);
     }
     WG_AUTOFUNCTOR_END;
 
-    EXPECT_TRUE(didAssign.first);
+    EXPECT_TRUE(didAssign.get<0>());
   }
   WG_GTEST_CATCH
 }

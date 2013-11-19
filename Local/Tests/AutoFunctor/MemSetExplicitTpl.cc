@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
-#include <utility>
+#include <boost/tuple/tuple.hpp>
 
 namespace
 {
@@ -62,30 +62,30 @@ TEST(wg_autofunctor_memsetexplicittpl, OkIf1ArgSet)
 
 namespace
 {
-template <typename T1, typename T2>
-struct OkIfPPEscaped1ArgSet
+template <typename T1>
+struct OkIfGloballyScoped1ArgSet
 {
   static void run()
   {
-    std::pair<T1, T2> didAssign = std::make_pair(false, 0);
+    ::boost::tuple<T1> didAssign = ::boost::make_tuple(false);
 
     WG_AUTOFUNCTOR_TPL
     (oneArgAutoFunctor,
-      memset (ppescape((std::pair<bool, int> &)) assigner, didAssign) )
+      memset ((::boost::tuple<bool> &) assigner, didAssign) )
     {
-      this->assigner.first = true;
+      this->assigner.template get<0>() = true;
     }
     WG_AUTOFUNCTOR_END;
 
-    EXPECT_TRUE(didAssign.first);
+    EXPECT_TRUE(didAssign.template get<0>());
   }
 };
 }
-TEST(wg_autofunctor_memsetexplicittpl, OkIfPPEscaped1ArgSet)
+TEST(wg_autofunctor_memsetexplicittpl, OkIfGloballyScoped1ArgSet)
 {
   try
   {
-    OkIfPPEscaped1ArgSet<bool, int>::run();
+    OkIfGloballyScoped1ArgSet<bool>::run();
   }
   WG_GTEST_CATCH
 }

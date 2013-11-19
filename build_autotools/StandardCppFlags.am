@@ -6,8 +6,8 @@
 
 AM_CPPFLAGS = \
     -I$(abs_top_srcdir)/ \
-    -I$(BOOST_INCLUDES_PATH)/boost/tr1 \
-    -I$(BOOST_INCLUDES_PATH)
+    -isystem $(BOOST_INCLUDES_PATH)/boost/tr1 \
+    -isystem $(BOOST_INCLUDES_PATH)
 
 ###############
 #Compiler Flags
