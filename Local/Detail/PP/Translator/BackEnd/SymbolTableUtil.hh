@@ -124,9 +124,10 @@
 //-------
 //OUTPUT:
 //-------
-// A symbol table where all occurrences of "kind" captured types are mapped to
-// their typealiaser counterparts, and all other markers in type sequences
-// are mapped to the nothing.
+// A symbol table where:
+//   1) all occurrences of "kind" captured types are mapped to
+//     their typealiaser counterparts
+//   2) all markers in type sequences are mapped to the nothing.
 //
 // typealiasername:
 //   This aliaser should only alias non-local types.
