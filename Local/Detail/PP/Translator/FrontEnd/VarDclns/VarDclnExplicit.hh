@@ -14,7 +14,7 @@
 // explicitvardcln:
 //   explicit-type-var-dcln
 // Expands to the following:
-//   (parsed-explicit-type) (var-name)
+//   (WG_PP_NOOP parsed-explicit-type) (var-name)
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE(explicitvardcln, istpl) \
@@ -23,7 +23,7 @@
 // explicitvardcln:
 //   explicit-type-var-dcln
 // Expands to the following:
-//   (parsed-explicit-non-local-type) (var-name)
+//   (WG_PP_NOOP parsed-explicit-non-local-type) (var-name)
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_VARDCLN_EXPLICIT_NLT_TUPLIZE(explicitvardcln, istpl) \

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <utility>
+#include <boost/tuple/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <WG/Local/Tests/TestHelper.hh>
 
@@ -68,31 +68,31 @@ TEST(wg_lclfunction_varbindexplicit_tpl, OkIf1VarBound)
 
 namespace
 {
-template <typename T1, typename T2>
-struct OkIfPPEscaped1VarBound
+template <typename T1>
+struct OkIfGloballyScoped1VarBound
 {
   static void run()
   {
-    std::pair<T1, T2> didBind = std::make_pair(false, 0);
+    ::boost::tuple<T1> didBind = ::boost::make_tuple(false);
 
     WG_LCLFUNCTION_TPL
     (check,
-      varbind (ppescape((std::pair<T1, T2> &)) didBind) )
+      varbind ((::boost::tuple<T1> &) didBind) )
     {
-      didBind.first = true;
+      didBind.template get<0>() = true;
     }WG_LCLFUNCTION_END;
 
     check();
 
-    EXPECT_TRUE(didBind.first);
+    EXPECT_TRUE(didBind.template get<0>());
   }
 };
 }
-TEST(wg_lclfunction_varbindexplicit_tpl, OkIfPPEscaped1VarBound)
+TEST(wg_lclfunction_varbindexplicit_tpl, OkIfGloballyScoped1VarBound)
 {
   try
   {
-    OkIfPPEscaped1VarBound<bool, int>::run();
+    OkIfGloballyScoped1VarBound<bool>::run();
   }
   WG_GTEST_CATCH
 }

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <utility>
+#include <boost/tuple/tuple.hpp>
 
 TEST(wg_lclfunction_return, OkIfSpecified)
 {
@@ -22,22 +22,22 @@ TEST(wg_lclfunction_return, OkIfSpecified)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclfunction_return, OkIfPPEscaped)
+TEST(wg_lclfunction_return, OkIfGloballyScoped)
 {
   try
   {
-    std::pair<bool, int> retval = std::make_pair(false, 0);
+    ::boost::tuple<bool> retval = ::boost::make_tuple(false);
 
     WG_LCLFUNCTION
-    (rettest, return (ppescape((std::pair<bool, int>))) )
+    (rettest, return (::boost::tuple<bool>) )
     {
-      return std::make_pair(true, 1);
+      return ::boost::make_tuple(true);
     }
     WG_LCLFUNCTION_END;
 
     retval = rettest();
 
-    EXPECT_TRUE(retval.first);
+    EXPECT_TRUE(retval.get<0>());
   }
   WG_GTEST_CATCH
 }

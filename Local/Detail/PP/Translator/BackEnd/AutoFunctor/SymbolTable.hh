@@ -3,10 +3,12 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/Seq.hh>
+#include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
 
 //################
 //Interface Impls.
+//  (Implements interfaces required by external macros.)
 //################
 
 #define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_ISTPL(symbtbl) \
@@ -162,7 +164,7 @@
 //parsed-local-type := local(some-token) lib-type-qualifier-seq
 //lib-type-qualifier-seq := (const) | (ref) | (const)(ref)
 //parsed-deduced-type :=
-//  { BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> > }
+//  ( { BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> > } )
 //BT := BOOST_TYPEOF(some-token)
 //
 //-------

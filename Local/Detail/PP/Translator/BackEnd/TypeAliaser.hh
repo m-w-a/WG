@@ -6,6 +6,7 @@
 #include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
 #include <WG/Local/Detail/PP/Translator/Utils.hh>
 #include <WG/Local/Detail/PP/Translator/Markers.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/TypeExtractor.hh>
 
 //###########
 //Public APIs
@@ -89,19 +90,27 @@
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLN_IMPLICITTYPES( \
-  r, spec, indx, e_or_d_type) \
+  r, spec, indx, marked_e_or_d_type) \
     BOOST_PP_EXPR_IIF( \
-      WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_DEDUCEDTYPE(e_or_d_type), \
-      WG_PP_TYPEALIASER_DEDUCEDTYPEDCLN_IMPL(spec, indx, e_or_d_type) )
+      WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_DEDUCEDTYPE(marked_e_or_d_type), \
+      WG_PP_TYPEALIASER_DEDUCEDTYPEDCLN_IMPL( \
+        spec, \
+        indx, \
+        marked_e_or_d_type ) )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLN_ALLTYPES( \
-  r, spec, indx, e_or_d_type) \
-    WG_PP_TYPEALIASER_DEDUCEDTYPEDCLN_IMPL(spec, indx, e_or_d_type)
+  r, spec, indx, marked_e_or_d_type) \
+    WG_PP_TYPEALIASER_DEDUCEDTYPEDCLN_IMPL( \
+      spec, \
+      indx, \
+      marked_e_or_d_type)
 
 #define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLN_IMPL( \
-  spec, indx, deduced_type) \
-    typedef WG_PP_TRNSLTR_MARKERS_EATHEADMARKER(deduced_type) \
+  spec, indx, marked_e_or_d_type) \
+    typedef \
+      WG_PP_PARSEDTYPE_EXTRACTCPPTYPE( \
+        WG_PP_TRNSLTR_MARKERS_EATHEADMARKER(marked_e_or_d_type)) \
     WG_PP_TYPEALIASER_VARTYPENAME(spec, indx) ;
 
 #endif /* WG_PP_TYPEALIASER_HH_ */
