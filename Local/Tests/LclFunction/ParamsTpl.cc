@@ -90,35 +90,35 @@ TEST(wg_lclfunction_params_tpl, OkIf1ArgPassedByConstRef)
   WG_GTEST_CATCH
 }
 
-namespace
-{
-template <typename T1, typename T2>
-struct OkIfPPEscaped1ArgUsed
-{
-  static void run()
-  {
-    std::pair<T1, T2> wasCalled = std::make_pair(false, 0);
-
-    WG_LCLFUNCTION_TPL
-    (checkValue,
-      params (ppescape((std::pair<T1,T2>)) wasCalled) )
-    {
-      EXPECT_FALSE(wasCalled.first);
-      EXPECT_EQ(0, wasCalled.second);
-    }WG_LCLFUNCTION_END;
-
-    checkValue(wasCalled);
-  }
-};
-}
-TEST(wg_lclfunction_params_tpl, OkIfPPEscaped1ArgUsed)
-{
-  try
-  {
-    OkIfPPEscaped1ArgUsed<bool, int>::run();
-  }
-  WG_GTEST_CATCH
-}
+//namespace
+//{
+//template <typename T1, typename T2>
+//struct OkIfPPEscaped1ArgUsed
+//{
+//  static void run()
+//  {
+//    std::pair<T1, T2> wasCalled = std::make_pair(false, 0);
+//
+//    WG_LCLFUNCTION_TPL
+//    (checkValue,
+//      params (ppescape((std::pair<T1,T2>)) wasCalled) )
+//    {
+//      EXPECT_FALSE(wasCalled.first);
+//      EXPECT_EQ(0, wasCalled.second);
+//    }WG_LCLFUNCTION_END;
+//
+//    checkValue(wasCalled);
+//  }
+//};
+//}
+//TEST(wg_lclfunction_params_tpl, OkIfPPEscaped1ArgUsed)
+//{
+//  try
+//  {
+//    OkIfPPEscaped1ArgUsed<bool, int>::run();
+//  }
+//  WG_GTEST_CATCH
+//}
 
 namespace
 {

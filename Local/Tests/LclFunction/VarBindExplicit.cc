@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <utility>
+#include <boost/tuple/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <WG/Local/Tests/TestHelper.hh>
 
@@ -44,24 +44,24 @@ TEST(wg_lclfunction_varbindexplicit, OkIf1VarBound)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclfunction_varbindexplicit, OkIfPPEscaped1VarBound)
+TEST(wg_lclfunction_varbindexplicit, OkIfGloballyScoped1VarBound)
 {
   try
   {
-    std::pair<bool, int> didBind = std::make_pair(false, 0);
+    ::boost::tuple<bool> didBind = ::boost::make_tuple(false);
 
-    WG_LCLFUNCTION(check, varbind (ppescape((std::pair<bool, int> &)) didBind) )
+    WG_LCLFUNCTION(check, varbind ((::boost::tuple<bool> &) didBind) )
     {
       WG_PP_TESTHELPER_IS_SAME_TYPE(
-        BOOST_IDENTITY_TYPE((std::pair<bool, int> &)),
+        ::boost::tuple<bool> &,
         BOOST_TYPEOF(didBind) &);
 
-      didBind.first = true;
+      didBind.get<0>() = true;
     }WG_LCLFUNCTION_END;
 
     check();
 
-    EXPECT_TRUE(didBind.first);
+    EXPECT_TRUE(didBind.get<0>());
   }
   WG_GTEST_CATCH
 }

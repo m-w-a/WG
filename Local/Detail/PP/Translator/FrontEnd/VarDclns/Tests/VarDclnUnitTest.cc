@@ -10,8 +10,6 @@
 #define S4 const
 #define S5 ref
 #define S6 const ref
-#define S7 ppescape((int))
-#define S8 ppescape((std::pair<int, long>))
 
 /*
 WG_PP_VARDCLN_ISEXPLICIT(S1)

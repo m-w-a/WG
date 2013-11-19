@@ -37,9 +37,7 @@
 
 #define WG_PP_VARDCLN_ISEXPLICIT_IMPL2(vardcln) \
   BOOST_PP_IIF( \
-    BOOST_PP_OR( \
-      WG_PP_KEYWORDS_STARTSWITH_LOCAL(vardcln), \
-      WG_PP_KEYWORDS_STARTSWITH_PPESCAPE(vardcln) ), \
+    WG_PP_KEYWORDS_STARTSWITH_LOCAL(vardcln), \
     1, \
     0)
 
@@ -47,12 +45,6 @@
   BOOST_PP_IIF( \
     WG_PP_ISNEXTTOKEN_A_TUPLE(1, vardcln), \
     WG_PP_MAP_TO_1_ARG1, \
-    WG_PP_VARDCLN_ISEXPLICIT_NLT_IMPL2) (vardcln)
-
-#define WG_PP_VARDCLN_ISEXPLICIT_NLT_IMPL2(vardcln) \
-  BOOST_PP_IIF( \
-    WG_PP_KEYWORDS_STARTSWITH_PPESCAPE(vardcln), \
-    1, \
-    0)
+    WG_PP_MAP_TO_0_ARG1) (vardcln)
 
 #endif //WG_PP_VARDCLN_HH_

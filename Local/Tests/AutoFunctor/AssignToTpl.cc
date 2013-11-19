@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
-#include <utility>
+#include <boost/tuple/tuple.hpp>
 
 namespace
 {
@@ -37,29 +37,29 @@ TEST(wg_autofunctor_assigntotpl, OkIfNonLocalExplicit)
 
 namespace
 {
-template <typename T1, typename T2>
-struct OkIfNonLocalExplicitPPEscaped
+template <typename T1>
+struct OkIfNonLocalExplicitAndGloballyScoped
 {
   static void run()
   {
-    std::pair<T1, T2> didAssign = std::make_pair(false, 0);
+    ::boost::tuple<T1> didAssign = ::boost::make_tuple(false);
     WG_AUTOFUNCTOR_TPL
     (assign,
-      assignto (ppescape((std::pair<T1, T2>)) didAssign) )
+      assignto ((::boost::tuple<T1>) didAssign) )
     {
-      return std::make_pair(true, 1);
+      return ::boost::make_tuple(true);
     }
     WG_AUTOFUNCTOR_END;
 
-    EXPECT_TRUE(didAssign.first);
+    EXPECT_TRUE(didAssign.template get<0>());
   }
 };
 }
-TEST(wg_autofunctor_assigntotpl, OkIfNonLocalExplicitPPEscaped)
+TEST(wg_autofunctor_assigntotpl, OkIfNonLocalExplicitAndGloballyScoped)
 {
   try
   {
-    OkIfNonLocalExplicitPPEscaped<bool, int>::run();
+    OkIfNonLocalExplicitAndGloballyScoped<bool>::run();
   }
   WG_GTEST_CATCH
 }

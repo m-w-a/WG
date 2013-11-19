@@ -14,7 +14,7 @@
 // explicitvardcln:
 //   explicit-type-var-dcln
 // Expands to the following:
-//   (parsed-explicit-type) (var-name)
+//   (WG_PP_NOOP parsed-explicit-type) (var-name)
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE(explicitvardcln, istpl) \
@@ -23,7 +23,7 @@
 // explicitvardcln:
 //   explicit-type-var-dcln
 // Expands to the following:
-//   (parsed-explicit-non-local-type) (var-name)
+//   (WG_PP_NOOP parsed-explicit-non-local-type) (var-name)
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_VARDCLN_EXPLICIT_NLT_TUPLIZE(explicitvardcln, istpl) \
@@ -40,7 +40,7 @@
   BOOST_PP_IIF( \
     WG_PP_ISNEXTTOKEN_A_TUPLE(1, explicitvardcln), \
     WG_PP_MAP_TO_1_ARG1, \
-    WG_PP_KEYWORDS_STARTSWITH_PPESCAPE) (explicitvardcln)
+    WG_PP_MAP_TO_0_ARG1) (explicitvardcln)
 
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_IMPL1(explicitvardcln, istpl) \
   BOOST_PP_IIF( \
@@ -63,24 +63,8 @@
 // Non-Local Type Macros.
 //-----------------------
 
-#define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_IMPL_PPESCAPED_NONLOCAL( \
-  explicittype, istpl) \
-    BOOST_PP_LPAREN() \
-      WG_PP_NOOP WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-      BOOST_PP_CAT( \
-        WG_PP_VARDCLN_EXPLICIT_TUPLIZE_IMPL_NONLOCAL_, explicittype) \
-    BOOST_PP_RPAREN()
-#define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_IMPL_NONLOCAL_ppescape( \
-  parenthzd_explicittype) \
-    BOOST_IDENTITY_TYPE(parenthzd_explicittype) \
-    BOOST_PP_RPAREN() BOOST_PP_LPAREN()
-
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONLOCAL(explicitvardcln, istpl) \
-  BOOST_PP_IIF( \
-    WG_PP_ISNEXTTOKEN_A_TUPLE(1, explicitvardcln), \
-    WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONPREFIXED_NONLOCAL1, \
-    WG_PP_VARDCLN_EXPLICIT_TUPLIZE_IMPL_PPESCAPED_NONLOCAL) \
-  (explicitvardcln, istpl)
+  WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONPREFIXED_NONLOCAL1(explicitvardcln, istpl)
 
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONPREFIXED_NONLOCAL1( \
   explicitvardcln, ignore) \
@@ -88,7 +72,7 @@
       WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONPREFIXED_NONLOCAL2 explicitvardcln) \
     BOOST_PP_RPAREN()
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONPREFIXED_NONLOCAL2(explicittype) \
-  (WG_PP_NOOP explicittype) BOOST_PP_LPAREN()
+  (WG_PP_NOOP (explicittype)) BOOST_PP_LPAREN()
 
 //-------------------
 // Local Type Macros.

@@ -64,7 +64,7 @@
         WG_PP_SPLITHEADTUPLEFROMTOKENS_EXPAND2( \
           BOOST_PP_LPAREN() \
             BOOST_PP_CAT( \
-              WG_PP_ADDCOMMA_AFTERTUPLE_ARG, tuplearity) spec BOOST_PP_COMMA() \
+              WG_PP_ADDCOMMA_AFTERTUPLE_ARITY, tuplearity) spec BOOST_PP_COMMA() \
             headelemtransform BOOST_PP_COMMA() \
             headtransform BOOST_PP_COMMA() \
             nexttransform \

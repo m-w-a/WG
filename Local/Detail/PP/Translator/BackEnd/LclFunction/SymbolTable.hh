@@ -2,25 +2,32 @@
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_HH_
 
 #include <boost/preprocessor.hpp>
+#include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
 
 //################
 //Interface Impls.
+//  (Implements interfaces required by external macros.)
 //################
 
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_ISTPL(symbtbl) \
   WG_PP_LCLFUNCTION_ST_GET(symbtbl, ISTPL)
 
-//Returns: { BOOST_PP_NIL | return-type  }
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE(symbtbl) \
-  WG_PP_LCLFUNCTION_ST_GET(symbtbl, RETTYPE)
-
 //Returns: { 0 | 1 }
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_EXISTS_RETTYPE(symbtbl) \
-  BOOST_PP_NOT( \
-    WG_PP_STARTSWITH_BOOST_PP_NIL( \
-      WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE(symbtbl) ))
+  WG_PP_ISNEXTTOKEN_A_TUPLE( \
+    1, \
+    WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTUPLE(symbtbl) )
+
+//Returns: { return-type | some-unspecified-token-seq }
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE(symbtbl) \
+  WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE_IMPL( \
+    WG_PP_IDENTITY_ARG1 WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTUPLE(symbtbl) )
+
+//Returns: { BOOST_PP_NIL | return-tuple  }
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTUPLE(symbtbl) \
+  WG_PP_LCLFUNCTION_ST_GET(symbtbl, RETTUPLE)
 
 //Returns: { BOOST_PP_NIL | {(non-local-type)}+ }
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_PARAMS(symbtbl) \
@@ -101,10 +108,12 @@
 //normalized-set-nlt-tuple :=
 //  (parsed-explicit-non-local-type-or-deduced-type)(var-name)(value-expr)
 //parsed-explicit-non-local-type-or-deduced-type: =
-//    (WG_PP_NOOP non-local-type)
-//  | (WG_PP_DEDUCEDTYPE parsed-deduced-type)
+//    WG_PP_NOOP parsed-explicit-non-local-type
+//  | WG_PP_DEDUCEDTYPE parsed-deduced-type
+//parsed-explicit-non-local-type :=
+//  explicit-non-local-type
 //parsed-deduced-type :=
-//  { BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> > }
+//  ( { BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> > } )
 //BT := BOOST_TYPEOF(some-token)
 //
 //-------
@@ -132,7 +141,7 @@
 
 #define WG_PP_LCLFUNCTION_ST_INDX_ISTPL 1
 
-#define WG_PP_LCLFUNCTION_ST_INDX_RETTYPE 2
+#define WG_PP_LCLFUNCTION_ST_INDX_RETTUPLE 2
 
 #define WG_PP_LCLFUNCTION_ST_INDX_TYPESEQ_PARAMS 3
 #define WG_PP_LCLFUNCTION_ST_INDX_OBJSEQ_PARAMS 4
@@ -153,6 +162,9 @@
   BOOST_PP_ARRAY_ELEM( \
     BOOST_PP_CAT(WG_PP_LCLFUNCTION_ST_INDX_, suffix), \
     symbtbl)
+
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE_IMPL(rescan) \
+  rescan
 
 //---------------
 //Creation Macros

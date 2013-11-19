@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
-#include <utility>
+#include <boost/tuple/tuple.hpp>
 #include <boost/type_traits/add_const.hpp>
 
 namespace
@@ -37,31 +37,31 @@ TEST(wg_autofunctor_returntpl, OkIfReturnSpecified)
 
 namespace
 {
-template <typename T1, typename T2>
-struct OkIfReturnPPEscaped
+template <typename T1>
+struct OkIfReturnGloballyScoped
 {
   static void run()
   {
-    std::pair<T1, T2> didAssign = std::make_pair(false, 0);
+    ::boost::tuple<T1> didAssign = ::boost::make_tuple(false);
 
     WG_AUTOFUNCTOR_TPL
     (ret,
       assignto (didAssign)
-      return (ppescape((std::pair<T1, T2>)) const) )
+      return (::boost::tuple<T1> const) )
     {
-      return std::make_pair(true, 1);
+      return ::boost::make_tuple(true);
     }
     WG_AUTOFUNCTOR_END;
 
-    EXPECT_TRUE(didAssign.first);
+    EXPECT_TRUE(didAssign.template get<0>());
   }
 };
 }
-TEST(wg_autofunctor_returntpl, OkIfReturnPPEscaped)
+TEST(wg_autofunctor_returntpl, OkIfReturnGloballyScoped)
 {
   try
   {
-    OkIfReturnPPEscaped<bool, int>::run();
+    OkIfReturnGloballyScoped<bool>::run();
   }
   WG_GTEST_CATCH
 }

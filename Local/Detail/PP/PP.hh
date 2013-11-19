@@ -84,7 +84,7 @@
 #define WG_PP_ISNEXTTOKEN_A_TUPLE(tuplearity, tokens) \
   WG_PP_ISNEXTTOKEN_A_TUPLE_IMPL(tuplearity, tokens)
 
-// Usage: BOOST_PP_EXPAND(WG_PP_ADDCOMMA_AFTERTUPLE_ARG##arity some-tuple-token)
+// Usage: BOOST_PP_EXPAND(WG_PP_ADDCOMMA_AFTERTUPLE_ARITY##arity some-tuple-token)
 #define WG_PP_ADDCOMMA_AFTERTUPLE_ARITY1(x) (x) BOOST_PP_COMMA()
 #define WG_PP_ADDCOMMA_AFTERTUPLE_ARITY2(x, y) (x, y) BOOST_PP_COMMA()
 

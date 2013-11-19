@@ -57,24 +57,24 @@ TEST(wg_lclfunction_params, OkIf1ArgPassedByConstRef)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclfunction_params, OkIfPPEscaped1ArgUsed)
-{
-  try
-  {
-    std::pair<bool, int> wasCalled = std::make_pair(false, 0);
-
-    WG_LCLFUNCTION
-    (checkValue,
-      params (ppescape((std::pair<bool, int>)) wasCalled) )
-    {
-      EXPECT_FALSE(wasCalled.first);
-      EXPECT_EQ(0, wasCalled.second);
-    }WG_LCLFUNCTION_END;
-
-    checkValue(wasCalled);
-  }
-  WG_GTEST_CATCH
-}
+//TEST(wg_lclfunction_params, OkIfPPEscaped1ArgUsed)
+//{
+//  try
+//  {
+//    std::pair<bool, int> wasCalled = std::make_pair(false, 0);
+//
+//    WG_LCLFUNCTION
+//    (checkValue,
+//      params (ppescape((std::pair<bool, int>)) wasCalled) )
+//    {
+//      EXPECT_FALSE(wasCalled.first);
+//      EXPECT_EQ(0, wasCalled.second);
+//    }WG_LCLFUNCTION_END;
+//
+//    checkValue(wasCalled);
+//  }
+//  WG_GTEST_CATCH
+//}
 
 TEST(wg_lclfunction_params, OkIf3ArgsUsed)
 {
