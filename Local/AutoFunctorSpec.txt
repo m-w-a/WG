@@ -132,8 +132,7 @@ autofunctor-spec :=
 assignto-tuple := bound-tuple
 
 return-tuple := 
-    ( non-local-type-with-no-embedded-commas )
-  | ( local-type )
+    ( type-specifier )
 
 parambind-seq := bound-tuple-seq
 paramset-seq := set-tuple-seq
@@ -173,25 +172,23 @@ implicit-type := lib-type-qualifiers | empty-string
 lib-type-qualifiers := const | ref | const ref
 
 explicit-type :=
-    non-local-type 
-  | local-type
+    explicit-non-local-type
+  | explicit-local-type
 
-non-local-type := 
-    ( non-local-type-with-no-embedded-commas )
+explicit-non-local-type := 
+    ( non-local-type-specifier )
 
-local-type :=
+explicit-local-type :=
     local(local-nonconst-nonref-type)
   | local(local-nonconst-nonref-type) lib-type-qualifiers
 
 cv-qualifier-seq := See C++ standard.
 exception-specification := See C++ standard.
 function-body := See C++ standard.
-type := A C++ type.
+type-specifier := See C++ standard.
 var-name := A C++ variable name.
 local-nonconst-nonref-type := 
   A C++ type declaration specifying a non-const, non-reference local type.
-non-local-type-with-no-embedded-commas := 
-  A C++ type declaration specifying a non-local type that contains no commas.
-non-local-type-unrestricted-syntax := 
-  A C++ type declaration specifying a non-local type.
+non-local-type-specifier :=
+  A type-specifier that specifies a non-local type.
 value-expr := A C++ expression evaluating to some value.

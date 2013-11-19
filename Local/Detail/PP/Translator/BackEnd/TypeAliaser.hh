@@ -16,12 +16,13 @@
 // also be included
 //----------------------------------------------------------------------------//
 
-// Will create a struct named <typealiasername> that typedefs all the types
-// of implicitly-typed vars to aliases that are accessible via the macros that
+// Will create a struct named <typealiasername> that typedefs all the requested
+// types to aliases that are accessible via the macros that
 // follow. Note that the indx param in the said macros reflect the order in
 // which the vars were encountered in the symbtbl, starting from the number 0.
 //
 // kind:
+//   The kind of types to be aliased.
 //   a token from the following the set: {ALLTYPES, IMPLICITTYPES}
 //
 // symbtbl:

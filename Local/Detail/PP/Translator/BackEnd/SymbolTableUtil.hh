@@ -117,8 +117,14 @@
 // their typealiaser counterparts, and all other markers in type sequences
 // are mapped to the nothing.
 //
+// typealiasername:
+//   This aliaser should only alias non-local types.
+//
 // kind:
 //   a token from the following the set: {ALLTYPES, IMPLICITTYPES}
+//   See WG_PP_TYPEALIASER_DCLN in TypeAliaser.hh for more info.
+//   Must match whatever "kind" that was used with WG_PP_TYPEALIASER_DCLN to
+//   create typealiasername.
 #define WG_PP_STUTIL_USETYPEALIASER(symbtbl, typealiasername, kind, specseq) \
   WG_PP_STUTIL_USETYPEALIASER_IMPL(symbtbl, typealiasername, kind, specseq)
 
@@ -296,7 +302,10 @@
 
 #define WG_PP_STUTIL_USETYPEALIASER_REPLACEWITHALIASEDTYPE2( \
   spec, typealiasername, istpl, indx) \
-    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-      typealiasername::WG_PP_TYPEALIASER_VARTYPENAME(spec, indx)
+    /* Remember to replace with expected SymbolTable format! */ \
+    ( \
+      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
+      typealiasername::WG_PP_TYPEALIASER_VARTYPENAME(spec, indx) \
+    )
 
 #endif /* WG_PP_SYMBOLTABLEUTIL_HH_ */

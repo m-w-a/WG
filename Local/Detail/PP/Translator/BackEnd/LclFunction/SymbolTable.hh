@@ -101,8 +101,10 @@
 //normalized-set-nlt-tuple :=
 //  (parsed-explicit-non-local-type-or-deduced-type)(var-name)(value-expr)
 //parsed-explicit-non-local-type-or-deduced-type: =
-//    (WG_PP_NOOP non-local-type)
-//  | (WG_PP_DEDUCEDTYPE parsed-deduced-type)
+//    WG_PP_NOOP parsed-explicit-non-local-type
+//  | WG_PP_DEDUCEDTYPE parsed-deduced-type
+//parsed-explicit-non-local-type :=
+//  explicit-non-local-type
 //parsed-deduced-type :=
 //  { BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> > }
 //BT := BOOST_TYPEOF(some-token)

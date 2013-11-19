@@ -30,7 +30,7 @@
 //###########
 
 #define WG_PP_RETURNTYPE_NORMALIZE_IMPL(returntype, istpl) \
-  returntype
+  (returntype)
 
 
 #endif /* WG_PP_RETURNTYPENORMALIZE_HH_ */

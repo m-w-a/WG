@@ -72,7 +72,7 @@
       WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONPREFIXED_NONLOCAL2 explicitvardcln) \
     BOOST_PP_RPAREN()
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONPREFIXED_NONLOCAL2(explicittype) \
-  (WG_PP_NOOP explicittype) BOOST_PP_LPAREN()
+  (WG_PP_NOOP (explicittype)) BOOST_PP_LPAREN()
 
 //-------------------
 // Local Type Macros.

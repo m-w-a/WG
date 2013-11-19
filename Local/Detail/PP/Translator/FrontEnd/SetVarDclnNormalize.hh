@@ -10,32 +10,40 @@
 //Public APIs
 //###########
 
+// typevardcln:
+//   set-var-dcln
 // Expands to the following:
-//   {(parsed-explicit-type) (var-name) (value-expr)}+
+//   {(explicit-type) (var-name) (value-expr)}+
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_SETVARDCLN_NORMALIZE(typevardcln, valueexpr) \
   WG_PP_SETVARDCLN_NORMALIZE_IMPL(typevardcln, valueexpr, 0) \
   WG_PP_TUPLIZE_ARG1(valueexpr)
 
+// typevardcln:
+//   set-var-dcln
 // Expands to the following:
-//   {(parsed-explicit-type) (var-name) (value-expr)}+
+//   {(explicit-type) (var-name) (value-expr)}+
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_SETVARDCLN_NORMALIZE_TPL(typevardcln, valueexpr) \
   WG_PP_SETVARDCLN_NORMALIZE_IMPL(typevardcln, valueexpr, 1) \
   WG_PP_TUPLIZE_ARG1(valueexpr)
 
+// typevardcln:
+//   nlt-set-var-dcln
 // Expands to the following:
-//   {(parsed-explicit-non-local-type) (var-name) (value-expr)}+
+//   {(explicit-non-local-type) (var-name) (value-expr)}+
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_SETVARDCLN_NLT_NORMALIZE(typevardcln, valueexpr) \
   WG_PP_SETVARDCLN_NLT_NORMALIZE_IMPL(typevardcln, valueexpr, 0) \
   WG_PP_TUPLIZE_ARG1(valueexpr)
 
+// typevardcln:
+//   nlt-set-var-dcln
 // Expands to the following:
-//   {(parsed-explicit-non-local-type) (var-name) (value-expr)}+
+//   {(explicit-non-local-type) (var-name) (value-expr)}+
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_SETVARDCLN_NLT_NORMALIZE_TPL(typevardcln, valueexpr) \

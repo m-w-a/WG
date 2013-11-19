@@ -31,15 +31,20 @@
 #define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_XXX_SIZE_ASSIGNEE(symbtbl) \
   WG_PP_AUTOFUNCTOR_SYMBOLTABLE_EXISTS_ASSIGNEE(symbtbl)
 
-//Returns: { BOOST_PP_NIL | return-type  }
-#define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_RETTYPE(symbtbl) \
-  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, RETTYPE)
-
 //Returns: { 0 | 1 }
 #define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_EXISTS_RETTYPE(symbtbl) \
-  BOOST_PP_NOT( \
-    WG_PP_STARTSWITH_BOOST_PP_NIL( \
-      WG_PP_AUTOFUNCTOR_SYMBOLTABLE_RETTYPE(symbtbl) ))
+  WG_PP_ISNEXTTOKEN_A_TUPLE( \
+    1, \
+    WG_PP_AUTOFUNCTOR_SYMBOLTABLE_RETTUPLE(symbtbl) )
+
+//Returns: { return-type | some-unspecified-token-seq }
+#define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_RETTYPE(symbtbl) \
+  WG_PP_AUTOFUNCTOR_SYMBOLTABLE_RETTYPE_IMPL( \
+    WG_PP_IDENTITY_ARG1 WG_PP_AUTOFUNCTOR_SYMBOLTABLE_RETTUPLE(symbtbl) )
+
+//Returns: { BOOST_PP_NIL | return-tuple  }
+#define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_RETTUPLE(symbtbl) \
+  WG_PP_AUTOFUNCTOR_ST_GET(symbtbl, RETTUPLE)
 
 //Returns: { BOOST_PP_NIL | {(parsed-explicit-or-deduced-type)}+ }
 #define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_TYPESEQ_BOUNDPARAM(symbtbl) \
@@ -153,7 +158,7 @@
 //parsed-explicit-or-deduced-type :=
 //    WG_PP_NOOP parsed-explicit-type
 //  | WG_PP_DEDUCEDTYPE parsed-deduced-type
-//parsed-explicit-type := parsed-local-type | non-local-type
+//parsed-explicit-type := parsed-local-type | explicit-non-local-type
 //parsed-local-type := local(some-token) lib-type-qualifier-seq
 //lib-type-qualifier-seq := (const) | (ref) | (const)(ref)
 //parsed-deduced-type :=
@@ -193,7 +198,7 @@
 #define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_ASSIGNEE 3
 #define WG_PP_AUTOFUNCTOR_ST_INDX_EXISTS_ASSIGNEE 4
 
-#define WG_PP_AUTOFUNCTOR_ST_INDX_RETTYPE 5
+#define WG_PP_AUTOFUNCTOR_ST_INDX_RETTUPLE 5
 
 #define WG_PP_AUTOFUNCTOR_ST_INDX_TYPESEQ_BOUNDPARAM 6
 #define WG_PP_AUTOFUNCTOR_ST_INDX_OBJSEQ_BOUNDPARAM 7
@@ -222,6 +227,9 @@
   BOOST_PP_ARRAY_ELEM( \
     BOOST_PP_CAT(WG_PP_AUTOFUNCTOR_ST_INDX_, suffix), \
     symbtbl)
+
+#define WG_PP_AUTOFUNCTOR_SYMBOLTABLE_RETTYPE_IMPL(rescan) \
+  rescan
 
 //---------------
 //Creation Macros
