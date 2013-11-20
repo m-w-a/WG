@@ -101,10 +101,6 @@ captured-variables:
 //BNF
 //---
 
-//Note:
-//  1) params needs to be PP parseable because it needs to be prepended/appended
-//    to in codegen for the purpose of constructing the callback signature.
-
 special symbols:
   [...] specifies an optional BNF expression.
 terminals: return params varbind varset const ref
@@ -128,6 +124,26 @@ lclfunction-spec :=
 nlt-return-tuple :=
     ( non-local-type-with-no-embedded-commas )
 
+//Note:
+//  1) params needs to be PP parseable because it needs to be prepended/appended
+//    to in codegen for the purpose of constructing the callback signature. 
+//    (That is, we need to be able to insert a comma before and after it.)
+//  2) param-tuple needs to be PP parseable in order for:
+//    a) the user facing function prototype to accurately reflect the specified
+//      param type, and
+//    b) for the generated code to efficiently forward the parameter value.
+//
+//    Example:
+//      1) "params ((big_type) x)" needs to generate:
+//         void interface_func(big_type x);
+//         void impl_func(big_type & x);
+//      2) "params ((big_type const) x)" needs to generate:
+//         void interface_func(big_type const x);
+//         void impl_func(big_type const & x);
+//
+//    Note: If param-tuple was not PP parseable, then there would be no way to
+//      efficiently generate the needed params for impl_func for both the above 
+//      examples. (Try it.)
 param-seq :=
     param-tuple
   | param-seq param-tuple
