@@ -5,7 +5,7 @@
 #include "../TypeExtractor.hh"
 
 //Unit Tests.
-#define S1 SomeGlobalType &
+#define S1 (SomeGlobalType &)
 #define S2 local(SomeLocalType *)
 #define S3 local(SomeLocalType *) (const)
 #define S4 local(SomeLocalType *) (ref)

@@ -36,19 +36,19 @@ TEST(wg_lclfunction_codegenspec, cpp11)
   //WG_LCLFUNCTION_END;
 #define LOCAL_FUNCTION_NAME() lin
 #define RETURN_TYPE() int
-#define PARAMS_NTUPLE() (int const &, int const &)
+#define PARAMS_LIST() int const &, int const &
 #define CAPTURED_VAR_TYPE1 int const &
   //Expands to:
   
   /*PP iterator over captured vars for template params. */
   typedef boost::tuple<CAPTURED_VAR_TYPE1> captured_vars_typeXXX128;
-  typedef RETURN_TYPE()(local_function_typeXXX128)PARAMS_NTUPLE() ;
 
   struct local_functor_typeXXX128;
   typedef wg::lclfunction::detail::cpp11::global_functor_type
   <
     local_functor_typeXXX128,
-    local_function_typeXXX128, 
+    RETURN_TYPE(),
+    boost::mpl::vector<PARAMS_LIST()>,
     captured_vars_typeXXX128
   > global_functor_typeXXX128;
   
@@ -66,7 +66,7 @@ TEST(wg_lclfunction_codegenspec, cpp11)
     
     /* This functions prototype should match global_functor_type::callback_type. */
     static int user_callback(
-      global_functor_type & LOCAL_FUNCTION_NAME(),
+      global_functor_type const & LOCAL_FUNCTION_NAME(),
       int const & x, 
       int const & y, 
       captured_vars_type & capturedvars)
