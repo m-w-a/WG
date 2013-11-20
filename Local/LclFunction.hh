@@ -61,10 +61,9 @@
   errors, error_seq) \
     WG_PP_LCLFUNCTION_REPORTERROR_OR_CONTINUE( \
       name, istpl, return_type, params_seq, varbind_seq, varset_seq, \
-      WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ(params_seq) \
       WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ(varbind_seq) \
       WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ(varset_seq) \
-      WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ(error_seq) BOOST_PP_NIL )
+      WG_PP_ERRORREPORTER_REPORT_ERRORSEQ(error_seq) BOOST_PP_NIL )
 
 #define WG_PP_LCLFUNCTION_REPORTERROR_OR_CONTINUE( \
   name, istpl, return_type, params_seq, varbind_seq, varset_seq, \

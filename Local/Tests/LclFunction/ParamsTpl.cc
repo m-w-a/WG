@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <utility>
+#include <boost/tuple/tuple.hpp>
 
 namespace
 {
@@ -90,35 +90,34 @@ TEST(wg_lclfunction_params_tpl, OkIf1ArgPassedByConstRef)
   WG_GTEST_CATCH
 }
 
-//namespace
-//{
-//template <typename T1, typename T2>
-//struct OkIfPPEscaped1ArgUsed
-//{
-//  static void run()
-//  {
-//    std::pair<T1, T2> wasCalled = std::make_pair(false, 0);
-//
-//    WG_LCLFUNCTION_TPL
-//    (checkValue,
-//      params (ppescape((std::pair<T1,T2>)) wasCalled) )
-//    {
-//      EXPECT_FALSE(wasCalled.first);
-//      EXPECT_EQ(0, wasCalled.second);
-//    }WG_LCLFUNCTION_END;
-//
-//    checkValue(wasCalled);
-//  }
-//};
-//}
-//TEST(wg_lclfunction_params_tpl, OkIfPPEscaped1ArgUsed)
-//{
-//  try
-//  {
-//    OkIfPPEscaped1ArgUsed<bool, int>::run();
-//  }
-//  WG_GTEST_CATCH
-//}
+namespace
+{
+template <typename T1>
+struct OkIfGloballyScoped1ArgUsed
+{
+  static void run()
+  {
+    ::boost::tuple<T1> wasCalled = ::boost::make_tuple(false);
+
+    WG_LCLFUNCTION_TPL
+    (checkValue,
+      params ((::boost::tuple<T1>) wasCalled) )
+    {
+      EXPECT_FALSE(wasCalled.template get<0>());
+    }WG_LCLFUNCTION_END;
+
+    checkValue(wasCalled);
+  }
+};
+}
+TEST(wg_lclfunction_params_tpl, OkIfGloballyScoped1ArgUsed)
+{
+  try
+  {
+    OkIfGloballyScoped1ArgUsed<bool>::run();
+  }
+  WG_GTEST_CATCH
+}
 
 namespace
 {
