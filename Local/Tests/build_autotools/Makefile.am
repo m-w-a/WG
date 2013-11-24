@@ -263,6 +263,8 @@ EXTRA_DIST =
 #Preprocessor Flags.
 ####################
 
+AM_CPPFLAGS += -ftrack-macro-expansion=0
+
 test_autofunctor_CPPFLAGS = \
     $(AM_CPPFLAGS) \
     $(GTEST_CPPFLAGS)
