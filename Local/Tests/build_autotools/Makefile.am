@@ -263,7 +263,8 @@ EXTRA_DIST =
 #Preprocessor Flags.
 ####################
 
-AM_CPPFLAGS += -ftrack-macro-expansion=0
+AM_CPPFLAGS += \
+    -ftrack-macro-expansion=0
 
 test_autofunctor_CPPFLAGS = \
     $(AM_CPPFLAGS) \
@@ -290,10 +291,12 @@ test_lclfunction_codegenspec_cpp11_CPPFLAGS = \
 ################
 
 AM_CXXFLAGS += \
-    -pedantic
+    -pedantic \
+    -Wno-unused-local-typedefs
 
 test_autofunctor_CXXFLAGS = \
-    -pedantic
+    -pedantic \
+    -Wno-unused-local-typedefs
 
 test_lclfunction_cpp03_CXXFLAGS = \
     $(AM_CXXFLAGS) \

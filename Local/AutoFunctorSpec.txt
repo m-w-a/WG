@@ -70,6 +70,10 @@ set-variables:
     type of the expression they are set to via BOOST_TYPEOF. Such an expression 
     may contain identifiers from the enclosing scope(s). If such an 
     expression is a variable, then the caveats of b-v 2) apply.
+  3) In C++03, the set-to expressions may not be array initializers. 
+    (This restriction may be worked around, but the extra work was not deemed 
+    worth the effort, especially given the existence of better alternative 
+    data types such as std::vector or boost::array.)
 
 local():
   Rationale:
