@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <cstring>
 
 namespace wg
 {
@@ -43,7 +44,7 @@ struct bind_traits<T[N]>
     //     enumerated, the implicit conversion should not cause a problem.
     binder_type(array_type const & array)
     {
-      std::copy(array, array + N, m_array);
+      std::memcpy(m_array, array, sizeof(array));
     }
 
     operator bindee_type & ()
