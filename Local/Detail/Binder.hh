@@ -2,10 +2,9 @@
 #define WG_LOCAL_DETAIL_BINDER_HH_
 
 #include <cstddef>
-#include <algorithm>
+#include <cstring>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/tuple/tuple.hpp>
-#include <cstring>
 
 namespace wg
 {
