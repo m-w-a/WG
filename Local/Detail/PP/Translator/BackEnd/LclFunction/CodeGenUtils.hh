@@ -11,7 +11,7 @@
 #include <WG/Local/Detail/PP/Translator/BackEnd/TypeAliaser.hh>
 #include <WG/Local/Detail/PP/LclFunction/FunctionOperatorUtils.hh>
 #include <WG/Local/Detail/PP/LclFunction/ConstInvariance.hh>
-#include <WG/Local/Detail/Binder.hh>
+#include <WG/Local/Detail/LclFunction/Binder.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/TypeExtractor.hh>
 
 //###########

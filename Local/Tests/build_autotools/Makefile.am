@@ -209,6 +209,8 @@ test_autofunctor_SOURCES = \
 
 LCLFUNCTION_SRC = \
     ../LclFunction/TestMain.cc \
+    ../LclFunction/Arrays.cc \
+    ../LclFunction/ArraysTpl.cc \
     ../LclFunction/AllCombo.cc \
     ../LclFunction/AllComboTpl.cc \
     ../LclFunction/AsTemplateParameterArg.cc \
