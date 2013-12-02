@@ -84,18 +84,18 @@ param-seq:
     Currently, WG_PP_LCLFUNCTION_MAX_ARGS is set to 15
 
 varbind:
-  1) See captured-variables.
+  1) See function-variables.
   2) See bound-variables.
 varset:
-  1) See captured-variables.
+  1) See function-variables.
   2) See set-variables.
   3) The order in which variables are set is undefined.
 
-captured-variables:
-  Captures variables in the enclosing scope(s). Note that each call of the 
-  same local function object gets the same capturing object. So, if a capturing 
-  object's state is changed for a given local function object, that change will 
-  be reflected in the next call of the *same* local function object.
+function-variables:
+  Variables that are local to each function instance. Note that each call of the 
+  same local function instance gets the same function variables. So, if a function 
+  variables' state is changed for a given function instance, that change will 
+  be reflected in the next call of the *same* function instance.
 
 //---
 //BNF

@@ -17,6 +17,7 @@ int main(int argc, char* argv[])
 #include <WG/Local/LclFunction.hh>
 
 #include <boost/tuple/tuple.hpp>
+#include <boost/type_traits/add_reference.hpp>
 #include <WG/Local/Detail/LclFunction/GlobalFunctorTypeCPP03.hh>
 
 TEST(wg_lclfunction_codegenspec, cpp03)
@@ -79,7 +80,10 @@ TEST(wg_lclfunction_codegenspec, cpp03)
         /* To avoid unused var warnings. */
         (void)(LOCAL_FUNCTION_NAME());
         
-        boost::tuples::element<0, captured_vars_type>::type
+        boost::add_reference
+        <
+          boost::tuples::element<0, captured_vars_type>::type
+        >::type
           slope(capturedvars.get<0>());
         
         /* User provided definition.*/
