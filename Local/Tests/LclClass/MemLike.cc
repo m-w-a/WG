@@ -1,4 +1,5 @@
 //#include <gtest/gtest.h>
+//#include <boost/typeof/typeof.hpp>
 //#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/TestHelper.hh>
 #include <WG/Local/LclClass.hh>
@@ -11,11 +12,17 @@ TEST(wg_lclclass_memlike, Mimic1Var)
     bool var = false;
 
     WG_LCLCLASS(verifier, memlike (var) )
-      void operator()()
+      void init()
       {
-        bool * is_bool = &var;
+        WG_PP_TESTHELPER_ASSERT_ISNOTCONST(var);
+        WG_PP_TESTHELPER_ASSERT_ISSAMETYPE(bool, BOOST_TYPEOF(var));
       }
+      BOOST_TYPEOF(var) const & getVar() const { return var; }
     WG_LCLCLASS_END;
+
+    verifier v(var);
+
+    WG_TESTHELPER_ASSERT_ISNOTREFERENCE(var, v.getVar());
   }
   WG_GTEST_CATCH
 }
@@ -26,15 +33,18 @@ TEST(wg_lclclass_memlike, Mimic1VarByRef)
   {
     bool var = false;
 
-    WG_LCLCLASS(verifier, memdecl ((bool *) pVar) memlike (ref var) )
+    WG_LCLCLASS(verifier, memlike (ref var) )
       void init()
       {
-        bool is_ref = (pVar == &var);
-        EXPECT_TRUE(is_ref);
+        WG_PP_TESTHELPER_ASSERT_ISNOTCONST(var);
+        WG_PP_TESTHELPER_ASSERT_ISSAMETYPE(bool, BOOST_TYPEOF(var));
       }
+      BOOST_TYPEOF(var) const & getVar() const { return var; }
     WG_LCLCLASS_END;
 
-    verifier v(&var, var);
+    verifier v(var);
+
+    WG_TESTHELPER_ASSERT_ISREFERENCE(var, v.getVar());
   }
   WG_GTEST_CATCH
 }
@@ -48,10 +58,15 @@ TEST(wg_lclclass_memlike, Mimic1VarByConst)
     WG_LCLCLASS(verifier, memlike (const red) )
       void didMimicType() const
       {
-        enum { is_const = red };
-        int const * is_int = &red;
+        WG_PP_TESTHELPER_ASSERT_ISCONST(red);
+        WG_PP_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(red));
       }
+      BOOST_TYPEOF(red) const & getRed() const { return red; }
     WG_LCLCLASS_END;
+
+    verifier v(red);
+
+    WG_TESTHELPER_ASSERT_ISNOTREFERENCE(red, v.getRed());
   }
   WG_GTEST_CATCH
 }
@@ -62,16 +77,21 @@ TEST(wg_lclclass_memlike, Mimic1VarByConstRef)
   {
     int blue = 10;
 
-    WG_LCLCLASS(verifier, memdecl ((int *) pBlue) memlike (const ref blue) )
+    WG_LCLCLASS(verifier, memlike (const ref blue) )
       void init()
       {
-        enum { is_const = blue };
-        bool is_ref = (pBlue == &blue);
-        EXPECT_TRUE(is_ref);
+        WG_PP_TESTHELPER_ASSERT_ISCONST(blue);
+        WG_PP_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(blue));
+      }
+      BOOST_TYPEOF(blue) const & getBlue() const
+      {
+        return blue;
       }
     WG_LCLCLASS_END;
 
-    verifier v(&blue, blue);
+    verifier v(blue);
+
+    WG_TESTHELPER_ASSERT_ISREFERENCE(blue, v.getBlue());
   }
   WG_GTEST_CATCH
 }
@@ -86,25 +106,28 @@ TEST(wg_lclclass_memlike, Mimic3Vars)
 
     WG_LCLCLASS
     (calculateForce,
-      memdecl ((int *) pForce) ((int const *) pMass) ((int const *) pVelocity)
       memlike (ref force) (const mass) (const ref velocity)
     )
       void init()
       {
-        bool is_ref_force = (pForce == &force);
-        EXPECT_TRUE(is_ref_force);
+        WG_PP_TESTHELPER_ASSERT_ISNOTCONST(force);
+        WG_PP_TESTHELPER_ASSERT_ISCONST(mass);
+        WG_PP_TESTHELPER_ASSERT_ISCONST(velocity);
 
-        enum { is_const_mass = mass };
-        bool is_not_ref_mass = (pMass != &mass);
-        EXPECT_TRUE(is_not_ref_mass);
-
-        enum{ is_const_velocity = velocity };
-        bool is_ref_velocity = (pVelocity == &velocity);
-        EXPECT_TRUE(pVelocity == &velocity);
+        WG_PP_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(force));
+        WG_PP_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(mass));
+        WG_PP_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(velocity));
       }
+      BOOST_TYPEOF(force) const & getForce() const { return force; }
+      BOOST_TYPEOF(mass) const & getMass() const { return mass; }
+      BOOST_TYPEOF(velocity) const & getVelocity() const { return velocity; }
     WG_LCLCLASS_END;
 
-    calculateForce c(&force, &mass, &velocity, force, mass, velocity);
+    calculateForce c(force, mass, velocity);
+
+    WG_TESTHELPER_ASSERT_ISREFERENCE(force, c.getForce());
+    WG_TESTHELPER_ASSERT_ISNOTREFERENCE(mass, c.getMass());
+    WG_TESTHELPER_ASSERT_ISREFERENCE(velocity, c.getVelocity());
   }
   WG_GTEST_CATCH
 }
@@ -117,9 +140,17 @@ struct MimicThisU
   {
     WG_LCLCLASS
     (verifier, memlike (this_) )
+      void init()
+      {
+        WG_PP_TESTHELPER_ASSERT_ISCONST(this_);
+        WG_PP_TESTHELPER_ASSERT_ISSAMETYPE(MimicThisU *, BOOST_TYPEOF(this_));
+      }
+      BOOST_TYPEOF(this_) const & getThisU() const { return this_; }
     WG_LCLCLASS_END;
 
     verifier v(this);
+
+    WG_TESTHELPER_ASSERT_ISREFERENCE(this, c.getThisU());
   }
 };
 }
