@@ -14,8 +14,8 @@ TEST(wg_lclclass_memlike, Mimic1Var)
     WG_LCLCLASS(verifier, memlike (var) )
       void init()
       {
-        WG_PP_TESTHELPER_ASSERT_ISNOTCONST(var);
-        WG_PP_TESTHELPER_ASSERT_ISSAMETYPE(bool, BOOST_TYPEOF(var));
+        WG_TESTHELPER_ASSERT_ISNOTCONST(var);
+        WG_TESTHELPER_ASSERT_ISSAMETYPE(bool, BOOST_TYPEOF(var));
       }
       BOOST_TYPEOF(var) const & getVar() const { return var; }
     WG_LCLCLASS_END;
@@ -36,8 +36,8 @@ TEST(wg_lclclass_memlike, Mimic1VarByRef)
     WG_LCLCLASS(verifier, memlike (ref var) )
       void init()
       {
-        WG_PP_TESTHELPER_ASSERT_ISNOTCONST(var);
-        WG_PP_TESTHELPER_ASSERT_ISSAMETYPE(bool, BOOST_TYPEOF(var));
+        WG_TESTHELPER_ASSERT_ISNOTCONST(var);
+        WG_TESTHELPER_ASSERT_ISSAMETYPE(bool, BOOST_TYPEOF(var));
       }
       BOOST_TYPEOF(var) const & getVar() const { return var; }
     WG_LCLCLASS_END;
@@ -58,8 +58,8 @@ TEST(wg_lclclass_memlike, Mimic1VarByConst)
     WG_LCLCLASS(verifier, memlike (const red) )
       void didMimicType() const
       {
-        WG_PP_TESTHELPER_ASSERT_ISCONST(red);
-        WG_PP_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(red));
+        WG_TESTHELPER_ASSERT_ISCONST(red);
+        WG_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(red));
       }
       BOOST_TYPEOF(red) const & getRed() const { return red; }
     WG_LCLCLASS_END;
@@ -80,8 +80,8 @@ TEST(wg_lclclass_memlike, Mimic1VarByConstRef)
     WG_LCLCLASS(verifier, memlike (const ref blue) )
       void init()
       {
-        WG_PP_TESTHELPER_ASSERT_ISCONST(blue);
-        WG_PP_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(blue));
+        WG_TESTHELPER_ASSERT_ISCONST(blue);
+        WG_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(blue));
       }
       BOOST_TYPEOF(blue) const & getBlue() const
       {
@@ -110,13 +110,13 @@ TEST(wg_lclclass_memlike, Mimic3Vars)
     )
       void init()
       {
-        WG_PP_TESTHELPER_ASSERT_ISNOTCONST(force);
-        WG_PP_TESTHELPER_ASSERT_ISCONST(mass);
-        WG_PP_TESTHELPER_ASSERT_ISCONST(velocity);
+        WG_TESTHELPER_ASSERT_ISNOTCONST(force);
+        WG_TESTHELPER_ASSERT_ISCONST(mass);
+        WG_TESTHELPER_ASSERT_ISCONST(velocity);
 
-        WG_PP_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(force));
-        WG_PP_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(mass));
-        WG_PP_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(velocity));
+        WG_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(force));
+        WG_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(mass));
+        WG_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(velocity));
       }
       BOOST_TYPEOF(force) const & getForce() const { return force; }
       BOOST_TYPEOF(mass) const & getMass() const { return mass; }
@@ -142,8 +142,8 @@ struct MimicThisU
     (verifier, memlike (this_) )
       void init()
       {
-        WG_PP_TESTHELPER_ASSERT_ISCONST(this_);
-        WG_PP_TESTHELPER_ASSERT_ISSAMETYPE(MimicThisU *, BOOST_TYPEOF(this_));
+        WG_TESTHELPER_ASSERT_ISCONST(this_);
+        WG_TESTHELPER_ASSERT_ISSAMETYPE(MimicThisU *, BOOST_TYPEOF(this_));
       }
       BOOST_TYPEOF(this_) const & getThisU() const { return this_; }
     WG_LCLCLASS_END;
