@@ -1,36 +1,23 @@
 #ifndef WG_LOCAL_TESTS_TESTHELPER_HH_
 #define WG_LOCAL_TESTS_TESTHELPER_HH_
 
+#include <cstddef>
 #include <boost/type_traits/remove_all_extents.hpp>
-#include <boost/utility.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
 #include <boost/type_traits/is_const.hpp>
+#include <boost/preprocessor/control/if.hpp>
 #include <boost/preprocessor/control/expr_iif.hpp>
+#include <boost/typeof/typeof.hpp>
+#include <boost/utility/addressof.hpp>
 
 //###########
 //Public APIs
 //###########
 
-// Needed in order to compare local types.
-// Will produce a compiler error if false.
-// expected:
-// actual:
-//   Some token that expands to a type.
-#define WG_PP_TESTHELPER_IS_SAME_TYPE(expected, actual) \
-  WG_PP_TESTHELPER_IS_SAME_TYPE_IMPL(expected, actual)
-
-// Will produce a compiler error if false.
-// expected:
-// actual:
-//   Some token that expands to a variable identifier.
-#define WG_PP_TESTHELPER_IS_SAME_OBJ_NAME(expected, actual) \
-  WG_PP_TESTHELPER_IS_SAME_OBJ_NAME_IMPL(expected, actual) \
-
-// Will produce a compiler error if false.
-#define WG_PP_TESTHELPER_MACROEXPANDSTOID(macrotoexpand, expectedid) \
-  WG_PP_TESTHELPER_IS_SAME_OBJ_NAME(expectedid, macrotoexpand)
-
+//----------------
+//LocalType Macros
+//----------------
 
 // Declares a type with name "name".
 #define WG_TESTHELPER_LOCALTYPE_DECLARE(name) \
@@ -47,8 +34,24 @@
 #define WG_TESTHELPER_LOCALTYPE_ISNOTCONST(obj) \
   WG_TESTHELPER_LOCALTYPE_ISNOTCONST_IMPL(obj)
 
+#define WG_TESTHELPER_LOCALTYPE_ISREFERENCE(lvalue1, lvalue2) \
+  WG_TESTHELPER_ASSERT_ISREFERENCE(lvalue1, lvalue2)
+
+#define WG_TESTHELPER_LOCALTYPE_ISNOTREFERENCE(lvalue1, lvalue2) \
+  WG_TESTHELPER_ASSERT_ISNOTREFERENCE(lvalue1, lvalue2)
+
 #define WG_TESTHELPER_LOCALTYPE_ISSAMETYPE(expectedtype, objtotest) \
   WG_TESTHELPER_LOCALTYPE_ISSAMETYPE_IMPL(expectedtype, objtotest)
+
+//-------------------
+//NonLocalType Macros
+//-------------------
+
+#define WG_TESTHELPER_ASSERT_ISREFERENCE(lvalue1, lvalue2) \
+  EXPECT_TRUE( &(lvalue1) == &(lvalue2) )
+
+#define WG_TESTHELPER_ASSERT_ISNOTREFERENCE(lvalue1, lvalue2) \
+  EXPECT_TRUE( &(lvalue1) != &(lvalue2) )
 
 // identifier:
 //   Must be a variable identifier, not an expression!.
@@ -70,14 +73,15 @@
 #define WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(identifier) \
   WG_TESTHELPER_ASSERT_CONST(identifier, 1, 1)
 
-#define WG_TESTHELPER_ASSERT_ISREFERENCE(lvalue1, lvalue2) \
-  EXPECT_TRUE( &(lvalue1) == &(lvalue2) )
+#define WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF( \
+  expectedtype, objtotest) \
+    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
+      expectedtype, objtotest, 0)
 
-#define WG_TESTHELPER_ASSERT_ISNOTREFERENCE(lvalue1, lvalue2) \
-  EXPECT_TRUE( &(lvalue1) != &(lvalue2) )
-
-#define WG_TESTHELPER_ASSERT_ISSAMETYPE(expected, actual) \
-  EXPECT_TRUE(boost::is_same<expected, actual>::value);
+#define WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL( \
+  expectedtype, objtotest) \
+    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
+      expectedtype, objtotest, 1)
 
 namespace wg
 {
@@ -105,15 +109,15 @@ typename boost::remove_all_extents<T>::type *
 //######
 
 #define WG_TESTHELPER_ASSERT_CONST(identifier, isnotflag, istpl) \
-  EXPECT_TRUE( \
+  EXPECT_TRUE(( \
     BOOST_PP_EXPR_IIF(isnotflag, ! ) \
     boost::is_const \
     < \
       BOOST_PP_EXPR_IIF(istpl, typename) boost::remove_pointer \
       < \
-        &BOOST_TYPEOF(identifier) \
+        BOOST_TYPEOF(&(identifier)) \
       >::type \
-    >::value )
+    >::value ))
 
 #define WG_TESTHELPER_LOCALTYPE_DECLARE_IMPL(name) \
   struct name \
@@ -123,15 +127,24 @@ typename boost::remove_all_extents<T>::type *
   };
 
 #define WG_TESTHELPER_LOCALTYPE_ISCONST_IMPL(obj) \
-  WG_PP_TESTHELPER_ASSERT_ISCONST(obj.var)
+  WG_TESTHELPER_ASSERT_ISCONST(obj.var)
 
 #define WG_TESTHELPER_LOCALTYPE_ISNOTCONST_IMPL(obj) \
-  WG_PP_TESTHELPER_ASSERT_ISNOTCONST(obj.var)
+  WG_TESTHELPER_ASSERT_ISNOTCONST(obj.var)
 
 #define WG_TESTHELPER_LOCALTYPE_ISSAMETYPE_IMPL(expectedtype, objtotest) \
   { \
     expectedtype const * check = &objtotest; \
   }
+
+#define WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
+  expectedtype, objtotest, istpl) \
+    EXPECT_TRUE(( \
+      boost::is_same \
+      < \
+        expectedtype, \
+        BOOST_PP_IIF(istpl, BOOST_TYPEOF_TPL, BOOST_TYPEOF) (objtotest) \
+      >::value));
 
 namespace wg
 {
@@ -161,29 +174,5 @@ struct first_nonarray_elem<T[N]>
 }
 }
 }
-
-#define WG_PP_TESTHELPER_IS_SAME_TYPE_IMPL(expected, actual) \
-  struct BOOST_PP_CAT(test_type_did_bind, __LINE__) \
-  { \
-    void test() \
-    { \
-      typedef void (*expected_fptr_type)(expected param1); \
-      typedef void (*actual_fptr_type)(actual param1); \
-      expected_fptr_type expected_fptr = 0; \
-      actual_fptr_type actual_fptr = 0; \
-      expected_fptr = actual_fptr; \
-      (void)expected_fptr; \
-    } \
-  };
-
-#define WG_PP_TESTHELPER_IS_SAME_OBJ_NAME_IMPL(expected, actual) \
-  struct BOOST_PP_CAT(test_obj_did_bind, __LINE__) \
-  { \
-    int expected; \
-    void operator()() \
-    { \
-      (void)actual; \
-    } \
-  };
 
 #endif /* WG_LOCAL_TESTS_TESTHELPER_HH_ */
