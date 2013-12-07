@@ -1,6 +1,6 @@
 //#include <gtest/gtest.h>
 //#include <WG/GTest/Exceptions.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+//#include <WG/Local/Tests/TestHelper.hh>
 #include <WG/Local/LclClass.hh>
 
 TEST(wg_lclclass_memdecl, 1Var)
@@ -40,7 +40,7 @@ TEST(wg_lclclass_memdecl, LocalTypeNonQlfd)
 
     AnotherLocalClass anotherLocalObj(localObj);
 
-    WG_TESTHELPER_ASSERT_ISNOTREFERENCE(localObj, anotherLocalObj.value);
+    WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTREFERENCE(localObj, anotherLocalObj.value);
   }
   WG_GTEST_CATCH
 }
@@ -63,7 +63,7 @@ TEST(wg_lclclass_memdecl, LocalTypeConstQlfd)
 
     AnotherLocalClass anotherLocalObj(localObj);
 
-    WG_TESTHELPER_ASSERT_ISNOTREFERENCE(localObj, anotherLocalObj.value);
+    WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTREFERENCE(localObj, anotherLocalObj.value);
   }
   WG_GTEST_CATCH
 }
@@ -86,7 +86,7 @@ TEST(wg_lclclass_memdecl, LocalTypeRefQlfd)
 
     AnotherLocalClass anotherLocalObj(localObj);
 
-    WG_TESTHELPER_ASSERT_ISREFERENCE(localObj, anotherLocalObj.value);
+    WG_TESTHELPER_ASSERT_LOCALTYPE_ISREFERENCE(localObj, anotherLocalObj.value);
   }
   WG_GTEST_CATCH
 }
@@ -110,7 +110,7 @@ TEST(wg_lclclass_memdecl, LocalTypeConstRefQlfd)
 
     AnotherLocalClass anotherLocalObj(localObj);
 
-    WG_TESTHELPER_ASSERT_ISREFERENCE(localObj, anotherLocalObj.value);
+    WG_TESTHELPER_ASSERT_LOCALTYPE_ISREFERENCE(localObj, anotherLocalObj.value);
   }
   WG_GTEST_CATCH
 }
