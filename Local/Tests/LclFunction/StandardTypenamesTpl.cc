@@ -36,6 +36,8 @@ struct IntResultType
     WG_LCLFUNCTION_TPL(noop, return (T) )
     {
       EXPECT_TRUE(( boost::is_same<T, result_type>::value ));
+
+      return T();
     }WG_LCLFUNCTION_END;
   }
 };

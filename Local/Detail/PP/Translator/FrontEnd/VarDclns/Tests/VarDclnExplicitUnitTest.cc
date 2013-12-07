@@ -1,12 +1,10 @@
 #include <WG/Local/Tests/test.h>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Detail/PP/Tests/Util.hh>
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/TypeExtractor.hh>
 #include "../VarDclnExplicit.hh"
 #include <boost/preprocessor.hpp>
 #include <boost/typeof/typeof.hpp>
-#include <boost/utility/identity_type.hpp>
-#include <utility>
 #include <WG/Local/Detail/PP/Translator/Markers.hh>
 
 //Unit Tests.
@@ -32,8 +30,6 @@ WG_PP_VARDCLN_EXPLICIT_TUPLIZE(SPE3, 1)
 //( local(SomeLocalType *) (ref) ) (slvar3)
 //( local(SomeLocalType *) (const)(ref) ) (slvar4)
 //( (int) (spevar1) )
-//( (std::pair<int, long>) (spevar2) )
-//( (typename std::pair<T, U>) (spevar3) )
 */
 
 //-----
@@ -48,10 +44,10 @@ WG_PP_VARDCLN_EXPLICIT_TUPLIZE(SPE3, 1)
   BOOST_PP_SEQ_ELEM(1, explicittype_var_2tuple)
 
 #define TEST_DIDCAPTURE_TYPE(expected, actual) \
-  WG_PP_TESTHELPER_IS_SAME_TYPE(expected, WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(actual))
+  WG_PP_TESTS_UTIL_ISSAMETYPE(expected, WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(actual))
 
 #define TEST_DIDCAPTURE_OBJ(expected, actual) \
-  WG_PP_TESTHELPER_IS_SAME_OBJ_NAME(expected, actual)
+  WG_PP_TESTS_UTIL_ISSAMEOBJNAME(expected, actual)
 
 //-----
 //Tests

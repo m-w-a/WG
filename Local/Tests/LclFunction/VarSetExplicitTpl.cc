@@ -2,7 +2,7 @@
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
 #include <utility>
-#include <boost/typeof/typeof.hpp>
+#include <WG/Local/Tests/TestHelper.hh>
 
 namespace
 {
@@ -20,6 +20,9 @@ struct OkIf1VarSet
     (check,
       varset ((T &) didAssign, proxy.didAssign) )
     {
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(didAssign);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, didAssign);
+
       didAssign = true;
     }WG_LCLFUNCTION_END;
 
@@ -58,6 +61,14 @@ struct OkIf3VarOfVaryingMutabilitySet
         ((T2 const) height, cylinder.height)
         ((T3 &) volume, cylinder.volume) )
     {
+      WG_TESTHELPER_ASSERT_ISCONST_TPL(radius);
+      WG_TESTHELPER_ASSERT_ISCONST_TPL(height);
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(volume);
+
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, radius);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, height);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, volume);
+
       volume = radius * height;
     }
     WG_LCLFUNCTION_END;

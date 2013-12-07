@@ -3,6 +3,7 @@
 #include <WG/Local/LclFunction.hh>
 #include <algorithm>
 #include <vector>
+#include <WG/Local/Tests/TestHelper.hh>
 
 TEST(wg_lclfunction_astemplateparameterarg, StdForEach)
 {
@@ -16,6 +17,14 @@ TEST(wg_lclfunction_astemplateparameterarg, StdForEach)
       varbind (ref sum)
       varset (runningOffset, 0) )
     {
+      WG_TESTHELPER_ASSERT_ISCONST(datum);
+      WG_TESTHELPER_ASSERT_ISNOTCONST(sum);
+      WG_TESTHELPER_ASSERT_ISNOTCONST(runningOffset);
+
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, datum);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, sum);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, runningOffset);
+
       sum += runningOffset + datum;
       ++runningOffset;
     }WG_LCLFUNCTION_END;

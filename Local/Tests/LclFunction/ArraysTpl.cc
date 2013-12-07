@@ -49,13 +49,16 @@ struct BindByValue
 {
   static void run()
   {
-    typename Arr<T>::Type arr;
+    typedef typename Arr<T>::Type ArrType;
+    ArrType arr;
     std::memcpy(arr, arrPrototype, sizeof(arr));
 
     T const origArr_1_1 = arr[1][1];
     WG_LCLFUNCTION_TPL(arrBindByValue, varbind (arr) )
     {
-      EXPECT_TRUE(boost::is_array<BOOST_TYPEOF(arr)>::value);
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(arr);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
+
       EXPECT_TRUE(isEqualToPrototype(arr));
 
       arr[1][1] += 10;
@@ -84,13 +87,16 @@ struct BindByRef
 {
   static void run()
   {
-    typename Arr<T>::Type arr;
+    typedef typename Arr<T>::Type ArrType;
+    ArrType arr;
     std::memcpy(arr, arrPrototype, sizeof(arr));
 
     T const origArr_1_1 = arr[1][1];
     WG_LCLFUNCTION_TPL(arrBindByRef, varbind (ref arr) )
     {
-      EXPECT_TRUE(boost::is_array<BOOST_TYPEOF(arr)>::value);
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(arr);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
+
       EXPECT_TRUE(isEqualToPrototype(arr));
 
       arr[1][1] += 10;
@@ -119,13 +125,16 @@ struct SetByValue
 {
   static void run()
   {
-    typename Arr<T>::Type arr;
+    typedef typename Arr<T>::Type ArrType;
+    ArrType arr;
     std::memcpy(arr, arrPrototype, sizeof(arr));
 
     T const origArr_1_1 = arr[1][1];
     WG_LCLFUNCTION_TPL(arrSetByValue, varset (someArr, arr) )
     {
-      EXPECT_TRUE(boost::is_array<BOOST_TYPEOF(someArr)>::value);
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(arr);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
+
       EXPECT_TRUE(isEqualToPrototype(someArr));
 
       someArr[1][1] += 10;
@@ -154,13 +163,16 @@ struct SetByRef
 {
   static void run()
   {
-    typename Arr<T>::Type arr;
+    typedef typename Arr<T>::Type ArrType;
+    ArrType arr;
     std::memcpy(arr, arrPrototype, sizeof(arr));
 
     T const origArr_1_1 = arr[1][1];
     WG_LCLFUNCTION_TPL(arrSetByRef, varset (ref someArr, arr) )
     {
-      EXPECT_TRUE(boost::is_array<BOOST_TYPEOF(someArr)>::value);
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(arr);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
+
       EXPECT_TRUE(isEqualToPrototype(someArr));
 
       someArr[1][1] += 10;

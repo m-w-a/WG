@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <boost/typeof/typeof.hpp>
 #include <WG/Local/Tests/TestHelper.hh>
 
 TEST(wg_lclfunction_varbindimplicit, OkIf1VarBound)
@@ -12,8 +11,9 @@ TEST(wg_lclfunction_varbindimplicit, OkIf1VarBound)
 
     WG_LCLFUNCTION(check, varbind (ref didBind) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        bool &, BOOST_TYPEOF(didBind) &);
+      WG_TESTHELPER_ASSERT_ISNOTCONST(didBind);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, didBind);
+
       didBind = true;
     }WG_LCLFUNCTION_END;
 
@@ -35,12 +35,13 @@ TEST(wg_lclfunction_varbindimplicit, OkIf3VarsOfVaryingMutabilityBound)
     WG_LCLFUNCTION
     (calculateForce, varbind (ref force) (const mass) (const velocity) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int &, BOOST_TYPEOF(force) &);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int const, BOOST_TYPEOF(mass) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int const, BOOST_TYPEOF(velocity) const);
+      WG_TESTHELPER_ASSERT_ISNOTCONST(force);
+      WG_TESTHELPER_ASSERT_ISCONST(mass);
+      WG_TESTHELPER_ASSERT_ISCONST(velocity);
+
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, force);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, mass);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, velocity);
 
       force = mass * velocity;
     }
@@ -64,8 +65,9 @@ struct OkIfKeywordThisUBound
   {
     WG_LCLFUNCTION(bindThisU, varbind (this_) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        OkIfKeywordThisUBound * const, BOOST_TYPEOF(this_) const);
+      WG_TESTHELPER_ASSERT_ISCONST(this_);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+        OkIfKeywordThisUBound *, this_);
 
       this_->didBindThis = true;
     }
@@ -91,6 +93,9 @@ TEST(wg_lclfunction_varbindimplicit, OkIfLocalFunctionBound)
 
   WG_LCLFUNCTION(bindVar, varbind (ref didBind) )
   {
+    WG_TESTHELPER_ASSERT_ISNOTCONST(didBind);
+    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, didBind);
+
     didBind = true;
   }WG_LCLFUNCTION_END;
 

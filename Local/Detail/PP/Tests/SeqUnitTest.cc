@@ -1,5 +1,5 @@
 #include <WG/Local/Tests/test.h>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Detail/PP/Tests/Util.hh>
 #include <WG/Local/Detail/PP/Seq.hh>
 
 int const BOOST_PP_NIL = 123456789;
@@ -13,7 +13,7 @@ int const BOOST_PP_NIL = 123456789;
 // SEQ_ISNIL
 BEGIN WG_PP_SEQ_ISNIL(SN1) == 1 END
 BEGIN WG_PP_SEQ_ISNIL(S1) == 0 END
-WG_PP_TESTHELPER_MACROEXPANDSTOID( \
+WG_PP_TESTS_UTIL_MACROEXPANDSTOID( \
   WG_PP_SEQ_ISNIL(blah blah blah), \
   WG_PP_ERROR_INVALID_ARGUMENT)
 

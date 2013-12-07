@@ -2,6 +2,7 @@
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
 #include <boost/tuple/tuple.hpp>
+#include <WG/Local/Tests/TestHelper.hh>
 
 namespace
 {
@@ -12,8 +13,11 @@ struct OkIf1ArgPassedByValue
   {
     T value = 10;
 
-    WG_LCLFUNCTION_TPL(checkValue, params ((int) value) )
+    WG_LCLFUNCTION_TPL(checkValue, params ((T) value) )
     {
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(value);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, value);
+
       ++value;
       EXPECT_EQ(11, value);
     }WG_LCLFUNCTION_END;
@@ -43,6 +47,9 @@ struct OkIf1ArgPassedByRef
     T value = 10;
     WG_LCLFUNCTION_TPL(checkValue, params ((T &) value) )
     {
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(value);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, value);
+
       ++value;
       EXPECT_EQ(11, value);
     }WG_LCLFUNCTION_END;
@@ -74,6 +81,9 @@ struct OkIf1ArgPassedByConstRef
     (checkValue,
       params ((T const &) value) )
     {
+      WG_TESTHELPER_ASSERT_ISCONST_TPL(value);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, value);
+
       EXPECT_EQ(10, value);
     }WG_LCLFUNCTION_END;
 
@@ -103,6 +113,10 @@ struct OkIfGloballyScoped1ArgUsed
     (checkValue,
       params ((::boost::tuple<T1>) wasCalled) )
     {
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(wasCalled);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+        ::boost::tuple<T1>, wasCalled);
+
       EXPECT_FALSE(wasCalled.template get<0>());
     }WG_LCLFUNCTION_END;
 
@@ -134,6 +148,14 @@ struct OkIf3ArgsUsed
     (calculateForce,
       params ((T1 &) force) ((T2 const) mass) ((T3 const) velocity) )
     {
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(force);
+      WG_TESTHELPER_ASSERT_ISCONST_TPL(mass);
+      WG_TESTHELPER_ASSERT_ISCONST_TPL(velocity);
+
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, force);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, mass);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, velocity);
+
       force = mass * velocity;
     }WG_LCLFUNCTION_END;
 
