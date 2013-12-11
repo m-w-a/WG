@@ -37,3 +37,4 @@ LclClass:
   remove WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE
   remove WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE
   remove any misc from TypeExtractor.hh
+  memset -> meminit

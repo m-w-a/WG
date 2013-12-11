@@ -6,6 +6,7 @@
 #include <WG/Local/Detail/PP/Translator/Keywords.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/NamedParamParser.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/SplitHeadFromTokens.hh>
+#include <WG/Local/Detail/PP/Translator/FrontEnd/VarDclns/VarDclnExplicit.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/VarDclns/VarDclnImplicit.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/SetVarDclnNormalize.hh>
 
@@ -81,6 +82,13 @@
   head_rest_tuple, nexttransform, specoptions) \
     ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
     nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) , specoptions )
+
+#define WG_PP_LCLCLASS_SPEC_NORMALIZE_VARDCLN_EXPLICIT_TUPLIZE( \
+  explicitvardcln) \
+    WG_PP_VARDCLN_EXPLICIT_TUPLIZE(explicitvardcln, 0)
+#define WG_PP_LCLCLASS_SPEC_NORMALIZE_VARDCLN_EXPLICIT_TUPLIZE_TPL( \
+  explicitvardcln) \
+    WG_PP_VARDCLN_EXPLICIT_TUPLIZE(explicitvardcln, 1)
 
 #define WG_PP_LCLCLASS_SPEC_NORMALIZE_VARDCLN_IMPLICIT_TUPLIZE( \
   implicitvardcln) \

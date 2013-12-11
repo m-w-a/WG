@@ -194,6 +194,7 @@
 #define WG_PP_KEYWORDS_EAT_varbind
 #define WG_PP_KEYWORDS_EAT_varset
 #define WG_PP_KEYWORDS_EAT_derives
+#define WG_PP_KEYWORDS_EAT_memdecl
 #define WG_PP_KEYWORDS_EAT_memlike
 #define WG_PP_KEYWORDS_EAT_memset
 
