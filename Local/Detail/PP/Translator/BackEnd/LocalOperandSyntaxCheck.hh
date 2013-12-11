@@ -27,9 +27,11 @@
 // specseq:
 //   { ( (suffix)(varrootname) ) }+
 //
+//   suffix:
+//     The class of variables that if are locally typed then should be syntax
+//     checked.
 //   varrootname:
-//     the root name of the congruence class of variables that if are locally
-//     typed then should be syntax checked.
+//     The root name of the variables to be used in the syntax checker.
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN(syntaxcheckername, symbtbl, specseq) \
   WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN_IMPL(syntaxcheckername, symbtbl, specseq)
 
