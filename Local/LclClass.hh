@@ -101,7 +101,7 @@
   memlike_seq, \
   memset_seq, \
   psbl_error_tokens) \
-    WG_PP_LCLCLASS_CODEGENSTART( \
+    WG_PP_LCLCLASS_CODEGEN_START( \
       name, \
       WG_PP_LCLCLASS_SYMBOLTABLE_CREATE( \
         istpl, \

@@ -20,6 +20,8 @@ ExpandN:
   AUTOFUNCTOR -> ...
 
 LclFunction:
+  modified call traits.
+  Binder: local namespace to lclfunction namespace?
   x) compile fail tests for wrong number of operands to function, ie lin().
   x) add C++11Spec.cc to Makefile.am
   x) take care of WG_PP_DEDUCEDTYPE
@@ -29,4 +31,9 @@ LclFunction:
   x) tests uniform naming scheme.
 
 Why not BOOST_IDENTITY_TYPE_TPL?
- 
+
+LclClass:
+  WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE -> call_traits
+  remove WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE
+  remove WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE
+  remove any misc from TypeExtractor.hh
