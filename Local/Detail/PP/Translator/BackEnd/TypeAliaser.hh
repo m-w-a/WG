@@ -34,9 +34,10 @@
 // specseq:
 //   { ( (suffix)(varrootname) ) }+
 //
+//   suffix:
+//     The class of variables whose types should be considered for aliasing.
 //   varrootname:
-//     the root name of the congruence class of variables whose types should
-//     be aliased.
+//      The root name of the aliased types.
 #define WG_PP_TYPEALIASER_DCLN(typealiasername, kind, symbtbl, specseq) \
   WG_PP_TYPEALIASER_DCLN_IMPL(typealiasername, kind, symbtbl, specseq)
 
