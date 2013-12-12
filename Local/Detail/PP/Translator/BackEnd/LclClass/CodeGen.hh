@@ -97,7 +97,8 @@
     WG_PP_LCLCLASS_CG_LCLCLASS_CTOR_INITLIST(symbtbl) \
     { \
       init(); \
-    }
+    } \
+  private:
 
 #define WG_PP_LCLCLASS_CODEGEN_END_IMPL() \
   };
