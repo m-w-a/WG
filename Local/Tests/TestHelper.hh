@@ -40,8 +40,10 @@
 #define WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTREFERENCE(lvalue1, lvalue2) \
   WG_TESTHELPER_ASSERT_ISNOTREFERENCE(lvalue1, lvalue2)
 
-#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE(expectedtype, objtotest) \
-  WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_IMPL(expectedtype, objtotest)
+#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF( \
+  expectedtype, objtotest) \
+    WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
+      expectedtype, objtotest)
 
 //-------------------
 //NonLocalType Macros
@@ -132,11 +134,12 @@ typename boost::remove_all_extents<T>::type *
 #define WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_IMPL(obj) \
   WG_TESTHELPER_ASSERT_ISNOTCONST(obj.var)
 
-#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_IMPL(expectedtype, objtotest) \
-  { \
-    expectedtype const * check = &objtotest; \
-    (void)check; \
-  }
+#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
+  expectedtype, objtotest) \
+    { \
+      expectedtype const * check = &objtotest; \
+      (void)check; \
+    }
 
 #define WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
   expectedtype, objtotest, istpl) \

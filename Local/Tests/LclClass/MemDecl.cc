@@ -71,7 +71,8 @@ TEST(wg_lclclass_memdecl, LocalTypeNonQlfd)
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST(value);
-        WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE(SomeLocalClass, value);
+        WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF(
+          SomeLocalClass, value);
       }
     public:
       SomeLocalClass const & getValue() const { return value; }
@@ -96,7 +97,8 @@ TEST(wg_lclclass_memdecl, LocalTypeConstQlfd)
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST(value);
-        WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE(SomeLocalClass, value);
+        WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF(
+          SomeLocalClass, value);
       }
     public:
       SomeLocalClass const & getValue() const { return value; }
@@ -121,7 +123,8 @@ TEST(wg_lclclass_memdecl, LocalTypeRefQlfd)
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST(value);
-        WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE(SomeLocalClass, value);
+        WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF(
+          SomeLocalClass, value);
       }
     public:
       SomeLocalClass const & getValue() const { return value; }
@@ -147,7 +150,8 @@ TEST(wg_lclclass_memdecl, LocalTypeConstRefQlfd)
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST(value);
-        WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE(SomeLocalClass, value);
+        WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF(
+          SomeLocalClass, value);
       }
     public:
       SomeLocalClass const & getValue() const { return value; }
