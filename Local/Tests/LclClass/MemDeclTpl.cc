@@ -6,6 +6,11 @@
 
 namespace
 {
+struct ignore;
+}
+
+namespace
+{
 template <typename T>
 struct OneVar
 {
@@ -82,3 +87,153 @@ TEST(wg_lclclass_memdecl_tpl, 3Vars)
   WG_GTEST_CATCH
 }
 
+namespace
+{
+template <typename IGNORED>
+struct LocalTypeNonQlfd
+{
+  static void run()
+  {
+    WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
+    SomeLocalClass localObj;
+
+    WG_LCLCLASS_TPL(AnotherLocalClass, memdecl (local(SomeLocalClass) value) )
+      void init()
+      {
+        WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_TPL(value);
+        WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF(
+          SomeLocalClass, value);
+      }
+    public:
+      SomeLocalClass const & getValue() const { return value; }
+    WG_LCLCLASS_END;
+
+    AnotherLocalClass anotherLocalObj(localObj);
+
+    WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTREFERENCE(
+      localObj, anotherLocalObj.getValue());
+  }
+};
+}
+TEST(wg_lclclass_memdecl_tpl, LocalTypeNonQlfd)
+{
+  try
+  {
+    LocalTypeNonQlfd<ignore>::run();
+  }
+  WG_GTEST_CATCH
+}
+
+namespace
+{
+template <typename IGNORED>
+struct LocalTypeConstQlfd
+{
+  static void run()
+  {
+    WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
+    SomeLocalClass localObj;
+
+    WG_LCLCLASS_TPL
+    (AnotherLocalClass, memdecl (local(SomeLocalClass) const value) )
+      void init()
+      {
+        WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST_TPL(value);
+        WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF(
+          SomeLocalClass, value);
+      }
+    public:
+      SomeLocalClass const & getValue() const { return value; }
+    WG_LCLCLASS_END;
+
+    AnotherLocalClass anotherLocalObj(localObj);
+
+    WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTREFERENCE(
+      localObj, anotherLocalObj.getValue());
+  }
+};
+}
+TEST(wg_lclclass_memdecl_tpl, LocalTypeConstQlfd)
+{
+  try
+  {
+    LocalTypeConstQlfd<ignore>::run();
+  }
+  WG_GTEST_CATCH
+}
+
+namespace
+{
+template <typename IGNORED>
+struct LocalTypeRefQlfd
+{
+  static void run()
+  {
+    WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
+    SomeLocalClass localObj;
+
+    WG_LCLCLASS_TPL
+    (AnotherLocalClass, memdecl (local(SomeLocalClass) ref value) )
+      void init()
+      {
+        WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_TPL(value);
+        WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF(
+          SomeLocalClass, value);
+      }
+    public:
+      SomeLocalClass const & getValue() const { return value; }
+    WG_LCLCLASS_END;
+
+    AnotherLocalClass anotherLocalObj(localObj);
+
+    WG_TESTHELPER_ASSERT_LOCALTYPE_ISREFERENCE(
+      localObj, anotherLocalObj.getValue());
+  }
+};
+}
+TEST(wg_lclclass_memdecl_tpl, LocalTypeRefQlfd)
+{
+  try
+  {
+    LocalTypeRefQlfd<ignore>::run();
+  }
+  WG_GTEST_CATCH
+}
+
+namespace
+{
+template <typename IGNORED>
+struct LocalTypeConstRefQlfd
+{
+  static void run()
+  {
+    WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
+    SomeLocalClass localObj;
+
+    WG_LCLCLASS_TPL
+    (AnotherLocalClass, memdecl (local(SomeLocalClass) const ref value) )
+      void init()
+      {
+        WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST_TPL(value);
+        WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF(
+          SomeLocalClass, value);
+      }
+    public:
+      SomeLocalClass const & getValue() const { return value; }
+    WG_LCLCLASS_END;
+
+    AnotherLocalClass anotherLocalObj(localObj);
+
+    WG_TESTHELPER_ASSERT_LOCALTYPE_ISREFERENCE(
+      localObj, anotherLocalObj.getValue());
+  }
+};
+}
+TEST(wg_lclclass_memdecl_tpl, LocalTypeConstRefQlfd)
+{
+  try
+  {
+    LocalTypeConstRefQlfd<ignore>::run();
+  }
+  WG_GTEST_CATCH
+}
