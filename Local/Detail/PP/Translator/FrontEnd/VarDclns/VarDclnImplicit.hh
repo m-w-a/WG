@@ -17,7 +17,7 @@
 // implicitvardcln:
 //   implicit-type-var-dcln
 // Expands to the following:
-//   (WG_PP_DEDUCEDTYPE parsed-deduced-type) (var-name)
+//   (WG_PP_MARKER_DEDUCEDTYPE parsed-deduced-type) (var-name)
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG(implicitvardcln, istpl) \
@@ -28,7 +28,7 @@
 // valueexpr:
 //   value-expr
 // Expands to the following:
-//   (WG_PP_DEDUCEDTYPE parsed-deduced-type) (var-name)
+//   (WG_PP_MARKER_DEDUCEDTYPE parsed-deduced-type) (var-name)
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_2ARG(implicitvardcln, valueexpr, istpl) \
@@ -95,17 +95,17 @@
     (var)
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_00(expr, istpl) \
-  WG_PP_DEDUCEDTYPE ( WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) )
+  WG_PP_MARKER_DEDUCEDTYPE ( WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) )
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_01(expr, istpl) \
-  WG_PP_DEDUCEDTYPE \
+  WG_PP_MARKER_DEDUCEDTYPE \
     ( WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
       boost::add_reference< WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) >::type )
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_10(expr, istpl) \
-  WG_PP_DEDUCEDTYPE \
+  WG_PP_MARKER_DEDUCEDTYPE \
     ( WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
       boost::add_const< WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) >::type )
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_11(expr, istpl) \
-  WG_PP_DEDUCEDTYPE \
+  WG_PP_MARKER_DEDUCEDTYPE \
     ( \
       WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_reference \
       < \
@@ -117,11 +117,11 @@
     )
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_00(bvar, istpl) \
-  WG_PP_DEDUCEDTYPE ( WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, this) const )
+  WG_PP_MARKER_DEDUCEDTYPE ( WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, this) const )
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_01(bvar, istpl) \
   WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_ERRMSG()
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_10(bvar, istpl) \
-  WG_PP_DEDUCEDTYPE \
+  WG_PP_MARKER_DEDUCEDTYPE \
   ( \
     WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_const \
     < \

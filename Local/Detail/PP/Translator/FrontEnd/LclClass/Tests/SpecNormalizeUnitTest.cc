@@ -19,8 +19,8 @@ BOOST_PP_EXPAND(WG_PP_LCLCLASS_SPEC_NORMALIZE(MS2, 0))
 //EXPECTED:
 (derives) ( foo ) (memlike) (BOOST_PP_NIL) (memset) (BOOST_PP_NIL) (errors) ( BOOST_PP_NIL )
 (derives) ( public foo virtual bar private virtual ::bat<man> ) (memlike) (BOOST_PP_NIL) (memset) (BOOST_PP_NIL) (errors) ( BOOST_PP_NIL )
-(derives) (BOOST_PP_NIL) (memlike) ( ( WG_PP_DEDUCEDTYPE ( BOOST_TYPEOF(b) ) (b) ) (memset) (BOOST_PP_NIL) (errors) ( BOOST_PP_NIL )
-(derives) (BOOST_PP_NIL) (memlike) ( (WG_PP_NOOP (long)) ( b ) ( WG_PP_DEDUCEDTYPE ( BOOST_TYPEOF(c)) ) ) (c) ) (memset) (BOOST_PP_NIL) (errors) ( BOOST_PP_NIL )
-(derives) (BOOST_PP_NIL) (memlike) (BOOST_PP_NIL) (memset) ( ( WG_PP_DEDUCEDTYPE ( BOOST_TYPEOF(7)) ) ) (x) (7) ) (errors) ( BOOST_PP_NIL )
-(derives) (BOOST_PP_NIL) (memlike) (BOOST_PP_NIL) (memset) ( (WG_PP_NOOP (int)) ( x ) (7) ( WG_PP_NOOP local (Callback) ) (y) (8) ) (errors) ( BOOST_PP_NIL )
+(derives) (BOOST_PP_NIL) (memlike) ( ( WG_PP_MARKER_DEDUCEDTYPE ( BOOST_TYPEOF(b) ) (b) ) (memset) (BOOST_PP_NIL) (errors) ( BOOST_PP_NIL )
+(derives) (BOOST_PP_NIL) (memlike) ( (WG_PP_MARKER_NOOP (long)) ( b ) ( WG_PP_MARKER_DEDUCEDTYPE ( BOOST_TYPEOF(c)) ) ) (c) ) (memset) (BOOST_PP_NIL) (errors) ( BOOST_PP_NIL )
+(derives) (BOOST_PP_NIL) (memlike) (BOOST_PP_NIL) (memset) ( ( WG_PP_MARKER_DEDUCEDTYPE ( BOOST_TYPEOF(7)) ) ) (x) (7) ) (errors) ( BOOST_PP_NIL )
+(derives) (BOOST_PP_NIL) (memlike) (BOOST_PP_NIL) (memset) ( (WG_PP_MARKER_NOOP (int)) ( x ) (7) ( WG_PP_MARKER_NOOP local (Callback) ) (y) (8) ) (errors) ( BOOST_PP_NIL )
 */

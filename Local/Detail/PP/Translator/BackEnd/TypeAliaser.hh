@@ -93,7 +93,7 @@
 #define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLN_IMPLICITTYPES( \
   r, spec, indx, marked_e_or_d_type) \
     BOOST_PP_EXPR_IIF( \
-      WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_DEDUCEDTYPE(marked_e_or_d_type), \
+      WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_MARKER_DEDUCEDTYPE(marked_e_or_d_type), \
       WG_PP_TYPEALIASER_DEDUCEDTYPEDCLN_IMPL( \
         spec, \
         indx, \

@@ -108,8 +108,8 @@
 //normalized-set-nlt-tuple :=
 //  (parsed-explicit-non-local-type-or-deduced-type)(var-name)(value-expr)
 //parsed-explicit-non-local-type-or-deduced-type: =
-//    WG_PP_NOOP parsed-explicit-non-local-type
-//  | WG_PP_DEDUCEDTYPE parsed-deduced-type
+//    WG_PP_MARKER_NOOP parsed-explicit-non-local-type
+//  | WG_PP_MARKER_DEDUCEDTYPE parsed-deduced-type
 //parsed-explicit-non-local-type :=
 //  explicit-non-local-type
 //parsed-deduced-type :=

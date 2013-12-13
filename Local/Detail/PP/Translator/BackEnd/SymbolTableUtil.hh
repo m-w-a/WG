@@ -290,7 +290,7 @@
   r, spec_typealiasername_istpl, indx, entry) \
     ( \
       BOOST_PP_IIF( \
-        WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_DEDUCEDTYPE(entry), \
+        WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_MARKER_DEDUCEDTYPE(entry), \
         WG_PP_STUTIL_USETYPEALIASER_REPLACEWITHALIASEDTYPE( \
           spec_typealiasername_istpl, indx), \
         WG_PP_TRNSLTR_MARKERS_EATHEADMARKER(entry) ) \
