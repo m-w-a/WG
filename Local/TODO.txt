@@ -13,6 +13,11 @@ Tests: tpl -> _tpl
 Misc.
 -----
 
+GlobalTypes -> unique names.
+LocalOperandsSyntaxCheck tests.
+ErrorReporting tests.
+Error -> WG_LCL_ERROR
+
 NOT/AND/OR to their bit counter parts.
 
 ExpandN:
@@ -38,3 +43,8 @@ LclClass:
   remove WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE
   remove any misc from TypeExtractor.hh
   memset -> meminit
+  
+  Tests:
+    Nested
+    Multiple in same scope.
+    Multiple in same macro.

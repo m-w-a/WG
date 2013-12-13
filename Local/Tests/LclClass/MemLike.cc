@@ -1,9 +1,8 @@
-//#include <gtest/gtest.h>
-//#include <boost/typeof/typeof.hpp>
-//#include <WG/GTest/Exceptions.hh>
+#include <gtest/gtest.h>
+#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/TestHelper.hh>
 #include <WG/Local/LclClass.hh>
-#include "BaseClasses.hh"
+#include <boost/typeof/typeof.hpp>
 
 TEST(wg_lclclass_memlike, Mimic1Var)
 {
@@ -15,8 +14,9 @@ TEST(wg_lclclass_memlike, Mimic1Var)
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST(var);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE(bool, BOOST_TYPEOF(var));
+        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, var);
       }
+    public:
       BOOST_TYPEOF(var) const & getVar() const { return var; }
     WG_LCLCLASS_END;
 
@@ -37,8 +37,9 @@ TEST(wg_lclclass_memlike, Mimic1VarByRef)
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST(var);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE(bool, BOOST_TYPEOF(var));
+        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, var);
       }
+    public:
       BOOST_TYPEOF(var) const & getVar() const { return var; }
     WG_LCLCLASS_END;
 
@@ -59,8 +60,9 @@ TEST(wg_lclclass_memlike, Mimic1VarByConst)
       void didMimicType() const
       {
         WG_TESTHELPER_ASSERT_ISCONST(red);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(red));
+        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, red);
       }
+    public:
       BOOST_TYPEOF(red) const & getRed() const { return red; }
     WG_LCLCLASS_END;
 
@@ -81,8 +83,9 @@ TEST(wg_lclclass_memlike, Mimic1VarByConstRef)
       void init()
       {
         WG_TESTHELPER_ASSERT_ISCONST(blue);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(blue));
+        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, blue);
       }
+    public:
       BOOST_TYPEOF(blue) const & getBlue() const
       {
         return blue;
@@ -114,10 +117,11 @@ TEST(wg_lclclass_memlike, Mimic3Vars)
         WG_TESTHELPER_ASSERT_ISCONST(mass);
         WG_TESTHELPER_ASSERT_ISCONST(velocity);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(force));
-        WG_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(mass));
-        WG_TESTHELPER_ASSERT_ISSAMETYPE(int, BOOST_TYPEOF(velocity));
+        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, force);
+        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, mass);
+        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, velocity);
       }
+    public:
       BOOST_TYPEOF(force) const & getForce() const { return force; }
       BOOST_TYPEOF(mass) const & getMass() const { return mass; }
       BOOST_TYPEOF(velocity) const & getVelocity() const { return velocity; }
@@ -143,14 +147,15 @@ struct MimicThisU
       void init()
       {
         WG_TESTHELPER_ASSERT_ISCONST(this_);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE(MimicThisU *, BOOST_TYPEOF(this_));
+        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(MimicThisU *, this_);
       }
+    public:
       BOOST_TYPEOF(this_) const & getThisU() const { return this_; }
     WG_LCLCLASS_END;
 
     verifier v(this);
 
-    WG_TESTHELPER_ASSERT_ISREFERENCE(this, c.getThisU());
+    WG_TESTHELPER_ASSERT_ISREFERENCE(*this, *v.getThisU());
   }
 };
 }
