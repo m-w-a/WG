@@ -57,7 +57,15 @@
 //------------------
 //TypeAliaser Utils.
 //------------------
+
+// Skip MEMDECL since it will never have deduced types.
 #define WG_PP_LCLCLASS_CG_TYPEALIASER_SPECSEQ() \
+  ( (MEMLIKE)(memlike) ) \
+  ( (MEMSET)(memset) )
+
+// Include MEMDECL since we want to remove all type markers.
+#define WG_PP_LCLCLASS_CG_TYPEALIASER_USE_SPECSEQ() \
+  ( (MEMDECL)(ignore) ) \
   ( (MEMLIKE)(memlike) ) \
   ( (MEMSET)(memset) )
 
@@ -85,7 +93,7 @@
       symbtbl, \
       WG_PP_LCLCLASS_CG_TYPEALIASER_NAME(), \
       IMPLICITTYPES, \
-      WG_PP_LCLCLASS_CG_LOCALOPERANDSSYNTAXCHECKER_SPECSEQ()) )
+      WG_PP_LCLCLASS_CG_TYPEALIASER_USE_SPECSEQ()) )
 
 #define WG_PP_LCLCLASS_CODEGEN_START_IMPL2(name, symbtbl) \
   class name WG_PP_LCLCLASS_CG_LCLCLASS_BASESPECIFIERDCLN(symbtbl) \
