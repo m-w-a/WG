@@ -139,19 +139,19 @@
 #define WG_PP_TYPEALIASER_REPLACEDEDUCEDTYPETUPLE( \
   r, istpl_typealiasername_spec, indx, entry) \
     ( \
-      BOOST_PP_EXPR_IIF( \
+      BOOST_PP_IIF( \
         WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_MARKER_DEDUCEDTYPE(entry), \
         WG_PP_TYPEALIASER_REPLACEDEDUCEDTYPE( \
           BOOST_PP_SEQ_ELEM(0, istpl_typealiasername_spec), \
           BOOST_PP_SEQ_ELEM(1, istpl_typealiasername_spec), \
           WG_PP_TYPEALIASER_SPEC_ALIASROOTNAME( \
             BOOST_PP_SEQ_REST_N(2, istpl_typealiasername_spec)), \
-          indx, \
-          entry) ) \
+          indx), \
+        entry) \
     )
 
 #define WG_PP_TYPEALIASER_REPLACEDEDUCEDTYPE( \
-  istpl, typealiasername, aliasrootname, indx, entry) \
+  istpl, typealiasername, aliasrootname, indx) \
     WG_PP_MARKER_DEDUCEDTYPE \
     ( \
       WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \

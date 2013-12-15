@@ -22,7 +22,7 @@
 //   The first element must be the moduleid.
 #define WG_PP_STUTIL_CALL_F1(function, symbtbl, arg) \
   WG_PP_UCAT_ARG2( \
-    WG_PP_LCLCLASS_SYMBOLTABLE_MODULEID(symbtbl), function) (arg)
+    BOOST_PP_ARRAY_ELEM(0, symbtbl), function) (arg)
 
 // Expands to <symbtbl-moduleid>_<functionpt1>_<functionpt2>(arg)
 //
@@ -30,7 +30,7 @@
 //   The first element must be the moduleid.
 #define WG_PP_STUTIL_CALL_F2(functionpt1, functionpt2, symbtbl, arg) \
   WG_PP_UCAT_ARG3( \
-    WG_PP_LCLCLASS_SYMBOLTABLE_MODULEID(symbtbl), functionpt1, functionpt2) \
+    BOOST_PP_ARRAY_ELEM(0, symbtbl), functionpt1, functionpt2) \
   (arg)
 
 //###########

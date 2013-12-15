@@ -11,6 +11,9 @@
 //  (Implements interfaces required by external macros.)
 //################
 
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_MODULEID(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, MODULEID)
+
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_ISTPL(symbtbl) \
   WG_PP_LCLFUNCTION_ST_GET(symbtbl, ISTPL)
 
@@ -77,10 +80,8 @@
 //STUTIL Interface Impls.
 //#######################
 
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_INDX_TYPESEQ_BOUNDVAR \
-  WG_PP_LCLFUNCTION_ST_INDX_TYPESEQ_BOUNDVAR
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_INDX_TYPESEQ_SETVAR \
-  WG_PP_LCLFUNCTION_ST_INDX_TYPESEQ_SETVAR
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_INDX(suffix) \
+  BOOST_PP_CAT(WG_PP_LCLFUNCTION_ST_INDX_, suffix)
 
 //###########
 //Public APIs
