@@ -30,6 +30,7 @@ ExpandN:
 LclFunction:
   modified call traits.
   Binder: local namespace to lclfunction namespace?
+  Multiple in same macro.
 
 LclClass:
   WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE -> call_traits
@@ -39,7 +40,7 @@ LclClass:
   memset -> meminit
   
   Tests:
-    init is called.
+    x) init is called.
     Nested
     Multiple in same scope.
     Multiple in same macro.
