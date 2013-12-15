@@ -20,8 +20,8 @@
 //
 // symbtbl:
 //   must have the following defined:
-//     1) WG_PP_STUTIL_CALL_F2(TYPESEQ, <suffix>, symbtbl)
-//     2) WG_PP_STUTIL_CALL_F2(OBJSEQ, <suffix>, symbtbl)
+//     1) WG_PP_STUTIL_CALL_F2(TYPESEQ, <suffix>, symbtbl, symbtbl)
+//     2) WG_PP_STUTIL_CALL_F2(OBJSEQ, <suffix>, symbtbl, symbtbl)
 //   where suffix is declared in specseq.
 //
 // specseq:
@@ -60,9 +60,9 @@
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN(r, symbtbl, spec) \
   WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN2( \
     WG_PP_STUTIL_CALL_F2( \
-      TYPESEQ, WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec), symbtbl), \
+      TYPESEQ, WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec), symbtbl, symbtbl), \
     WG_PP_STUTIL_CALL_F2( \
-      OBJSEQ, WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec), symbtbl), \
+      OBJSEQ, WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec), symbtbl, symbtbl), \
     WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_VARROOTNAME(spec))
 
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN2( \

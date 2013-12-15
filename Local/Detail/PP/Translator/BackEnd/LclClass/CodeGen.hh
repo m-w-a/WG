@@ -60,14 +60,7 @@
 
 // Skip MEMDECL since it will never have deduced types.
 #define WG_PP_LCLCLASS_CG_TYPEALIASER_SPECSEQ() \
-  ( (MEMLIKE)(memlike) ) \
-  ( (MEMSET)(memset) )
-
-// Include MEMDECL since we want to remove all type markers.
-#define WG_PP_LCLCLASS_CG_TYPEALIASER_USE_SPECSEQ() \
-  ( (MEMDECL)(ignore) ) \
-  ( (MEMLIKE)(memlike) ) \
-  ( (MEMSET)(memset) )
+  ( (MEMLIKE)(memlike) )
 
 //------------
 //The CodeGen.
@@ -80,22 +73,28 @@
     WG_PP_LCLCLASS_CG_LOCALOPERANDSSYNTAXCHECKER_SPECSEQ() ) \
   WG_PP_TYPEALIASER_DCLN( \
     WG_PP_LCLCLASS_CG_TYPEALIASER_NAME(), \
-    IMPLICITTYPES, \
     symbtbl, \
     WG_PP_LCLCLASS_CG_TYPEALIASER_SPECSEQ() ) \
   WG_PP_LCLCLASS_CODEGEN_START_IMPL2( \
     name, \
-    /* Do not use typealiaser for wholesale aliasing of captured variables' types, */ \
-    /* since some of those captured types maybe local, and that information needs  */ \
-    /* to be preserved for later codegen passes, where we have to choose between   */ \
-    /* PPMP and TMP techniques to const/ref qualify these captured types.          */ \
-    WG_PP_STUTIL_USETYPEALIASER( \
+    WG_PP_STUTIL_REPLACESEQ( \
       symbtbl, \
-      WG_PP_LCLCLASS_CG_TYPEALIASER_NAME(), \
-      IMPLICITTYPES, \
-      WG_PP_LCLCLASS_CG_TYPEALIASER_USE_SPECSEQ()) )
+      (TYPESEQ_MEMLIKE), \
+      WG_PP_TYPEALIASER_REPLACEDEDUCEDTYPESEQ, \
+      ( WG_PP_LCLCLASS_SYMBOLTABLE_ISTPL(symbtbl) ) \
+      ( WG_PP_LCLCLASS_CG_TYPEALIASER_NAME() ) \
+      WG_PP_LCLCLASS_CG_TYPEALIASER_SPECSEQ() ) )
 
 #define WG_PP_LCLCLASS_CODEGEN_START_IMPL2(name, symbtbl) \
+  WG_PP_LCLCLASS_CODEGEN_START_IMPL3( \
+    name, \
+    WG_PP_STUTIL_REPLACESEQ( \
+      symbtbl, \
+      (TYPESEQ_MEMDECL)(TYPESEQ_MEMLIKE)(TYPESEQ_MEMSET), \
+      WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ, \
+      ~) )
+
+#define WG_PP_LCLCLASS_CODEGEN_START_IMPL3(name, symbtbl) \
   class name WG_PP_LCLCLASS_CG_LCLCLASS_BASESPECIFIERDCLN(symbtbl) \
   { \
   private: \
