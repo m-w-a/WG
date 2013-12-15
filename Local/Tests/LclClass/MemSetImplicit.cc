@@ -35,7 +35,7 @@ TEST(wg_lclclass_memsetimplicit, OkIf3MemOfVaryingMutabilitySet)
       memset
         (const radius, 2)
         (height, 10ul)
-        ((unsigned long) volume, radius * height) )
+        (volume, radius * height) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISCONST(radius);
