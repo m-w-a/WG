@@ -25,7 +25,8 @@ memlike:
     said member variables.
 
 memset:
-  1) Will generate member variables initialized to the user specified expressions.
+  1) Will generate member variables initialized to the user specified expressions. 
+    Such exressions may reference previously declared member variables.
   2) Said member variables will be declared in the order that they appeared in  
     the user specified macro.
   3) If implicitly typed, the types of the member variables are deduced from
