@@ -236,7 +236,9 @@ test_lclclass_SOURCES = \
     ../LclClass/MemSetExplicitAndImplicit.cc \
     ../LclClass/MemSetExplicitTpl.cc \
     ../LclClass/MemSetImplicitTpl.cc \
-    ../LclClass/MemSetExplicitAndImplicitTpl.cc
+    ../LclClass/MemSetExplicitAndImplicitTpl.cc \
+    ../LclClass/InitHook.cc \
+    ../LclClass/InitHookTpl.cc
 
 LCLFUNCTION_SRC = \
     ../LclFunction/TestMain.cc \
