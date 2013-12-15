@@ -45,7 +45,9 @@ TEST(wg_lclfunction_arrays, BindByValue)
     int const origArr_1_1 = arr[1][1];
     WG_LCLFUNCTION(arrBindByValue, varbind (arr) )
     {
-      EXPECT_TRUE(boost::is_array<BOOST_TYPEOF(arr)>::value);
+      WG_TESTHELPER_ASSERT_ISNOTCONST(arr);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(Arr, arr);
+
       EXPECT_TRUE(isEqualToPrototype(arr));
 
       arr[1][1] += 10;
@@ -69,7 +71,9 @@ TEST(wg_lclfunction_arrays, BindByRef)
     int const origArr_1_1 = arr[1][1];
     WG_LCLFUNCTION(arrBindByRef, varbind (ref arr) )
     {
-      EXPECT_TRUE(boost::is_array<BOOST_TYPEOF(arr)>::value);
+      WG_TESTHELPER_ASSERT_ISNOTCONST(arr);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(Arr, arr);
+
       EXPECT_TRUE(isEqualToPrototype(arr));
 
       arr[1][1] += 10;
@@ -93,7 +97,9 @@ TEST(wg_lclfunction_arrays, SetByValue)
     int const origArr_1_1 = arr[1][1];
     WG_LCLFUNCTION(arrSetByValue, varset (someArr, arr) )
     {
-      EXPECT_TRUE(boost::is_array<BOOST_TYPEOF(someArr)>::value);
+      WG_TESTHELPER_ASSERT_ISNOTCONST(arr);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(Arr, arr);
+
       EXPECT_TRUE(isEqualToPrototype(someArr));
 
       someArr[1][1] += 10;
@@ -117,7 +123,9 @@ TEST(wg_lclfunction_arrays, SetByRef)
     int const origArr_1_1 = arr[1][1];
     WG_LCLFUNCTION(arrSetByRef, varset (ref someArr, arr) )
     {
-      EXPECT_TRUE(boost::is_array<BOOST_TYPEOF(someArr)>::value);
+      WG_TESTHELPER_ASSERT_ISNOTCONST(arr);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(Arr, arr);
+
       EXPECT_TRUE(isEqualToPrototype(someArr));
 
       someArr[1][1] += 10;

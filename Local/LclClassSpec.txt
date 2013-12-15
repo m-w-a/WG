@@ -1,21 +1,36 @@
+The client-fill portion is by default private.
+
+A hook for the generated constructor maybe specified via a method with the 
+following signature: "void init()".
+
 //----------
 //Semantics:
 //----------
 
 Note: All terms not defined here should be referenced in AutoFunctorSpec.txt
 
+memdecl:
+  1) Will generate member variables for the local class.
+  2) Said member variables will be declared in the 
+    order that they appeared in the user specified macro.
+  3) Will generate parameters for the public constructor necessary to initialize  
+    said member variables.
+
 memlike:
-  1) When implicitly typed, the types of the declared member variables are 
-    deduced from variables of the same name in the enclosing scope(s) using
-    Boost.TypeOf
-  2) The signature of the generated constructor for the local class will reflect 
-    what's specified here.
+  1) Will generate member variables with the same types as those variables with 
+    the same name in the enclosing scope(s). 
+  2) Said member variables will be declared in the 
+    order that they appeared in the user specified macro.
+  3) Will generate parameters for the public constructor necessary to initialize  
+    said member variables.
 
 memset:
-  1) Specifies the member variables of the local class that will be initialized 
-    to some expression during construction.
-  2) When implicitly typed, the types of the member variables are deduced from
-    the type of the expression each is set to via BOOST_TYPEOF.
+  1) Will generate member variables initialized to the user specified expressions. 
+    Such exressions may reference previously declared member variables.
+  2) Said member variables will be declared in the order that they appeared in  
+    the user specified macro.
+  3) If implicitly typed, the types of the member variables are deduced from
+  the types of the user specified expressions via BOOST_TYPEOF.
 
 //---
 //BNF
@@ -36,6 +51,7 @@ lclclass-start-macro :=
 
 lclclass-spec :=
   [derives derives-seq]
+  [memdecl memdecl-tuple-seq]
   [memlike memlike-tuple-seq]
   [memset memset-seq]
 
@@ -48,12 +64,19 @@ derives-tuple-seq :=
 derives-tuple :=
   ( base-specifier )
 
+memdecl-tuple-seq :=
+    memdecl-tuple
+  | memdecl-tuple-seq memdecl-tuple
+
+memdecl-tuple :=
+  explicit-type-var-dcln
+
 memlike-tuple-seq :=
     memlike-tuple
   | memlike-tuple-seq memlike-tuple
 
 memlike-tuple :=
-  ( type-var-dcln )
+  ( implicit-type-var-dcln )
 
 memset-seq := set-tuple-seq
 

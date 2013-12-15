@@ -14,7 +14,7 @@
 // explicitvardcln:
 //   explicit-type-var-dcln
 // Expands to the following:
-//   (WG_PP_NOOP parsed-explicit-type) (var-name)
+//   (WG_PP_MARKER_NOOP parsed-explicit-type) (var-name)
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE(explicitvardcln, istpl) \
@@ -23,7 +23,7 @@
 // explicitvardcln:
 //   explicit-type-var-dcln
 // Expands to the following:
-//   (WG_PP_NOOP parsed-explicit-non-local-type) (var-name)
+//   (WG_PP_MARKER_NOOP parsed-explicit-non-local-type) (var-name)
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_VARDCLN_EXPLICIT_NLT_TUPLIZE(explicitvardcln, istpl) \
@@ -56,7 +56,7 @@
 
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_MISSING_TYPE_ERROR(explicitvardcln) \
   ( \
-    WG_PP_ERROR ERROR_missing_type_in_explicit_type_var_dcln \
+    WG_PP_MARKER_ERROR ERROR_missing_type_in_explicit_type_var_dcln \
   )
 
 //-----------------------
@@ -72,7 +72,7 @@
       WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONPREFIXED_NONLOCAL2 explicitvardcln) \
     BOOST_PP_RPAREN()
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONPREFIXED_NONLOCAL2(explicittype) \
-  (WG_PP_NOOP (explicittype)) BOOST_PP_LPAREN()
+  (WG_PP_MARKER_NOOP (explicittype)) BOOST_PP_LPAREN()
 
 //-------------------
 // Local Type Macros.
@@ -91,7 +91,7 @@
 
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_LOCAL2(localvalue, tq_varname) \
   BOOST_PP_LPAREN() \
-    WG_PP_NOOP local (localvalue) \
+    WG_PP_MARKER_NOOP local (localvalue) \
     WG_PP_VARDCLN_EXPLICIT_TUPLIZE_LOCAL3(tq_varname)
 
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_LOCAL3(tq_varname) \

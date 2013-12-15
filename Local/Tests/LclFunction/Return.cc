@@ -2,6 +2,7 @@
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
 #include <boost/tuple/tuple.hpp>
+#include <WG/Local/Tests/TestHelper.hh>
 
 TEST(wg_lclfunction_return, OkIfSpecified)
 {
@@ -14,6 +15,8 @@ TEST(wg_lclfunction_return, OkIfSpecified)
       return 1;
     }
     WG_LCLFUNCTION_END;
+
+    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, rettest());
 
     retval = rettest();
 
@@ -34,6 +37,9 @@ TEST(wg_lclfunction_return, OkIfGloballyScoped)
       return ::boost::make_tuple(true);
     }
     WG_LCLFUNCTION_END;
+
+    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      ::boost::tuple<bool>, rettest());
 
     retval = rettest();
 

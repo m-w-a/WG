@@ -1,8 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <utility>
-#include <boost/typeof/typeof.hpp>
 #include <WG/Local/Tests/TestHelper.hh>
 
 namespace
@@ -23,12 +21,13 @@ struct OkIfUsing21Combo
       varbind (ref volume) (const pressure)
       varset ((int const) numerator, numMoles * R * temp) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int &, BOOST_TYPEOF_TPL(volume) &);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int const, BOOST_TYPEOF_TPL(pressure) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int const, BOOST_TYPEOF_TPL(numerator) const);
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(volume);
+      WG_TESTHELPER_ASSERT_ISCONST_TPL(pressure);
+      WG_TESTHELPER_ASSERT_ISCONST_TPL(numerator);
+
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, volume);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, pressure);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(int, numerator);
 
       volume = numerator / pressure;
     }

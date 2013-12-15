@@ -14,13 +14,13 @@
 // Creates a class for forwarding captured variables and/or expressions.
 // symbtbl:
 //   must have:
-//     1) WG_PP_STUTIL_CALL_F1(ISTPL, symbtbl)
-//     2) WG_PP_STUTIL_CALL_F2(TYPESEQ, <suffix>, symbtbl)
-//     3) WG_PP_STUTIL_CALL_F2(OBJSEQ, <suffix>, symbtbl)
-//     4) WG_PP_STUTIL_CALL_F2(VALUESEQ, <suffix>, symbtbl)
-//     5) WG_PP_STUTIL_CALL_F1(TOTAL_XXX_SIZE, symbtbl)
+//     1) WG_PP_STUTIL_CALL_F1(ISTPL, symbtbl, symbtbl)
+//     2) WG_PP_STUTIL_CALL_F2(TYPESEQ, <suffix>, symbtbl, symbtbl)
+//     3) WG_PP_STUTIL_CALL_F2(OBJSEQ, <suffix>, symbtbl, symbtbl)
+//     4) WG_PP_STUTIL_CALL_F2(VALUESEQ, <suffix>, symbtbl, symbtbl)
+//     5) WG_PP_STUTIL_CALL_F1(TOTAL_XXX_SIZE, symbtbl, symbtbl)
 //     6) and when necessary,
-//       WG_PP_STUTIL_CALL_F2(OBJSEQ_THISU_MARKER, <suffix>, symbtbl)
+//       WG_PP_STUTIL_CALL_F2(OBJSEQ_THISU_MARKER, <suffix>, symbtbl, symbtbl)
 //   Where suffix is declared in specseq.
 // specseq:
 //   { ( (suffix)(forwarding_type)(varrootname)(thisu_policy) ) }+
@@ -33,7 +33,7 @@
 //   thisu_policy:
 //     one of {REPLACETHISU, DONOTREPLACETHISU}
 //     if REPLACETHISU is chosen, then there must be a corresponding
-//     WG_PP_STUTIL_CALL_F2(OBJSEQ_THISU_MARKER, <suffix>, symbtbl)
+//     WG_PP_STUTIL_CALL_F2(OBJSEQ_THISU_MARKER, <suffix>, symbtbl, symbtbl)
 #define WG_PP_FORWARDER_DCLN( \
   frwdr_typename, frwdr_objname, symbtbl, specseq) \
     WG_PP_FORWARDER_DCLN_IMPL(frwdr_typename, frwdr_objname, symbtbl, specseq)
@@ -166,8 +166,8 @@
   suffix, transform, varrootname, symbtbl) \
     WG_PP_SEQ_NOTHING_FOR_EACH_I( \
       transform, \
-      (varrootname)( WG_PP_STUTIL_CALL_F1(ISTPL,symbtbl) ), \
-      WG_PP_STUTIL_CALL_F2(TYPESEQ, suffix, symbtbl) )
+      (varrootname)( WG_PP_STUTIL_CALL_F1(ISTPL, symbtbl, symbtbl) ), \
+      WG_PP_STUTIL_CALL_F2(TYPESEQ, suffix, symbtbl, symbtbl) )
 
 //-----------
 //MemberDclns
@@ -227,7 +227,7 @@
 
 #define WG_PP_FORWARDER_TYPE_CTOR_PARAMLIST(symbtbl, specseq) \
   BOOST_PP_IF( \
-    WG_PP_STUTIL_CALL_F1(TOTALXXX_SIZE, symbtbl), \
+    WG_PP_STUTIL_CALL_F1(TOTALXXX_SIZE, symbtbl, symbtbl), \
     WG_PP_SEQ_ENUM, \
     WG_PP_MAPTO_NOTHING_ARG1) \
       ( \
@@ -266,7 +266,7 @@
 
 #define WG_PP_FORWARDER_TYPE_CTOR_INITLIST(symbtbl, specseq) \
   BOOST_PP_IF( \
-    WG_PP_STUTIL_CALL_F1(TOTALXXX_SIZE, symbtbl), \
+    WG_PP_STUTIL_CALL_F1(TOTALXXX_SIZE, symbtbl, symbtbl), \
     WG_PP_IDENTITY_ARG1(:) WG_PP_SEQ_ENUM, \
     WG_PP_MAPTO_NOTHING_ARG1) \
       ( \
@@ -350,12 +350,14 @@
 
 #define WG_PP_FORWARDER_OBJ_INITLIST_SEQ_REPLACETHISU(symbtbl, spec) \
   WG_PP_SEQ_REPLACE( \
-    WG_PP_STUTIL_CALL_F2(OBJSEQ, WG_PP_FORWARDER_SPEC_SUFFIX(spec), symbtbl), \
     WG_PP_STUTIL_CALL_F2( \
-      OBJSEQ_THISU_MARKER, WG_PP_FORWARDER_SPEC_SUFFIX(spec), symbtbl), \
+      OBJSEQ, WG_PP_FORWARDER_SPEC_SUFFIX(spec), symbtbl, symbtbl), \
+    WG_PP_STUTIL_CALL_F2( \
+      OBJSEQ_THISU_MARKER, WG_PP_FORWARDER_SPEC_SUFFIX(spec), symbtbl, symbtbl), \
     this)
 
 #define WG_PP_FORWARDER_OBJ_INITLIST_SEQ_DONOTREPLACETHISU(symbtbl, spec) \
-  WG_PP_STUTIL_CALL_F2(VALUESEQ, WG_PP_FORWARDER_SPEC_SUFFIX(spec), symbtbl)
+  WG_PP_STUTIL_CALL_F2( \
+    VALUESEQ, WG_PP_FORWARDER_SPEC_SUFFIX(spec), symbtbl, symbtbl)
 
 #endif /* WG_PP_FORWARDER_HH_ */

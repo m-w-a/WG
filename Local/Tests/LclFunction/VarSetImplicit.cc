@@ -14,7 +14,9 @@ TEST(wg_lclfunction_varsetimplicit, OkIf1VarSet)
 
     WG_LCLFUNCTION(check, varset (ref didAssign, proxy.didAssign) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(bool &, BOOST_TYPEOF(didAssign) &);
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(didAssign);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(bool, didAssign);
+
       didAssign = true;
     }WG_LCLFUNCTION_END;
 
@@ -42,14 +44,13 @@ TEST(wg_lclfunction_varsetimplicit, OkIf3VarsOfVaryingMutabilitySet)
         (const height, cylinder.height)
         (ref volume, cylinder.volume) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int const,
-        BOOST_TYPEOF(radius) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int const,
-        BOOST_TYPEOF(height) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int &, BOOST_TYPEOF(volume) &)
+      WG_TESTHELPER_ASSERT_ISCONST(radius);
+      WG_TESTHELPER_ASSERT_ISCONST(height);
+      WG_TESTHELPER_ASSERT_ISNOTCONST(volume);
+
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, radius);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, height);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, volume);
 
       volume = radius * height;
     }WG_LCLFUNCTION_END;

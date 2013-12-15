@@ -20,16 +20,18 @@
 //
 // symbtbl:
 //   must have the following defined:
-//     1) WG_PP_STUTIL_CALL_F2(TYPESEQ, <suffix>, symbtbl)
-//     2) WG_PP_STUTIL_CALL_F2(OBJSEQ, <suffix>, symbtbl)
+//     1) WG_PP_STUTIL_CALL_F2(TYPESEQ, <suffix>, symbtbl, symbtbl)
+//     2) WG_PP_STUTIL_CALL_F2(OBJSEQ, <suffix>, symbtbl, symbtbl)
 //   where suffix is declared in specseq.
 //
 // specseq:
 //   { ( (suffix)(varrootname) ) }+
 //
+//   suffix:
+//     The class of variables that if are locally typed then should be syntax
+//     checked.
 //   varrootname:
-//     the root name of the congruence class of variables that if are locally
-//     typed then should be syntax checked.
+//     The root name of the variables to be used in the syntax checker.
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN(syntaxcheckername, symbtbl, specseq) \
   WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN_IMPL(syntaxcheckername, symbtbl, specseq)
 
@@ -58,9 +60,9 @@
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN(r, symbtbl, spec) \
   WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN2( \
     WG_PP_STUTIL_CALL_F2( \
-      TYPESEQ, WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec), symbtbl), \
+      TYPESEQ, WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec), symbtbl, symbtbl), \
     WG_PP_STUTIL_CALL_F2( \
-      OBJSEQ, WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec), symbtbl), \
+      OBJSEQ, WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec), symbtbl, symbtbl), \
     WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_VARROOTNAME(spec))
 
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN2( \
