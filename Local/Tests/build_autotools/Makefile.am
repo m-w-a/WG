@@ -243,7 +243,8 @@ test_lclclass_SOURCES = \
     ../LclClass/InitHookTpl.cc \
     ../LclClass/Nested.cc \
     ../LclClass/NestedTpl.cc \
-    ../LclClass/MultipleUseInSameMacro.cc
+    ../LclClass/MultipleUseInSameMacro.cc \
+    ../LclClass/MultipleUseInSameMacroTpl.cc
 
 LCLFUNCTION_SRC = \
     ../LclFunction/TestMain.cc \
