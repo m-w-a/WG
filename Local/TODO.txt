@@ -42,5 +42,5 @@ LclClass:
   Tests:
     x) init is called.
     x) Nested
-    Multiple in same scope.
+    x) Multiple in same scope.
     Multiple in same macro.

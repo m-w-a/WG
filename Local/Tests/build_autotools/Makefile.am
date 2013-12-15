@@ -225,6 +225,8 @@ test_autofunctor_SOURCES = \
 
 test_lclclass_SOURCES = \
     ../LclClass/TestMain.cc \
+    ../LclClass/AllCombo.cc \
+    ../LclClass/AllComboTpl.cc \
     ../LclClass/Derives.cc \
     ../LclClass/DerivesTpl.cc \
     ../LclClass/MemDecl.cc \
