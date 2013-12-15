@@ -80,7 +80,7 @@
   \
   WG_PP_LCLFUNCTION_CG_CPP11_START_IMPL2( \
     function_name, \
-    WG_PP_LCLFUNCTION_USETYPEALIASER(symbtbl) )
+    WG_PP_LCLFUNCTION_CGUTILS_USETYPEALIASER(symbtbl) )
 
 #define WG_PP_LCLFUNCTION_CG_CPP11_START_IMPL2(function_name, symbtbl) \
   \
