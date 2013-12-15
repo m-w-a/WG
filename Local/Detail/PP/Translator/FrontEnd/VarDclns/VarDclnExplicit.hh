@@ -56,7 +56,7 @@
 
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_MISSING_TYPE_ERROR(explicitvardcln) \
   ( \
-    WG_PP_ERROR ERROR_missing_type_in_explicit_type_var_dcln \
+    WG_PP_MARKER_ERROR ERROR_missing_type_in_explicit_type_var_dcln \
   )
 
 //-----------------------

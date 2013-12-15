@@ -40,7 +40,7 @@
 
 #define WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_NONTUPLE_ERROR(paramdcln, ignored) \
   ( \
-    WG_PP_ERROR \
+    WG_PP_MARKER_ERROR \
       BOOST_PP_CAT( \
         ERROR_missing_type_in_params_dcln_near_token_, \
         paramdcln) \

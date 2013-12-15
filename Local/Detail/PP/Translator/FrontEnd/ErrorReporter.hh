@@ -12,10 +12,10 @@
 //###########
 
 // psble_error:
-//   BOOST_PP_NIL | WG_PP_ERROR ...
+//   BOOST_PP_NIL | WG_PP_MARKER_ERROR ...
 // expands to:
 //   1) nothing if BOOST_PP_NIL, or
-//   2) the tokens following WG_PP_ERROR
+//   2) the tokens following WG_PP_MARKER_ERROR
 #define WG_PP_ERRORREPORTER_REPORT_ERRORSEQ(psble_error) \
   WG_PP_ERRORREPORTER_REPORT_ERRORSEQ_IMPL(psble_error)
 
@@ -24,10 +24,10 @@
 // expands to:
 //   1) nothing if BOOST_PP_NIL, or
 //   2) to:
-//     1) nothing, if there are no WG_PP_ERROR markers in any of the elements of
+//     1) nothing, if there are no WG_PP_MARKER_ERROR markers in any of the elements of
 //       the normalized-bound-tuple sequence, else
 //     2) tokens corresponding to the elements that had
-//       WG_PP_ERROR markers, but ommitting the said marker.
+//       WG_PP_MARKER_ERROR markers, but ommitting the said marker.
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ(psble_nrmlzd_bnd_tuple_seq) \
@@ -38,10 +38,10 @@
 // expands to:
 //   1) nothing if BOOST_PP_NIL, or
 //   2) to:
-//     1) nothing, if there are no WG_PP_ERROR markers in any of the elements of
+//     1) nothing, if there are no WG_PP_MARKER_ERROR markers in any of the elements of
 //       the normalized-bound-tuple sequence, else
 //     2) tokens corresponding to the elements that had
-//       WG_PP_ERROR markers, but ommitting the said marker.
+//       WG_PP_MARKER_ERROR markers, but ommitting the said marker.
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_ERRORREPORTER_REPORT_NRMLZDSETTUPLESEQ(psble_nrmlzd_set_tuple_seq) \
@@ -53,7 +53,7 @@
 
 #define WG_PP_ERRORREPORTER_REPORT_ERRORSEQ_IMPL(psble_error) \
   BOOST_PP_EXPR_IIF( \
-    WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_ERROR(psble_error), \
+    WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_MARKER_ERROR(psble_error), \
     WG_PP_TRNSLTR_MARKERS_EATHEADMARKER(psble_error))
 
 //-------------------------------------------------

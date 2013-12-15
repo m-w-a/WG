@@ -187,7 +187,7 @@
     BOOST_PP_IIF( \
       WG_PP_STARTSWITH_BOOST_PP_NIL(spec), \
       BOOST_PP_NIL BOOST_PP_EMPTY, \
-      WG_PP_ERROR WG_PP_ID_CAT( \
+      WG_PP_MARKER_ERROR WG_PP_ID_CAT( \
         ERROR_Invalid_tokens, \
         WG_PP_EATTAILTOKEN_BOOST_PP_NIL(spec) BOOST_PP_EMPTY) ) () \
   )
