@@ -226,3 +226,36 @@ TEST(wg_lclclass_memlike_tpl, MimicThisU)
   }
   WG_GTEST_CATCH
 }
+
+namespace
+{
+template <typename T>
+struct OkIfMultipleUseInSameScope
+{
+  static void run()
+  {
+    T var = 1;
+
+    WG_LCLCLASS_TPL(Local1, memlike (ref var) )
+      void init() { ++var; }
+    WG_LCLCLASS_END;
+
+    WG_LCLCLASS_TPL(Local2, memlike (ref var) )
+      void init() { ++var; }
+    WG_LCLCLASS_END;
+
+    Local1 v1(var);
+    Local2 v2(var);
+
+    EXPECT_EQ(3, var);
+  }
+};
+}
+TEST(wg_lclclass_memlike_tpl, OkIfMultipleUseInSameScope)
+{
+  try
+  {
+    OkIfMultipleUseInSameScope<int>::run();
+  }
+  WG_GTEST_CATCH
+}
