@@ -225,6 +225,8 @@ test_autofunctor_SOURCES = \
 
 test_lclclass_SOURCES = \
     ../LclClass/TestMain.cc \
+    ../LclClass/AllCombo.cc \
+    ../LclClass/AllComboTpl.cc \
     ../LclClass/Derives.cc \
     ../LclClass/DerivesTpl.cc \
     ../LclClass/MemDecl.cc \
@@ -236,7 +238,13 @@ test_lclclass_SOURCES = \
     ../LclClass/MemSetExplicitAndImplicit.cc \
     ../LclClass/MemSetExplicitTpl.cc \
     ../LclClass/MemSetImplicitTpl.cc \
-    ../LclClass/MemSetExplicitAndImplicitTpl.cc
+    ../LclClass/MemSetExplicitAndImplicitTpl.cc \
+    ../LclClass/InitHook.cc \
+    ../LclClass/InitHookTpl.cc \
+    ../LclClass/Nested.cc \
+    ../LclClass/NestedTpl.cc \
+    ../LclClass/MultipleUseInSameMacro.cc \
+    ../LclClass/MultipleUseInSameMacroTpl.cc
 
 LCLFUNCTION_SRC = \
     ../LclFunction/TestMain.cc \
@@ -279,7 +287,9 @@ LCLFUNCTION_SRC = \
     ../LclFunction/Recursive.cc \
     ../LclFunction/RecursiveTpl.cc \
     ../LclFunction/StandardTypenames.cc \
-    ../LclFunction/StandardTypenamesTpl.cc
+    ../LclFunction/StandardTypenamesTpl.cc \
+    ../LclFunction/MultipleUseInSameMacro.cc \
+    ../LclFunction/MultipleUseInSameMacroTpl.cc
 
 test_lclfunction_cpp03_SOURCES = $(LCLFUNCTION_SRC)
 test_lclfunction_cpp11_SOURCES = $(LCLFUNCTION_SRC)

@@ -17,9 +17,9 @@ Why not BOOST_IDENTITY_TYPE_TPL?
 GlobalTypes -> unique names.
 LocalOperandsSyntaxCheck tests.
 ErrorReporting tests.
-Error -> WG_LCL_ERROR
-WG_PP_TYPEALIASER_DCLN -> just do implicit.
-WG_PP_ERROR -> WG_PP_MARKER_ERROR
+Error -> WG_LCL_ERROR ?
+x) WG_PP_TYPEALIASER_DCLN -> just do implicit.
+x) WG_PP_ERROR -> WG_PP_MARKER_ERROR
 
 NOT/AND/OR to their bit counter parts.
 
@@ -30,16 +30,16 @@ ExpandN:
 LclFunction:
   modified call traits.
   Binder: local namespace to lclfunction namespace?
+  Multiple in same macro.
 
 LclClass:
   WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE -> call_traits
   remove WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE
   remove WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE
   remove any misc from TypeExtractor.hh
-  memset -> meminit
   
   Tests:
-    init is called.
-    Nested
-    Multiple in same scope.
+    x) init is called.
+    x) Nested
+    x) Multiple in same scope.
     Multiple in same macro.

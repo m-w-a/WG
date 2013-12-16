@@ -167,3 +167,25 @@ TEST(wg_lclclass_memlike, MimicThisU)
   }
   WG_GTEST_CATCH
 }
+
+TEST(wg_lclclass_memlike, OkIfMultipleUseInSameScope)
+{
+  try
+  {
+    int var = 1;
+
+    WG_LCLCLASS(Local1, memlike (ref var) )
+      void init() { ++var; }
+    WG_LCLCLASS_END;
+
+    WG_LCLCLASS(Local2, memlike (ref var) )
+      void init() { ++var; }
+    WG_LCLCLASS_END;
+
+    Local1 v1(var);
+    Local2 v2(var);
+
+    EXPECT_EQ(3, var);
+  }
+  WG_GTEST_CATCH
+}

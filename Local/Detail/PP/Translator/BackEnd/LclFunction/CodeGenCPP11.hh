@@ -7,6 +7,7 @@
 #include <WG/Local/Detail/LclFunction/GlobalFunctorTypeCPP11.hh>
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/CodeGenUtils.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/ID.hh>
 
 //###########
 //Public APIs
@@ -27,38 +28,39 @@
 //-----------------
 
 #define WG_PP_LCLFUNCTION_CG_CPP11_GLOBALFUNCTORTYPE_DCLN( \
-  symbtbl, global_functor_type_name, local_functor_type_name) \
-  typedef WG_PP_LCLFUNCTION_CG_CPP11_GLOBALFUNCTORTYPE_TYPE( \
-    symbtbl, local_functor_type_name) \
-      global_functor_type_name ;
+  symbtbl, function_name) \
+    typedef WG_PP_LCLFUNCTION_CG_CPP11_GLOBALFUNCTORTYPE_TYPE( \
+      symbtbl, function_name) \
+        WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME(function_name) ;
 
 #define WG_PP_LCLFUNCTION_CG_CPP11_GLOBALFUNCTORTYPE_TYPE( \
-  symbtbl, local_functor_type_name) \
+  symbtbl, function_name) \
     wg::lclfunction::detail::cpp11::global_functor_type \
     < \
-      local_functor_type_name, \
+      WG_PP_LCLFUNCTION_CG_CPP11_LOCALFUNCTORTYPE_NAME(function_name), \
       WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl), \
       boost::mpl::vector \
       < \
         WG_PP_SEQ_ENUM( WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_PARAMS(symbtbl) ) \
       >, \
-      WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME() \
+      WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME(function_name) \
     >
 
 //----------------
 //LocalFunctorType
 //----------------
 
-#define WG_PP_LCLFUNCTION_CG_CPP11_LOCALFUNCTORTYPE_NAME() \
-  WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE(local_functor_type)
+#define WG_PP_LCLFUNCTION_CG_CPP11_LOCALFUNCTORTYPE_NAME(function_name) \
+  WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE( \
+    WG_PP_ID_CAT(local_functor_type, function_name))
 
 #define WG_PP_LCLFUNCTION_CG_CPP11_LOCALFUNCTORTYPE_START( \
   symbtbl, function_name) \
-    struct WG_PP_LCLFUNCTION_CG_CPP11_LOCALFUNCTORTYPE_NAME() \
+    struct WG_PP_LCLFUNCTION_CG_CPP11_LOCALFUNCTORTYPE_NAME(function_name) \
     { \
-      typedef WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME() \
+      typedef WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME(function_name) \
         captured_vars_type; \
-      typedef WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME() \
+      typedef WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME(function_name) \
         global_functor_type; \
       \
       WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN( \
@@ -76,22 +78,19 @@
 //-------
 
 #define WG_PP_LCLFUNCTION_CG_CPP11_START_IMPL(function_name, symbtbl) \
-  WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_DCLN(symbtbl) \
+  WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_DCLN(symbtbl, function_name) \
   \
   WG_PP_LCLFUNCTION_CG_CPP11_START_IMPL2( \
     function_name, \
     WG_PP_LCLFUNCTION_CGUTILS_REMOVEMARKERS( \
-      WG_PP_LCLFUNCTION_CGUTILS_REPLACEDEDUCEDTYPES(symbtbl)) )
+      WG_PP_LCLFUNCTION_CGUTILS_REPLACEDEDUCEDTYPES(symbtbl, function_name)) )
 
 #define WG_PP_LCLFUNCTION_CG_CPP11_START_IMPL2(function_name, symbtbl) \
   \
-  WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN(symbtbl) \
+  WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN(symbtbl, function_name) \
   \
-  struct WG_PP_LCLFUNCTION_CG_CPP11_LOCALFUNCTORTYPE_NAME() ; \
-  WG_PP_LCLFUNCTION_CG_CPP11_GLOBALFUNCTORTYPE_DCLN( \
-    symbtbl, \
-    WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME(), \
-    WG_PP_LCLFUNCTION_CG_CPP11_LOCALFUNCTORTYPE_NAME()) \
+  struct WG_PP_LCLFUNCTION_CG_CPP11_LOCALFUNCTORTYPE_NAME(function_name) ; \
+  WG_PP_LCLFUNCTION_CG_CPP11_GLOBALFUNCTORTYPE_DCLN(symbtbl, function_name) \
   \
   WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTOROBJ_DCLN(symbtbl, function_name) \
   \
