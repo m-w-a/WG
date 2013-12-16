@@ -54,7 +54,7 @@ struct Tester
   }
 };
 }
-TEST(wg_lclclass_multipleuseinsamemacro_tpl, Tester)
+TEST(wg_lclclass_multipleuseinsamemacro_tpl, Test)
 {
   try
   {
