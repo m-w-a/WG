@@ -287,7 +287,9 @@ LCLFUNCTION_SRC = \
     ../LclFunction/Recursive.cc \
     ../LclFunction/RecursiveTpl.cc \
     ../LclFunction/StandardTypenames.cc \
-    ../LclFunction/StandardTypenamesTpl.cc
+    ../LclFunction/StandardTypenamesTpl.cc \
+    ../LclFunction/MultipleUseInSameMacro.cc \
+    ../LclFunction/MultipleUseInSameMacroTpl.cc
 
 test_lclfunction_cpp03_SOURCES = $(LCLFUNCTION_SRC)
 test_lclfunction_cpp11_SOURCES = $(LCLFUNCTION_SRC)
