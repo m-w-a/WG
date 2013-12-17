@@ -153,7 +153,7 @@
 #define WG_PP_TYPEALIASER_REPLACEDEDUCEDTYPE( \
   istpl, typealiasername, aliasrootname, indx) \
     WG_PP_MARKER_DEDUCEDTYPE \
-    ( \
+    type( \
       WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
       typealiasername::WG_PP_TYPEALIASER_ALIASNAME(aliasrootname, indx) \
     )

@@ -106,11 +106,11 @@
 //parsed-explicit-or-deduced-type :=
 //    WG_PP_MARKER_NOOP parsed-explicit-type
 //  | WG_PP_MARKER_DEDUCEDTYPE parsed-deduced-type
-//parsed-explicit-type := parsed-local-type | explicit-non-local-type
+//parsed-explicit-type := parsed-local-type | type explicit-non-local-type
 //parsed-local-type := local(some-token) lib-type-qualifier-seq
 //lib-type-qualifier-seq := (const) | (ref) | (const)(ref)
 //parsed-deduced-type :=
-//  ( { BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> > } )
+//  type( { BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> > } )
 //BT := BOOST_TYPEOF(some-token)
 //
 //-------

@@ -112,9 +112,9 @@
 //    WG_PP_MARKER_NOOP parsed-explicit-non-local-type
 //  | WG_PP_MARKER_DEDUCEDTYPE parsed-deduced-type
 //parsed-explicit-non-local-type :=
-//  explicit-non-local-type
+//  type explicit-non-local-type
 //parsed-deduced-type :=
-//  ( { BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> > } )
+//  type( { BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> > } )
 //BT := BOOST_TYPEOF(some-token)
 //
 //-------
