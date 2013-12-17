@@ -71,10 +71,10 @@
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_SYNTAXCHECKER( \
   syntaxcheckername, syntaxcheckseq) \
     { /* Put it in its own scope to help optimize it out as dead code. */ \
-        struct syntaxcheckername \
-        { \
-          WG_PP_SEQ_FLATTEN(BOOST_PP_SEQ_TAIL(syntaxcheckseq)) \
-        }; \
+      struct syntaxcheckername \
+      { \
+        WG_PP_SEQ_FLATTEN(BOOST_PP_SEQ_TAIL(syntaxcheckseq)) \
+      }; \
     }
 
 //--------------------------------------------
