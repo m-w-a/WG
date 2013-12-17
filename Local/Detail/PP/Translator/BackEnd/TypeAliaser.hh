@@ -88,10 +88,8 @@
         WG_PP_TYPEALIASER_SPEC_SUFFIX(spec), \
         symbtbl, \
         symbtbl)), \
-    WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS_NONE, \
+    WG_PP_MAPTO_NOTHING_ARG2, \
     WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS_PROCESS) (symbtbl, spec)
-
-#define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS_NONE(symbtbl, spec) // nothing
 
 #define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS_PROCESS(symbtbl, spec) \
   WG_PP_SEQ_FOR_EACH_I( \
