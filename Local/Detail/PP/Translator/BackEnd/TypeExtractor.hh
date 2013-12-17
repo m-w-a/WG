@@ -71,17 +71,9 @@
 
 #define WG_PP_PARSEDTYPE_ISLOCALTYPE(parsedtype) \
   BOOST_PP_IIF( \
-    WG_PP_ISNEXTTOKEN_A_TUPLE(1, parsedtype), \
-    WG_PP_MAP_TO_0_ARG1, \
-    WG_PP_PARSEDTYPE_ISLOCALTYPE2) (parsedtype)
-
-#define WG_PP_PARSEDTYPE_ISLOCALTYPE2(parsedtype) \
-  BOOST_PP_IIF( \
     WG_PP_KEYWORDS_STARTSWITH_LOCAL(parsedtype), \
     1, \
-    BOOST_PP_CAT( \
-      ERROR_expected_local_keyword_but_got, \
-      parsedtype) )
+    0)
 
 #define WG_PP_PARSEDTYPE_NONLOCALTYPE_ADDCONST(parsedtype, istpl) \
   WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
@@ -134,7 +126,7 @@
     WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_NONLOCAL) (parsedtype)
 
 #define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_NONLOCAL(parsedtype) \
-  BOOST_PP_TUPLE_ELEM(1, 0, parsedtype)
+  BOOST_PP_TUPLE_ELEM(1, 0, WG_PP_KEYWORDS_EAT_HEADKEYWORD(parsedtype))
 
 #define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_LOCAL(parsedtype) \
   WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND(parsedtype) \
