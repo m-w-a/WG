@@ -39,6 +39,10 @@
 //Impl Macros
 //###########
 
+//-----
+//Utils
+//-----
+
 #define  WG_PP_LOCALOPERANDSYNTAXCHECK_EXPAND1(x) x
 
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec) \
@@ -46,15 +50,42 @@
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_VARROOTNAME(spec) \
   BOOST_PP_SEQ_ELEM(1, spec)
 
+//----------------------------------
+//WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN
+//----------------------------------
+
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN_IMPL( \
   syntaxcheckername, symbtbl, specseq) \
-    struct syntaxcheckername \
-    { \
-      BOOST_PP_SEQ_FOR_EACH( \
-        WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN, \
-        symbtbl, \
-        specseq) \
-    };
+    WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN_IMPL2( \
+      syntaxcheckername, \
+      ( BOOST_PP_NIL ) \
+      WG_PP_LOCALOPERANDSYNTAXCHECK_SYNTAXCHECKSEQ(symbtbl, specseq) )
+
+#define WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN_IMPL2( \
+  syntaxcheckername, syntaxcheckseq) \
+    BOOST_PP_IF( \
+      BOOST_PP_GREATER(WG_PP_SEQ_SIZE(syntaxcheckseq), 1), \
+      WG_PP_LOCALOPERANDSYNTAXCHECK_SYNTAXCHECKER, \
+      WG_PP_MAPTO_NOTHING_ARG2) (syntaxcheckername, syntaxcheckseq)
+
+#define WG_PP_LOCALOPERANDSYNTAXCHECK_SYNTAXCHECKER( \
+  syntaxcheckername, syntaxcheckseq) \
+    { /* Put it in its own scope to help optimize it out as dead code. */ \
+      struct syntaxcheckername \
+      { \
+        WG_PP_SEQ_FLATTEN(BOOST_PP_SEQ_TAIL(syntaxcheckseq)) \
+      }; \
+    }
+
+//--------------------------------------------
+//WG_PP_LOCALOPERANDSYNTAXCHECK_SYNTAXCHECKSEQ
+//--------------------------------------------
+
+#define WG_PP_LOCALOPERANDSYNTAXCHECK_SYNTAXCHECKSEQ(symbtbl, specseq) \
+  BOOST_PP_SEQ_FOR_EACH( \
+    WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN, \
+    symbtbl, \
+    specseq)
 
 // BOOST_PP_SEQ_FOR_EACH functor.
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN(r, symbtbl, spec) \
@@ -91,8 +122,9 @@
 
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN3( \
   localtype, objname, varrootname, indx) \
-    typedef \
-      localtype const & (* \
-        WG_PP_ID_CAT(WG_PP_ID_CAT(varrootname, indx), objname) ) () ;
+    ( \
+      typedef \
+        localtype const & (*objname) () ; \
+    )
 
 #endif /* WG_PP_LOCALOPERANDSYNTAXCHECK_HH_ */

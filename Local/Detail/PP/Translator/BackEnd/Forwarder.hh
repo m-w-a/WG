@@ -67,12 +67,12 @@
     public: \
       WG_PP_FORWARDER_TYPE_CTOR_DCLN(frwdr_typename, symbtbl, specseq) \
       WG_PP_FORWARDER_TYPE_ACCESSORS(symbtbl, specseq) \
-    } WG_PP_IDENTITY_ARG1(;) \
+    }; \
     frwdr_typename const & frwdr_objname = \
       frwdr_typename \
       BOOST_PP_LPAREN() \
         WG_PP_FORWARDER_OBJ_INITLIST(symbtbl, specseq) \
-      BOOST_PP_RPAREN() WG_PP_IDENTITY_ARG1(;)
+      BOOST_PP_RPAREN() ;
 
 //-----------------------------
 //WG_PP_FORWARDER_ACCESSORWGSEQ
@@ -187,8 +187,7 @@
       e_or_d_type, \
       WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_ISTPL(data)) \
     WG_PP_FORWARDER_TYPE_MEMBERVARNAME( \
-      WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_VARROOTNAME(data), indx) \
-    WG_PP_IDENTITY_ARG1(;)
+      WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_VARROOTNAME(data), indx) ;
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_FORWARDER_TYPE_MEMBERDCLN_CONSTREF( \
@@ -197,8 +196,7 @@
       e_or_d_type, \
       WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_ISTPL(data)) \
     WG_PP_FORWARDER_TYPE_MEMBERVARNAME( \
-      WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_VARROOTNAME(data), indx) \
-    WG_PP_IDENTITY_ARG1(;)
+      WG_PP_FORWARDER_TYPE_MEMBER_COMMONTRANSFORM_VARROOTNAME(data), indx) ;
 
 //----------
 //Ctor Utils

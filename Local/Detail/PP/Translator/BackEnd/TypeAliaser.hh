@@ -15,7 +15,7 @@
 
 //----------------------------------------------------------------------------//
 // Whereever this file is included the appropiate SymbolTable.hh must
-// also be included
+// also be included.
 //----------------------------------------------------------------------------//
 
 // Will create a struct named <typealiasername> that typedefs all
@@ -71,13 +71,28 @@
 // to be preserved for later codegen passes, where we have to choose between
 // PPMP and TMP techniques to const/ref qualify these captured types.
 #define WG_PP_TYPEALIASER_DCLN_IMPL(typealiasername, symbtbl, specseq) \
+  WG_PP_TYPEALIASER_DCLN_IMPL2( \
+    typealiasername, \
+    ( BOOST_PP_NIL ) \
+    WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNSEQ(symbtbl, specseq) )
+
+#define WG_PP_TYPEALIASER_DCLN_IMPL2(typealiasername, deducedtypedclnseq) \
+  BOOST_PP_IF( \
+    BOOST_PP_GREATER(WG_PP_SEQ_SIZE(deducedtypedclnseq), 1), \
+    WG_PP_TYPEALIASER_DECLARE, \
+    WG_PP_MAPTO_NOTHING_ARG2) (typealiasername, deducedtypedclnseq)
+
+#define WG_PP_TYPEALIASER_DECLARE(typealiasername, deducedtypedclnseq) \
   struct typealiasername \
   { \
-    BOOST_PP_SEQ_FOR_EACH( \
-      WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS, \
-      symbtbl, \
-      specseq) \
+    WG_PP_SEQ_FLATTEN(BOOST_PP_SEQ_TAIL(deducedtypedclnseq)) \
   };
+
+#define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNSEQ(symbtbl, specseq) \
+  BOOST_PP_SEQ_FOR_EACH( \
+    WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS, \
+    symbtbl, \
+    specseq)
 
 // BOOST_PP_SEQ_FOR_EACH functor.
 #define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS(r, symbtbl, spec) \
@@ -88,10 +103,8 @@
         WG_PP_TYPEALIASER_SPEC_SUFFIX(spec), \
         symbtbl, \
         symbtbl)), \
-    WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS_NONE, \
+    WG_PP_MAPTO_NOTHING_ARG2, \
     WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS_PROCESS) (symbtbl, spec)
-
-#define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS_NONE(symbtbl, spec) // nothing
 
 #define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS_PROCESS(symbtbl, spec) \
   WG_PP_SEQ_FOR_EACH_I( \
@@ -115,11 +128,13 @@
 
 #define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLN_IMPL( \
   spec, indx, marked_e_or_d_type) \
+  ( \
     typedef \
       WG_PP_PARSEDTYPE_EXTRACTCPPTYPE( \
         WG_PP_TRNSLTR_MARKERS_EATHEADMARKER(marked_e_or_d_type)) \
-    WG_PP_TYPEALIASER_ALIASNAME( \
-      WG_PP_TYPEALIASER_SPEC_ALIASROOTNAME(spec), indx) ;
+      WG_PP_TYPEALIASER_ALIASNAME( \
+        WG_PP_TYPEALIASER_SPEC_ALIASROOTNAME(spec), indx) ; \
+  )
 
 //---------------------------------------
 //WG_PP_TYPEALIASER_REPLACEDEDUCEDTYPESEQ

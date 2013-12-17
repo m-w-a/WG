@@ -25,6 +25,11 @@
 #define WG_PP_SEQ_ELEM(indx, seq) \
   WG_PP_SEQ_ELEM_IMPL(indx, seq)
 
+// Maps to BOOST_PP_NIL if seq is nil.
+// Lists each element of the seq as they appeared in the seq.
+#define WG_PP_SEQ_FLATTEN(seq) \
+  WG_PP_SEQ_FLATTEN_IMPL(seq)
+
 // Handles empty sequences.
 // NOTE: maps empty sequences to NOTHING!
 //   Rationale:
@@ -148,6 +153,13 @@
       WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)), \
     BOOST_PP_NOT(WG_PP_STARTSWITH_BOOST_PP_NIL(indx))) \
   (seq, indx, elem)
+
+#define WG_PP_SEQ_FLATTEN_IMPL(seq) \
+  WG_PP_SEQ_FOR_EACH( \
+    WG_PP_SEQ_FLATTEN_IMPL_ELEMENT, \
+    ~, \
+    seq)
+#define WG_PP_SEQ_FLATTEN_IMPL_ELEMENT(r, data, elem) elem
 
 #define WG_PP_SEQ_ELEM_IMPL_00(indx, seq) BOOST_PP_NIL
 #define WG_PP_SEQ_ELEM_IMPL_01(indx, seq) BOOST_PP_NIL

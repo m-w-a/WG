@@ -14,7 +14,6 @@ Misc.
 -----
 Why not BOOST_IDENTITY_TYPE_TPL?
 
-GlobalTypes -> unique names.
 LocalOperandsSyntaxCheck tests.
 ErrorReporting tests.
 Error -> WG_LCL_ERROR ?
@@ -30,7 +29,7 @@ ExpandN:
 LclFunction:
   modified call traits.
   Binder: local namespace to lclfunction namespace?
-  Multiple in same macro.
+  x) Multiple in same macro.
 
 LclClass:
   WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE -> call_traits
@@ -42,4 +41,4 @@ LclClass:
     x) init is called.
     x) Nested
     x) Multiple in same scope.
-    Multiple in same macro.
+    x) Multiple in same macro.
