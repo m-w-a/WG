@@ -4,13 +4,13 @@
 #include <WG/Local/LclClass.hh>
 #include <boost/typeof/typeof.hpp>
 
-TEST(wg_lclclass_memlike, Mimic1Var)
+TEST(wg_lclclass_memextimplicit, Mimic1Var)
 {
   try
   {
     bool var = false;
 
-    WG_LCLCLASS(Local, memlike (var) )
+    WG_LCLCLASS(Local, memext (var) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST(var);
@@ -27,13 +27,13 @@ TEST(wg_lclclass_memlike, Mimic1Var)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclclass_memlike, Mimic1VarByRef)
+TEST(wg_lclclass_memextimplicit, Mimic1VarByRef)
 {
   try
   {
     bool var = false;
 
-    WG_LCLCLASS(Local, memlike (ref var) )
+    WG_LCLCLASS(Local, memext (ref var) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST(var);
@@ -50,13 +50,13 @@ TEST(wg_lclclass_memlike, Mimic1VarByRef)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclclass_memlike, Mimic1VarByConst)
+TEST(wg_lclclass_memextimplicit, Mimic1VarByConst)
 {
   try
   {
     int const red = 10;
 
-    WG_LCLCLASS(Local, memlike (const red) )
+    WG_LCLCLASS(Local, memext (const red) )
       void didMimicType() const
       {
         WG_TESTHELPER_ASSERT_ISCONST(red);
@@ -73,13 +73,13 @@ TEST(wg_lclclass_memlike, Mimic1VarByConst)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclclass_memlike, Mimic1VarByConstRef)
+TEST(wg_lclclass_memextimplicit, Mimic1VarByConstRef)
 {
   try
   {
     int blue = 10;
 
-    WG_LCLCLASS(Local, memlike (const ref blue) )
+    WG_LCLCLASS(Local, memext (const ref blue) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISCONST(blue);
@@ -99,7 +99,7 @@ TEST(wg_lclclass_memlike, Mimic1VarByConstRef)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclclass_memlike, Mimic3Vars)
+TEST(wg_lclclass_memextimplicit, Mimic3Vars)
 {
   try
   {
@@ -109,7 +109,7 @@ TEST(wg_lclclass_memlike, Mimic3Vars)
 
     WG_LCLCLASS
     (CalculateForce,
-      memlike (ref force) (const mass) (const ref velocity)
+      memext (ref force) (const mass) (const ref velocity)
     )
       void init()
       {
@@ -143,7 +143,7 @@ struct MimicThisU
   MimicThisU()
   {
     WG_LCLCLASS
-    (Local, memlike (this_) )
+    (Local, memext (this_) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISCONST(this_);
@@ -159,7 +159,7 @@ struct MimicThisU
   }
 };
 }
-TEST(wg_lclclass_memlike, MimicThisU)
+TEST(wg_lclclass_memextimplicit, MimicThisU)
 {
   try
   {
@@ -168,17 +168,17 @@ TEST(wg_lclclass_memlike, MimicThisU)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclclass_memlike, OkIfMultipleUseInSameScope)
+TEST(wg_lclclass_memextimplicit, OkIfMultipleUseInSameScope)
 {
   try
   {
     int var = 1;
 
-    WG_LCLCLASS(Local1, memlike (ref var) )
+    WG_LCLCLASS(Local1, memext (ref var) )
       void init() { ++var; }
     WG_LCLCLASS_END;
 
-    WG_LCLCLASS(Local2, memlike (ref var) )
+    WG_LCLCLASS(Local2, memext (ref var) )
       void init() { ++var; }
     WG_LCLCLASS_END;
 

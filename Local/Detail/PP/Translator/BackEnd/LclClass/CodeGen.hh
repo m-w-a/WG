@@ -55,16 +55,17 @@
 //------------------------------
 
 #define WG_PP_LCLCLASS_CG_LOCALOPERANDSSYNTAXCHECKER_SPECSEQ() \
-  ( (MEMDECL)(memdecl) ) \
-  ( (MEMSET)(memset) )
+  ( (MEMEXT)(memdecl) ) \
+  ( (MEMINT)(memset) )
 
 //------------------
 //TypeAliaser Utils.
 //------------------
 
-// Skip MEMDECL since it will never have deduced types.
+// Skip MEMINT since any of the variables whose types it is deduced from must
+// already be in scope.
 #define WG_PP_LCLCLASS_CG_TYPEALIASER_SPECSEQ() \
-  ( (MEMLIKE)(memlike) )
+  ( (MEMEXT)(memlike) )
 
 //------------
 //The CodeGen.
@@ -79,7 +80,7 @@
     name, \
     WG_PP_STUTIL_REPLACESEQ( \
       symbtbl, \
-      (TYPESEQ_MEMLIKE), \
+      (TYPESEQ_MEMEXT), \
       WG_PP_TYPEALIASER_REPLACEDEDUCEDTYPESEQ, \
       ( WG_PP_LCLCLASS_SYMBOLTABLE_ISTPL(symbtbl) ) \
       ( WG_PP_LCLCLASS_CG_TYPEALIASER_NAME(name) ) \
@@ -90,7 +91,7 @@
     name, \
     WG_PP_STUTIL_REPLACESEQ( \
       symbtbl, \
-      (TYPESEQ_MEMDECL)(TYPESEQ_MEMLIKE)(TYPESEQ_MEMSET), \
+      (TYPESEQ_MEMEXT)(TYPESEQ_MEMINT), \
       WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ, \
       ~) )
 
@@ -134,16 +135,12 @@
 #define WG_PP_LCLCLASS_CG_LCLCLASS_MEMDCLNS(symbtbl) \
   WG_PP_SEQ_NOTHING_FOR_EACH_I( \
     WG_PP_LCLCLASS_CG_LCLCLASS_MEMDCLN, \
-    WG_PP_LCLCLASS_SYMBOLTABLE_OBJSEQ_MEMDECL(symbtbl), \
-    WG_PP_LCLCLASS_SYMBOLTABLE_TYPESEQ_MEMDECL(symbtbl) ) \
+    WG_PP_LCLCLASS_SYMBOLTABLE_OBJSEQ_MEMEXT(symbtbl), \
+    WG_PP_LCLCLASS_SYMBOLTABLE_TYPESEQ_MEMEXT(symbtbl) ) \
   WG_PP_SEQ_NOTHING_FOR_EACH_I( \
     WG_PP_LCLCLASS_CG_LCLCLASS_MEMDCLN, \
-    WG_PP_LCLCLASS_SYMBOLTABLE_OBJSEQ_MEMLIKE(symbtbl), \
-    WG_PP_LCLCLASS_SYMBOLTABLE_TYPESEQ_MEMLIKE(symbtbl) ) \
-  WG_PP_SEQ_NOTHING_FOR_EACH_I( \
-    WG_PP_LCLCLASS_CG_LCLCLASS_MEMDCLN, \
-    WG_PP_LCLCLASS_SYMBOLTABLE_OBJSEQ_MEMSET(symbtbl), \
-    WG_PP_LCLCLASS_SYMBOLTABLE_TYPESEQ_MEMSET(symbtbl) )
+    WG_PP_LCLCLASS_SYMBOLTABLE_OBJSEQ_MEMINT(symbtbl), \
+    WG_PP_LCLCLASS_SYMBOLTABLE_TYPESEQ_MEMINT(symbtbl) )
 
 // WG_PP_SEQ_NOTHING_FOR_EACH_I functor.
 #define WG_PP_LCLCLASS_CG_LCLCLASS_MEMDCLN(r, objseq, indx, parsedtype) \
@@ -158,9 +155,7 @@
     WG_PP_SEQ_FOR_EACH_I( \
       WG_PP_LCLCLASS_CG_LCLCLASS_CTOR_PARAM, \
       WG_PP_LCLCLASS_SYMBOLTABLE_ISTPL(symbtbl), \
-      WG_PP_SEQ_JOIN_ARG2( \
-        WG_PP_LCLCLASS_SYMBOLTABLE_TYPESEQ_MEMDECL(symbtbl), \
-        WG_PP_LCLCLASS_SYMBOLTABLE_TYPESEQ_MEMLIKE(symbtbl)) ))
+      WG_PP_LCLCLASS_SYMBOLTABLE_TYPESEQ_MEMEXT(symbtbl) ))
 
 // WG_PP_SEQ_NOTHING_FOR_EACH_I functor.
 #define WG_PP_LCLCLASS_CG_LCLCLASS_CTOR_PARAM(r, istpl, indx, parsedtype) \
@@ -180,13 +175,11 @@
       WG_PP_SEQ_FOR_EACH_I( \
         WG_PP_LCLCLASS_CG_LCLCLASS_CTOR_INITWITHPARAMS, \
         ~, \
-        WG_PP_SEQ_JOIN_ARG2( \
-          WG_PP_LCLCLASS_SYMBOLTABLE_OBJSEQ_MEMDECL(symbtbl), \
-          WG_PP_LCLCLASS_SYMBOLTABLE_OBJSEQ_MEMLIKE(symbtbl)) ), \
+        WG_PP_LCLCLASS_SYMBOLTABLE_OBJSEQ_MEMEXT(symbtbl) ), \
       WG_PP_SEQ_FOR_EACH_I( \
         WG_PP_LCLCLASS_CG_LCLCLASS_CTOR_INITWITHVALUES, \
-        WG_PP_LCLCLASS_SYMBOLTABLE_VALUESEQ_MEMSET(symbtbl), \
-        WG_PP_LCLCLASS_SYMBOLTABLE_OBJSEQ_MEMSET(symbtbl)) ))
+        WG_PP_LCLCLASS_SYMBOLTABLE_VALUESEQ_MEMINT(symbtbl), \
+        WG_PP_LCLCLASS_SYMBOLTABLE_OBJSEQ_MEMINT(symbtbl)) ))
 
 // WG_PP_SEQ_NOTHING_FOR_EACH_I functor.
 #define WG_PP_LCLCLASS_CG_LCLCLASS_CTOR_INITWITHPARAMS(r, data, indx, memname) \

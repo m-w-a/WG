@@ -17,7 +17,7 @@ struct OkIf3MemOfVaryingMutabilitySet
   {
     WG_LCLCLASS
     (CalculateVolume,
-      memset
+      memint
         (const radius, 2)
         (height, 10)
         ((long const) volume, radius * height) )
@@ -35,7 +35,7 @@ struct OkIf3MemOfVaryingMutabilitySet
   }
 };
 }
-TEST(wg_lclclass_memsetexplicitandimplicit_tpl, OkIf3MemOfVaryingMutabilitySet)
+TEST(wg_lclclass_memintexplicitandimplicit_tpl, OkIf3MemOfVaryingMutabilitySet)
 {
   try
   {

@@ -7,7 +7,7 @@ TEST(wg_lclclass_inithook, IsCalled)
   try
   {
     int var = 0;
-    WG_LCLCLASS(Local, memdecl((int &) var) )
+    WG_LCLCLASS(Local, memext ((int &) var) )
       void init()
       {
         ++var;

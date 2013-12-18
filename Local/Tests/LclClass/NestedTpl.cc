@@ -11,8 +11,8 @@ struct TwoLevels
   {
     T var = 1;
 
-    WG_LCLCLASS_TPL(Level1, memlike(ref var) )
-      WG_LCLCLASS_TPL(Level2, memlike(ref var) )
+    WG_LCLCLASS_TPL(Level1, memext (ref var) )
+      WG_LCLCLASS_TPL(Level2, memext (ref var) )
         void init() { ++var; }
       WG_LCLCLASS_END;
 

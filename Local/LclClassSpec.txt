@@ -9,28 +9,25 @@ following signature: "void init()".
 
 Note: All terms not defined here should be referenced in AutoFunctorSpec.txt
 
-memdecl:
-  1) Will generate member variables for the local class.
+memext:
+  1) Member variables initialized with external values via ctor parameters.
   2) Said member variables will be declared in the 
-    order that they appeared in the user specified macro.
+    order that they appeared in the user specified macro
   3) Will generate parameters for the public constructor necessary to initialize  
     said member variables.
+  4) Said parameters will be declared in the same order as their corresponding
+    member variables.
+  5) If the type of a variable is omitted, it will be deduced from the type of 
+    the variable with the same name in the enclosing scope(s) using 
+    BOOST_TYPEOF.
 
-memlike:
-  1) Will generate member variables with the same types as those variables with 
-    the same name in the enclosing scope(s). 
-  2) Said member variables will be declared in the 
-    order that they appeared in the user specified macro.
-  3) Will generate parameters for the public constructor necessary to initialize  
-    said member variables.
-
-memset:
-  1) Will generate member variables initialized to the user specified expressions. 
-    Such exressions may reference previously declared member variables.
+memint:
+  1) Member variables initialized with internal values.
+    Such expressions may reference previously declared member variables.
   2) Said member variables will be declared in the order that they appeared in  
     the user specified macro.
   3) If implicitly typed, the types of the member variables are deduced from
-  the types of the user specified expressions via BOOST_TYPEOF.
+    the types of the user specified expressions via BOOST_TYPEOF.
 
 //---
 //BNF
@@ -51,9 +48,8 @@ lclclass-start-macro :=
 
 lclclass-spec :=
   [derives derives-seq]
-  [memdecl memdecl-tuple-seq]
-  [memlike memlike-tuple-seq]
-  [memset memset-seq]
+  [memext memext-tuple-seq]
+  [memint memint-tuple-seq]
 
 derives-seq := derives-tuple-seq
 
@@ -64,21 +60,14 @@ derives-tuple-seq :=
 derives-tuple :=
   ( base-specifier )
 
-memdecl-tuple-seq :=
-    memdecl-tuple
-  | memdecl-tuple-seq memdecl-tuple
+memext-tuple-seq :=
+    memext-tuple
+  | memext-tuple-seq memext-tuple
 
-memdecl-tuple :=
-  explicit-type-var-dcln
+memext-tuple :=
+  ( type-var-dcln )
 
-memlike-tuple-seq :=
-    memlike-tuple
-  | memlike-tuple-seq memlike-tuple
-
-memlike-tuple :=
-  ( implicit-type-var-dcln )
-
-memset-seq := set-tuple-seq
+memint-tuple-seq := set-tuple-seq
 
 member-specification := See C++ standard.
 base-specifier := See C++ standard.

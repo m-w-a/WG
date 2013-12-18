@@ -4,11 +4,11 @@
 #include <WG/Local/LclClass.hh>
 #include <boost/tuple/tuple.hpp>
 
-TEST(wg_lclclass_memsetexplicit, EnsureTypeOfNotUsed)
+TEST(wg_lclclass_memintexplicit, EnsureTypeOfNotUsed)
 {
   try
   {
-    WG_LCLCLASS(Local, memset ((int) value, 1.2f) )
+    WG_LCLCLASS(Local, memint ((int) value, 1.2f) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST(value);
@@ -23,13 +23,13 @@ TEST(wg_lclclass_memsetexplicit, EnsureTypeOfNotUsed)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclclass_memsetexplicit, OkIfMemTypeGloballyScoped)
+TEST(wg_lclclass_memintexplicit, OkIfMemTypeGloballyScoped)
 {
   try
   {
     WG_LCLCLASS
     (Local,
-      memset ((::boost::tuple<bool>) assigner, ::boost::make_tuple(true)) )
+      memint ((::boost::tuple<bool>) assigner, ::boost::make_tuple(true)) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST(assigner);
@@ -45,13 +45,13 @@ TEST(wg_lclclass_memsetexplicit, OkIfMemTypeGloballyScoped)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclclass_memsetexplicit, OkIf3MemOfVaryingMutabilitySet)
+TEST(wg_lclclass_memintexplicit, OkIf3MemOfVaryingMutabilitySet)
 {
   try
   {
     WG_LCLCLASS
     (CalculateVolume,
-      memset
+      memint
         ((short const) radius, 2)
         ((int const) height, 10)
         ((long) volume, radius * height) )
@@ -72,14 +72,14 @@ TEST(wg_lclclass_memsetexplicit, OkIf3MemOfVaryingMutabilitySet)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclclass_memsetexplicit, OkIfNoQlfdLocalTypeSet)
+TEST(wg_lclclass_memintexplicit, OkIfNoQlfdLocalTypeSet)
 {
   try
   {
     WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
 
     WG_LCLCLASS
-    (UseLocalKeyword, memset (local(SomeLocalClass) obj, SomeLocalClass()) )
+    (UseLocalKeyword, memint (local(SomeLocalClass) obj, SomeLocalClass()) )
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST(obj);
@@ -93,14 +93,14 @@ TEST(wg_lclclass_memsetexplicit, OkIfNoQlfdLocalTypeSet)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclclass_memsetexplicit, OkIfConstQlfdLocalTypeSet)
+TEST(wg_lclclass_memintexplicit, OkIfConstQlfdLocalTypeSet)
 {
   try
   {
     WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
 
     WG_LCLCLASS
-    (UseLocalKeyword, memset (local(SomeLocalClass) const obj, SomeLocalClass()) )
+    (UseLocalKeyword, memint (local(SomeLocalClass) const obj, SomeLocalClass()) )
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST(obj);

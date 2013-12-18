@@ -225,20 +225,24 @@ test_autofunctor_SOURCES = \
 
 test_lclclass_SOURCES = \
     ../LclClass/TestMain.cc \
-    ../LclClass/AllCombo.cc \
-    ../LclClass/AllComboTpl.cc \
     ../LclClass/Derives.cc \
     ../LclClass/DerivesTpl.cc \
-    ../LclClass/MemDecl.cc \
-    ../LclClass/MemDeclTpl.cc \
-    ../LclClass/MemLike.cc \
-    ../LclClass/MemLikeTpl.cc \
-    ../LclClass/MemSetExplicit.cc \
-    ../LclClass/MemSetImplicit.cc \
-    ../LclClass/MemSetExplicitAndImplicit.cc \
-    ../LclClass/MemSetExplicitTpl.cc \
-    ../LclClass/MemSetImplicitTpl.cc \
-    ../LclClass/MemSetExplicitAndImplicitTpl.cc \
+    ../LclClass/MemExtExplicit.cc \
+    ../LclClass/MemExtExplicitTpl.cc \
+    ../LclClass/MemExtImplicit.cc \
+    ../LclClass/MemExtImplicitTpl.cc \
+    ../LclClass/MemExtExplicitAndImplicit.cc \
+    ../LclClass/MemExtExplicitAndImplicitTpl.cc \
+    ../LclClass/MemIntExplicit.cc \
+    ../LclClass/MemIntExplicitTpl.cc \
+    ../LclClass/MemIntImplicit.cc \
+    ../LclClass/MemIntImplicitTpl.cc \
+    ../LclClass/MemIntExplicitAndImplicit.cc \
+    ../LclClass/MemIntExplicitAndImplicitTpl.cc \
+    ../LclClass/MemExtAndMemInt.cc \
+    ../LclClass/MemExtAndMemIntTpl.cc \
+    ../LclClass/AllCombo.cc \
+    ../LclClass/AllComboTpl.cc \
     ../LclClass/InitHook.cc \
     ../LclClass/InitHookTpl.cc \
     ../LclClass/Nested.cc \

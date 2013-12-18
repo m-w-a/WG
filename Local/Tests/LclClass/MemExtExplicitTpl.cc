@@ -16,7 +16,7 @@ struct OneVar
 {
   static void run()
   {
-    WG_LCLCLASS_TPL(Local, memdecl ((int) value) )
+    WG_LCLCLASS_TPL(Local, memext ((int) value) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(value);
@@ -31,7 +31,7 @@ struct OneVar
   }
 };
 }
-TEST(wg_lclclass_memdecl_tpl, 1Var)
+TEST(wg_lclclass_memextexplicit_tpl, 1Var)
 {
   try
   {
@@ -53,7 +53,7 @@ struct ThreeVars
 
     WG_LCLCLASS_TPL
     (MultiVar,
-      memdecl ((T1) id) ((T2 const) age) ((T3 const &) name) )
+      memext ((T1) id) ((T2 const) age) ((T3 const &) name) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(id);
@@ -78,7 +78,7 @@ struct ThreeVars
   }
 };
 }
-TEST(wg_lclclass_memdecl_tpl, 3Vars)
+TEST(wg_lclclass_memextexplicit_tpl, 3Vars)
 {
   try
   {
@@ -97,7 +97,7 @@ struct LocalTypeNonQlfd
     WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
     SomeLocalClass localObj;
 
-    WG_LCLCLASS_TPL(AnotherLocalClass, memdecl (local(SomeLocalClass) value) )
+    WG_LCLCLASS_TPL(AnotherLocalClass, memext (local(SomeLocalClass) value) )
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_TPL(value);
@@ -115,7 +115,7 @@ struct LocalTypeNonQlfd
   }
 };
 }
-TEST(wg_lclclass_memdecl_tpl, LocalTypeNonQlfd)
+TEST(wg_lclclass_memextexplicit_tpl, LocalTypeNonQlfd)
 {
   try
   {
@@ -135,7 +135,7 @@ struct LocalTypeConstQlfd
     SomeLocalClass localObj;
 
     WG_LCLCLASS_TPL
-    (AnotherLocalClass, memdecl (local(SomeLocalClass) const value) )
+    (AnotherLocalClass, memext (local(SomeLocalClass) const value) )
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST_TPL(value);
@@ -153,7 +153,7 @@ struct LocalTypeConstQlfd
   }
 };
 }
-TEST(wg_lclclass_memdecl_tpl, LocalTypeConstQlfd)
+TEST(wg_lclclass_memextexplicit_tpl, LocalTypeConstQlfd)
 {
   try
   {
@@ -173,7 +173,7 @@ struct LocalTypeRefQlfd
     SomeLocalClass localObj;
 
     WG_LCLCLASS_TPL
-    (AnotherLocalClass, memdecl (local(SomeLocalClass) ref value) )
+    (AnotherLocalClass, memext (local(SomeLocalClass) ref value) )
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_TPL(value);
@@ -191,7 +191,7 @@ struct LocalTypeRefQlfd
   }
 };
 }
-TEST(wg_lclclass_memdecl_tpl, LocalTypeRefQlfd)
+TEST(wg_lclclass_memextexplicit_tpl, LocalTypeRefQlfd)
 {
   try
   {
@@ -211,7 +211,7 @@ struct LocalTypeConstRefQlfd
     SomeLocalClass localObj;
 
     WG_LCLCLASS_TPL
-    (AnotherLocalClass, memdecl (local(SomeLocalClass) const ref value) )
+    (AnotherLocalClass, memext (local(SomeLocalClass) const ref value) )
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST_TPL(value);
@@ -229,7 +229,7 @@ struct LocalTypeConstRefQlfd
   }
 };
 }
-TEST(wg_lclclass_memdecl_tpl, LocalTypeConstRefQlfd)
+TEST(wg_lclclass_memextexplicit_tpl, LocalTypeConstRefQlfd)
 {
   try
   {

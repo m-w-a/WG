@@ -13,7 +13,7 @@ struct Mimic1Var
   {
     T var = false;
 
-    WG_LCLCLASS_TPL(verifier, memlike (var) )
+    WG_LCLCLASS_TPL(verifier, memext (var) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(var);
@@ -29,7 +29,7 @@ struct Mimic1Var
   }
 };
 }
-TEST(wg_lclclass_memlike_tpl, Mimic1Var)
+TEST(wg_lclclass_memextimplicit_tpl, Mimic1Var)
 {
   try
   {
@@ -47,7 +47,7 @@ struct Mimic1VarByRef
   {
     T var = false;
 
-    WG_LCLCLASS_TPL(verifier, memlike (ref var) )
+    WG_LCLCLASS_TPL(verifier, memext (ref var) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(var);
@@ -63,7 +63,7 @@ struct Mimic1VarByRef
   }
 };
 }
-TEST(wg_lclclass_memlike_tpl, Mimic1VarByRef)
+TEST(wg_lclclass_memextimplicit_tpl, Mimic1VarByRef)
 {
   try
   {
@@ -81,7 +81,7 @@ struct Mimic1VarByConst
   {
     T const red = 10;
 
-    WG_LCLCLASS_TPL(verifier, memlike (const red) )
+    WG_LCLCLASS_TPL(verifier, memext (const red) )
       void didMimicType() const
       {
         WG_TESTHELPER_ASSERT_ISCONST_TPL(red);
@@ -97,7 +97,7 @@ struct Mimic1VarByConst
   }
 };
 }
-TEST(wg_lclclass_memlike_tpl, Mimic1VarByConst)
+TEST(wg_lclclass_memextimplicit_tpl, Mimic1VarByConst)
 {
   try
   {
@@ -115,7 +115,7 @@ struct Mimic1VarByConstRef
   {
     T blue = 10;
 
-    WG_LCLCLASS_TPL(verifier, memlike (const ref blue) )
+    WG_LCLCLASS_TPL(verifier, memext (const ref blue) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISCONST_TPL(blue);
@@ -134,7 +134,7 @@ struct Mimic1VarByConstRef
   }
 };
 }
-TEST(wg_lclclass_memlike_tpl, Mimic1VarByConstRef)
+TEST(wg_lclclass_memextimplicit_tpl, Mimic1VarByConstRef)
 {
   try
   {
@@ -156,7 +156,7 @@ struct Mimic3Vars
 
     WG_LCLCLASS_TPL
     (calculateForce,
-      memlike (ref force) (const mass) (const ref velocity)
+      memext (ref force) (const mass) (const ref velocity)
     )
       void init()
       {
@@ -182,7 +182,7 @@ struct Mimic3Vars
   }
 };
 }
-TEST(wg_lclclass_memlike_tpl, Mimic3Vars)
+TEST(wg_lclclass_memextimplicit_tpl, Mimic3Vars)
 {
   try
   {
@@ -201,7 +201,7 @@ struct MimicThisU
   MimicThisU()
   {
     WG_LCLCLASS_TPL
-    (verifier, memlike (this_) )
+    (verifier, memext (this_) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISCONST_TPL(this_);
@@ -218,7 +218,7 @@ struct MimicThisU
   }
 };
 }
-TEST(wg_lclclass_memlike_tpl, MimicThisU)
+TEST(wg_lclclass_memextimplicit_tpl, MimicThisU)
 {
   try
   {
@@ -236,11 +236,11 @@ struct OkIfMultipleUseInSameScope
   {
     T var = 1;
 
-    WG_LCLCLASS_TPL(Local1, memlike (ref var) )
+    WG_LCLCLASS_TPL(Local1, memext (ref var) )
       void init() { ++var; }
     WG_LCLCLASS_END;
 
-    WG_LCLCLASS_TPL(Local2, memlike (ref var) )
+    WG_LCLCLASS_TPL(Local2, memext (ref var) )
       void init() { ++var; }
     WG_LCLCLASS_END;
 
@@ -251,7 +251,7 @@ struct OkIfMultipleUseInSameScope
   }
 };
 }
-TEST(wg_lclclass_memlike_tpl, OkIfMultipleUseInSameScope)
+TEST(wg_lclclass_memextimplicit_tpl, OkIfMultipleUseInSameScope)
 {
   try
   {

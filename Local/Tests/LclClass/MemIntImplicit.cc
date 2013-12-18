@@ -4,13 +4,13 @@
 #include <WG/Local/LclClass.hh>
 #include <boost/tuple/tuple.hpp>
 
-TEST(wg_lclclass_memsetimplicit, OkIfMemValueGloballyScoped)
+TEST(wg_lclclass_memintimplicit, OkIfMemValueGloballyScoped)
 {
   try
   {
     WG_LCLCLASS
     (Local,
-      memset (assigner, ::boost::make_tuple(true)) )
+      memint (assigner, ::boost::make_tuple(true)) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST(assigner);
@@ -26,13 +26,13 @@ TEST(wg_lclclass_memsetimplicit, OkIfMemValueGloballyScoped)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclclass_memsetimplicit, OkIf3MemOfVaryingMutabilitySet)
+TEST(wg_lclclass_memintimplicit, OkIf3MemOfVaryingMutabilitySet)
 {
   try
   {
     WG_LCLCLASS
     (CalculateVolume,
-      memset
+      memint
         (const radius, 2)
         (height, 10ul)
         (volume, radius * height) )

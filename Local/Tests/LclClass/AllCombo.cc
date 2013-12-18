@@ -14,9 +14,8 @@ TEST(wg_lclclass_allcombo, Tester)
     WG_LCLCLASS
     (Local,
      derives (protected Base)
-     memdecl ((std::string const) name)
-     memlike (var)
-     memset (score, 21) )
+     memext ((std::string const) name) (var)
+     memint (score, 21) )
       void init()
       {
         EXPECT_EQ(ID, 11);

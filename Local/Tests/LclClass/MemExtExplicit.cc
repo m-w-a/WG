@@ -4,11 +4,11 @@
 #include <WG/Local/LclClass.hh>
 #include <string>
 
-TEST(wg_lclclass_memdecl, 1Var)
+TEST(wg_lclclass_memextexplicit, 1Var)
 {
   try
   {
-    WG_LCLCLASS(Local, memdecl ((int) value) )
+    WG_LCLCLASS(Local, memext ((int) value) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST(value);
@@ -24,7 +24,7 @@ TEST(wg_lclclass_memdecl, 1Var)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclclass_memdecl, 3Vars)
+TEST(wg_lclclass_memextexplicit, 3Vars)
 {
   try
   {
@@ -34,7 +34,7 @@ TEST(wg_lclclass_memdecl, 3Vars)
 
     WG_LCLCLASS
     (MultiVar,
-      memdecl ((short) id) ((int const) age) ((std::string const &) name) )
+      memext ((short) id) ((int const) age) ((std::string const &) name) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST(id);
@@ -60,14 +60,14 @@ TEST(wg_lclclass_memdecl, 3Vars)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclclass_memdecl, LocalTypeNonQlfd)
+TEST(wg_lclclass_memextexplicit, LocalTypeNonQlfd)
 {
   try
   {
     WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
     SomeLocalClass localObj;
 
-    WG_LCLCLASS(AnotherLocalClass, memdecl (local(SomeLocalClass) value) )
+    WG_LCLCLASS(AnotherLocalClass, memext (local(SomeLocalClass) value) )
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST(value);
@@ -86,14 +86,14 @@ TEST(wg_lclclass_memdecl, LocalTypeNonQlfd)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclclass_memdecl, LocalTypeConstQlfd)
+TEST(wg_lclclass_memextexplicit, LocalTypeConstQlfd)
 {
   try
   {
     WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
     SomeLocalClass localObj;
 
-    WG_LCLCLASS(AnotherLocalClass, memdecl (local(SomeLocalClass) const value) )
+    WG_LCLCLASS(AnotherLocalClass, memext (local(SomeLocalClass) const value) )
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST(value);
@@ -112,14 +112,14 @@ TEST(wg_lclclass_memdecl, LocalTypeConstQlfd)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclclass_memdecl, LocalTypeRefQlfd)
+TEST(wg_lclclass_memextexplicit, LocalTypeRefQlfd)
 {
   try
   {
     WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
     SomeLocalClass localObj;
 
-    WG_LCLCLASS(AnotherLocalClass, memdecl (local(SomeLocalClass) ref value) )
+    WG_LCLCLASS(AnotherLocalClass, memext (local(SomeLocalClass) ref value) )
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST(value);
@@ -138,7 +138,7 @@ TEST(wg_lclclass_memdecl, LocalTypeRefQlfd)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclclass_memdecl, LocalTypeConstRefQlfd)
+TEST(wg_lclclass_memextexplicit, LocalTypeConstRefQlfd)
 {
   try
   {
@@ -146,7 +146,7 @@ TEST(wg_lclclass_memdecl, LocalTypeConstRefQlfd)
     SomeLocalClass localObj;
 
     WG_LCLCLASS
-    (AnotherLocalClass, memdecl (local(SomeLocalClass) const ref value) )
+    (AnotherLocalClass, memext (local(SomeLocalClass) const ref value) )
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST(value);

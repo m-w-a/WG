@@ -10,7 +10,7 @@ struct EnsureTypeOfNotUsed
 {
   static void run()
   {
-    WG_LCLCLASS_TPL(Local, memset ((T) value, 1.2f) )
+    WG_LCLCLASS_TPL(Local, memint ((T) value, 1.2f) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(value);
@@ -24,7 +24,7 @@ struct EnsureTypeOfNotUsed
   }
 };
 }
-TEST(wg_lclclass_memsetexplicit_tpl, EnsureTypeOfNotUsed)
+TEST(wg_lclclass_memintexplicit_tpl, EnsureTypeOfNotUsed)
 {
   try
   {
@@ -42,7 +42,7 @@ struct OkIf3MemOfVaryingMutabilitySet
   {
     WG_LCLCLASS_TPL
     (CalculateVolume,
-      memset
+      memint
         ((T1 const) radius, 2)
         ((T2 const) height, 10)
         ((T3) volume, radius * height) )
@@ -62,7 +62,7 @@ struct OkIf3MemOfVaryingMutabilitySet
   }
 };
 }
-TEST(wg_lclclass_memsetexplicit_tpl, OkIf3MemOfVaryingMutabilitySet)
+TEST(wg_lclclass_memintexplicit_tpl, OkIf3MemOfVaryingMutabilitySet)
 {
   try
   {

@@ -3,13 +3,13 @@
 #include <WG/Local/Tests/TestHelper.hh>
 #include <WG/Local/LclClass.hh>
 
-TEST(wg_lclclass_memsetexplicitandimplicit, OkIf3MemOfVaryingMutabilitySet)
+TEST(wg_lclclass_memintexplicitandimplicit, OkIf3MemOfVaryingMutabilitySet)
 {
   try
   {
     WG_LCLCLASS
     (CalculateVolume,
-      memset
+      memint
         (const radius, 2)
         (height, 10)
         ((long const) volume, radius * height) )

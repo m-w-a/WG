@@ -7,9 +7,8 @@
     WG_LCLCLASS \
     (Local1, \
      derives (protected Base) \
-     memdecl (local(Param0Type) name) \
-     memlike (var) \
-     memset (score, 21) ) \
+     memext (local(Param0Type) name)  (var) \
+     memint (score, 21) ) \
       void init() \
       { \
         EXPECT_EQ(ID, 11); \
@@ -21,9 +20,8 @@
     WG_LCLCLASS \
     (Local2, \
      derives (protected Base) \
-     memdecl (local(Param0Type) name) \
-     memlike (var) \
-     memset (score, 21) ) \
+     memext (local(Param0Type) name)  (var) \
+     memint (score, 21) ) \
       void init() \
       { \
         EXPECT_EQ(ID, 11); \

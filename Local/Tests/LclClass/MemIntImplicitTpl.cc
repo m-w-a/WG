@@ -18,7 +18,7 @@ struct OkIfMemValueGloballyScoped
   {
     WG_LCLCLASS_TPL
     (Local,
-      memset (assigner, ::boost::make_tuple(true)) )
+      memint (assigner, ::boost::make_tuple(true)) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(assigner);
@@ -33,7 +33,7 @@ struct OkIfMemValueGloballyScoped
   }
 };
 }
-TEST(wg_lclclass_memsetimplicit_tpl, OkIfMemValueGloballyScoped)
+TEST(wg_lclclass_memintimplicit_tpl, OkIfMemValueGloballyScoped)
 {
   try
   {
@@ -51,7 +51,7 @@ struct OkIf3MemOfVaryingMutabilitySet
   {
     WG_LCLCLASS_TPL
     (CalculateVolume,
-      memset
+      memint
         (const radius, 2)
         (height, 10ul)
         (volume, radius * height) )
@@ -71,7 +71,7 @@ struct OkIf3MemOfVaryingMutabilitySet
   }
 };
 }
-TEST(wg_lclclass_memsetimplicit_tpl, OkIf3MemOfVaryingMutabilitySet)
+TEST(wg_lclclass_memintimplicit_tpl, OkIf3MemOfVaryingMutabilitySet)
 {
   try
   {

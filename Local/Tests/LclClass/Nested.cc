@@ -8,8 +8,8 @@ TEST(wg_lclclass_nested, TwoLevels)
   {
     long var = 1;
 
-    WG_LCLCLASS(Level1, memlike(ref var) )
-      WG_LCLCLASS(Level2, memlike(ref var) )
+    WG_LCLCLASS(Level1, memext (ref var) )
+      WG_LCLCLASS(Level2, memext (ref var) )
         void init() { ++var; }
       WG_LCLCLASS_END;
 

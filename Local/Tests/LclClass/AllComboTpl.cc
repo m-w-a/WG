@@ -17,9 +17,8 @@ struct Tester
     WG_LCLCLASS_TPL
     (Local,
      derives (protected Base)
-     memdecl ((T const) name)
-     memlike (var)
-     memset (score, 21) )
+     memext ((T const) name) (var)
+     memint (score, 21) )
       void init()
       {
         EXPECT_EQ(Local::ID, 11);
