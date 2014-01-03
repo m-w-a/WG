@@ -108,7 +108,7 @@
     explicit name ( WG_PP_LCLCLASS_CG_LCLCLASS_CTOR_PARAMLIST(symbtbl) ) \
     WG_PP_LCLCLASS_CG_LCLCLASS_CTOR_INITLIST(symbtbl) \
     { \
-      init(); \
+      this->init(); \
     } \
   private:
 
