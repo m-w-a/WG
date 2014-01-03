@@ -1,49 +1,196 @@
 #ifndef WG_LOCAL_TESTS_TESTHELPER_HH_
 #define WG_LOCAL_TESTS_TESTHELPER_HH_
 
+#include <cstddef>
+#include <boost/type_traits/remove_all_extents.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/remove_pointer.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <boost/preprocessor/control/if.hpp>
+#include <boost/preprocessor/control/expr_iif.hpp>
+#include <boost/typeof/typeof.hpp>
+#include <boost/utility/addressof.hpp>
+
 //###########
 //Public APIs
 //###########
 
-// Needed in order to compare local types.
-// Will produce a compiler error if false.
-#define WG_PP_TESTHELPER_IS_SAME_TYPE(expected, actual) \
-  WG_PP_TESTHELPER_IS_SAME_TYPE_IMPL(expected, actual)
+//----------------
+//LocalType Macros
+//----------------
 
-// Will produce a compiler error if false.
-#define WG_PP_TESTHELPER_IS_SAME_OBJ_NAME(expected, actual) \
-  WG_PP_TESTHELPER_IS_SAME_OBJ_NAME_IMPL(expected, actual) \
+// Declares a type with name "name".
+#define WG_TESTHELPER_LOCALTYPE_DECLARE(name) \
+  WG_TESTHELPER_LOCALTYPE_DECLARE_IMPL(name)
 
-// Will produce a compiler error if false.
-#define WG_PP_TESTHELPER_MACROEXPANDSTOID(macrotoexpand, expectedid) \
-  WG_PP_TESTHELPER_IS_SAME_OBJ_NAME(expectedid, macrotoexpand)
+// obj:
+//   A variable identifier, not an expression!
+//   An object of some type that was declared using the
+//   WG_TESTHELPER_LOCALTYPE_DECLARE macro.
+#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST(obj) \
+  WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST_IMPL(obj)
 
-//###########
-//Impl Macros
-//###########
+// See WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST.
+#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST_TPL(obj) \
+  WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST_TPL_IMPL(obj)
 
-#define WG_PP_TESTHELPER_IS_SAME_TYPE_IMPL(expected, actual) \
-  struct BOOST_PP_CAT(test_type_did_bind, __LINE__) \
+// See WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST.
+#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST(obj) \
+  WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_IMPL(obj)
+
+// See WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST.
+#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_TPL(obj) \
+  WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_TPL_IMPL(obj)
+
+#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISREFERENCE(lvalue1, lvalue2) \
+  WG_TESTHELPER_ASSERT_ISREFERENCE(lvalue1, lvalue2)
+
+#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTREFERENCE(lvalue1, lvalue2) \
+  WG_TESTHELPER_ASSERT_ISNOTREFERENCE(lvalue1, lvalue2)
+
+#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF( \
+  expectedtype, objtotest) \
+    WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
+      expectedtype, objtotest)
+
+//-------------------
+//NonLocalType Macros
+//-------------------
+
+#define WG_TESTHELPER_ASSERT_ISREFERENCE(lvalue1, lvalue2) \
+  EXPECT_TRUE( &(lvalue1) == &(lvalue2) )
+
+#define WG_TESTHELPER_ASSERT_ISNOTREFERENCE(lvalue1, lvalue2) \
+  EXPECT_TRUE( &(lvalue1) != &(lvalue2) )
+
+// identifier:
+//   Must be a variable identifier, not an expression!.
+//   The type of identifier must not be a local one.
+#define WG_TESTHELPER_ASSERT_ISCONST(identifier) \
+  WG_TESTHELPER_ASSERT_CONST(identifier, 0, 0)
+
+// See WG_TESTHELPER_ASSERT_ISCONST.
+#define WG_TESTHELPER_ASSERT_ISCONST_TPL(identifier) \
+  WG_TESTHELPER_ASSERT_CONST(identifier, 0, 1)
+
+// identifier:
+//   Must be a variable identifier, not an expression!.
+//   The type of identifier must not be a local one.
+#define WG_TESTHELPER_ASSERT_ISNOTCONST(identifier) \
+  WG_TESTHELPER_ASSERT_CONST(identifier, 1, 0)
+
+// See WG_TESTHELPER_ASSERT_ISNOTCONST.
+#define WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(identifier) \
+  WG_TESTHELPER_ASSERT_CONST(identifier, 1, 1)
+
+#define WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF( \
+  expectedtype, objtotest) \
+    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
+      expectedtype, objtotest, 0)
+
+#define WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL( \
+  expectedtype, objtotest) \
+    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
+      expectedtype, objtotest, 1)
+
+namespace wg
+{
+namespace local
+{
+namespace tests
+{
+
+template <typename T>
+struct first_nonarray_elem;
+
+template <typename T, std::size_t N>
+typename boost::remove_all_extents<T>::type *
+  address_of_first_nonarray_elem(T (&arr)[N])
+{
+  return first_nonarray_elem<T[N]>::address_of(arr);
+}
+
+}
+}
+}
+
+//######
+//Impls.
+//######
+
+#define WG_TESTHELPER_ASSERT_CONST(identifier, isnotflag, istpl) \
+  EXPECT_TRUE(( \
+    BOOST_PP_EXPR_IIF(isnotflag, ! ) \
+    boost::is_const \
+    < \
+      BOOST_PP_EXPR_IIF(istpl, typename) boost::remove_pointer \
+      < \
+        BOOST_TYPEOF(&(identifier)) \
+      >::type \
+    >::value ))
+
+#define WG_TESTHELPER_LOCALTYPE_DECLARE_IMPL(name) \
+  struct name \
   { \
-    void test() \
-    { \
-      typedef void (*expected_fptr_type)(expected param1); \
-      typedef void (*actual_fptr_type)(actual param1); \
-      expected_fptr_type expected_fptr = 0; \
-      actual_fptr_type actual_fptr = 0; \
-      expected_fptr = actual_fptr; \
-      (void)expected_fptr; \
-    } \
+    /* This variable must not have const type! */ \
+    int var; \
   };
 
-#define WG_PP_TESTHELPER_IS_SAME_OBJ_NAME_IMPL(expected, actual) \
-  struct BOOST_PP_CAT(test_obj_did_bind, __LINE__) \
-  { \
-    int expected; \
-    void operator()() \
+#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST_IMPL(obj) \
+  WG_TESTHELPER_ASSERT_ISCONST(obj.var)
+
+#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST_TPL_IMPL(obj) \
+WG_TESTHELPER_ASSERT_ISCONST_TPL(obj.var)
+
+#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_IMPL(obj) \
+  WG_TESTHELPER_ASSERT_ISNOTCONST(obj.var)
+
+#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_TPL_IMPL(obj) \
+WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(obj.var)
+
+#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
+  expectedtype, objtotest) \
     { \
-      (void)actual; \
-    } \
-  };
+      expectedtype const * check = &objtotest; \
+      (void)check; \
+    }
+
+#define WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
+  expectedtype, objtotest, istpl) \
+    EXPECT_TRUE(( \
+      boost::is_same \
+      < \
+        expectedtype, \
+        BOOST_PP_IIF(istpl, BOOST_TYPEOF_TPL, BOOST_TYPEOF) (objtotest) \
+      >::value));
+
+namespace wg
+{
+namespace local
+{
+namespace tests
+{
+
+template <typename T>
+struct first_nonarray_elem
+{
+  static T * address_of(T & first_elem)
+  {
+    return boost::addressof(first_elem);
+  }
+};
+
+template <typename T, std::size_t N>
+struct first_nonarray_elem<T[N]>
+{
+  static typename boost::remove_all_extents<T>::type * address_of(T (&arr)[N])
+  {
+    return first_nonarray_elem<T>::address_of(*arr);
+  }
+};
+
+}
+}
+}
 
 #endif /* WG_LOCAL_TESTS_TESTHELPER_HH_ */

@@ -4,7 +4,7 @@
 #include <boost/typeof/typeof.hpp>
 #include <WG/Local/Tests/TestHelper.hh>
 #include <utility>
-#include <boost/utility/identity_type.hpp>
+#include <boost/tuple/tuple.hpp>
 
 TEST(wg_autofunctor_parambindexplicit, EnsureTypeOfNotUsed)
 {
@@ -43,25 +43,25 @@ TEST(wg_autofunctor_parambindexplicit, OkIf1ArgBound)
   WG_GTEST_CATCH
 }
 
-TEST(wg_autofunctor_parambindexplicit, OkIfPPEscaped1ArgBound)
+TEST(wg_autofunctor_parambindexplicit, OkIfGloballyScoped1ArgBound)
 {
   try
   {
-    std::pair<bool, int> didArgumentBind = std::make_pair(false, 0);
+    ::boost::tuple<bool> didArgumentBind = ::boost::make_tuple(false);
 
     WG_AUTOFUNCTOR
     (oneArgAutoFunctor,
-      parambind (ppescape((std::pair<bool, int> &)) didArgumentBind) )
+      parambind ((::boost::tuple<bool> &) didArgumentBind) )
     {
       WG_PP_TESTHELPER_IS_SAME_TYPE(
-        BOOST_IDENTITY_TYPE((std::pair<bool, int> &)),
+        BOOST_IDENTITY_TYPE((::boost::tuple<bool> &)),
         BOOST_TYPEOF(didArgumentBind) &);
 
-      didArgumentBind.first = true;
+      didArgumentBind.get<0>() = true;
     }
     WG_AUTOFUNCTOR_END;
 
-    EXPECT_TRUE(didArgumentBind.first);
+    EXPECT_TRUE(didArgumentBind.get<0>());
   }
   WG_GTEST_CATCH
 }

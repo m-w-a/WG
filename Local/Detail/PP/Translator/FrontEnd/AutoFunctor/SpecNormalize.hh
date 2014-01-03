@@ -21,12 +21,9 @@
 //   (paramset) { (BOOST_PP_NIL) | ( {normalized-set-tuple}+ ) }
 //   (membind) { (BOOST_PP_NIL) | ( {normalized-bound-tuple}+ ) }
 //   (memset) { (BOOST_PP_NIL) | ( {normalized-set-tuple}+ ) }
-//   (errors) { (BOOST_PP_NIL) | (WG_PP_ERROR ...) }
+//   (errors) { (BOOST_PP_NIL) | (WG_PP_MARKER_ERROR ...) }
 //
 // (For definition of terms see SymbolTable documentation.)
-// EXCEPTION:
-//   every tuple in normalized-bound-tuple or normalized-set-tuple
-//   maybe replaced with "WG_PP_ERROR ..." tokens.
 #define WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE(spec, istpl) \
   WG_PP_AUTOFUNCTOR_SPEC_NORMALIZE_IMPL( \
     spec BOOST_PP_NIL, \
@@ -239,7 +236,7 @@
     BOOST_PP_IIF( \
       WG_PP_STARTSWITH_BOOST_PP_NIL(spec), \
       BOOST_PP_NIL BOOST_PP_EMPTY, \
-      WG_PP_ERROR WG_PP_ID_CAT( \
+      WG_PP_MARKER_ERROR WG_PP_ID_CAT( \
         ERROR_Invalid_tokens, \
         WG_PP_EATTAILTOKEN_BOOST_PP_NIL(spec) BOOST_PP_EMPTY) ) () \
   )

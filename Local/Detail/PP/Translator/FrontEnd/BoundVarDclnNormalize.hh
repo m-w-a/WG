@@ -10,6 +10,8 @@
 //Public APIs
 //###########
 
+// boundvardcln:
+//   bound-var-dcln
 // Expands to the following:
 //   {(parsed-explicit-or-deduced-type) (bound-var-name)}+
 //
@@ -17,6 +19,8 @@
 #define WG_PP_BOUNDVARDCLN_NORMALIZE(boundvardcln) \
   WG_PP_BOUNDVARDCLN_NORMALIZE_IMPL(boundvardcln, 0)
 
+// boundvardcln:
+//   bound-var-dcln
 // Expands to the following:
 //   {(parsed-explicit-or-deduced-type) (bound-var-name)}+
 //
@@ -24,6 +28,8 @@
 #define WG_PP_BOUNDVARDCLN_NORMALIZE_TPL(boundvardcln) \
   WG_PP_BOUNDVARDCLN_NORMALIZE_IMPL(boundvardcln, 1)
 
+// boundvardcln:
+//   nlt-bound-var-dcln
 // Expands to the following:
 //   {(parsed-explicit-non-local-type-or-deduced-type) (bound-var-name)}+
 //
@@ -31,6 +37,8 @@
 #define WG_PP_BOUNDVARDCLN_NLT_NORMALIZE(boundvardcln) \
   WG_PP_BOUNDVARDCLN_NLT_NORMALIZE_IMPL(boundvardcln, 0)
 
+// boundvardcln:
+//   nlt-bound-var-dcln
 // Expands to the following:
 //   {(parsed-explicit-non-local-type-or-deduced-type) (bound-var-name)}+
 //

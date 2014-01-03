@@ -84,26 +84,22 @@ param-seq:
     Currently, WG_PP_LCLFUNCTION_MAX_ARGS is set to 15
 
 varbind:
-  1) See captured-variables.
+  1) See function-variables.
   2) See bound-variables.
 varset:
-  1) See captured-variables.
+  1) See function-variables.
   2) See set-variables.
   3) The order in which variables are set is undefined.
 
-captured-variables:
-  Captures variables in the enclosing scope(s). Note that each call of the 
-  same local function object gets the same capturing object. So, if a capturing 
-  object's state is changed for a given local function object, that change will 
-  be reflected in the next call of the *same* local function object.
+function-variables:
+  Variables that are local to each function instance. Note that each call of the 
+  same local function instance gets the same function variables. So, if a function 
+  variables' state is changed for a given function instance, that change will 
+  be reflected in the next call of the *same* function instance.
 
 //---
 //BNF
 //---
-
-//Note:
-//  1) params needs to be PP parseable because it needs to be prepended/appended
-//    to in codegen for the purpose of constructing the callback signature.
 
 special symbols:
   [...] specifies an optional BNF expression.
@@ -127,8 +123,27 @@ lclfunction-spec :=
 
 nlt-return-tuple :=
     ( non-local-type-with-no-embedded-commas )
-  | ( ppescape(( non-local-type-unrestricted-syntax )) )
 
+//Note:
+//  1) params needs to be PP parseable because it needs to be prepended/appended
+//    to in codegen for the purpose of constructing the callback signature. 
+//    (That is, we need to be able to insert a comma before and after it.)
+//  2) param-tuple needs to be PP parseable in order for:
+//    a) the user facing function prototype to accurately reflect the specified
+//      param type, and
+//    b) for the generated code to efficiently forward the parameter value.
+//
+//    Example:
+//      1) "params ((big_type) x)" needs to generate:
+//         void interface_func(big_type x);
+//         void impl_func(big_type & x);
+//      2) "params ((big_type const) x)" needs to generate:
+//         void interface_func(big_type const x);
+//         void impl_func(big_type const & x);
+//
+//    Note: If param-tuple was not PP parseable, then there would be no way to
+//      efficiently generate the needed params for impl_func for both the above 
+//      examples. (Try it.)
 param-seq :=
     param-tuple
   | param-seq param-tuple
@@ -137,7 +152,7 @@ varbind-seq := nlt-bound-tuple-seq
 varset-seq := nlt-set-tuple-seq
 
 param-tuple :=
-  (non-local-type var-name)
+  (explicit-non-local-type-var-dcln)
 
 nlt-bound-tuple-seq :=
     nlt-bound-tuple
@@ -158,10 +173,11 @@ nlt-bound-var-dcln := nlt-type-var-dcln
 nlt-set-var-dcln := nlt-type-var-dcln , value-expr
 
 nlt-type-var-dcln :=
-    implicit-type-var-dcln
-  | nlt-explicit-type-var-dcln
+    implicit-non-local-type-var-dcln
+  | explicit-non-local-type-var-dcln
 
-nlt-explicit-type-var-dcln :=
-  nlt-explicit-type var-name
+implicit-non-local-type-var-dcln :=
+  implicit-type-var-dcln
 
-nlt-explicit-type := non-local-type
+explicit-non-local-type-var-dcln :=
+  explicit-non-local-type var-name

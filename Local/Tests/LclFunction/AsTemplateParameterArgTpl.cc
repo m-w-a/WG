@@ -3,6 +3,7 @@
 #include <WG/Local/LclFunction.hh>
 #include <algorithm>
 #include <vector>
+#include <WG/Local/Tests/TestHelper.hh>
 
 namespace
 {
@@ -19,6 +20,14 @@ struct StdForEach
       varbind (ref sum)
       varset (runningOffset, 0) )
     {
+      WG_TESTHELPER_ASSERT_ISCONST_TPL(datum);
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(sum);
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(runningOffset);
+
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, datum);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, sum);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(int, runningOffset);
+
       sum += runningOffset + datum;
       ++runningOffset;
     }WG_LCLFUNCTION_END;

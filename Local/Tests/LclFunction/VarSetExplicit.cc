@@ -1,8 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <utility>
-#include <boost/typeof/typeof.hpp>
+#include <boost/tuple/tuple.hpp>
 #include <WG/Local/Tests/TestHelper.hh>
 
 TEST(wg_lclfunction_varsetexplicit, EnsureTypeOfNotUsed)
@@ -13,8 +12,9 @@ TEST(wg_lclfunction_varsetexplicit, EnsureTypeOfNotUsed)
 
     WG_LCLFUNCTION(setToDiffType, varset ((int) value, val) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int, BOOST_TYPEOF(value));
+      WG_TESTHELPER_ASSERT_ISNOTCONST(value);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, value);
+
       EXPECT_EQ(1, value);
     }WG_LCLFUNCTION_END;
 
@@ -36,8 +36,10 @@ TEST(wg_lclfunction_varsetexplicit, OkIf1VarSet)
     (check,
       varset ((bool &) didAssign, proxy.didAssign) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(bool &, BOOST_TYPEOF(didAssign) &);
-            didAssign = true;
+      WG_TESTHELPER_ASSERT_ISNOTCONST(didAssign);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, didAssign);
+
+      didAssign = true;
     }WG_LCLFUNCTION_END;
 
     check();
@@ -47,25 +49,26 @@ TEST(wg_lclfunction_varsetexplicit, OkIf1VarSet)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclfunction_varsetexplicit, OkIfPPEscaped1VarSet)
+TEST(wg_lclfunction_varsetexplicit, OkIfGloballyScoped1VarSet)
 {
   try
   {
-    std::pair<bool, int> didAssign = std::make_pair(false, 0);
+    ::boost::tuple<bool> didAssign = ::boost::make_tuple(false);
 
     WG_LCLFUNCTION
     (check,
-      varset (ppescape((std::pair<bool, int> &)) assigner, didAssign) )
+      varset ((::boost::tuple<bool> &) assigner, didAssign) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        BOOST_IDENTITY_TYPE((std::pair<bool, int> &)),
-        BOOST_TYPEOF(assigner) &);
-      assigner.first = true;
+      WG_TESTHELPER_ASSERT_ISNOTCONST(assigner);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+        ::boost::tuple<bool>, assigner);
+
+      assigner.get<0>() = true;
     }WG_LCLFUNCTION_END;
 
     check();
 
-    EXPECT_TRUE(didAssign.first);
+    EXPECT_TRUE(didAssign.get<0>());
   }
   WG_GTEST_CATCH
 }
@@ -87,12 +90,13 @@ TEST(wg_lclfunction_varsetexplicit, OkIf3VarOfVaryingMutabilitySet)
         ((int const) height, cylinder.height)
         ((int &) volume, cylinder.volume) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int const, BOOST_TYPEOF(radius) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int const, BOOST_TYPEOF(height) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int &, BOOST_TYPEOF(volume) &);
+      WG_TESTHELPER_ASSERT_ISCONST(radius);
+      WG_TESTHELPER_ASSERT_ISCONST(height);
+      WG_TESTHELPER_ASSERT_ISNOTCONST(volume);
+
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, radius);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, height);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, volume);
 
       volume = radius * height;
     }

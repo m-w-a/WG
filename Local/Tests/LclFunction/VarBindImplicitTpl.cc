@@ -15,6 +15,9 @@ struct OkIf1VarBound
 
     WG_LCLFUNCTION_TPL(check, varbind (ref didBind) )
     {
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(didBind);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, didBind);
+
       didBind = true;
     }WG_LCLFUNCTION_END;
 
@@ -48,6 +51,14 @@ struct OkIf3VarsOfVaryingMutabilityBound
     (calculateForce,
       varbind (ref force) (const mass) (const velocity) )
     {
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(force);
+      WG_TESTHELPER_ASSERT_ISCONST_TPL(mass);
+      WG_TESTHELPER_ASSERT_ISCONST_TPL(velocity);
+
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, force);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, mass);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, velocity);
+
       force = mass * velocity;
     }
     WG_LCLFUNCTION_END;
@@ -81,6 +92,10 @@ struct OkIfKeywordThisUBound
     WG_LCLFUNCTION_TPL
     (bindThisU, varbind (this_) )
     {
+      WG_TESTHELPER_ASSERT_ISCONST_TPL(this_);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+        OkIfKeywordThisUBound<T> *, this_);
+
       this_->didBindThis = true;
     }
     WG_LCLFUNCTION_END;
@@ -112,6 +127,9 @@ struct OkIfLocalFunctionBound
 
     WG_LCLFUNCTION_TPL(bindVar, varbind (ref didBind) )
     {
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(didBind);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, didBind);
+
       didBind = true;
     }WG_LCLFUNCTION_END;
 

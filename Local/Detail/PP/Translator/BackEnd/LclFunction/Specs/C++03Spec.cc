@@ -17,6 +17,7 @@ int main(int argc, char* argv[])
 #include <WG/Local/LclFunction.hh>
 
 #include <boost/tuple/tuple.hpp>
+#include <boost/type_traits/add_reference.hpp>
 #include <WG/Local/Detail/LclFunction/GlobalFunctorTypeCPP03.hh>
 
 TEST(wg_lclfunction_codegenspec, cpp03)
@@ -36,17 +37,17 @@ TEST(wg_lclfunction_codegenspec, cpp03)
   //WG_LCLFUNCTION_END;
 #define LOCAL_FUNCTION_NAME() lin
 #define RETURN_TYPE() int
-#define PARAMS_NTUPLE() (int const &, int const &)
+#define PARAMS_LIST() int const &, int const &
 #define CAPTURED_VAR_TYPE1 int const &
   //Expands to:
 
   /* PP iterator over captured var types for template params. */
   typedef boost::tuple<CAPTURED_VAR_TYPE1> captured_vars_typeXXX32;
-  typedef RETURN_TYPE()(local_function_typeXXX32)PARAMS_NTUPLE() ;
 
   typedef wg::lclfunction::detail::global_functor_type
   <
-    local_function_typeXXX32,
+    RETURN_TYPE(),
+    boost::mpl::vector<PARAMS_LIST()>,
     captured_vars_typeXXX32
   > global_functor_typeXXX32;
   /* Note: double parenthesis around ctor param to prevent most vexing parse
@@ -71,7 +72,7 @@ TEST(wg_lclfunction_codegenspec, cpp03)
     private:
       /* This functions prototype should match global_functor_type::callback_type. */
       static int user_callback(
-        global_functor_type & LOCAL_FUNCTION_NAME(),
+        global_functor_type const & LOCAL_FUNCTION_NAME(),
         int const & x, 
         int const & y, 
         captured_vars_type & capturedvars)
@@ -79,7 +80,10 @@ TEST(wg_lclfunction_codegenspec, cpp03)
         /* To avoid unused var warnings. */
         (void)(LOCAL_FUNCTION_NAME());
         
-        boost::tuples::element<0, captured_vars_type>::type
+        boost::add_reference
+        <
+          boost::tuples::element<0, captured_vars_type>::type
+        >::type
           slope(capturedvars.get<0>());
         
         /* User provided definition.*/

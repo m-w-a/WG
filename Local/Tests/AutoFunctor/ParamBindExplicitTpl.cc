@@ -4,7 +4,7 @@
 #include <boost/typeof/typeof.hpp>
 #include <WG/Local/Tests/TestHelper.hh>
 #include <utility>
-#include <boost/utility/identity_type.hpp>
+#include <boost/tuple/tuple.hpp>
 
 namespace
 {
@@ -66,34 +66,34 @@ TEST(wg_autofunctor_parambindexplicittpl, OkIf1ArgBound)
 
 namespace
 {
-template <typename T1, typename T2>
-struct OkIfPPEscaped1ArgBound
+template <typename T1>
+struct OkIfGloballyScoped1ArgBound
 {
   static void run()
   {
-    std::pair<T1, T2> didArgumentBind = std::make_pair(false, 0);
+    ::boost::tuple<T1> didArgumentBind = ::boost::make_tuple(false);
 
     WG_AUTOFUNCTOR_TPL
     (oneArgAutoFunctor,
-      parambind (ppescape((std::pair<bool, int> &)) didArgumentBind) )
+      parambind ((::boost::tuple<bool> &) didArgumentBind) )
     {
       WG_PP_TESTHELPER_IS_SAME_TYPE(
-        typename BOOST_IDENTITY_TYPE((std::pair<bool, int> &)),
+        typename BOOST_IDENTITY_TYPE((::boost::tuple<bool> &)),
         BOOST_TYPEOF_TPL(didArgumentBind) &);
 
-      didArgumentBind.first = true;
+      didArgumentBind.template get<0>() = true;
     }
     WG_AUTOFUNCTOR_END;
 
-    EXPECT_TRUE(didArgumentBind.first);
+    EXPECT_TRUE(didArgumentBind.template get<0>());
   }
 };
 }
-TEST(wg_autofunctor_parambindexplicittpl, OkIfPPEscaped1ArgBound)
+TEST(wg_autofunctor_parambindexplicittpl, OkIfGloballyScoped1ArgBound)
 {
   try
   {
-    OkIfPPEscaped1ArgBound<bool, int>::run();
+    OkIfGloballyScoped1ArgBound<bool>::run();
   }
   WG_GTEST_CATCH
 }

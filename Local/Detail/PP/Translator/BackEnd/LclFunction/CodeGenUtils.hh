@@ -11,6 +11,8 @@
 #include <WG/Local/Detail/PP/Translator/BackEnd/TypeAliaser.hh>
 #include <WG/Local/Detail/PP/LclFunction/FunctionOperatorUtils.hh>
 #include <WG/Local/Detail/PP/LclFunction/ConstInvariance.hh>
+#include <WG/Local/Detail/LclFunction/Binder.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/TypeExtractor.hh>
 
 //###########
 //Public APIs
@@ -25,23 +27,28 @@
 //TypesAliaser
 //------------
 
-#define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_DCLN(symbtbl) \
-  WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_DCLN_IMPL(symbtbl)
+#define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_DCLN(symbtbl, function_name) \
+  WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_DCLN_IMPL(symbtbl, function_name)
 
-// For specs:
-//   see WG_PP_STUTIL_USETYPEALIASER(...)
-#define WG_PP_LCLFUNCTION_USETYPEALIASER(symbtbl) \
-  WG_PP_LCLFUNCTION_USETYPEALIASER_IMPL(symbtbl)
+//----------------
+//Intermediate Ops
+//----------------
+
+#define WG_PP_LCLFUNCTION_CGUTILS_REPLACEDEDUCEDTYPES(symbtbl, function_name) \
+  WG_PP_LCLFUNCTION_CGUTILS_REPLACEDEDUCEDTYPES_IMPL(symbtbl, function_name)
+
+#define WG_PP_LCLFUNCTION_CGUTILS_REMOVEMARKERS(symbtbl) \
+  WG_PP_LCLFUNCTION_CGUTILS_REMOVEMARKERS_IMPL(symbtbl)
 
 //--------------
 //CapturedValues
 //--------------
 
-#define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME() \
-  WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME_IMPL()
+#define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME(function_name) \
+  WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME_IMPL(function_name)
 
-#define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN(symbtbl) \
-  WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN_IMPL(symbtbl)
+#define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN(symbtbl, function_name) \
+  WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN_IMPL(symbtbl, function_name)
 
 //-------------
 //LocalFunction
@@ -56,11 +63,13 @@
 
 // Expands to:
 //   Line specific id.
-#define WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME() \
-  WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME_IMPL()
+#define WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME(function_name) \
+  WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME_IMPL(function_name)
 
-#define WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTOROBJ_DCLN(symbtbl, objname) \
-  WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTOROBJ_DCLN_IMPL(symbtbl, objname)
+#define WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTOROBJ_DCLN( \
+  symbtbl, function_name) \
+    WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTOROBJ_DCLN_IMPL( \
+      symbtbl, function_name)
 
 //------------
 //LocalFunctor
@@ -94,50 +103,92 @@
     WG_PP_ID_CAT(WG_PP_LCLFUNCTION_CGUTILS_GLOBALID(), name), \
     __LINE__)
 
+// Expands to:
+//   BOOST_PP_NIL_ | {non-local-type}+
+//
+// symbtbl_type_seq:
+//   { ( non-local-type ) }+
+#define WG_PP_LCLFUNCTION_CGUTILS_TYPESEQ_TO_CAPTUREDTYPESEQ( \
+  istpl, symbtbl_type_seq) \
+    WG_PP_SEQ_FOR_EACH( \
+      WG_PP_LCLFUNCTION_CGUTILS_TYPESEQ_TO_CAPTUREDTYPESEQ_TRANSFORM, \
+      istpl, \
+      symbtbl_type_seq)
+
+// WG_PP_SEQ_FOR_EACH functor.
+#define WG_PP_LCLFUNCTION_CGUTILS_TYPESEQ_TO_CAPTUREDTYPESEQ_TRANSFORM( \
+  r, istpl, elem) \
+    ( \
+      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
+      wg::local::detail::bind_traits \
+      < \
+        WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(elem) \
+      >::binder_type \
+    )
+
 //------------
 //TypesAliaser
 //------------
 
 // Expands to:
 //   Line specific id.
-#define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_NAME() \
-  WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE(captured_types_aliaser)
+#define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_NAME(function_name) \
+  WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE( \
+    WG_PP_ID_CAT(captured_types_aliaser, function_name))
 
-#define WG_PP_LCLFUNCTION_CG_TYPEALIASER_SPECSEQ() \
+#define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_SPECSEQ() \
   ( (BOUNDVAR)(varbind) )( (SETVAR)(varset) )
 
-#define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_DCLN_IMPL(symbtbl) \
+#define WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_DCLN_IMPL(symbtbl, function_name) \
   WG_PP_TYPEALIASER_DCLN( \
-    WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_NAME(), \
-    ALLTYPES, \
+    WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_NAME(function_name), \
     symbtbl, \
-    WG_PP_LCLFUNCTION_CG_TYPEALIASER_SPECSEQ() )
+    WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_SPECSEQ() )
 
-#define WG_PP_LCLFUNCTION_USETYPEALIASER_IMPL(symbtbl) \
-  WG_PP_STUTIL_USETYPEALIASER( \
+//----------------
+//Intermediate Ops
+//----------------
+
+#define WG_PP_LCLFUNCTION_CGUTILS_REPLACEDEDUCEDTYPES_IMPL(symbtbl, function_name) \
+  WG_PP_STUTIL_REPLACESEQ( \
     symbtbl, \
-    WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_NAME(), \
-    ALLTYPES, \
-    WG_PP_LCLFUNCTION_CG_TYPEALIASER_SPECSEQ() )
+    (TYPESEQ_BOUNDVAR)(TYPESEQ_SETVAR), \
+    WG_PP_TYPEALIASER_REPLACEDEDUCEDTYPESEQ, \
+    ( WG_PP_LCLFUNCTION_SYMBOLTABLE_ISTPL(symbtbl) ) \
+    ( WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_NAME(function_name) ) \
+    WG_PP_LCLFUNCTION_CGUTILS_TYPEALIASER_SPECSEQ() )
+
+#define WG_PP_LCLFUNCTION_CGUTILS_REMOVEMARKERS_IMPL(symbtbl) \
+  WG_PP_STUTIL_REPLACESEQ( \
+    symbtbl, \
+    (TYPESEQ_BOUNDVAR)(TYPESEQ_SETVAR), \
+    WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ, \
+    ~)
 
 //--------------
 //CapturedValues
 //--------------
 
-#define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME_IMPL() \
-  WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE(captured_values_type)
+#define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME_IMPL(function_name) \
+  WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE( \
+    WG_PP_ID_CAT(captured_values_type, function_name))
 
-#define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN_IMPL(symbtbl) \
+#define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPEDCLN_IMPL( \
+  symbtbl, function_name) \
     typedef WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPE(symbtbl) \
-      WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME() ;
+      WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME(function_name) ;
 
 #define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPE(symbtbl) \
   boost::tuple \
   < \
     WG_PP_SEQ_ENUM( \
       WG_PP_SEQ_JOIN_ARG2( \
-        WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_BOUNDVAR(symbtbl), \
-        WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_SETVAR(symbtbl) )) \
+        WG_PP_LCLFUNCTION_CGUTILS_TYPESEQ_TO_CAPTUREDTYPESEQ( \
+          WG_PP_LCLFUNCTION_SYMBOLTABLE_ISTPL(symbtbl), \
+          WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_BOUNDVAR(symbtbl)), \
+        WG_PP_LCLFUNCTION_CGUTILS_TYPESEQ_TO_CAPTUREDTYPESEQ( \
+          WG_PP_LCLFUNCTION_SYMBOLTABLE_ISTPL(symbtbl), \
+          WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_SETVAR(symbtbl)) )) \
   >
 
 #define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN( \
@@ -145,34 +196,31 @@
     WG_PP_SEQ_NOTHING_FOR_EACH_I( \
       WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN_ENTRY, \
       ( WG_PP_LCLFUNCTION_SYMBOLTABLE_ISTPL(symbtbl) ) \
-        (captured_values_typename)(captured_values_objname), \
+      ( captured_values_objname ) \
+      ( WG_PP_SEQ_JOIN_ARG2( \
+          WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_BOUNDVAR(symbtbl), \
+          WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_SETVAR(symbtbl) ) ) , \
       WG_PP_SEQ_JOIN_ARG2( \
         WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_BOUNDVAR(symbtbl), \
         WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_SETVAR(symbtbl) ) )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN_ENTRY( \
-  r, istpl_cvtype_cvobj, indx, varname) \
-    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(BOOST_PP_SEQ_ELEM(0, istpl_cvtype_cvobj)) \
+  r, istpl_cvobj_vartypeseq, indx, varname) \
+    WG_PP_TRNSLTR_UTILS_ADDTYPENAME( \
+      BOOST_PP_SEQ_ELEM(0, istpl_cvobj_vartypeseq)) \
     boost::add_reference \
     < \
-      WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_TUPLEELEMENTTYPE( \
-        BOOST_PP_SEQ_ELEM(0, istpl_cvtype_cvobj), \
-        indx, \
-        BOOST_PP_SEQ_ELEM(1, istpl_cvtype_cvobj)) \
+      WG_PP_PARSEDTYPE_EXTRACTCPPTYPE( \
+        BOOST_PP_SEQ_ELEM(indx, BOOST_PP_SEQ_ELEM(2, istpl_cvobj_vartypeseq)) ) \
     >::type \
     varname \
       ( \
         WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_TUPLEELEMENTACCESS( \
-          BOOST_PP_SEQ_ELEM(0, istpl_cvtype_cvobj), \
-          BOOST_PP_SEQ_ELEM(2, istpl_cvtype_cvobj), \
+          BOOST_PP_SEQ_ELEM(0, istpl_cvobj_vartypeseq), \
+          BOOST_PP_SEQ_ELEM(1, istpl_cvobj_vartypeseq), \
           indx) \
       ) ;
-
-#define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_TUPLEELEMENTTYPE( \
-  istpl, indx, tupletype) \
-    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-    boost::tuples::element < indx, tupletype >::type
 
 #define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_TUPLEELEMENTACCESS( \
   istpl, cvobj, indx) \
@@ -222,15 +270,17 @@
 //GlobalFunctor
 //-------------
 
-#define  WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME_IMPL() \
-  WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE(global_functor_type)
+#define  WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME_IMPL(function_name) \
+  WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE( \
+    WG_PP_ID_CAT(global_functor_type, function_name))
 
-#define WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTOROBJ_DCLN_IMPL(symbtbl, objname) \
-  WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME() objname \
+#define WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTOROBJ_DCLN_IMPL( \
+  symbtbl, function_name) \
+  WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME(function_name) function_name \
   /* Note: double parenthesis around ctor param to prevent most vexing parse */ \
   /* error. */ \
   (( \
-    WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME() \
+    WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME(function_name) \
     ( \
       WG_PP_SEQ_ENUM( \
         WG_PP_SEQ_JOIN_ARG2( \

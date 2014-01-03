@@ -22,6 +22,7 @@ noinst_PROGRAMS = \
     test_lclfunction_cpp11 \
     test_lclfunction_codegenspec_cpp03 \
     test_lclfunction_codegenspec_cpp11 \
+    test_lclclass \
     test_pp_lclcontext_keywords
 
 # Don't auto build test_autofunctor_cf_* since they're compile-failure tests.
@@ -39,6 +40,12 @@ TEST_WG_AUTOFUNCTOR_APPALTPATH = \
     $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTOR_APPNAME)
 TEST_WG_AUTOFUNCTOR_APPBUILDLOC = \
     $(abs_builddir)/$(TEST_WG_AUTOFUNCTOR_APPNAME)
+
+TEST_WG_LCLCLASS_APPNAME = test_lclclass$(EXEEXT)
+TEST_WG_LCLCLASS_APPALTPATH = \
+    $(TEST_BIN_DIR)/$(TEST_WG_LCLCLASS_APPNAME)
+TEST_WG_LCLCLASS_APPBUILDLOC = \
+    $(abs_builddir)/$(TEST_WG_LCLCLASS_APPNAME)
 
 TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPNAME = \
     test_lclfunction_codegenspec_cpp03$(EXEEXT)
@@ -71,11 +78,12 @@ TEST_WG_LCLFUNCTION_CPP11_APPBUILDLOC = \
 #Custom init.
 all-local : \
     $(TEST_BIN_DIR) \
+    $(TEST_WG_LCLCLASS_APPALTPATH) \
     $(TEST_WG_AUTOFUNCTOR_APPALTPATH) \
     $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPALTPATH) \
     $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP11_APPALTPATH) \
-    $(TEST_WG_LCLFUNCTION_CPP03_APPNAME) \
-    $(TEST_WG_LCLFUNCTION_CPP11_APPNAME)
+    $(TEST_WG_LCLFUNCTION_CPP03_APPALTPATH) \
+    $(TEST_WG_LCLFUNCTION_CPP11_APPALTPATH)
     
 $(TEST_BIN_DIR) :
 	$(MKDIR_P) $(TEST_BIN_DIR)
@@ -85,6 +93,12 @@ $(TEST_WG_AUTOFUNCTOR_APPALTPATH) : $(TEST_WG_AUTOFUNCTOR_APPBUILDLOC)
       $(LN_S) -f \
           $(TEST_WG_AUTOFUNCTOR_APPBUILDLOC) \
           $(TEST_WG_AUTOFUNCTOR_APPNAME); )
+
+$(TEST_WG_LCLCLASS_APPALTPATH) : $(TEST_WG_LCLCLASS_APPBUILDLOC)
+	( cd $(TEST_BIN_DIR); \
+      $(LN_S) -f \
+          $(TEST_WG_LCLCLASS_APPBUILDLOC) \
+          $(TEST_WG_LCLCLASS_APPNAME); )
 
 $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPALTPATH) : $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPBUILDLOC)
 	( cd $(TEST_BIN_DIR); \
@@ -113,6 +127,7 @@ $(TEST_WG_LCLFUNCTION_CPP11_APPALTPATH) : $(TEST_WG_LCLFUNCTION_CPP11_APPBUILDLO
 #Custom finalize.
 clean-local : \
     rm -rf $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTOR_APPNAME) \
+    rm -rf $(TEST_BIN_DIR)/$(TEST_WG_LCLCLASS_APPNAME) \
     rm -rf $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPNAME) \
     rm -rf $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP11_APPNAME) \
     rm -rf $(TEST_WG_LCLFUNCTION_CPP03_APPNAME) \
@@ -125,6 +140,7 @@ clean-local : \
 # Don't add test_autofunctor_cf_* to TESTS since they're compile-failure tests.
 TESTS = \
     $(TEST_WG_AUTOFUNCTOR_APPNAME) \
+    $(TEST_WG_LCLCLASS_APPNAME) \
     $(TEST_WG_LCLFUNCTION_CPP03_APPNAME) \
     $(TEST_WG_LCLFUNCTION_CPP11_APPNAME)
 
@@ -211,8 +227,37 @@ test_autofunctor_SOURCES = \
     ../AutoFunctor/SelfType.cc \
     ../AutoFunctor/SelfTypeTpl.cc
 
+test_lclclass_SOURCES = \
+    ../LclClass/TestMain.cc \
+    ../LclClass/Derives.cc \
+    ../LclClass/DerivesTpl.cc \
+    ../LclClass/MemExtExplicit.cc \
+    ../LclClass/MemExtExplicitTpl.cc \
+    ../LclClass/MemExtImplicit.cc \
+    ../LclClass/MemExtImplicitTpl.cc \
+    ../LclClass/MemExtExplicitAndImplicit.cc \
+    ../LclClass/MemExtExplicitAndImplicitTpl.cc \
+    ../LclClass/MemIntExplicit.cc \
+    ../LclClass/MemIntExplicitTpl.cc \
+    ../LclClass/MemIntImplicit.cc \
+    ../LclClass/MemIntImplicitTpl.cc \
+    ../LclClass/MemIntExplicitAndImplicit.cc \
+    ../LclClass/MemIntExplicitAndImplicitTpl.cc \
+    ../LclClass/MemExtAndMemInt.cc \
+    ../LclClass/MemExtAndMemIntTpl.cc \
+    ../LclClass/AllCombo.cc \
+    ../LclClass/AllComboTpl.cc \
+    ../LclClass/InitHook.cc \
+    ../LclClass/InitHookTpl.cc \
+    ../LclClass/Nested.cc \
+    ../LclClass/NestedTpl.cc \
+    ../LclClass/MultipleUseInSameMacro.cc \
+    ../LclClass/MultipleUseInSameMacroTpl.cc
+
 LCLFUNCTION_SRC = \
     ../LclFunction/TestMain.cc \
+    ../LclFunction/Arrays.cc \
+    ../LclFunction/ArraysTpl.cc \
     ../LclFunction/AllCombo.cc \
     ../LclFunction/AllComboTpl.cc \
     ../LclFunction/AsTemplateParameterArg.cc \
@@ -250,7 +295,9 @@ LCLFUNCTION_SRC = \
     ../LclFunction/Recursive.cc \
     ../LclFunction/RecursiveTpl.cc \
     ../LclFunction/StandardTypenames.cc \
-    ../LclFunction/StandardTypenamesTpl.cc
+    ../LclFunction/StandardTypenamesTpl.cc \
+    ../LclFunction/MultipleUseInSameMacro.cc \
+    ../LclFunction/MultipleUseInSameMacroTpl.cc
 
 test_lclfunction_cpp03_SOURCES = $(LCLFUNCTION_SRC)
 test_lclfunction_cpp11_SOURCES = $(LCLFUNCTION_SRC)
@@ -267,7 +314,14 @@ EXTRA_DIST =
 #Preprocessor Flags.
 ####################
 
+AM_CPPFLAGS += \
+    -ftrack-macro-expansion=0
+
 test_autofunctor_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
+    $(GTEST_CPPFLAGS)
+
+test_lclclass_CPPFLAGS = \
     $(AM_CPPFLAGS) \
     $(GTEST_CPPFLAGS)
 
@@ -292,10 +346,14 @@ test_lclfunction_codegenspec_cpp11_CPPFLAGS = \
 ################
 
 AM_CXXFLAGS += \
-    -pedantic
+    -pedantic \
+    -Wno-unused-local-typedefs
 
 test_autofunctor_CXXFLAGS = \
-    -pedantic
+    $(AM_CXXFLAGS)
+
+test_lclclass_CXXFLAGS = \
+    $(AM_CXXFLAGS)
 
 test_lclfunction_cpp03_CXXFLAGS = \
     $(AM_CXXFLAGS) \
@@ -321,6 +379,7 @@ GTEST_LTLIB = \
     $(top_builddir)/WG/ExternalLibsNoInstall/build_autotools/libgtest.la
 
 test_autofunctor_LDADD = $(GTEST_LTLIB)
+test_lclclass_LDADD = $(GTEST_LTLIB)
 test_lclfunction_cpp03_LDADD = $(GTEST_LTLIB)
 test_lclfunction_cpp11_LDADD = $(GTEST_LTLIB)
 test_lclfunction_codegenspec_cpp03_LDADD = $(GTEST_LTLIB)

@@ -2,6 +2,7 @@
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
 #include <boost/function.hpp>
+#include <WG/Local/Tests/TestHelper.hh>
 
 TEST(wg_lclfunction_boost_function, OkIfCopyAssigned)
 {
@@ -9,8 +10,13 @@ TEST(wg_lclfunction_boost_function, OkIfCopyAssigned)
   {
     WG_LCLFUNCTION(square, return (int) params ((int) x) )
     {
+      WG_TESTHELPER_ASSERT_ISNOTCONST(x);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, x);
+
       return x * x;
     }WG_LCLFUNCTION_END;
+
+    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, square(3));
 
     boost::function<int(int)> f = square;
 
@@ -25,8 +31,13 @@ TEST(wg_lclfunction_boost_function, OkayIfConstRefAssigned)
   {
     WG_LCLFUNCTION(square, return (int) params ((int) x) )
     {
+      WG_TESTHELPER_ASSERT_ISNOTCONST(x);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, x);
+
       return x * x;
     }WG_LCLFUNCTION_END;
+
+    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, square(3));
 
     boost::function<int(int)> f = boost::cref(square);
 
@@ -44,8 +55,13 @@ struct OkIfReturnedFromFunction
   {
     WG_LCLFUNCTION(square, return(int) params((int) x) )
     {
+      WG_TESTHELPER_ASSERT_ISNOTCONST(x);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, x);
+
       return x * x;
     }WG_LCLFUNCTION_END;
+
+    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, square(3));
 
     return square;
   }

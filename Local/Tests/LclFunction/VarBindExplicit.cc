@@ -1,8 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <utility>
-#include <boost/typeof/typeof.hpp>
+#include <boost/tuple/tuple.hpp>
 #include <WG/Local/Tests/TestHelper.hh>
 
 TEST(wg_lclfunction_varbindexplicit, EnsureTypeOfNotUsed)
@@ -13,9 +12,10 @@ TEST(wg_lclfunction_varbindexplicit, EnsureTypeOfNotUsed)
 
     WG_LCLFUNCTION(bindByDiffType, varbind ((int const) value) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int const, BOOST_TYPEOF(value) const);
-        EXPECT_EQ(1, value);
+      WG_TESTHELPER_ASSERT_ISCONST(value);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, value);
+
+      EXPECT_EQ(1, value);
     }WG_LCLFUNCTION_END;
 
     bindByDiffType();
@@ -31,8 +31,8 @@ TEST(wg_lclfunction_varbindexplicit, OkIf1VarBound)
 
     WG_LCLFUNCTION(check, varbind ((bool &) didBind) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        bool &, BOOST_TYPEOF(didBind) &);
+      WG_TESTHELPER_ASSERT_ISNOTCONST(didBind);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, didBind);
 
       didBind = true;
     }WG_LCLFUNCTION_END;
@@ -44,24 +44,24 @@ TEST(wg_lclfunction_varbindexplicit, OkIf1VarBound)
   WG_GTEST_CATCH
 }
 
-TEST(wg_lclfunction_varbindexplicit, OkIfPPEscaped1VarBound)
+TEST(wg_lclfunction_varbindexplicit, OkIfGloballyScoped1VarBound)
 {
   try
   {
-    std::pair<bool, int> didBind = std::make_pair(false, 0);
+    ::boost::tuple<bool> didBind = ::boost::make_tuple(false);
 
-    WG_LCLFUNCTION(check, varbind (ppescape((std::pair<bool, int> &)) didBind) )
+    WG_LCLFUNCTION(check, varbind ((::boost::tuple<bool> &) didBind) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        BOOST_IDENTITY_TYPE((std::pair<bool, int> &)),
-        BOOST_TYPEOF(didBind) &);
+      WG_TESTHELPER_ASSERT_ISNOTCONST(didBind);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+        ::boost::tuple<bool>, didBind);
 
-      didBind.first = true;
+      didBind.get<0>() = true;
     }WG_LCLFUNCTION_END;
 
     check();
 
-    EXPECT_TRUE(didBind.first);
+    EXPECT_TRUE(didBind.get<0>());
   }
   WG_GTEST_CATCH
 }
@@ -78,12 +78,13 @@ TEST(wg_lclfunction_varbindexplicit, OkIf3VarsOfVaryingMutabilityBound)
     (calculateForce,
       varbind ((int &) force) ((int const) mass) ((int const) velocity) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int &, BOOST_TYPEOF(force) &);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int const, BOOST_TYPEOF(mass) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
-        int const, BOOST_TYPEOF(velocity) const);
+      WG_TESTHELPER_ASSERT_ISNOTCONST(force);
+      WG_TESTHELPER_ASSERT_ISCONST(mass);
+      WG_TESTHELPER_ASSERT_ISCONST(velocity);
+
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, force);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, mass);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, velocity);
 
       force = mass * velocity;
     }
@@ -109,6 +110,10 @@ struct OkIfKeywordThisUBound
     WG_LCLFUNCTION
     (bindThisU, varbind ((OkIfKeywordThisUBound * const) this_) )
     {
+      WG_TESTHELPER_ASSERT_ISCONST(this_);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+        OkIfKeywordThisUBound *, this_);
+
       this_->didBindThis = true;
     }
     WG_LCLFUNCTION_END;

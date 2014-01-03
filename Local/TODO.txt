@@ -8,14 +8,17 @@ x) Better Syntax Error Checking/Reporting:
   missing type in implicit-type-var-dcln ?
   missing var in "..." ?
 
-x) Embedded comma syntax.
-  x) Test (std::pair<foo, bar>)
-  x) Test ppescape.
-
 Tests: tpl -> _tpl
 
 Misc.
 -----
+Why not BOOST_IDENTITY_TYPE_TPL?
+
+LocalOperandsSyntaxCheck tests.
+ErrorReporting tests.
+Error -> WG_LCL_ERROR ?
+x) WG_PP_TYPEALIASER_DCLN -> just do implicit.
+x) WG_PP_ERROR -> WG_PP_MARKER_ERROR
 
 NOT/AND/OR to their bit counter parts.
 
@@ -24,14 +27,18 @@ ExpandN:
   AUTOFUNCTOR -> ...
 
 LclFunction:
-  x) compile fail tests for wrong number of operands to function, ie lin().
-  x) add C++11Spec.cc to Makefile.am
-  x) Spec -> params do ppescape processing
-  x) take care of WG_PP_DEDUCEDTYPE
-  x) update spec for varbind/varset, see AutoFunctorSpec.txt
-  x) remove local_function_type_dcln
-  x) what does const local function obj mean -> nothing
-  x) tests uniform naming scheme.
+  modified call traits.
+  Binder: local namespace to lclfunction namespace?
+  x) Multiple in same macro.
 
-Why not BOOST_IDENTITY_TYPE_TPL?
- 
+LclClass:
+  WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE -> call_traits
+  remove WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE
+  remove WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE
+  remove any misc from TypeExtractor.hh
+  
+  Tests:
+    x) init is called.
+    x) Nested
+    x) Multiple in same scope.
+    x) Multiple in same macro.

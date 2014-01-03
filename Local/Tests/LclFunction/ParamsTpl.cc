@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <utility>
+#include <boost/tuple/tuple.hpp>
+#include <WG/Local/Tests/TestHelper.hh>
 
 namespace
 {
@@ -12,8 +13,11 @@ struct OkIf1ArgPassedByValue
   {
     T value = 10;
 
-    WG_LCLFUNCTION_TPL(checkValue, params ((int) value) )
+    WG_LCLFUNCTION_TPL(checkValue, params ((T) value) )
     {
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(value);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, value);
+
       ++value;
       EXPECT_EQ(11, value);
     }WG_LCLFUNCTION_END;
@@ -43,6 +47,9 @@ struct OkIf1ArgPassedByRef
     T value = 10;
     WG_LCLFUNCTION_TPL(checkValue, params ((T &) value) )
     {
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(value);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, value);
+
       ++value;
       EXPECT_EQ(11, value);
     }WG_LCLFUNCTION_END;
@@ -74,6 +81,9 @@ struct OkIf1ArgPassedByConstRef
     (checkValue,
       params ((T const &) value) )
     {
+      WG_TESTHELPER_ASSERT_ISCONST_TPL(value);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, value);
+
       EXPECT_EQ(10, value);
     }WG_LCLFUNCTION_END;
 
@@ -92,30 +102,33 @@ TEST(wg_lclfunction_params_tpl, OkIf1ArgPassedByConstRef)
 
 namespace
 {
-template <typename T1, typename T2>
-struct OkIfPPEscaped1ArgUsed
+template <typename T1>
+struct OkIfGloballyScoped1ArgUsed
 {
   static void run()
   {
-    std::pair<T1, T2> wasCalled = std::make_pair(false, 0);
+    ::boost::tuple<T1> wasCalled = ::boost::make_tuple(false);
 
     WG_LCLFUNCTION_TPL
     (checkValue,
-      params (ppescape((std::pair<T1,T2>)) wasCalled) )
+      params ((::boost::tuple<T1>) wasCalled) )
     {
-      EXPECT_FALSE(wasCalled.first);
-      EXPECT_EQ(0, wasCalled.second);
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(wasCalled);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+        ::boost::tuple<T1>, wasCalled);
+
+      EXPECT_FALSE(wasCalled.template get<0>());
     }WG_LCLFUNCTION_END;
 
     checkValue(wasCalled);
   }
 };
 }
-TEST(wg_lclfunction_params_tpl, OkIfPPEscaped1ArgUsed)
+TEST(wg_lclfunction_params_tpl, OkIfGloballyScoped1ArgUsed)
 {
   try
   {
-    OkIfPPEscaped1ArgUsed<bool, int>::run();
+    OkIfGloballyScoped1ArgUsed<bool>::run();
   }
   WG_GTEST_CATCH
 }
@@ -135,6 +148,14 @@ struct OkIf3ArgsUsed
     (calculateForce,
       params ((T1 &) force) ((T2 const) mass) ((T3 const) velocity) )
     {
+      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(force);
+      WG_TESTHELPER_ASSERT_ISCONST_TPL(mass);
+      WG_TESTHELPER_ASSERT_ISCONST_TPL(velocity);
+
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, force);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, mass);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, velocity);
+
       force = mass * velocity;
     }WG_LCLFUNCTION_END;
 

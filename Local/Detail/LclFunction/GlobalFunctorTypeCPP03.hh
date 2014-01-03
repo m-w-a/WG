@@ -45,7 +45,7 @@ WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_DCLNS()
 // NOTE:
 //   USERCALLBACK method type cannot be passed as a template parameter to
 //   this class because its signature contains the type of this class as a
-//   parameter. Hence, it has to be construct using TMP techniques.
+//   parameter. Hence, it has to be constructed using TMP techniques.
 template<
   typename LCLFUNCTION_RETTYPE,
   typename LCLFUNCTION_PARAMTYPES,

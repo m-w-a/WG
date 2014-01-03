@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <utility>
+#include <boost/tuple/tuple.hpp>
+#include <WG/Local/Tests/TestHelper.hh>
 
 namespace
 {
@@ -18,6 +19,8 @@ struct OkIfReturnSpecified
       return true;
     }
     WG_LCLFUNCTION_END;
+
+    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, rettest());
 
     retval = rettest();
 
@@ -36,31 +39,34 @@ TEST(wg_lclfunction_returntpl, OkIfReturnSpecified)
 
 namespace
 {
-template <typename T1, typename T2>
-struct OkIfReturnPPEscaped
+template <typename T1>
+struct OkIfGloballyScopedReturn
 {
   static void run()
   {
-    std::pair<T1, T2> retval = std::make_pair(false, 0);
+    ::boost::tuple<T1> retval = ::boost::make_tuple(false);
 
     WG_LCLFUNCTION_TPL
-    (rettest, return (ppescape((std::pair<T1, T2>)) const) )
+    (rettest, return (::boost::tuple<T1> const) )
     {
-      return std::make_pair(true, 1);
+      return ::boost::make_tuple(true);
     }
     WG_LCLFUNCTION_END;
 
+    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      ::boost::tuple<T1>, rettest());
+
     retval = rettest();
 
-    EXPECT_TRUE(retval.first);
+    EXPECT_TRUE(retval.template get<0>());
   }
 };
 }
-TEST(wg_lclfunction_returntpl, OkIfReturnPPEscaped)
+TEST(wg_lclfunction_returntpl, OkIfGloballyScopedReturn)
 {
   try
   {
-    OkIfReturnPPEscaped<bool, int>::run();
+    OkIfGloballyScopedReturn<bool>::run();
   }
   WG_GTEST_CATCH
 }

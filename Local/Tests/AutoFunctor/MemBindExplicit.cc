@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
-#include <utility>
+#include <boost/tuple/tuple.hpp>
 
 TEST(wg_autofunctor_membindexplicit, EnsureTypeOfNotUsed)
 {
@@ -35,21 +35,21 @@ TEST(wg_autofunctor_membindexplicit, OkIf1ArgBound)
   WG_GTEST_CATCH
 }
 
-TEST(wg_autofunctor_membindexplicit, OkIfPPEscaped1ArgBound)
+TEST(wg_autofunctor_membindexplicit, OkIfGloballyScoped1ArgBound)
 {
   try
   {
-    std::pair<bool, int> didArgumentBind = std::make_pair(false, 0);
+    ::boost::tuple<bool> didArgumentBind = ::boost::make_tuple(false);
 
     WG_AUTOFUNCTOR
     (oneArgAutoFunctor,
-      membind (ppescape((std::pair<bool, int> &)) didArgumentBind) )
+      membind ((::boost::tuple<bool> &) didArgumentBind) )
     {
-      this->didArgumentBind = std::make_pair(true, 1);
+      this->didArgumentBind = ::boost::make_tuple(true);
     }
     WG_AUTOFUNCTOR_END;
 
-    EXPECT_TRUE(didArgumentBind.first);
+    EXPECT_TRUE(didArgumentBind.get<0>());
   }
   WG_GTEST_CATCH
 }
