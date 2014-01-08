@@ -1,9 +1,0 @@
-derives := base-specifier-seq
-
-base-specifier-seq :=
-    base-specifier-tuple
-  | base-specifier-seq base-specifier-tuple
-
-base-specifier-tuple := ( base-specifier )
-
-base-specifier := As defined in the C++ standard.
