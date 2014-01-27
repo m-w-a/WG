@@ -35,31 +35,14 @@
 // parsedtype: parsed-explicit-or-deduced-type
 // Result:
 //   1) if type non-local: boost::call_traits<extracted-type>::type
-//   2) else, "extracted-local-type const &"
+//   2) else:
+//     1) if C++03: "extracted-local-type const &", else:
+//     2) boost::call_traits<extracted-type>::type
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE( \
  parsedtype, istpl) \
    WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE_IMPL(parsedtype, istpl)
-
-// parsedtype: parsed-explicit-or-deduced-type
-// Result:
-//   a cpp type that has the emulated metafunction add_reference applied to it
-//
-// (For definition of terms see SymbolTable documentation.)
-#define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE(parsedtype, istpl) \
-  WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE_IMPL(parsedtype, istpl)
-
-// parsedtype: parsed-explicit-or-deduced-type
-// Result:
-//   a cpp type that has the emulated metafunction add_const followed by the
-//   emulated metafunction add_reference applied to it
-//
-// (For definition of terms see SymbolTable documentation.)
-#define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE( \
-  parsedtype, istpl) \
-    WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE_IMPL( \
-      parsedtype, istpl)
 
 //###########
 //Impl Macros
@@ -74,27 +57,6 @@
     WG_PP_KEYWORDS_STARTSWITH_LOCAL(parsedtype), \
     1, \
     0)
-
-#define WG_PP_PARSEDTYPE_NONLOCALTYPE_ADDCONST(parsedtype, istpl) \
-  WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-  boost::add_const<WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_NONLOCAL(parsedtype)>::type
-
-#define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE_NONLOCAL( \
-  parsedtype, istpl) \
-    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_reference \
-    < \
-      WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_NONLOCAL(parsedtype) \
-    >::type
-
-#define WG_PP_PARSEDTYPE_NONLOCALTYPE_ADDCONSTADDREFERENCE( \
-  parsedtype, istpl) \
-    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_reference \
-    < \
-      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_const \
-      < \
-        WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_NONLOCAL(parsedtype) \
-      >::type \
-    >::type
 
 // elem: 0 or 1.
 // Result:
@@ -140,31 +102,6 @@
 #define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_LOCAL_ref &
 #define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_LOCAL_constref const &
 
-//------------------------------------------------
-//WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE
-//------------------------------------------------
-
-#define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE_IMPL( \
-  parsedtype, istpl) \
-    BOOST_PP_IIF( \
-      WG_PP_PARSEDTYPE_ISLOCALTYPE(parsedtype), \
-      WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE_LOCAL, \
-      WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE_NONLOCAL) \
-    (parsedtype, istpl)
-
-#define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE_LOCAL( \
-  parsedtype, istpl) \
-    WG_PP_PARSEDTYPE_LOCALTYPE_PARSE(parsedtype, 0) \
-    BOOST_PP_CAT( \
-      WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE_LOCAL, \
-      BOOST_PP_SEQ_CAT( \
-        (_) WG_PP_PARSEDTYPE_LOCALTYPE_PARSE(parsedtype, 1)) )
-
-#define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE_LOCAL_ &
-#define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE_LOCAL_const const &
-#define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE_LOCAL_ref &
-#define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE_LOCAL_constref const &
-
 //------------------------------------------------------
 //WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE
 //------------------------------------------------------
@@ -173,7 +110,7 @@
   parsedtype, istpl) \
     BOOST_PP_IIF( \
       WG_PP_PARSEDTYPE_ISLOCALTYPE(parsedtype), \
-      WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE_LOCAL, \
+      WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE_LOCAL, \
       WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE_NONLOCAL) \
     (parsedtype, istpl)
 
@@ -185,16 +122,19 @@
       WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_NONLOCAL(parsedtype) \
     >::param_type
 
-//--------------------------------------------------------
-//WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE
-//--------------------------------------------------------
-
-#define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE_IMPL( \
-  parsedtype, istpl) \
-    BOOST_PP_IIF( \
-      WG_PP_PARSEDTYPE_ISLOCALTYPE(parsedtype), \
-      WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE_LOCAL, \
-      WG_PP_PARSEDTYPE_NONLOCALTYPE_ADDCONSTADDREFERENCE) (parsedtype, istpl)
+#ifdef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+  #define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE_LOCAL( \
+    parsedtype, istpl) \
+      WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE_LOCAL( \
+        parsedtype, istpl)
+#else
+  #define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE_LOCAL( \
+    parsedtype, istpl) \
+      WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE_NONLOCAL( \
+        /* Put arg into correct form by mimicking non-local type. */ \
+        type( WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_LOCAL(parsedtype) ), \
+        istpl)
+#endif
 
 #define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE_LOCAL( \
   parsedtype, istpl) \

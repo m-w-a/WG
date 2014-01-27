@@ -14,7 +14,8 @@ noinst_PROGRAMS = \
     test_pp_trnsltr_vardcln \
     test_pp_trnsltr_vardcln_implicit \
     test_pp_trnsltr_vardcln_explicit \
-    test_pp_trnsltr_parsedtype \
+    test_pp_trnsltr_parsedtype_cpp03 \
+    test_pp_trnsltr_parsedtype_cpp11 \
     test_autofunctor \
     test_autofunctor_errorreporting_invalidnamedparameters \
     test_autofunctor_errorreporting_refthisu \
@@ -152,7 +153,8 @@ test_pp_trnsltr_markers_SOURCES = ../../Detail/PP/Translator/Tests/MarkersUnitTe
 test_pp_trnsltr_vardcln_SOURCES = ../../Detail/PP/Translator/FrontEnd/VarDclns/Tests/VarDclnUnitTest.cc
 test_pp_trnsltr_vardcln_implicit_SOURCES = ../../Detail/PP/Translator/FrontEnd/VarDclns/Tests/VarDclnImplicitUnitTest.cc
 test_pp_trnsltr_vardcln_explicit_SOURCES = ../../Detail/PP/Translator/FrontEnd/VarDclns/Tests/VarDclnExplicitUnitTest.cc
-test_pp_trnsltr_parsedtype_SOURCES = ../../Detail/PP/Translator/BackEnd/Tests/TypeExtractorUnitTest.cc
+test_pp_trnsltr_parsedtype_cpp03_SOURCES = ../../Detail/PP/Translator/BackEnd/Tests/TypeExtractorUnitTest.cc
+test_pp_trnsltr_parsedtype_cpp11_SOURCES = ../../Detail/PP/Translator/BackEnd/Tests/TypeExtractorUnitTest.cc
 test_autofunctor_errorreporting_invalidnamedparameters_SOURCES = \
     ../../Tests/AutoFunctor/ErrorReporting/InvalidNamedParameters.cc
 test_autofunctor_errorreporting_refthisu_SOURCES = \
@@ -344,6 +346,9 @@ test_lclfunction_codegenspec_cpp11_CPPFLAGS = \
 ################
 #Compiler Flags.
 ################
+
+test_pp_trnsltr_parsedtype_cpp11_CXXFLAGS = \
+    -std=gnu++11
 
 AM_CXXFLAGS += \
     -pedantic \

@@ -8,15 +8,17 @@ x) Better Syntax Error Checking/Reporting:
   missing type in implicit-type-var-dcln ?
   missing var in "..." ?
 
-Tests: tpl -> _tpl
+x) Tests: tpl -> _tpl
 
 Misc.
 -----
 Why not BOOST_IDENTITY_TYPE_TPL?
 
+Breakup Keywords.
+
 LocalOperandsSyntaxCheck tests.
 ErrorReporting tests.
-Error -> WG_LCL_ERROR ?
+ERROR_ -> WG_LCL_ERROR_ ?
 x) WG_PP_TYPEALIASER_DCLN -> just do implicit.
 x) WG_PP_ERROR -> WG_PP_MARKER_ERROR
 
