@@ -10,6 +10,8 @@ int main()
 "WG_LCLCONTEXT( with(cntxtmngr1) as(enter_result_obj1) )" should expand to:
 
 {
+  LOCALOPERANDSYNTAXCHECKER ...
+
   TYPEALIASOR(contxtmngrS)
   TYPEALIASOR(enter_result_objS)
   Managers

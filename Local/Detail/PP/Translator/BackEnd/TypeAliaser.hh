@@ -24,7 +24,10 @@
 // symbtbl:
 //   must have the following defined:
 //     1) WG_PP_STUTIL_CALL_F2(TYPESEQ, <suffix>, symbtbl, symbtbl)
-//   where suffix is declared in specseq.
+//
+//  Where suffix is declared in specseq, and the macro itself expands to a
+//  WG_PP_SEQ of parsed-explicit-or-deduced-typeS as defined in any
+//  SymbolTable.hh
 //
 // specseq:
 //   { ( (suffix)(aliasrootname) ) }+
@@ -36,9 +39,11 @@
 #define WG_PP_TYPEALIASER_DCLN(typealiasername, symbtbl, specseq) \
   WG_PP_TYPEALIASER_DCLN_IMPL(typealiasername, symbtbl, specseq)
 
-// WG_PP_STUTIL_REPLACESEQ callback.
+// This macro is a WG_PP_STUTIL_REPLACESEQ callback.
 // typeseq:
 //    A WG_PP_SEQ.
+// iteration:
+//   See WG_PP_STUTIL_REPLACESEQ::callback
 // specseq:
 //   See WG_PP_TYPEALIASER_DCLN.
 #define WG_PP_TYPEALIASER_REPLACEDEDUCEDTYPESEQ( \
