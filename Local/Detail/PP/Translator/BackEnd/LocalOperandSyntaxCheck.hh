@@ -20,18 +20,23 @@
 //
 // symbtbl:
 //   must have the following defined:
-//     1) WG_PP_STUTIL_CALL_F2(TYPESEQ, <suffix>, symbtbl, symbtbl)
-//     2) WG_PP_STUTIL_CALL_F2(OBJSEQ, <suffix>, symbtbl, symbtbl)
+//     1) WG_PP_STUTIL_CALL_F2(DCLNS, suffix, symbtbl, symbtbl)
 //   where suffix is declared in specseq.
 //
 // specseq:
-//   { ( (suffix)(varrootname) ) }+
+//   { ( (suffix)(varrootname)(gettypemacro)(getobjmacro) ) }+
 //
 //   suffix:
 //     The class of variables that if are locally typed then should be syntax
 //     checked.
 //   varrootname:
 //     The root name of the variables to be used in the syntax checker.
+//   gettypemacro:
+//     A one arg macro that when applied to an element of dclnseq expands to
+//     the type associated with that sequence.
+//   getobjmacro:
+//     A one arg macro that when applied to an element of dclnseq expands to
+//     the obj associated with that sequence.
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN(syntaxcheckername, symbtbl, specseq) \
   WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN_IMPL(syntaxcheckername, symbtbl, specseq)
 
@@ -49,6 +54,10 @@
   BOOST_PP_SEQ_ELEM(0, spec)
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_VARROOTNAME(spec) \
   BOOST_PP_SEQ_ELEM(1, spec)
+#define WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_GETTYPEMACRO(spec) \
+  BOOST_PP_SEQ_ELEM(2, spec)
+#define WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_GETOBJMACRO(spec) \
+  BOOST_PP_SEQ_ELEM(3, spec)
 
 //----------------------------------
 //WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN
@@ -91,36 +100,48 @@
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN(r, symbtbl, spec) \
   WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN2( \
     WG_PP_STUTIL_CALL_F2( \
-      TYPESEQ, WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec), symbtbl, symbtbl), \
-    WG_PP_STUTIL_CALL_F2( \
-      OBJSEQ, WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec), symbtbl, symbtbl), \
-    WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_VARROOTNAME(spec))
+      DCLNS, WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec), symbtbl, symbtbl), \
+    WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_VARROOTNAME(spec), \
+    WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_GETTYPEMACRO(spec), \
+    WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_GETOBJMACRO(spec) )
 
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN2( \
-  typeseq, objseq, varrootname) \
+  dclnseq, gettypemacro, getobjmacro, varrootname) \
     WG_PP_SEQ_NOTHING_FOR_EACH_I( \
       WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN, \
-      (varrootname)(objseq), \
-      typeseq )
+      (varrootname)(gettypemacro)(getobjmacro), \
+      dclnseq )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN( \
-  r, varrootname_objseq, indx, type) \
-    BOOST_PP_IIF( \
-      WG_PP_KEYWORDS_STARTSWITH_LOCAL(type), \
-      WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN2, \
-      WG_PP_MAPTO_NOTHING_ARG3) (varrootname_objseq, indx, type)
+  r, varrootname_gettypemacro_getobjmacro, indx, dcln) \
+    WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN2( \
+      BOOST_PP_SEQ_ELEM(0, varrootname_gettypemacro_getobjmacro), \
+      BOOST_PP_SEQ_ELEM(1, varrootname_gettypemacro_getobjmacro), \
+      BOOST_PP_SEQ_ELEM(2, varrootname_gettypemacro_getobjmacro), \
+      indx, \
+      dcln)
 
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN2( \
-  varrootname_objseq, indx, type) \
-    WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN3( \
-      WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND(type), \
-      BOOST_PP_SEQ_ELEM( \
-        indx, BOOST_PP_SEQ_ELEM(1, varrootname_objseq)), \
-      BOOST_PP_SEQ_ELEM(0, varrootname_objseq), \
-      indx)
+  varrootname, gettypemacro, getobjmacro, indx, dcln)
+    BOOST_PP_IIF( \
+      WG_PP_KEYWORDS_STARTSWITH_LOCAL( gettypemacro(dcln) ), \
+      WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN3, \
+      WG_PP_MAPTO_NOTHING_ARG5) \
+    (varrootname, gettypemacro, getobjmacro, indx, dcln)
 
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN3( \
+  varrootname, gettypemacro, getobjmacro, indx, dcln) \
+    WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN4( \
+      /* NOTE: we're only interested in the operand of the local specifier.*/ \
+      /* This is because we want to test that no const or & appears alongside*/ \
+      /* that operand*/ \
+      WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND( gettypemacro(dcln) ), \
+      getobjmacro(dcln), \
+      varrootname, \
+      indx)
+
+#define WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN4( \
   localtype, objname, varrootname, indx) \
     ( \
       typedef \
