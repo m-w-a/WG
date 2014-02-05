@@ -37,70 +37,42 @@
 //Public APIs
 //###########
 
-// Expands to a sequence of all the types in the order in which they declared
-// in nrmlzd_bound_tuple_seq.
+// Expands to { BOOST_PP_NIL | { (normalized-bound-tuple) }+ }
 //
 // nrmlzd_bound_tuple_seq:
-//   {normalized-bound-tuple}+
+//  { BOOST_PP_NIL | {normalized-bound-tuple}+ }
 //
 // (For definition of terms see SymbolTable documentation.)
-#define WG_PP_STUTIL_BOUNDTUPLESEQ_TO_TYPESEQ(nrmlzd_bound_tuple_seq) \
-  WG_PP_STUTIL_BOUNDTUPLESEQ_TO_TYPESEQ_IMPL(nrmlzd_bound_tuple_seq)
+#define WG_PP_STUTIL_NRMLZDBOUNDTUPLESEQ_TO_BOUNDDCLNSEQ( \
+  nrmlzd_bound_tuple_seq) \
+    WG_PP_STUTIL_NRMLZDBOUNDTUPLESEQ_TO_BOUNDDCLNSEQ_IMPL(nrmlzd_bound_tuple_seq)
 
-// Expands to a sequence of all the objects in the order in which they declared
-// in nrmlzd_bound_tuple_seq.
-//
-// nrmlzd_bound_tuple_seq:
-//   {normalized-bound-tuple}+
-//
-// (For definition of terms see SymbolTable documentation.)
-#define WG_PP_STUTIL_BOUNDTUPLESEQ_TO_OBJSEQ(nrmlzd_bound_tuple_seq) \
-  WG_PP_STUTIL_BOUNDTUPLESEQ_TO_OBJSEQ_IMPL(nrmlzd_bound_tuple_seq)
-
-// Expands to a sequence of all the types in the order in which they declared
-// in nrmlzd_bound_tuple_seq.
+// Expands to { BOOST_PP_NIL | { (normalized-set-tuple) }+ }
 //
 // nrmlzd_set_tuple_seq:
-//   {normalized-set-tuple}+
+//   { BOOST_PP_NIL | {normalized-set-tuple}+ }
 //
 // (For definition of terms see SymbolTable documentation.)
-#define WG_PP_STUTIL_SETTUPLESEQ_TO_TYPESEQ(nrmlzd_set_tuple_seq) \
-  WG_PP_STUTIL_SETTUPLESEQ_TO_TYPESEQ_IMPL(nrmlzd_set_tuple_seq)
+#define WG_PP_STUTIL_NRMLZDSETTUPLESEQ_TO_SETDCLNSEQ(nrmlzd_set_tuple_seq) \
+  WG_PP_STUTIL_NRMLZDSETTUPLESEQ_TO_SETDCLNSEQ_IMPL(nrmlzd_set_tuple_seq)
 
-// Expands to a sequence of all the objects in the order in which they declared
-// in nrmlzd_bound_tuple_seq.
-//
-// nrmlzd_set_tuple_seq:
-//   {normalized-set-tuple}+
-//
-// (For definition of terms see SymbolTable documentation.)
-#define WG_PP_STUTIL_SETTUPLESEQ_TO_OBJSEQ(nrmlzd_set_tuple_seq) \
-  WG_PP_STUTIL_SETTUPLESEQ_TO_OBJSEQ_IMPL(nrmlzd_set_tuple_seq)
-
-// Expands to a sequence of all the value expressions in the order in which
-// they declared in nrmlzd_bound_tuple_seq.
-//
-// nrmlzd_set_tuple_seq:
-//   {normalized-set-tuple}+
-//
-// (For definition of terms see SymbolTable documentation.)
-#define WG_PP_STUTIL_SETTUPLESEQ_TO_VALUESEQ(nrmlzd_set_tuple_seq) \
-  WG_PP_STUTIL_SETTUPLESEQ_TO_VALUESEQ_IMPL(nrmlzd_set_tuple_seq)
-
-// bound_obj_seq:
-//   The expansion of WG_PP_STUTIL_BOUNDTUPLESEQ_TO_OBJSEQ.
+// decln_seq:
+//   Some sequence of dclnS that have associated objects.
+// decln_objmacro:
+//   A 1-arg macro that when applied to a decln expands to the obj associated
+//   with that macro.
 //
 // Returns: { BOOST_PP_NIL | integer }
-#define WG_PP_STUTIL_THISU_INDX(bound_obj_seq) \
-  WG_PP_STUTIL_THISU_INDX_IMPL1(bound_obj_seq)
+#define WG_PP_STUTIL_THISU_INDX(decln_seq, decln_objmacro) \
+  WG_PP_STUTIL_THISU_INDX_IMPL1(decln_seq, decln_objmacro)
 
 //------
 //INPUT:
 //------
 // The symbol table created using <symbol-moduleid>_SYMBOLTABLE_CREATE.
 // This symbol table must have the result of the following defined:
-//   1) WG_PP_STUTIL_CALL_F1(suffix, symbtbl, symbtbl)
-//   2) WG_PP_STUTIL_CALL_F1(INDX, symbtbl, suffix)
+//   1) WG_PP_STUTIL_CALL_F2(DCLNS, suffix, symbtbl, symbtbl)
+//   2) WG_PP_STUTIL_CALL_F1(INDX, symbtbl, WG_PP_UCAT_ARG2(DCLNS,suffix) )
 // where suffix is declared in specseq
 //
 // specseq:
@@ -108,10 +80,11 @@
 //
 // callback:
 //   A three argument macro to apply to the sequence(s) to be replaced.
-//   The first arg will be the sequence as specified by specseq.
+//   The first arg will be the sequence from the symbtbl that needs to be
+//   replaced, as specified by specseq.
 //   The second arg will be a zero-based index into specseq specifying which
-//   sequence was passed as the first arg.
-//   The third arg will be the user specified data.
+//   spec is being processed.
+//   The third arg will be some user specified data.
 //
 // data:
 //   An argument to callback.
@@ -121,7 +94,7 @@
 //-------
 // A symbol table where:
 //   1) The sequence associated with
-//     WG_PP_STUTIL_CALL_F1(suffix, symbtbl, symbtbl) is replaced by
+//     WG_PP_STUTIL_CALL_F2(DCLNS, suffix, symbtbl, symbtbl) is replaced by
 //     "callback(the-said-sequence, iteration, data)"
 //
 #define WG_PP_STUTIL_REPLACESEQ(symbtbl, specseq, callback, data) \
@@ -136,50 +109,40 @@
 //------------------------
 
 // WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_STUTIL_SEQUENCE_IF_INDEX(r, CONDITION, indx, elem) \
-  BOOST_PP_EXPR_IF( \
-    CONDITION(indx), \
-    BOOST_PP_LPAREN() elem BOOST_PP_RPAREN())
+#define WG_PP_STUTIL_TUPLIZE_NRMLZDBOUNDTUPLE(r, data, indx, elem) \
+  BOOST_PP_IIF(WG_PP_IS_EVEN(indx), BOOST_PP_LPAREN, BOOST_PP_EMPTY ) () \
+  ( elem ) \
+  BOOST_PP_IIF(WG_PP_IS_ODD(indx), BOOST_PP_RPAREN, BOOST_PP_EMPTY ) ()
 
-#define WG_PP_STUTIL_BOUNDTUPLESEQ_TO_TYPESEQ_IMPL(nrmlzd_bound_tuple_seq) \
-  WG_PP_SEQ_FOR_EACH_I( \
-    WG_PP_STUTIL_SEQUENCE_IF_INDEX, \
-    WG_PP_IS_EVEN, \
-    nrmlzd_bound_tuple_seq)
+#define WG_PP_STUTIL_NRMLZDBOUNDTUPLESEQ_TO_BOUNDDCLNSEQ_IMPL( \
+  nrmlzd_bound_tuple_seq) \
+    WG_PP_SEQ_FOR_EACH_I( \
+      WG_PP_STUTIL_TUPLIZE_NRMLZDBOUNDTUPLE, \
+      ~, \
+      nrmlzd_bound_tuple_seq)
 
-#define WG_PP_STUTIL_BOUNDTUPLESEQ_TO_OBJSEQ_IMPL(nrmlzd_bound_tuple_seq) \
-  WG_PP_SEQ_FOR_EACH_I( \
-    WG_PP_STUTIL_SEQUENCE_IF_INDEX, \
-    WG_PP_IS_ODD, \
-    nrmlzd_bound_tuple_seq)
+// WG_PP_SEQ_FOR_EACH_I functor.
+#define WG_PP_STUTIL_TUPLIZE_NRMLZDSETTUPLE(r, data, indx, elem) \
+  BOOST_PP_IIF(WG_PP_IS_MOD3_R0(indx), BOOST_PP_LPAREN, BOOST_PP_EMPTY ) () \
+  ( elem ) \
+  BOOST_PP_IIF(WG_PP_IS_MOD3_R2(indx), BOOST_PP_RPAREN, BOOST_PP_EMPTY ) ()
 
-#define WG_PP_STUTIL_SETTUPLESEQ_TO_TYPESEQ_IMPL(nrmlzd_set_tuple_seq) \
-  WG_PP_SEQ_FOR_EACH_I( \
-    WG_PP_STUTIL_SEQUENCE_IF_INDEX, \
-    WG_PP_IS_MOD3_R0, \
-    nrmlzd_set_tuple_seq)
-
-#define WG_PP_STUTIL_SETTUPLESEQ_TO_OBJSEQ_IMPL(nrmlzd_set_tuple_seq) \
-  WG_PP_SEQ_FOR_EACH_I( \
-    WG_PP_STUTIL_SEQUENCE_IF_INDEX, \
-    WG_PP_IS_MOD3_R1, \
-    nrmlzd_set_tuple_seq)
-
-#define WG_PP_STUTIL_SETTUPLESEQ_TO_VALUESEQ_IMPL(nrmlzd_set_tuple_seq) \
-  WG_PP_SEQ_FOR_EACH_I( \
-    WG_PP_STUTIL_SEQUENCE_IF_INDEX, \
-    WG_PP_IS_MOD3_R2, \
-    nrmlzd_set_tuple_seq)
+#define WG_PP_STUTIL_NRMLZDSETTUPLESEQ_TO_SETDCLNSEQ_IMPL( \
+  nrmlzd_set_tuple_seq) \
+    WG_PP_SEQ_FOR_EACH_I( \
+      WG_PP_STUTIL_TUPLIZE_NRMLZDSETTUPLE, \
+      ~, \
+      nrmlzd_set_tuple_seq)
 
 //----------------------
 //Calculate this_ index.
 //----------------------
 
-#define WG_PP_STUTIL_THISU_INDX_IMPL1(bound_obj_seq) \
+#define WG_PP_STUTIL_THISU_INDX_IMPL1(decln_seq, decln_objmacro) \
   WG_PP_STUTIL_THISU_INDX_IMPL( \
     (BOOST_PP_NIL) \
     WG_PP_SEQ_NOTHING_FOR_EACH_I( \
-      WG_PP_STUTIL_THISU_MARK_INDX, ~, bound_obj_seq))
+      WG_PP_STUTIL_THISU_MARK_INDX, decln_objmacro, decln_seq))
 
 #define WG_PP_STUTIL_THISU_INDX_IMPL_0 BOOST_PP_NIL
 #define WG_PP_STUTIL_THISU_INDX_IMPL_1(indx) indx
@@ -190,9 +153,9 @@
       1, BOOST_PP_TUPLE_EAT(1)seq BOOST_PP_NIL)) BOOST_PP_TUPLE_EAT(1)seq
 
 // WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_STUTIL_THISU_MARK_INDX(r, data, indx, elem) \
+#define WG_PP_STUTIL_THISU_MARK_INDX(r, decln_objmacro, indx, decln) \
   BOOST_PP_EXPR_IIF( \
-    WG_PP_KEYWORDS_STARTSWITH_THISU(elem), \
+    WG_PP_KEYWORDS_STARTSWITH_THISU( decln_objmacro(decln) ), \
     (indx))
 
 //---------------------
@@ -259,7 +222,10 @@
   symbtbl, spec, callback, iteration, data) \
     BOOST_PP_ARRAY_REPLACE( \
       symbtbl, \
-      WG_PP_STUTIL_CALL_F1(INDX, symbtbl, spec), \
-      callback(WG_PP_STUTIL_CALL_F1(spec, symbtbl, symbtbl), iteration, data) )
+      WG_PP_STUTIL_CALL_F1(INDX, symbtbl, WG_PP_UCAT_ARG2(DCLNS,spec) ), \
+      callback( \
+        WG_PP_STUTIL_CALL_F2(DCLNS, spec, symbtbl, symbtbl), \
+        iteration, \
+        data) )
 
 #endif /* WG_PP_SYMBOLTABLEUTIL_HH_ */

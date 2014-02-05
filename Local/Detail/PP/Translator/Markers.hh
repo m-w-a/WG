@@ -24,8 +24,21 @@
 // WG_PP_STUTIL_REPLACESEQ callback.
 // seq:
 //   A WG_PP_SEQ.
-#define WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ(seq, iteration, data) \
-  WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ_IMPL(seq)
+// iteration:
+//   See WG_PP_STUTIL_REPLACESEQ::callback
+// dataseq:
+//   { ( (gettypemacro)(settypemacro) ) }+
+//
+//   gettypemacro:
+//     A one arg macro that when applied to an element of declnseq expands to
+//     the type associated with that sequence.
+//   settypemacro:
+//     A two arg macro whose first arg takes an element of declnseq and whose
+//     second arg takes some tokens.
+//     The purpose of this macro is replace the type associated with the first
+//     arg with the second arg.
+#define WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ(seq, iteration, dataseq) \
+  WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ_IMPL(seq, iteration, dataseq)
 
 //###########
 //Impl Macros
@@ -77,17 +90,27 @@
 //WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ
 //---------------------------------------
 
-#define WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ_IMPL(seq) \
+#define WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ_IMPL(seq, iteration, dataseq) \
   WG_PP_SEQ_FOR_EACH_I( \
-    WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ_REPLACETUPLE, \
-    ~, \
+    WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ_REPLACETYPE1, \
+    BOOST_PP_SEQ_ELEM(iteration, dataseq), \
     seq)
 
 // WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ_REPLACETUPLE( \
-  r, ignored, indx, entry) \
+#define WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ_REPLACETYPE1( \
+  r, gettypemacro_settypemacro, indx, dcln) \
+   WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ_REPLACETYPE2( \
+     BOOST_PP_SEQ_ELEM(0, gettypemacro_settypemacro), \
+     BOOST_PP_SEQ_ELEM(1, gettypemacro_settypemacro), \
+     indx, \
+     dcln)
+
+#define WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ_REPLACETYPE2( \
+  gettypemacro, settypemacro, indx, dcln) \
     ( \
-      WG_PP_TRNSLTR_MARKERS_EATHEADMARKER(entry) \
-    )
+      settypemacro( \
+        dcln, \
+         WG_PP_TRNSLTR_MARKERS_EATHEADMARKER(gettypemacro(dcln)) ) \
+     )
 
 #endif /* WG_LOCAL_DETAIL_TRANSLATOR_MARKERS_HH_ */
