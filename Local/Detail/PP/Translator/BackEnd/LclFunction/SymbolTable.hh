@@ -12,74 +12,117 @@
 //################
 
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_MODULEID(symbtbl) \
-  WG_PP_LCLCLASS_ST_GET(symbtbl, MODULEID)
+  WG_PP_LCLFUNCTION_ST_GET(symbtbl, MODULEID)
 
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_ISTPL(symbtbl) \
   WG_PP_LCLFUNCTION_ST_GET(symbtbl, ISTPL)
 
-//Returns: { 0 | 1 }
+// Returns: { 0 | 1 }
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_EXISTS_RETTYPE(symbtbl) \
-  WG_PP_ISNEXTTOKEN_A_TUPLE( \
-    1, \
-    WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTUPLE(symbtbl) )
+  BOOST_PP_COMPL( \
+    WG_PP_STARTSWITH_BOOST_PP_NIL( \
+      WG_PP_LCLFUNCTION_ST_GET(symbtbl, RETTUPLE) ) )
 
-//Returns: { return-type | some-unspecified-token-seq }
+// Returns: { parsed-explicit-non-local-type | some-unspecified-token-seq }
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE(symbtbl) \
-  WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE_IMPL( \
-    WG_PP_IDENTITY_ARG1 WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTUPLE(symbtbl) )
-
-//Returns: { BOOST_PP_NIL | return-tuple  }
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTUPLE(symbtbl) \
   WG_PP_LCLFUNCTION_ST_GET(symbtbl, RETTUPLE)
 
-//Returns: { BOOST_PP_NIL | {(non-local-type)}+ }
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_PARAMS(symbtbl) \
-  WG_PP_LCLFUNCTION_ST_GET(symbtbl, TYPESEQ_PARAMS)
+//------
+//Params
+//------
 
-//Returns: { BOOST_PP_NIL | {(var-name)}+ }
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_PARAMS(symbtbl) \
-  WG_PP_LCLFUNCTION_ST_GET(symbtbl, OBJSEQ_PARAMS)
+// dcln: param-dcln
+// Returns: non-local-type
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_TYPE_PARAMS(dcln) \
+  WG_PP_SEQ_ELEM(0, dcln)
 
-//Returns: { BOOST_PP_NIL | {(parsed-explicit-non-local-type-or-deduced-type)}+ }
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_BOUNDVAR(symbtbl) \
-  WG_PP_LCLFUNCTION_ST_GET(symbtbl, TYPESEQ_BOUNDVAR)
+// dcln: param-dcln
+// Returns: var-name
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_OBJ_PARAMS(dcln) \
+  WG_PP_SEQ_ELEM(1, dcln)
 
-//Returns: { BOOST_PP_NIL | {(var-name)}+ }
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_BOUNDVAR(symbtbl) \
-  WG_PP_LCLFUNCTION_ST_GET(symbtbl, OBJSEQ_BOUNDVAR)
+// Returns: { BOOST_PP_NIL | { (param-dcln) }+ }
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_PARAMS(symbtbl) \
+  WG_PP_LCLFUNCTION_ST_GET(symbtbl, DCLNS_PARAMS)
 
-//See WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_BOUNDVAR.
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_VALUESEQ_BOUNDVAR(symbtbl) \
-  WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_BOUNDVAR(symbtbl)
+//--------
+//BoundVar
+//--------
+
+// dcln: boundvar-dcln
+// Returns: parsed-explicit-non-local-type-or-deduced-type
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_GETTYPE_BOUNDVAR(dcln) \
+  WG_PP_SEQ_ELEM(0, dcln)
+
+// dcln: boundvar-dcln
+// type: the replacement type for dcln.
+// Returns: boundvar-dcln
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_SETTYPE_BOUNDVAR(dcln, type) \
+  WG_PP_SEQ_REPLACE(dcln, 0, type)
+
+// dcln: boundvar-dcln
+// Returns: var-name
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_OBJ_BOUNDVAR(dcln) \
+  WG_PP_SEQ_ELEM(1, dcln)
+
+// Returns: { BOOST_PP_NIL | { (boundvar-dcln) }+ }
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_BOUNDVAR(symbtbl) \
+  WG_PP_LCLFUNCTION_ST_GET(symbtbl, DCLNS_BOUNDVAR)
+
+// Returns: { integer }
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_SIZE_BOUNDVAR(symbtbl) \
+  WG_PP_LCLFUNCTION_ST_GET(symbtbl, DCLNS_SIZE_BOUNDVAR)
+
+// Returns: { BOOST_PP_NIL | integer }
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_THISU_MARKER_BOUNDVAR(symbtbl) \
+  WG_PP_LCLFUNCTION_ST_GET(symbtbl, THISU_MARKER_BOUNDVAR)
+
+//------
+//SetVar
+//------
+
+// dcln: setvar-dcln
+// Returns: parsed-explicit-non-local-type-or-deduced-type
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_GETTYPE_SETVAR(dcln) \
+  WG_PP_SEQ_ELEM(0, dcln)
+
+// dcln: setvar-dcln
+// type: the replacement type for dcln.
+// Returns: setvar-dcln
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_SETTYPE_SETVAR(dcln, type) \
+  WG_PP_SEQ_REPLACE(dcln, 0, type)
+
+// dcln: setvar-dcln
+// Returns: var-name
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_OBJ_SETVAR(dcln) \
+  WG_PP_SEQ_ELEM(1, dcln)
+
+// dcln: setvar-dcln
+// Returns: value-expr
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_VALUE_SETVAR(dcln) \
+  WG_PP_SEQ_ELEM(2, dcln)
+
+// Returns: { BOOST_PP_NIL | { (setvar-dcln) }+ }
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_SETVAR(symbtbl) \
+  WG_PP_LCLFUNCTION_ST_GET(symbtbl, DCLNS_SETVAR)
+
+// Returns: { integer }
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_SIZE_SETVAR(symbtbl) \
+  WG_PP_LCLFUNCTION_ST_GET(symbtbl, DCLNS_SIZE_SETVAR)
+
+//-----
+//Misc.
+//-----
 
 //Returns: { integer }
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_XXX_SIZE_BOUNDVAR(symbtbl) \
-  WG_PP_LCLFUNCTION_ST_GET(symbtbl, XXX_SIZE_BOUNDVAR)
-
-//Returns: { BOOST_PP_NIL | integer }
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_THISU_MARKER_BOUNDVAR(symbtbl) \
-  WG_PP_LCLFUNCTION_ST_GET(symbtbl, OBJSEQ_THISU_MARKER_BOUNDVAR)
-
-//Returns: { BOOST_PP_NIL | {(parsed-explicit-non-local-type-or-deduced-type)}+ }
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_SETVAR(symbtbl) \
-  WG_PP_LCLFUNCTION_ST_GET(symbtbl, TYPESEQ_SETVAR)
-
-//Returns: { BOOST_PP_NIL | {(var-name)}+ }
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_OBJSEQ_SETVAR(symbtbl) \
-  WG_PP_LCLFUNCTION_ST_GET(symbtbl, OBJSEQ_SETVAR)
-
-//Returns: { BOOST_PP_NIL | {(value-expr)}+ }
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_VALUESEQ_SETVAR(symbtbl) \
-  WG_PP_LCLFUNCTION_ST_GET(symbtbl, VALUESEQ_SETVAR)
-
-//Returns: { integer }
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_XXX_SIZE_SETVAR(symbtbl) \
-  WG_PP_LCLFUNCTION_ST_GET(symbtbl, XXX_SIZE_SETVAR)
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_TOTALSIZE(symbtbl) \
+  WG_PP_LCLFUNCTION_ST_GET(symbtbl, DCLNS_TOTALSIZE)
 
 //#######################
 //STUTIL Interface Impls.
 //#######################
 
+// suffix: must match one of the following: WG_PP_LCLFUNCTION_ST_INDX_<suffix>
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_INDX(suffix) \
   BOOST_PP_CAT(WG_PP_LCLFUNCTION_ST_INDX_, suffix)
 
@@ -96,7 +139,7 @@
 //INPUT:
 //------
 //
-//return_type: { BOOST_PP_NIL | type }
+//return_type: { BOOST_PP_NIL | parsed-explicit-non-local-type }
 //params_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-explicit-nlt-tuple}+ }
 //
 //varbind_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-bound-nlt-tuple}+ }
@@ -144,28 +187,22 @@
 
 #define WG_PP_LCLFUNCTION_ST_INDX_RETTUPLE 2
 
-#define WG_PP_LCLFUNCTION_ST_INDX_TYPESEQ_PARAMS 3
-#define WG_PP_LCLFUNCTION_ST_INDX_OBJSEQ_PARAMS 4
-#define WG_PP_LCLFUNCTION_ST_INDX_TYPESEQ_BOUNDVAR 5
-#define WG_PP_LCLFUNCTION_ST_INDX_OBJSEQ_BOUNDVAR 6
-#define WG_PP_LCLFUNCTION_ST_INDX_XXX_SIZE_BOUNDVAR 7
-#define WG_PP_LCLFUNCTION_ST_INDX_OBJSEQ_THISU_MARKER_BOUNDVAR 8
+#define WG_PP_LCLFUNCTION_ST_INDX_DCLNS_PARAMS 3
 
-#define WG_PP_LCLFUNCTION_ST_INDX_TYPESEQ_SETVAR 9
-#define WG_PP_LCLFUNCTION_ST_INDX_OBJSEQ_SETVAR 10
-#define WG_PP_LCLFUNCTION_ST_INDX_VALUESEQ_SETVAR 11
-#define WG_PP_LCLFUNCTION_ST_INDX_XXX_SIZE_SETVAR 12
+#define WG_PP_LCLFUNCTION_ST_INDX_DCLNS_BOUNDVAR 4
+#define WG_PP_LCLFUNCTION_ST_INDX_THISU_MARKER_BOUNDVAR 5
+#define WG_PP_LCLFUNCTION_ST_INDX_DCLNS_SIZE_BOUNDVAR 6
 
-#define WG_PP_LCLFUNCTION_ST_INDX_TOTALXXX_SIZE 13
+#define WG_PP_LCLFUNCTION_ST_INDX_DCLNS_SETVAR 7
+#define WG_PP_LCLFUNCTION_ST_INDX_DCLNS_SIZE_SETVAR 8
+
+#define WG_PP_LCLFUNCTION_ST_INDX_DCLNS_TOTALSIZE 9
 
 // suffix: must match one of the following: WG_PP_LCLFUNCTION_ST_INDX_<suffix>
 #define WG_PP_LCLFUNCTION_ST_GET(symbtbl, suffix) \
   BOOST_PP_ARRAY_ELEM( \
     BOOST_PP_CAT(WG_PP_LCLFUNCTION_ST_INDX_, suffix), \
     symbtbl)
-
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE_IMPL(rescan) \
-  rescan
 
 //---------------
 //Creation Macros
@@ -180,42 +217,36 @@
     WG_PP_LCLFUNCTION_ST_CREATE_IMPL2( \
       istpl, \
       return_type, \
-      WG_PP_STUTIL_BOUNDTUPLESEQ_TO_TYPESEQ(params_nrmlzd_tupleseq), \
-      WG_PP_STUTIL_BOUNDTUPLESEQ_TO_OBJSEQ(params_nrmlzd_tupleseq), \
-      WG_PP_STUTIL_BOUNDTUPLESEQ_TO_TYPESEQ(varbind_nrmlzd_tupleseq), \
-      WG_PP_STUTIL_BOUNDTUPLESEQ_TO_OBJSEQ(varbind_nrmlzd_tupleseq), \
-      WG_PP_STUTIL_SETTUPLESEQ_TO_TYPESEQ(varset_nrmlzd_tupleseq), \
-      WG_PP_STUTIL_SETTUPLESEQ_TO_OBJSEQ(varset_nrmlzd_tupleseq), \
-      WG_PP_STUTIL_SETTUPLESEQ_TO_VALUESEQ(varset_nrmlzd_tupleseq))
+      WG_PP_STUTIL_NRMLZDBOUNDTUPLESEQ_TO_BOUNDDCLNSEQ(params_nrmlzd_tupleseq), \
+      WG_PP_STUTIL_NRMLZDBOUNDTUPLESEQ_TO_BOUNDDCLNSEQ(varbind_nrmlzd_tupleseq), \
+      WG_PP_STUTIL_NRMLZDSETTUPLESEQ_TO_SETDCLNSEQ(varset_nrmlzd_tupleseq) )
 
 #define WG_PP_LCLFUNCTION_ST_CREATE_IMPL2( \
   istpl, \
   return_type, \
-  params_type_seq, params_obj_seq, \
-  varbind_type_seq, varbind_obj_seq, \
-  varset_type_seq, varset_obj_seq, varset_value_seq) \
+  params_dcln_seq, \
+  varbind_dcln_seq, \
+  varset_dcln_seq) \
     WG_PP_LCLFUNCTION_ST_CREATE_IMPL3( \
-      (13, \
+      (9, \
         (WG_PP_LCLFUNCTION_SYMBOLTABLE, \
         istpl, \
         return_type, \
-        params_type_seq, \
-        params_obj_seq, \
-        varbind_type_seq, \
-        varbind_obj_seq, \
-        WG_PP_SEQ_SIZE(varbind_type_seq), \
-        WG_PP_STUTIL_THISU_INDX(varbind_obj_seq), \
-        varset_type_seq, \
-        varset_obj_seq, \
-        varset_value_seq, \
-        WG_PP_SEQ_SIZE(varset_type_seq) )) \
+        params_dcln_seq, \
+        varbind_dcln_seq, \
+        WG_PP_STUTIL_THISU_INDX( \
+          varbind_dcln_seq, \
+          WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_OBJ_BOUNDVAR), \
+        WG_PP_SEQ_SIZE(varbind_dcln_seq), \
+        varset_dcln_seq, \
+        WG_PP_SEQ_SIZE(varset_dcln_seq) )) \
     )
 
 #define WG_PP_LCLFUNCTION_ST_CREATE_IMPL3(wiparray) \
   BOOST_PP_ARRAY_PUSH_BACK( \
     wiparray, \
     BOOST_PP_ADD( \
-      WG_PP_LCLFUNCTION_SYMBOLTABLE_XXX_SIZE_BOUNDVAR(wiparray), \
-      WG_PP_LCLFUNCTION_SYMBOLTABLE_XXX_SIZE_SETVAR(wiparray)) )
+      WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_SIZE_BOUNDVAR(wiparray), \
+      WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_SIZE_SETVAR(wiparray)) )
 
 #endif /* WG_PP_LCLFUNCTION_SYMBOLTABLE_HH_ */

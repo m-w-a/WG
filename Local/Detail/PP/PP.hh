@@ -40,6 +40,8 @@
 #define WG_PP_MAPTO_NOTHING_ARG2(a, b)
 #define WG_PP_MAPTO_NOTHING_ARG3(a, b, c)
 #define WG_PP_MAPTO_NOTHING_ARG4(a, b, c, d)
+#define WG_PP_MAPTO_NOTHING_ARG5(a, b, c, d, e)
+#define WG_PP_MAPTO_NOTHING_ARG6(a, b, c, d, e, f)
 
 #define WG_PP_MAP_TO_WG_PP_TRUE_ARG1(x) WG_PP_TRUE
 #define WG_PP_MAP_TO_WG_PP_TRUE_ARG2(x, y) WG_PP_TRUE

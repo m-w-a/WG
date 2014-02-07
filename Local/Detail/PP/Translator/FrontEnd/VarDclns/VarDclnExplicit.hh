@@ -2,7 +2,6 @@
 #define WG_PP_VARDCLN_EXPLICIT_HH_
 
 #include <boost/preprocessor.hpp>
-#include <boost/utility/identity_type.hpp>
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Translator/Keywords.hh>
 #include <WG/Local/Detail/PP/Translator/Utils.hh>
