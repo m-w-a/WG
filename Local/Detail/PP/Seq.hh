@@ -69,8 +69,10 @@
   WG_PP_SEQ_SIZE_IMPL(seq)
 
 // Maps to BOOST_PP_NIL if seq is nil.
-#define WG_PP_SEQ_TRANSFORM(macro, data, seq) \
-  WG_PP_SEQ_TRANSFORM_IMPL(macro, data, seq)
+// transform: a 1-arg macro to apply to the elements of seq
+// Expands to: { BOOST_PP_NIL | { ( transform(elem) ) }+ }
+#define WG_PP_SEQ_APPLY_TRANSFORM(transform, seq) \
+  WG_PP_SEQ_APPLY_TRANSFORM_IMPL(transform, seq)
 
 //###########
 //Impl Macros
@@ -119,13 +121,13 @@
     WG_PP_SEQ_FOR_EACH_I_IMPL_, \
     WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) (macro, data, seq)
 
-#define WG_PP_SEQ_TRANSFORM_IMPL_0(macro, data, seq) BOOST_PP_NIL
-#define WG_PP_SEQ_TRANSFORM_IMPL_1(macro, data, seq) \
-  BOOST_PP_SEQ_TRANSFORM(macro, data, seq)
-#define WG_PP_SEQ_TRANSFORM_IMPL(macro, data, seq) \
-  BOOST_PP_CAT( \
-    WG_PP_SEQ_TRANSFORM_IMPL_, \
-    WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) (macro, data, seq)
+#define WG_PP_SEQ_APPLY_TRANSFORM_IMPL(transform, seq) \
+  WG_PP_SEQ_FOR_EACH( \
+    WG_PP_SEQ_APPLY_TRANSFORM_IMPL_ENTRY, \
+    transform, \
+    seq)
+#define WG_PP_SEQ_APPLY_TRANSFORM_IMPL_ENTRY(r, transform, elem) \
+  ( transform(elem) )
 
 #define WG_PP_SEQ_SIZE_IMPL_0(seq) 0
 #define WG_PP_SEQ_SIZE_IMPL_1(seq) BOOST_PP_SEQ_SIZE(seq)
