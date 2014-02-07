@@ -24,12 +24,12 @@ WG_PP_VARDCLN_EXPLICIT_TUPLIZE(SPE2, 0)
 WG_PP_VARDCLN_EXPLICIT_TUPLIZE(SPE3, 1)
 
 //EXPECTED:
-//(SomeGlobalType const) (sgvar1)
-//( local(SomeLocalType *) ) (slvar1)
-//( local(SomeLocalType *) (const) ) (slvar2)
-//( local(SomeLocalType *) (ref) ) (slvar3)
-//( local(SomeLocalType *) (const)(ref) ) (slvar4)
-//( (int) (spevar1) )
+//(WG_PP_NOOP type(SomeGlobalType const) ) (sgvar1)
+//(WG_PP_NOOP local(SomeLocalType *) ) (slvar1)
+//(WG_PP_NOOP local(SomeLocalType *) ) (const) ) (slvar2)
+//(WG_PP_NOOP local(SomeLocalType *) ) (ref) ) (slvar3)
+//(WG_PP_NOOP local(SomeLocalType *) ) (const)(ref) ) (slvar4)
+//(WG_PP_NOOP type(int)) (spevar1)
 */
 
 //-----
