@@ -19,10 +19,12 @@ noinst_PROGRAMS = \
     test_autofunctor \
     test_autofunctor_errorreporting_invalidnamedparameters \
     test_autofunctor_errorreporting_refthisu \
+    test_pp_lclfunction_keywords \
     test_lclfunction_cpp03 \
     test_lclfunction_cpp11 \
     test_lclfunction_codegenspec_cpp03 \
     test_lclfunction_codegenspec_cpp11 \
+    test_pp_lclclass_keywords \
     test_lclclass \
     test_pp_lclcontext_keywords
 
@@ -166,6 +168,12 @@ test_autofunctor_cf_localoperandssyntax_const_SOURCES = \
     ../../Tests/AutoFunctor/LocalOperandsSyntaxCheck/ConstQualifiedLocalType.cc
 test_autofunctor_cf_localoperandssyntax_const_ref_SOURCES = \
     ../../Tests/AutoFunctor/LocalOperandsSyntaxCheck/ConstRefQualifiedLocalType.cc
+
+test_pp_lclfunction_keywords_SOURCES = \
+    ../../Detail/PP/Translator/FrontEnd/LclFunction/Tests/KeywordsUnitTest.cc
+
+test_pp_lclclass_keywords_SOURCES = \
+    ../../Detail/PP/Translator/FrontEnd/LclClass/Tests/KeywordsUnitTest.cc
 
 test_pp_lclcontext_keywords_SOURCES = \
     ../../Detail/PP/Translator/FrontEnd/LclContext/Tests/KeywordsUnitTest.cc
