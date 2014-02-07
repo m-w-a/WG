@@ -82,6 +82,7 @@
 //-------------------
 //EraseMarkers Utils.
 //-------------------
+
 #define WG_PP_LCLCLASS_CG_ERASEMARKERSCALLBACKDATASEQ() \
   ( \
     (WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_GETTYPE_MEMEXT) \
