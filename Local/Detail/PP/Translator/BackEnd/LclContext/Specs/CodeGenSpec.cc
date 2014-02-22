@@ -1,37 +1,49 @@
 int main()
 {
-  WG_LCLCONTEXT( with(cntxtmgr) as(foo) )
-  {
-
-  }
-  WG_LCLCONTEXT_END;
 }
 
-"WG_LCLCONTEXT( with(cntxtmngr1) as(enter_result_obj1) )" should expand to:
-
+WG_LCLCONTEXT(
+  with(cntxtmngr1) entered_as(enter_result_obj1)
+  with_adhoc(boundvar1) on_enter(enterstmts) on_exit(exitstmts) )
+// Expands To:
 {
-  LOCALOPERANDSYNTAXCHECKER ...
+  /* "with" context managers. */
+  LOCALOPERANDSYNTAXCHECKER(cntxtmngr_dclns)
+  TYPEALIASOR(cntxtmngr_dclns)
 
-  TYPEALIASOR(contxtmngrS)
-  TYPEALIASOR(enter_result_objS)
-  Managers
+  LOCALOPERANDSYNTAXCHECKER(enteredas_dclns)
+  TYPEALIASOR(enteredas_dclns)
+
+  /* Iterator over with_adhoc context managers. */
+  LCLCLASS(adhoc_ctxtmngr1, memext(boundvar1) )
+    void enter() { enterstmts }
+    void exit() { exitstmts }
+  LCLCLASS_END;
+  adhoc_ctxtmngr1 adhoc_obj1(boundvar1);
+
+  ContextMngrGroup
   {
-    CntxMngr1;
-    ...
+    /* Iterate over "with" context managers and associated objs. */
+    CntxMngr1 cntxtmngr1;
 
-    void onexit(bool const exception_is_active)
+    /* Iterate over with_adhoc context managers and associated objs. */
+    adhoc_ctxtmngr1 & adhoc_obj1;
+
+    void exit(bool const exception_is_active)
     {
-      CntxMngr1 . onexit(exception_is_active);
-      ...
+      /* Reverse iterate context managers obj seq. */
+      adhoc_obj1 . exit(exception_is_active);
+      cntxtmngr1 . exit(exception_is_active);
     }
-  } mngrs ;
+  } cntxtMngrGrpObj = {cntxtmngr1, adhoc_obj1};
 
 #ifndef NOEX
   try
   {
 #endif NOEX
-    enter_result_obj1 = mngrs.CntxtMngr1;
-    ...
+    /* Iterate context managers obj-ordinal seq. */
+    ALIASEDTYPE(1) enter_result_obj1 = cntxtmngr1.enter();
+    adhoc_obj1.enter();
 
     //User code starts.
     {
@@ -43,9 +55,9 @@ int main()
   }
   catch(...)
   {
-    mgrs.onexit(true);
+    mgrs.exit(true);
     throw;
   }
 #endif
 
-  mgrs.onexit(false);
+  mgrs.exit(false);

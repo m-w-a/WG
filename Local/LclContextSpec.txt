@@ -19,7 +19,7 @@ adhoc-context-handlers:
 
 special symbols:
   [...] specifies an optional BNF expression.
-terminals: with with_adhoc as on_enter on_exit
+terminals: with with_adhoc entered_as on_enter on_exit
 
 lclcontext-usage :=
   lclcontext-start-macro ( lclcontext-spec )
@@ -39,14 +39,16 @@ lclcontext-spec :=
   | with-adhoc-decln
 
 with-dcln :=
-  with( context-manager ) [ as( type-var-dcln ) ]
+  with( context-manager ) [ entered_as( bound-var-dcln ) ]
 
 // An expression that is or produces a context manager object.
 context-manager := 
-  type-var-dcln
+  bound-var-dcln
 
 with-adhoc-decln :=
   with_adhoc( varbind-seq ) adhoc-context-handlers 
+
+varbind-seq := bound-tuple-seq
 
 adhoc-context-handlers :=
   [onenter( compound-statement )] [onexit( compound-statement )]
