@@ -60,12 +60,7 @@ derives-tuple-seq :=
 derives-tuple :=
   ( base-specifier )
 
-memext-tuple-seq :=
-    memext-tuple
-  | memext-tuple-seq memext-tuple
-
-memext-tuple :=
-  ( type-var-dcln )
+memext-tuple-seq := bound-tuple-seq
 
 memint-tuple-seq := set-tuple-seq
 
