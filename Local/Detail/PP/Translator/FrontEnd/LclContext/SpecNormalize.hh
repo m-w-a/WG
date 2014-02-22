@@ -8,6 +8,14 @@
 #include <WG/Local/Detail/PP/Translator/FrontEnd/BoundVarDclnNormalize.hh>
 #include <WG/Local/Detail/PP/Translator/LclContext/Names.hh>
 
+// Expands to the following:
+//   (istplmarker) (0 | 1)
+//   (isnoex) (0 | )
+//   (withasmrkr) ( withas_dcln_seq )
+//   (withadhocmrkr) ( withadhoc_dcln_seq )
+//   (enteredasmrkr) ( orderedenteredas_seq )
+//
+// What ever terms not defined here are defined in SymbolTable.hh
 #define WG_PP_LCLCONTEXT_SPECPARSER_PARSE(spec, istpl, isnoex) \
   WG_PP_LCLCONTEXT_SPECPARSER_PARSE_IMPL(spec, istpl, isnoex)
 
