@@ -24,8 +24,8 @@
 // expands to:
 //   1) nothing if BOOST_PP_NIL, or
 //   2) to:
-//     1) nothing, if there are no WG_PP_MARKER_ERROR markers in any of the elements of
-//       the normalized-bound-tuple sequence, else
+//     1) nothing, if there are no WG_PP_MARKER_ERROR markers in any of the
+//       elements of the normalized-bound-tuple sequence, else
 //     2) tokens corresponding to the elements that had
 //       WG_PP_MARKER_ERROR markers, but ommitting the said marker.
 //
