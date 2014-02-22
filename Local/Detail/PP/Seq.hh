@@ -9,6 +9,7 @@
 //###########
 
 // Nil sequences are defined to be BOOST_PP_NIL.
+
 // If it can be determined that seq is not a WG-seq then will expand to
 // WG_PP_ERROR_INVALID_ARGUMENT, else it's UB.
 #define WG_PP_SEQ_ISNIL(seq) \
