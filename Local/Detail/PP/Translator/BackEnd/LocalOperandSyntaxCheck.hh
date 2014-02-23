@@ -5,7 +5,6 @@
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/TypeExtractor.hh>
-#include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
 
 //###########
 //Public APIs
@@ -18,25 +17,20 @@
 // Note that neither TMP techniques can be used for type checking since in
 // C++03 local types may not be used as template parameters.
 //
-// symbtbl:
-//   must have the following defined:
-//     1) WG_PP_STUTIL_CALL_F2(DCLNS, suffix, symbtbl, symbtbl)
-//   where suffix is declared in specseq.
-//
 // specseq:
-//   { ( (suffix)(varrootname)(gettypemacro)(getobjmacro) ) }+
+//   { ( (varrootname)(getdclnsmacro)(gettypemacro)(getobjmacro) ) }+
 //
-//   suffix:
-//     The class of variables that if are locally typed then should be syntax
-//     checked.
 //   varrootname:
 //     The root name of the variables to be used in the syntax checker.
+//   getdclnsmacro:
+//     A one arg macro that when applied to symbtbl expands to a sequence of
+//     dclnS whose types, if they are local, should be syntax checked.
 //   gettypemacro:
-//     A one arg macro that when applied to an element of dclnseq expands to
-//     the type associated with that sequence.
+//     A one arg macro that when applied to an element of getdclnsmacro(symbtbl)
+//     expands to the type associated with that sequence.
 //   getobjmacro:
-//     A one arg macro that when applied to an element of dclnseq expands to
-//     the obj associated with that sequence.
+//     A one arg macro that when applied to an element of getdclnsmacro(symbtbl)
+//     expands to the obj associated with that sequence.
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN(syntaxcheckername, symbtbl, specseq) \
   WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN_IMPL(syntaxcheckername, symbtbl, specseq)
 
@@ -50,9 +44,9 @@
 
 #define  WG_PP_LOCALOPERANDSYNTAXCHECK_EXPAND1(x) x
 
-#define WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec) \
-  BOOST_PP_SEQ_ELEM(0, spec)
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_VARROOTNAME(spec) \
+  BOOST_PP_SEQ_ELEM(0, spec)
+#define WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_GETDCLNSMACRO(spec) \
   BOOST_PP_SEQ_ELEM(1, spec)
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_GETTYPEMACRO(spec) \
   BOOST_PP_SEQ_ELEM(2, spec)
@@ -99,8 +93,7 @@
 // BOOST_PP_SEQ_FOR_EACH functor.
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN(r, symbtbl, spec) \
   WG_PP_LOCALOPERANDSYNTAXCHECK_CNGRNCECLASS_MEMBERDCLN2( \
-    WG_PP_STUTIL_CALL_F2( \
-      DCLNS, WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_SUFFIX(spec), symbtbl, symbtbl), \
+    WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_GETDCLNSMACRO(spec) (symbtbl), \
     WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_VARROOTNAME(spec), \
     WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_GETTYPEMACRO(spec), \
     WG_PP_LOCALOPERANDSYNTAXCHECK_SPEC_GETOBJMACRO(spec) )

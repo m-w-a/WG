@@ -6,10 +6,17 @@
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
 
-//################
-//Interface Impls.
-//  (Implements interfaces required by external macros.)
-//################
+//#######################
+//STUTIL Interface Impls.
+//#######################
+
+// suffix: must match one of the following: WG_PP_LCLCLASS_ST_INDX_<suffix>
+#define WG_PP_LCLCLASS_SYMBOLTABLE_INDX(suffix) \
+  BOOST_PP_CAT(WG_PP_LCLCLASS_ST_INDX_, suffix)
+
+//###########
+//Public APIs
+//###########
 
 #define WG_PP_LCLCLASS_SYMBOLTABLE_MODULEID(symbtbl) \
   WG_PP_LCLCLASS_ST_GET(symbtbl, MODULEID)
@@ -92,18 +99,6 @@
 //Returns: { integer }
 #define WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_TOTALSIZE(symbtbl) \
   WG_PP_LCLCLASS_ST_GET(symbtbl, DCLNS_TOTALSIZE)
-
-//#######################
-//STUTIL Interface Impls.
-//#######################
-
-// suffix: must match one of the following: WG_PP_LCLCLASS_ST_INDX_<suffix>
-#define WG_PP_LCLCLASS_SYMBOLTABLE_INDX(suffix) \
-  BOOST_PP_CAT(WG_PP_LCLCLASS_ST_INDX_, suffix)
-
-//###########
-//Public APIs
-//###########
 
 //-----
 //NOTE:

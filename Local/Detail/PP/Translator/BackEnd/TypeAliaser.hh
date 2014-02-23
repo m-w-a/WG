@@ -12,16 +12,11 @@
 //Public APIs
 //###########
 
-//----------------------------------------------------------------------------//
-// Whereever this file is included the appropiate SymbolTable.hh must
-// also be included.
-//----------------------------------------------------------------------------//
-
 // Will create a struct named <typealiasername> that typedefs all
 // WG_PP_MARKER_DEDUCEDTYPE marked types.
 //
 // specseq:
-//   { ( (aliasrootname)(dclns)(gettypemacro)(settypemacro) ) }+
+//   { ( (aliasrootname)(getdclnsmacro)(gettypemacro)(settypemacro) ) }+
 //
 //   aliasrootname:
 //      The root name of the type alias.
@@ -29,13 +24,13 @@
 //     A one arg macro that when applied to symbtbl expands to a WG_PP_SEQ
 //     sequence of dclnS whose types should be considered for aliasing.
 //   gettypemacro:
-//     A one arg macro that when applied to an element of declns expands to
-//     the type associated with that dcln element.
+//     A one arg macro that when applied to an element of getdclnsmacro(symbtbl)
+//     expands to the type associated with that dcln element.
 //   settypemacro:
-//     A two arg macro whose first arg takes an element of declns and whose
-//     second arg takes some tokens.
-//     The purpose of this macro is replace the type associated with the first
-//     arg with the second arg. (NOTE: this is not used for this macro, so it
+//     A two arg macro whose first arg takes an element of getdclnsmacro(symbtbl)
+//     and whose second arg takes some tokens, and when which expanded
+//     replaces the type associated with the first arg with the second arg.
+//     (NOTE: this is not used for this macro, so it
 //     it can be safely omitted if specseq is being used only for this macro.)
 #define WG_PP_TYPEALIASER_DCLN(typealiasername, symbtbl, specseq) \
   WG_PP_TYPEALIASER_DCLN_IMPL(typealiasername, symbtbl, specseq)
