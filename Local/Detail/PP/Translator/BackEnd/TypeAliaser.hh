@@ -43,7 +43,8 @@
 //     A two arg macro whose first arg takes an element of declnseq and whose
 //     second arg takes some tokens.
 //     The purpose of this macro is replace the type associated with the first
-//     arg with the second arg.
+//     arg with the second arg. (NOTE: this is not used for this macro, so it
+//     it can be safely omitted if specseq is being used only for this macro.)
 #define WG_PP_TYPEALIASER_DCLN(typealiasername, symbtbl, specseq) \
   WG_PP_TYPEALIASER_DCLN_IMPL(typealiasername, symbtbl, specseq)
 
