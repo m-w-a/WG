@@ -2,12 +2,11 @@
 #define WG_PP_TYPEALIASER_HH_
 
 #include <boost/preprocessor.hpp>
+#include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Seq.hh>
-#include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
 #include <WG/Local/Detail/PP/Translator/Utils.hh>
 #include <WG/Local/Detail/PP/Translator/Markers.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/TypeExtractor.hh>
-#include <WG/Local/Detail/PP/Translator/Utils.hh>
 
 //###########
 //Public APIs
@@ -21,26 +20,19 @@
 // Will create a struct named <typealiasername> that typedefs all
 // WG_PP_MARKER_DEDUCEDTYPE marked types.
 //
-// symbtbl:
-//   must have the following defined:
-//     1) WG_PP_STUTIL_CALL_F2(DCLNS, suffix, symbtbl, symbtbl)
-//
-//  Where suffix is declared in specseq, and the macro itself expands to a
-//  WG_PP_SEQ of parsed-explicit-or-deduced-typeS as defined in any
-//  SymbolTable.hh
-//
 // specseq:
-//   { ( (suffix)(aliasrootname)(gettypemacro)(settypemacro) ) }+
+//   { ( (aliasrootname)(dclns)(gettypemacro)(settypemacro) ) }+
 //
-//   suffix:
-//     The sequence of dclns whose types should be considered for aliasing.
 //   aliasrootname:
 //      The root name of the type alias.
+//   getdclnsmacro:
+//     A one arg macro that when applied to symbtbl expands to a WG_PP_SEQ
+//     sequence of dclnS whose types should be considered for aliasing.
 //   gettypemacro:
-//     A one arg macro that when applied to an element of declnseq expands to
-//     the type associated with that sequence.
+//     A one arg macro that when applied to an element of declns expands to
+//     the type associated with that dcln element.
 //   settypemacro:
-//     A two arg macro whose first arg takes an element of declnseq and whose
+//     A two arg macro whose first arg takes an element of declns and whose
 //     second arg takes some tokens.
 //     The purpose of this macro is replace the type associated with the first
 //     arg with the second arg. (NOTE: this is not used for this macro, so it
@@ -68,8 +60,8 @@
 //Utils
 //-----
 
-#define WG_PP_TYPEALIASER_SPEC_SUFFIX(spec) BOOST_PP_SEQ_ELEM(0, spec)
-#define WG_PP_TYPEALIASER_SPEC_ALIASROOTNAME(spec) BOOST_PP_SEQ_ELEM(1, spec)
+#define WG_PP_TYPEALIASER_SPEC_ALIASROOTNAME(spec) BOOST_PP_SEQ_ELEM(0, spec)
+#define WG_PP_TYPEALIASER_SPEC_GETDCLNSMACRO(spec) BOOST_PP_SEQ_ELEM(1, spec)
 #define WG_PP_TYPEALIASER_SPEC_GETTYPEMACRO(spec) BOOST_PP_SEQ_ELEM(2, spec)
 #define WG_PP_TYPEALIASER_SPEC_SETTYPEMACRO(spec) BOOST_PP_SEQ_ELEM(3, spec)
 
@@ -114,11 +106,7 @@
 #define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS(r, symbtbl, spec) \
   BOOST_PP_IIF( \
     WG_PP_SEQ_ISNIL( \
-      WG_PP_STUTIL_CALL_F2( \
-        DCLNS, \
-        WG_PP_TYPEALIASER_SPEC_SUFFIX(spec), \
-        symbtbl, \
-        symbtbl)), \
+      WG_PP_TYPEALIASER_SPEC_GETDCLNSMACRO(spec) (symbtbl)), \
     WG_PP_MAPTO_NOTHING_ARG2, \
     WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS_PROCESS) (symbtbl, spec)
 
@@ -126,11 +114,7 @@
   WG_PP_SEQ_FOR_EACH_I( \
     WG_PP_TYPEALIASER_DEDUCEDTYPEDCLN_IMPLICITTYPES, \
     spec, \
-    WG_PP_STUTIL_CALL_F2( \
-      DCLNS, \
-      WG_PP_TYPEALIASER_SPEC_SUFFIX(spec), \
-      symbtbl, \
-      symbtbl ) )
+    WG_PP_TYPEALIASER_SPEC_GETDCLNSMACRO(spec) (symbtbl) )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLN_IMPLICITTYPES( \
