@@ -92,11 +92,9 @@
 //-------
 //OUTPUT:
 //-------
-// A symbol table where:
-//   1) The sequence associated with
-//     WG_PP_STUTIL_CALL_F2(DCLNS, suffix, symbtbl, symbtbl) is replaced by
-//     "callback(the-said-sequence, iteration, data)"
-//
+// A symbol table whose sequences(s) as specified by specseq are each replaced
+// by callback("the-said-sequence", iteration, data), where callback is defined
+// above.
 #define WG_PP_STUTIL_REPLACESEQ(symbtbl, specseq, callback, data) \
   WG_PP_STUTIL_REPLACESEQ_IMPL(symbtbl, specseq, callback, data)
 
