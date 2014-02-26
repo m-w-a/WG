@@ -15,6 +15,12 @@
 // Will create a struct named <typealiasername> that declares typedefs for all
 // policy-marked types.
 //
+// WARNING:
+//   Aliasing all types will lose information of which types where
+//   declared/captured local. This information maybe necessary in later codegen
+//   passes, where we have to choose between PPMP and TMP techniques to
+//   const/ref qualify these types.
+//
 // replacementpolicy:
 //   { ALLTYPES | DEDUCEDTYPES }
 //
@@ -104,15 +110,12 @@
 //WG_PP_TYPEALIASER_DCLN
 //----------------------
 
-// Do not use typealiaser for wholesale aliasing of captured variables' types,
-// since some of those captured types maybe local, and that information needs
-// to be preserved for later codegen passes, where we have to choose between
-// PPMP and TMP techniques to const/ref qualify these captured types.
-#define WG_PP_TYPEALIASER_DCLN_IMPL(typealiasername, symbtbl, specseq) \
-  WG_PP_TYPEALIASER_DCLN_IMPL2( \
-    typealiasername, \
-    ( BOOST_PP_NIL ) \
-    WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNSEQ(symbtbl, specseq) )
+#define WG_PP_TYPEALIASER_DCLN_IMPL( \
+  typealiasername, replacementpolicy, symbtbl, specseq) \
+    WG_PP_TYPEALIASER_DCLN_IMPL2( \
+      typealiasername, \
+      ( BOOST_PP_NIL ) \
+      WG_PP_TYPEALIASER_DCLNSEQ(replacementpolicy, symbtbl, specseq) )
 
 #define WG_PP_TYPEALIASER_DCLN_IMPL2(typealiasername, deducedtypedclnseq) \
   BOOST_PP_IF( \
@@ -126,38 +129,53 @@
     WG_PP_SEQ_FLATTEN(BOOST_PP_SEQ_TAIL(deducedtypedclnseq)) \
   };
 
-#define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNSEQ(symbtbl, specseq) \
-  BOOST_PP_SEQ_FOR_EACH( \
-    WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS, \
-    symbtbl, \
-    specseq)
+#define WG_PP_TYPEALIASER_DCLNSEQ( \
+  replacementpolicy, symbtbl, specseq) \
+    BOOST_PP_SEQ_FOR_EACH( \
+      WG_PP_TYPEALIASER_DCLNENTRY, \
+      (replacementpolicy)(symbtbl), \
+      specseq)
 
 // BOOST_PP_SEQ_FOR_EACH functor.
-#define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS(r, symbtbl, spec) \
+#define WG_PP_TYPEALIASER_DCLNENTRY(r, replacementpolicy_symbtbl, spec) \
+  WG_PP_TYPEALIASER_DCLNENTRY2( \
+    BOOST_PP_SEQ_ELEM(0, replacementpolicy_symbtbl), \
+    BOOST_PP_SEQ_ELEM(1, replacementpolicy_symbtbl), \
+    spec)
+
+#define WG_PP_TYPEALIASER_DCLNENTRY2(replacementpolicy, symbtbl, spec) \
   BOOST_PP_IIF( \
     WG_PP_SEQ_ISNIL( \
       WG_PP_TYPEALIASER_DCLN_SPEC_GETDCLNSMACRO(spec) (symbtbl)), \
-    WG_PP_MAPTO_NOTHING_ARG2, \
-    WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS_PROCESS) (symbtbl, spec)
+    WG_PP_MAPTO_NOTHING_ARG3, \
+    WG_PP_TYPEALIASER_DCLNTUPLE_PROCESS) (replacementpolicy, symbtbl, spec)
 
-#define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLNS_PROCESS(symbtbl, spec) \
+#define WG_PP_TYPEALIASER_DCLNTUPLE_PROCESS(replacementpolicy, symbtbl, spec) \
   WG_PP_SEQ_FOR_EACH_I( \
-    WG_PP_TYPEALIASER_DEDUCEDTYPEDCLN_IMPLICITTYPES, \
+    WG_PP_UCAT_ARG2(WG_PP_TYPEALIASER_DCLNTUPLE, replacementpolicy), \
     spec, \
     WG_PP_TYPEALIASER_DCLN_SPEC_GETDCLNSMACRO(spec) (symbtbl) )
 
 // WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLN_IMPLICITTYPES( \
+#define WG_PP_TYPEALIASER_DCLNTUPLE_ALLTYPES( \
+  r, spec, indx, dcln) \
+    WG_PP_TYPEALIASER_DCLNTUPLE_IMPL( \
+      spec, \
+      indx, \
+      WG_PP_TYPEALIASER_DCLN_SPEC_GETTYPEMACRO(spec) (dcln) )
+
+// WG_PP_SEQ_FOR_EACH_I functor.
+#define WG_PP_TYPEALIASER_DCLNTUPLE_DEDUCEDTYPES( \
   r, spec, indx, dcln) \
     BOOST_PP_EXPR_IIF( \
       WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_MARKER_DEDUCEDTYPE( \
         WG_PP_TYPEALIASER_DCLN_SPEC_GETTYPEMACRO(spec) (dcln) ), \
-      WG_PP_TYPEALIASER_DEDUCEDTYPEDCLN_IMPL( \
+      WG_PP_TYPEALIASER_DCLNTUPLE_IMPL( \
         spec, \
         indx, \
         WG_PP_TYPEALIASER_DCLN_SPEC_GETTYPEMACRO(spec) (dcln) ) )
 
-#define WG_PP_TYPEALIASER_DEDUCEDTYPEDCLN_IMPL( \
+#define WG_PP_TYPEALIASER_DCLNTUPLE_IMPL( \
   spec, indx, marked_e_or_d_type) \
   ( \
     typedef \
