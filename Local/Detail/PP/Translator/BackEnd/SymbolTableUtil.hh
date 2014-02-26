@@ -66,12 +66,15 @@
 #define WG_PP_STUTIL_THISU_INDX(decln_seq, decln_objmacro) \
   WG_PP_STUTIL_THISU_INDX_IMPL1(decln_seq, decln_objmacro)
 
+#define WG_PP_STUTIL_SYMBOLTABLE_REPLACE(symbtbl, indx, value) \
+  WG_PP_STUTIL_SYMBOLTABLE_REPLACE_IMPL(symbtbl, indx, value)
+
 //------
 //INPUT:
 //------
 // The symbol table created using <symbol-moduleid>_SYMBOLTABLE_CREATE.
 // This symbol table must have the result of the following defined:
-//   1) WG_PP_STUTIL_CALL_F2(DCLNS, suffix, symbtbl, symbtbl)
+//   1) WG_PP_STUTIL_CALL_F2(GETDCLNS, suffix, symbtbl, symbtbl)
 //   2) WG_PP_STUTIL_CALL_F1(INDX, symbtbl, WG_PP_UCAT_ARG2(DCLNS,suffix) )
 // where suffix is declared in specseq
 //
@@ -133,9 +136,10 @@
       nrmlzd_set_tuple_seq)
 
 //----------------------
-//Calculate this_ index.
+//WG_PP_STUTIL_THISU_INDX
 //----------------------
 
+// Calculates this_ index.
 #define WG_PP_STUTIL_THISU_INDX_IMPL1(decln_seq, decln_objmacro) \
   WG_PP_STUTIL_THISU_INDX_IMPL( \
     (BOOST_PP_NIL) \
@@ -155,6 +159,18 @@
   BOOST_PP_EXPR_IIF( \
     WG_PP_KEYWORDS_STARTSWITH_THISU( decln_objmacro(decln) ), \
     (indx))
+
+//--------------------------------
+//WG_PP_STUTIL_SYMBOLTABLE_REPLACE
+//--------------------------------
+
+// WORKAROUND for BOOST_PP_ARRAY_REPLACE bug.
+#ifndef BOOST_PP_TUPLE_REM_0
+#define BOOST_PP_TUPLE_REM_0() // nothing
+#endif
+
+#define WG_PP_STUTIL_SYMBOLTABLE_REPLACE_IMPL(symbtbl, indx, value) \
+  BOOST_PP_ARRAY_REPLACE(symbtbl, indx, value)
 
 //---------------------
 //UseTypeDeducer Macros
@@ -222,7 +238,7 @@
       symbtbl, \
       WG_PP_STUTIL_CALL_F1(INDX, symbtbl, WG_PP_UCAT_ARG2(DCLNS,spec) ), \
       callback( \
-        WG_PP_STUTIL_CALL_F2(DCLNS, spec, symbtbl, symbtbl), \
+        WG_PP_STUTIL_CALL_F2(GETDCLNS, spec, symbtbl, symbtbl), \
         iteration, \
         data) )
 
