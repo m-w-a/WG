@@ -34,7 +34,7 @@
 //
 //   {
 //     (
-//       (aliasrootname)(getdclnsmacro)(gettypemacro) {*}
+//       (aliasrootname)(getdclnsmacro)(gettypemacro) {(*)}*
 //     )
 //   }+
 //
@@ -91,16 +91,6 @@
 //Utils
 //-----
 
-#define WG_PP_TYPEALIASER_DCLN_SPEC_ALIASROOTNAME(spec) BOOST_PP_SEQ_ELEM(0, spec)
-#define WG_PP_TYPEALIASER_DCLN_SPEC_GETDCLNSMACRO(spec) BOOST_PP_SEQ_ELEM(1, spec)
-#define WG_PP_TYPEALIASER_DCLN_SPEC_GETTYPEMACRO(spec) BOOST_PP_SEQ_ELEM(2, spec)
-
-#define WG_PP_TYPEALIASER_REPLACETYPE_SPEC_ALIASROOTNAME(spec) BOOST_PP_SEQ_ELEM(0, spec)
-#define WG_PP_TYPEALIASER_REPLACETYPE_SPEC_GETDCLNSMACRO(spec) BOOST_PP_SEQ_ELEM(1, spec)
-#define WG_PP_TYPEALIASER_REPLACETYPE_SPEC_GETTYPEMACRO(spec) BOOST_PP_SEQ_ELEM(2, spec)
-#define WG_PP_TYPEALIASER_REPLACETYPE_SPEC_SETDCLNSMACRO(spec) BOOST_PP_SEQ_ELEM(3, spec)
-#define WG_PP_TYPEALIASER_REPLACETYPE_SPEC_SETTYPEMACRO(spec) BOOST_PP_SEQ_ELEM(4, spec)
-
 // indx:
 //   The order in which types were aliased in the symbol table.
 #define WG_PP_TYPEALIASER_ALIASNAME(aliasrootname, indx) \
@@ -109,6 +99,10 @@
 //----------------------
 //WG_PP_TYPEALIASER_DCLN
 //----------------------
+
+#define WG_PP_TYPEALIASER_DCLN_SPEC_ALIASROOTNAME(spec) BOOST_PP_SEQ_ELEM(0, spec)
+#define WG_PP_TYPEALIASER_DCLN_SPEC_GETDCLNSMACRO(spec) BOOST_PP_SEQ_ELEM(1, spec)
+#define WG_PP_TYPEALIASER_DCLN_SPEC_GETTYPEMACRO(spec) BOOST_PP_SEQ_ELEM(2, spec)
 
 #define WG_PP_TYPEALIASER_DCLN_IMPL( \
   typealiasername, replacementpolicy, symbtbl, specseq) \
@@ -188,6 +182,12 @@
 //-----------------------------
 //WG_PP_TYPEALIASER_REPLACETYPE
 //-----------------------------
+
+#define WG_PP_TYPEALIASER_REPLACETYPE_SPEC_ALIASROOTNAME(spec) BOOST_PP_SEQ_ELEM(0, spec)
+#define WG_PP_TYPEALIASER_REPLACETYPE_SPEC_GETDCLNSMACRO(spec) BOOST_PP_SEQ_ELEM(1, spec)
+#define WG_PP_TYPEALIASER_REPLACETYPE_SPEC_GETTYPEMACRO(spec) BOOST_PP_SEQ_ELEM(2, spec)
+#define WG_PP_TYPEALIASER_REPLACETYPE_SPEC_SETDCLNSMACRO(spec) BOOST_PP_SEQ_ELEM(3, spec)
+#define WG_PP_TYPEALIASER_REPLACETYPE_SPEC_SETTYPEMACRO(spec) BOOST_PP_SEQ_ELEM(4, spec)
 
 #define WG_PP_TYPEALIASER_REPLACETYPE_IMPL( \
   symbtbl, istpl, typealiasername, replacementpolicy, specseq) \
