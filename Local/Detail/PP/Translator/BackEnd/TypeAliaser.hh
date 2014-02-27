@@ -51,37 +51,29 @@
     WG_PP_TYPEALIASER_DCLN_IMPL( \
       typealiasername, replacementpolicy, symbtbl, specseq)
 
-// Replaces the types associated with the dclnS specified in specseq with types
-// declared in typealiasername, where the latter is the name of the type that
-// was created using WG_PP_TYPEALIASER_DCLN.
-//
-// replacementpolicy:
-//   Must match the one used in WG_PP_TYPEALIASER_DCLN to create typealiasername.
-//
-// specseq:
+// WG_PP_STUTIL_REPLACESEQ callback.
+// seq:
+//   A WG_PP_SEQ.
+// iteration:
+//   See WG_PP_STUTIL_REPLACESEQ::callback
+// dataseq:
 //   {
-//     (
-//       (aliasrootname)(getdclnsmacro)(gettypemacro)(setdclnsmacro)(settypemacro)
-//     )
-//   }+
+//     (istpl)(typealiasername)(replacementpolicy)
+//     { ( (aliasrootname)(gettypemacro)(settypemacro) ) }+
+//   }
 //
-//   aliasrootname:
+//   replacementpolicy:
 //     Must match the one used in WG_PP_TYPEALIASER_DCLN to create typealiasername.
-//   getdclnsmacro:
+//   aliasrootname:
 //     Must match the one used in WG_PP_TYPEALIASER_DCLN to create typealiasername.
 //   gettypemacro:
 //     Must match the one used in WG_PP_TYPEALIASER_DCLN to create typealiasername.
-//   setdclnsmacro:
-//     A two arg macro that when applied to (symbtbl, replacement_dclns) replaces
-//     some sequence of dclnS with replacement_dclns.
 //   settypemacro:
 //     A two arg macro whose first arg takes an element of getdclnsmacro(symbtbl)
 //     and whose second arg takes some tokens, and when which expanded
 //     replaces the type associated with the first arg with the second arg.
-#define WG_PP_TYPEALIASER_REPLACETYPE( \
-  symbtbl, istpl, typealiasername, replacementpolicy, specseq) \
-    WG_PP_TYPEALIASER_REPLACETYPE_IMPL( \
-      symbtbl, istpl, typealiasername, replacementpolicy, specseq)
+#define WG_PP_TYPEALIASER_REPLACETYPE(seq, iteration, dataseq) \
+  WG_PP_TYPEALIASER_REPLACETYPE_IMPL(seq, iteration, dataseq)
 
 //###########
 //Impl Macros
@@ -183,84 +175,79 @@
 //WG_PP_TYPEALIASER_REPLACETYPE
 //-----------------------------
 
-#define WG_PP_TYPEALIASER_REPLACETYPE_SPEC_ALIASROOTNAME(spec) BOOST_PP_SEQ_ELEM(0, spec)
-#define WG_PP_TYPEALIASER_REPLACETYPE_SPEC_GETDCLNSMACRO(spec) BOOST_PP_SEQ_ELEM(1, spec)
-#define WG_PP_TYPEALIASER_REPLACETYPE_SPEC_GETTYPEMACRO(spec) BOOST_PP_SEQ_ELEM(2, spec)
-#define WG_PP_TYPEALIASER_REPLACETYPE_SPEC_SETDCLNSMACRO(spec) BOOST_PP_SEQ_ELEM(3, spec)
-#define WG_PP_TYPEALIASER_REPLACETYPE_SPEC_SETTYPEMACRO(spec) BOOST_PP_SEQ_ELEM(4, spec)
+#define WG_PP_TYPEALIASER_REPLACETYPE_DATASEQ_ISTPL(dataseq) \
+  BOOST_PP_SEQ_ELEM(0, dataseq)
+#define WG_PP_TYPEALIASER_REPLACETYPE_DATASEQ_TYPEALIASERNAME(dataseq) \
+  BOOST_PP_SEQ_ELEM(1, dataseq)
+#define WG_PP_TYPEALIASER_REPLACETYPE_DATASEQ_REPLACEMENTPOLICY(dataseq) \
+  BOOST_PP_SEQ_ELEM(2, dataseq)
+#define WG_PP_TYPEALIASER_REPLACETYPE_DATASEQ_DCLNSPECSEQ(dataseq) \
+  BOOST_PP_SEQ_REST_N(3, dataseq)
+#define WG_PP_TYPEALIASER_REPLACETYPE_DATASEQ_DCLNSPEC_ALIASROOTNAME(dclnspec) \
+  BOOST_PP_SEQ_ELEM(0, dclnspec)
+#define WG_PP_TYPEALIASER_REPLACETYPE_DATASEQ_DCLNSPEC_GETTYPEMACRO(dclnspec) \
+  BOOST_PP_SEQ_ELEM(1, dclnspec)
+#define WG_PP_TYPEALIASER_REPLACETYPE_DATASEQ_DCLNSPEC_SETTYPEMACRO(dclnspec) \
+  BOOST_PP_SEQ_ELEM(2, dclnspec)
 
-#define WG_PP_TYPEALIASER_REPLACETYPE_IMPL( \
-  symbtbl, istpl, typealiasername, replacementpolicy, specseq) \
-    BOOST_PP_SEQ_FOR_EACH( \
-      WG_PP_TYPEALIASER_REPLACETYPE_SPECENTRY, \
-      (symbtbl)(istpl)(typealiasername)(replacementpolicy), \
-      specseq )
-
-// BOOST_PP_SEQ_FOR_EACH functor.
-#define WG_PP_TYPEALIASER_REPLACETYPE_SPECENTRY( \
-  r, symbtbl_istpl_typealiasername_replacementpolicy, spec) \
-    WG_PP_TYPEALIASER_REPLACETYPE_SPEC_SETDCLNSMACRO(spec) \
-    ( \
-      BOOST_PP_SEQ_ELEM(0, symbtbl_istpl_typealiasername_replacementpolicy), \
-      WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLNSEQ( \
-        BOOST_PP_SEQ_REST_N(1, symbtbl_istpl_typealiasername_replacementpolicy) \
-        (spec), \
-        WG_PP_TYPEALIASER_REPLACETYPE_SPEC_GETDCLNSMACRO(spec) \
-        ( \
-          BOOST_PP_SEQ_ELEM( \
-            0, \
-            symbtbl_istpl_typealiasername_replacementpolicy) \
-        ) ) \
-    )
-
-#define WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLNSEQ( \
-  istpl_typealiasername_replacementpolicy_spec, dclns_to_replace) \
-    WG_PP_SEQ_FOR_EACH_I( \
-      WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLNENTRY, \
-      istpl_typealiasername_replacementpolicy_spec, \
-      dclns_to_replace)
+#define WG_PP_TYPEALIASER_REPLACETYPE_IMPL(seq, iteration, dataseq) \
+  WG_PP_SEQ_FOR_EACH_I( \
+    WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLNTUPLE, \
+    (iteration)(dataseq), \
+    seq)
 
 // WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLNENTRY( \
-  r, istpl_typealiasername_replacementpolicy_spec, indx, dcln) \
+#define WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLNTUPLE( \
+  r, iteration_dataseq, indx, dcln) \
     ( \
       WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLN( \
-        BOOST_PP_SEQ_ELEM(0, istpl_typealiasername_replacementpolicy_spec), \
-        BOOST_PP_SEQ_ELEM(1, istpl_typealiasername_replacementpolicy_spec), \
-        BOOST_PP_SEQ_ELEM(2, istpl_typealiasername_replacementpolicy_spec), \
-        BOOST_PP_SEQ_ELEM(3, istpl_typealiasername_replacementpolicy_spec), \
+        BOOST_PP_SEQ_ELEM(0, iteration_dataseq), \
+        BOOST_PP_SEQ_ELEM(1, iteration_dataseq), \
         indx, \
         dcln) \
     )
 
 #define WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLN( \
-  istpl, typealiasername, replacementpolicy, spec, indx, dcln) \
+  iteration, dataseq, indx, dcln) \
+    WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLN2( \
+      WG_PP_TYPEALIASER_REPLACETYPE_DATASEQ_ISTPL(dataseq), \
+      WG_PP_TYPEALIASER_REPLACETYPE_DATASEQ_TYPEALIASERNAME(dataseq), \
+      WG_PP_TYPEALIASER_REPLACETYPE_DATASEQ_REPLACEMENTPOLICY(dataseq), \
+      BOOST_PP_SEQ_ELEM( \
+        iteration, \
+        WG_PP_TYPEALIASER_REPLACETYPE_DATASEQ_DCLNSPECSEQ(dataseq) ), \
+      indx, \
+      dcln)
+
+#define WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLN2( \
+  istpl, typealiasername, replacementpolicy, dclnspec, indx, dcln) \
     WG_PP_UCAT_ARG2( \
       WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLN, \
       replacementpolicy) \
-    (istpl, typealiasername, spec, indx, dcln)
+    (istpl, typealiasername, dclnspec, indx, dcln)
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLN_ALLTYPES
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #define WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLN_ALLTYPES( \
-  istpl, typealiasername, spec, indx, dcln) \
-    WG_PP_TYPEALIASER_REPLACETYPE_SPEC_SETTYPEMACRO(spec) \
+  istpl, typealiasername, dclnspec, indx, dcln) \
+    WG_PP_TYPEALIASER_REPLACETYPE_DATASEQ_DCLNSPEC_SETTYPEMACRO(dclnspec) \
     ( \
       dcln, \
       WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLN_ALLTYPES2 \
-      (istpl, typealiasername, spec, indx, dcln) \
+      (istpl, typealiasername, dclnspec, indx, dcln) \
     )
 
 #define WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLN_ALLTYPES2( \
-  istpl, typealiasername, spec, indx, dcln) \
+  istpl, typealiasername, dclnspec, indx, dcln) \
     WG_PP_MARKER_NOOP \
     type \
     ( \
       WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
       typealiasername::WG_PP_TYPEALIASER_ALIASNAME( \
-        WG_PP_TYPEALIASER_REPLACETYPE_SPEC_ALIASROOTNAME(spec), indx) \
+        WG_PP_TYPEALIASER_REPLACETYPE_DATASEQ_DCLNSPEC_ALIASROOTNAME(dclnspec), \
+        indx) \
     )
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -268,17 +255,17 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #define WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLN_DEDUCEDTYPES( \
-  istpl, typealiasername, spec, indx, dcln) \
+  istpl, typealiasername, dclnspec, indx, dcln) \
     BOOST_PP_IIF( \
       WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_MARKER_DEDUCEDTYPE( \
-        WG_PP_TYPEALIASER_REPLACETYPE_SPEC_GETTYPEMACRO(spec) \
+        WG_PP_TYPEALIASER_REPLACETYPE_DATASEQ_DCLNSPEC_GETTYPEMACRO(dclnspec) \
         (dcln) ), \
       WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLN_ALLTYPES, \
       WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLN_NONE) \
-    (istpl, typealiasername, spec, indx, dcln)
+    (istpl, typealiasername, dclnspec, indx, dcln)
 
 #define WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLN_NONE( \
-  istpl, typealiasername, spec, indx, dcln) \
+  istpl, typealiasername, dclnspec, indx, dcln) \
     dcln
 
 #endif /* WG_PP_TYPEALIASER_HH_ */

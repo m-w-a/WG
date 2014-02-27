@@ -30,13 +30,11 @@
 //   { ( (gettypemacro)(settypemacro) ) }+
 //
 //   gettypemacro:
-//     A one arg macro that when applied to an element of declnseq expands to
-//     the type associated with that sequence.
+//     A one arg macro that when applied to an element of "seq" expands to the
+//     type associated with that element.
 //   settypemacro:
-//     A two arg macro whose first arg takes an element of declnseq and whose
-//     second arg takes some tokens.
-//     The purpose of this macro is replace the type associated with the first
-//     arg with the second arg.
+//     A two arg macro that when applied to an element of "seq" and some token
+//     replaces the type associated with that element with said token.
 #define WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ(seq, iteration, dataseq) \
   WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ_IMPL(seq, iteration, dataseq)
 

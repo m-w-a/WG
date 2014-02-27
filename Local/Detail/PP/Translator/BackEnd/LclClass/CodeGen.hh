@@ -7,9 +7,10 @@
 #include <WG/Local/Detail/PP/Translator/BackEnd/ID.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/TypeAliaser.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LocalOperandSyntaxCheck.hh>
-#include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
 #include <WG/Local/Detail/LclClass/Initializer.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/TypeExtractor.hh>
+#include <WG/Local/Detail/PP/Translator/Markers.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
 
 //###########
 //Public APIs
@@ -74,20 +75,45 @@
 
 // Skip MEMINT since any of the variables whose types it is deduced from must
 // already be in scope.
-#define WG_PP_LCLCLASS_CG_TYPEALIASER_SPECSEQ() \
+#define WG_PP_LCLCLASS_CG_TYPEALIASER_DCLN_SPECSEQ() \
   ( \
     (memlike) \
     (WG_PP_LCLCLASS_SYMBOLTABLE_GETDCLNS_MEMEXT) \
     (WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_GETTYPE_MEMEXT) \
-    (WG_PP_LCLCLASS_SYMBOLTABLE_SETDCLNS_MEMEXT) \
-    (WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_SETTYPE_MEMEXT) \
   )
+
+#define WG_PP_LCLCLASS_CG_TYPEALIASER_REPLACER_SPECSEQ() \
+  ( \
+    (WG_PP_LCLCLASS_SYMBOLTABLE_GETDCLNS_MEMEXT) \
+    (WG_PP_LCLCLASS_SYMBOLTABLE_SETDCLNS_MEMEXT) \
+  )
+
+#define WG_PP_LCLCLASS_CG_TYPEALIASER_REPLACER_CALLBACKDATA( \
+  istpl, typealiasername, replacementpolicy) \
+    (istpl) \
+    (typealiasername) \
+    (replacementpolicy) \
+    ( \
+      (memlike) \
+      (WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_GETTYPE_MEMEXT) \
+      (WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_SETTYPE_MEMEXT) \
+    )
 
 //-------------------
 //EraseMarkers Utils.
 //-------------------
 
-#define WG_PP_LCLCLASS_CG_ERASEMARKERSCALLBACKDATASEQ() \
+#define WG_PP_LCLCLASS_CG_ERASEMARKERS_SPECSEQ() \
+  ( \
+    (WG_PP_LCLCLASS_SYMBOLTABLE_GETDCLNS_MEMEXT) \
+    (WG_PP_LCLCLASS_SYMBOLTABLE_SETDCLNS_MEMEXT) \
+  ) \
+  ( \
+    (WG_PP_LCLCLASS_SYMBOLTABLE_GETDCLNS_MEMINT) \
+    (WG_PP_LCLCLASS_SYMBOLTABLE_SETDCLNS_MEMINT) \
+  )
+
+#define WG_PP_LCLCLASS_CG_ERASEMARKERS_CALLBACKDATA() \
   ( \
     (WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_GETTYPE_MEMEXT) \
     (WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_SETTYPE_MEMEXT) \
@@ -106,24 +132,26 @@
     WG_PP_LCLCLASS_CG_TYPEALIASER_NAME(name), \
     DEDUCEDTYPES, \
     symbtbl, \
-    WG_PP_LCLCLASS_CG_TYPEALIASER_SPECSEQ() ) \
+    WG_PP_LCLCLASS_CG_TYPEALIASER_DCLN_SPECSEQ() ) \
     WG_PP_LCLCLASS_CODEGEN_START_IMPL2( \
       name, \
-      WG_PP_TYPEALIASER_REPLACETYPE( \
+      WG_PP_STUTIL_REPLACESEQ( \
         symbtbl, \
-        WG_PP_LCLCLASS_SYMBOLTABLE_ISTPL(symbtbl), \
-        WG_PP_LCLCLASS_CG_TYPEALIASER_NAME(name), \
-        DEDUCEDTYPES, \
-        WG_PP_LCLCLASS_CG_TYPEALIASER_SPECSEQ() ) )
+        WG_PP_LCLCLASS_CG_TYPEALIASER_REPLACER_SPECSEQ(), \
+        WG_PP_TYPEALIASER_REPLACETYPE, \
+        WG_PP_LCLCLASS_CG_TYPEALIASER_REPLACER_CALLBACKDATA( \
+          WG_PP_LCLCLASS_SYMBOLTABLE_ISTPL(symbtbl), \
+          WG_PP_LCLCLASS_CG_TYPEALIASER_NAME(name), \
+          DEDUCEDTYPES) ) )
 
 #define WG_PP_LCLCLASS_CODEGEN_START_IMPL2(name, symbtbl) \
   WG_PP_LCLCLASS_CODEGEN_START_IMPL3( \
     name, \
     WG_PP_STUTIL_REPLACESEQ( \
       symbtbl, \
-      (MEMEXT)(MEMINT), \
+      WG_PP_LCLCLASS_CG_ERASEMARKERS_SPECSEQ(), \
       WG_PP_TRNSLTR_MARKERS_ERASEMARKERSINSEQ, \
-      WG_PP_LCLCLASS_CG_ERASEMARKERSCALLBACKDATASEQ() ) )
+      WG_PP_LCLCLASS_CG_ERASEMARKERS_CALLBACKDATA() ) )
 
 #define WG_PP_LCLCLASS_CODEGEN_START_IMPL3(name, symbtbl) \
   WG_PP_LOCALOPERANDSYNTAXCHECK_DCLN( \
