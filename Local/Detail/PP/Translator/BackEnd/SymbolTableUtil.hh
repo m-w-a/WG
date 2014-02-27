@@ -11,28 +11,6 @@
 // Therefore it is ok if it assumes SymbolTable is implemented as a pp array.
 //----------------------------------------------------------------------------//
 
-//################
-//Interface Impls.
-//  (Implements interfaces required by external macros.)
-//################
-
-// Expands to <symbtbl-moduleid>_<function>(arg)
-//
-// symbtbl:
-//   The first element must be the moduleid.
-#define WG_PP_STUTIL_CALL_F1(function, symbtbl, arg) \
-  WG_PP_UCAT_ARG2( \
-    BOOST_PP_ARRAY_ELEM(0, symbtbl), function) (arg)
-
-// Expands to <symbtbl-moduleid>_<functionpt1>_<functionpt2>(arg)
-//
-// symbtbl:
-//   The first element must be the moduleid.
-#define WG_PP_STUTIL_CALL_F2(functionpt1, functionpt2, symbtbl, arg) \
-  WG_PP_UCAT_ARG3( \
-    BOOST_PP_ARRAY_ELEM(0, symbtbl), functionpt1, functionpt2) \
-  (arg)
-
 //###########
 //Public APIs
 //###########
@@ -69,21 +47,31 @@
 #define WG_PP_STUTIL_SYMBOLTABLE_REPLACE(symbtbl, indx, value) \
   WG_PP_STUTIL_SYMBOLTABLE_REPLACE_IMPL(symbtbl, indx, value)
 
+// Use this to programmatically replace multiple sequences in the SymbolTable
+// with one call.
+// Otherwise manual nested calls along the lines of the following are required:
+//
+// REPLACE(
+//   REPLACE(symbtbl, ...),
+//   ...)
+//
 //------
 //INPUT:
 //------
-// The symbol table created using <symbol-moduleid>_SYMBOLTABLE_CREATE.
-// This symbol table must have the result of the following defined:
-//   1) WG_PP_STUTIL_CALL_F2(GETDCLNS, suffix, symbtbl, symbtbl)
-//   2) WG_PP_STUTIL_CALL_F1(INDX, symbtbl, WG_PP_UCAT_ARG2(DCLNS,suffix) )
-// where suffix is declared in specseq
-//
 // specseq:
-//   { ( suffix ) }+
+//   { ( (getdclnsmacro)(setdclnsmacro) ) }+
+//
+//   getdclnsmacro:
+//     A one arg macro that when applied to symbtbl expands to a WG_PP_SEQ
+//     sequence of dclnS that is to be replaced.
+//   setdclnsmacro:
+//     A two arg macro that when applied to (symbtbl, replacement_dclns) replaces
+//     some sequence of dclnS with replacement_dclns.
 //
 // callback:
 //   A three argument macro to apply to the sequence(s) to be replaced.
-//   The first arg will be the sequence from the symbtbl that needs to be
+//   It must expand to a replacement sequence.
+//   The first arg will be the sequence from the symbtbl that is to be
 //   replaced, as specified by specseq.
 //   The second arg will be a zero-based index into specseq specifying which
 //   spec is being processed.
@@ -135,9 +123,9 @@
       ~, \
       nrmlzd_set_tuple_seq)
 
-//----------------------
+//-----------------------
 //WG_PP_STUTIL_THISU_INDX
-//----------------------
+//-----------------------
 
 // Calculates this_ index.
 #define WG_PP_STUTIL_THISU_INDX_IMPL1(decln_seq, decln_objmacro) \
@@ -172,9 +160,12 @@
 #define WG_PP_STUTIL_SYMBOLTABLE_REPLACE_IMPL(symbtbl, indx, value) \
   BOOST_PP_ARRAY_REPLACE(symbtbl, indx, value)
 
-//---------------------
-//UseTypeDeducer Macros
-//---------------------
+//-----------------------
+//WG_PP_STUTIL_REPLACESEQ
+//-----------------------
+
+#define WG_PP_STUTIL_REPLACESEQ_SPEC_GETDCLNSMACRO(spec) BOOST_PP_SEQ_ELEM(0, spec)
+#define WG_PP_STUTIL_REPLACESEQ_SPEC_SETDCLNSMACRO(spec) BOOST_PP_SEQ_ELEM(1, spec)
 
 #define WG_PP_STUTIL_REPLACESEQ_WHILE_STATE_INIT( \
   symbtbl, specseq, callback, data) \
@@ -227,19 +218,15 @@
           callback, \
           data )))
 
-// WORKAROUND for BOOST_PP_ARRAY_REPLACE bug.
-#ifndef BOOST_PP_TUPLE_REM_0
-#define BOOST_PP_TUPLE_REM_0() // nothing
-#endif
-
 #define WG_PP_STUTIL_REPLACESEQ_REPLACESPEC( \
   symbtbl, spec, callback, iteration, data) \
-    BOOST_PP_ARRAY_REPLACE( \
+    WG_PP_STUTIL_REPLACESEQ_SPEC_SETDCLNSMACRO(spec) \
+    ( \
       symbtbl, \
-      WG_PP_STUTIL_CALL_F1(INDX, symbtbl, WG_PP_UCAT_ARG2(DCLNS,spec) ), \
       callback( \
-        WG_PP_STUTIL_CALL_F2(GETDCLNS, spec, symbtbl, symbtbl), \
+        WG_PP_STUTIL_REPLACESEQ_SPEC_GETDCLNSMACRO(spec) (symbtbl), \
         iteration, \
-        data) )
+        data) \
+    )
 
 #endif /* WG_PP_SYMBOLTABLEUTIL_HH_ */

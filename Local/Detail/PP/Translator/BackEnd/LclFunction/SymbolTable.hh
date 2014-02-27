@@ -6,10 +6,9 @@
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
 
-//################
-//Interface Impls.
-//  (Implements interfaces required by external macros.)
-//################
+//###########
+//Public APIs
+//###########
 
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_MODULEID(symbtbl) \
   WG_PP_LCLFUNCTION_ST_GET(symbtbl, MODULEID)
@@ -66,8 +65,12 @@
   WG_PP_SEQ_ELEM(1, dcln)
 
 // Returns: { BOOST_PP_NIL | { (boundvar-dcln) }+ }
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_BOUNDVAR(symbtbl) \
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_GETDCLNS_BOUNDVAR(symbtbl) \
   WG_PP_LCLFUNCTION_ST_GET(symbtbl, DCLNS_BOUNDVAR)
+
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_SETDCLNS_BOUNDVAR(symbtbl, dclns) \
+  WG_PP_STUTIL_SYMBOLTABLE_REPLACE( \
+    symbtbl, WG_PP_LCLFUNCTION_SYMBOLTABLE_INDX(DCLNS_BOUNDVAR), dclns)
 
 // Returns: { integer }
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_SIZE_BOUNDVAR(symbtbl) \
@@ -103,8 +106,12 @@
   WG_PP_SEQ_ELEM(2, dcln)
 
 // Returns: { BOOST_PP_NIL | { (setvar-dcln) }+ }
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_SETVAR(symbtbl) \
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_GETDCLNS_SETVAR(symbtbl) \
   WG_PP_LCLFUNCTION_ST_GET(symbtbl, DCLNS_SETVAR)
+
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_SETDCLNS_SETVAR(symbtbl, dclns) \
+  WG_PP_STUTIL_SYMBOLTABLE_REPLACE( \
+    symbtbl, WG_PP_LCLFUNCTION_SYMBOLTABLE_INDX(DCLNS_SETVAR), dclns)
 
 // Returns: { integer }
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_SIZE_SETVAR(symbtbl) \
@@ -117,18 +124,6 @@
 //Returns: { integer }
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_TOTALSIZE(symbtbl) \
   WG_PP_LCLFUNCTION_ST_GET(symbtbl, DCLNS_TOTALSIZE)
-
-//#######################
-//STUTIL Interface Impls.
-//#######################
-
-// suffix: must match one of the following: WG_PP_LCLFUNCTION_ST_INDX_<suffix>
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_INDX(suffix) \
-  BOOST_PP_CAT(WG_PP_LCLFUNCTION_ST_INDX_, suffix)
-
-//###########
-//Public APIs
-//###########
 
 //-----
 //NOTE:
@@ -180,6 +175,10 @@
 //###########
 //Impl Macros
 //###########
+
+// suffix: must match one of the following: WG_PP_LCLFUNCTION_ST_INDX_<suffix>
+#define WG_PP_LCLFUNCTION_SYMBOLTABLE_INDX(suffix) \
+  BOOST_PP_CAT(WG_PP_LCLFUNCTION_ST_INDX_, suffix)
 
 #define WG_PP_LCLFUNCTION_ST_INDX_MODULEID 0
 

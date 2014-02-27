@@ -6,14 +6,6 @@
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
 
-//#######################
-//STUTIL Interface Impls.
-//#######################
-
-// suffix: must match one of the following: WG_PP_LCLCLASS_ST_INDX_<suffix>
-#define WG_PP_LCLCLASS_SYMBOLTABLE_INDX(suffix) \
-  BOOST_PP_CAT(WG_PP_LCLCLASS_ST_INDX_, suffix)
-
 //###########
 //Public APIs
 //###########
@@ -154,6 +146,10 @@
 //###########
 //Impl Macros
 //###########
+
+// suffix: must match one of the following: WG_PP_LCLCLASS_ST_INDX_<suffix>
+#define WG_PP_LCLCLASS_SYMBOLTABLE_INDX(suffix) \
+  BOOST_PP_CAT(WG_PP_LCLCLASS_ST_INDX_, suffix)
 
 #define WG_PP_LCLCLASS_ST_INDX_MODULEID 0
 
