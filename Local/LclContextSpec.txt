@@ -5,10 +5,18 @@
 Note: All terms not defined here should be referenced in AutoFunctorSpec.txt
 
 context-manager:
-  1) It does not make sense for a context manager to be 
-    qualified const since an object of this type will be used to call the 
-    non-const methods onenter and onexit. Hence any const qualifications will
-    result in a compile-time error.
+  1) The type of the context manager object as specified in LCLCCONTEXT macro 
+    determines whether the associated context handlers are called by const or 
+    not. (Therefore any reference specification for the said type is ignored.)
+    Rationale:
+      The context scope is a subscope of the LCLCONTEXT macro scope, therefore 
+      the context manager object is already visible in it. The only reason its 
+      type needs to be specified is because it needs to call "onexit" at the end 
+      of the context scope, and the only way to do this without having to require
+      it to be specified in both the start and end macros is to cache a reference
+      to it in some locally generated object. Unfortunately, having to specify 
+      the type, either implicity or explicitly, allows for a const variation to
+      creep in, thus effecting the calls to the context handlers.
 
 adhoc-context-handlers:
   1) At least one handler must be specified.

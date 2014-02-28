@@ -3,10 +3,9 @@
 
 #include <boost/preprocessor.hpp>
 
-//################
-//Interface Impls.
-//  (Implements interfaces required by external macros.)
-//################
+//###########
+//Public APIs
+//###########
 
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_MODULEID(symbtbl) \
   WG_PP_LCLCONTEXT_ST_GET(symbtbl, MODULEID)
@@ -16,10 +15,6 @@
 
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_ISNOEX(symbtbl) \
   WG_PP_LCLCONTEXT_ST_GET(symbtbl, NOEX)
-
-//###########
-//Public APIs
-//###########
 
 //-----
 //NOTE:
@@ -75,6 +70,10 @@
 //###########
 //Impl Macros
 //###########
+
+// suffix: must match one of the following: WG_PP_LCLCONTEXT_ST_INDX_<suffix>
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_INDX(suffix) \
+  BOOST_PP_CAT(WG_PP_LCLCONTEXT_ST_INDX_, suffix)
 
 #define WG_PP_LCLCONTEXT_ST_INDX_MODULEID 0
 
