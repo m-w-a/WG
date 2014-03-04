@@ -60,4 +60,7 @@ WG_LCLCONTEXT(
   }
 #endif
 
+  /* Outside of try-catch clause since this may itself throw and we don't want
+   * context exitS to be called twice.
+   */
   mgrs.exit(false);

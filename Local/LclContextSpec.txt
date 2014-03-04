@@ -47,9 +47,8 @@ lclcontext-spec :=
   | with-adhoc-decln
 
 with-dcln :=
-  with( context-manager ) [ entered_as( bound-var-dcln ) ]
+  with( context-manager ) [ entered_as( type-var-dcln ) ]
 
-// An expression that is or produces a context manager object.
 context-manager := 
   bound-var-dcln
 
