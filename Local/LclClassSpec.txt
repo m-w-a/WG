@@ -60,7 +60,13 @@ derives-tuple-seq :=
 derives-tuple :=
   ( base-specifier )
 
-memext-tuple-seq := bound-tuple-seq
+memext-tuple-seq :=
+    memext-tuple
+  | memext-tuple-seq memext-tuple
+
+memext-tuple :=
+    ( implicit-type-var-dcln ) /* Mimic a variable with the same name in scope. */
+  | ( explicit-type-var-dcln ) /* Declare a normal variable, ignoring scope info. */
 
 memint-tuple-seq := set-tuple-seq
 
