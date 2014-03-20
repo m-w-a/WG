@@ -18,6 +18,9 @@
 //Public APIs
 //###########
 
+#define WG_PP_PARSEDTYPE_ISLOCALTYPE(parsedtype) \
+  WG_PP_PARSEDTYPE_ISLOCALTYPE_IMPL(parsedtype)
+
 // parsedlocaltype: parsed-local-type
 // Result: local-nonconst-nonref-type
 //
@@ -52,7 +55,7 @@
 //Utils
 //-----
 
-#define WG_PP_PARSEDTYPE_ISLOCALTYPE(parsedtype) \
+#define WG_PP_PARSEDTYPE_ISLOCALTYPE_IMPL(parsedtype) \
   BOOST_PP_IIF( \
     WG_PP_KEYWORDS_STARTSWITH_LOCAL(parsedtype), \
     1, \
