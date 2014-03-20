@@ -2,8 +2,8 @@
 #define WG_LCLFUNCTION_HH_
 
 // This has to be defined before any LclFunction includes.
-#ifndef WG_PP_LCLFUNCTION_MAX_ARGS
-  #define WG_PP_LCLFUNCTION_MAX_ARGS 15
+#ifndef WG_PP_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY
+  #define WG_PP_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY 15
 #endif
 
 #include <boost/config.hpp>

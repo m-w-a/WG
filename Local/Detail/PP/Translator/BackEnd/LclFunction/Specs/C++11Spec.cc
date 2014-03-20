@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 //**************************//
 
 // Not part of the spec.
-// Needed for the definition of WG_PP_LCLFUNCTION_MAX_ARGS.
+// Needed for the definition of WG_PP_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY.
 #include <WG/Local/LclFunction.hh>
 
 #include <boost/tuple/tuple.hpp>
