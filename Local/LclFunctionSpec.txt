@@ -1,6 +1,7 @@
 WG_LCLFUNCTION_TYPE(name)
   Expands to the implementation dependent type of the object named "name".
 
+// TODO:
 Differences w/Boost.LocalFunction
   x) This library allows the function name to be specified at and only at the 
     top of the local function declaration, unlike Boost::LocalFunction.
@@ -80,8 +81,8 @@ return:
   2) else if not present then the return type of the function is void.
 
 param-seq:
-  1) Limit: min(WG_PP_LCLFUNCTION_MAX_ARGS, BOOST_PP_LIMIT_REPEAT)
-    Currently, WG_PP_LCLFUNCTION_MAX_ARGS is set to 15
+  1) Limit: min(WG_PP_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY, BOOST_PP_LIMIT_REPEAT)
+    Currently, WG_PP_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY is set to 15
 
 varbind:
   1) See function-variables.
@@ -90,12 +91,20 @@ varset:
   1) See function-variables.
   2) See set-variables.
   3) The order in which variables are set is undefined.
+    Rationale:
+      This is because these variables are initialized from some function 
+      parameter values and in C++ the order of parameter value evaluation in a
+      function call is unspecified.
 
 function-variables:
   Variables that are local to each function instance. Note that each call of the 
   same local function instance gets the same function variables. So, if a function 
   variables' state is changed for a given function instance, that change will 
   be reflected in the next call of the *same* function instance.
+  Naming Rationale: 
+    Said variables are not necessarily implemented as member variables of a  
+    function instance. It is an implementation detail what form they take. 
+    Hence, that's why they're specified with var* keywords and mem* keywords.
 
 //---
 //BNF
@@ -124,26 +133,6 @@ lclfunction-spec :=
 nlt-return-tuple :=
     ( non-local-type-with-no-embedded-commas )
 
-//Note:
-//  1) params needs to be PP parseable because it needs to be prepended/appended
-//    to in codegen for the purpose of constructing the callback signature. 
-//    (That is, we need to be able to insert a comma before and after it.)
-//  2) param-tuple needs to be PP parseable in order for:
-//    a) the user facing function prototype to accurately reflect the specified
-//      param type, and
-//    b) for the generated code to efficiently forward the parameter value.
-//
-//    Example:
-//      1) "params ((big_type) x)" needs to generate:
-//         void interface_func(big_type x);
-//         void impl_func(big_type & x);
-//      2) "params ((big_type const) x)" needs to generate:
-//         void interface_func(big_type const x);
-//         void impl_func(big_type const & x);
-//
-//    Note: If param-tuple was not PP parseable, then there would be no way to
-//      efficiently generate the needed params for impl_func for both the above 
-//      examples. (Try it.)
 param-seq :=
     param-tuple
   | param-seq param-tuple
