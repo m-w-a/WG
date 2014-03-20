@@ -41,21 +41,24 @@ lclcontext-start-macro :=
   | WG_LCLCONTEXT_NOEX_TPL
 
 lclcontext-spec :=
-    with-decln lclcontext-spec
-  | with-adhoc-dcln lclcontext-spec
-  | with-decln 
-  | with-adhoc-decln
+    with-dcln [ lclcontext-spec ]
+  | with-set-dcln [ lclcontext-spec ]
+  | with-adhoc-dcln [ lclcontext-spec ]
 
 with-dcln :=
-  with( context-manager ) [ entered_as( type-var-dcln ) ]
+  with( bound-context-manager ) [ entered_as( type-var-dcln ) ]
 
-context-manager := 
+with-set-dcln :=
+  with_set( set-context-manager ) [ entered_as( type-var-dcln ) ]
+
+bound-context-manager := 
   bound-var-dcln
 
-with-adhoc-decln :=
-  with_adhoc( varbind-seq ) adhoc-context-handlers 
+set-context-manager :=
+  set-var-dcln
 
-varbind-seq := bound-tuple-seq
+with-adhoc-decln :=
+  with_adhoc(  ) varbind bound-tuple-seq adhoc-context-handlers
 
 adhoc-context-handlers :=
   [onenter( compound-statement )] [onexit( compound-statement )]
