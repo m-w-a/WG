@@ -32,17 +32,15 @@ LclFunction:
   modified call traits.
   Binder: local namespace to lclfunction namespace?
   x) Multiple in same macro.
+  x) varbind/varset -> membind/memset NO
+    x) And modify docs accordingly.
+  Exception specification
+  Function variable types.
 
 LclClass:
-  STUTIL remove unnecessary macros.
-
-  x) WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE -> call_traits
-  x) remove WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE
-  x) remove WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE
-  x) remove any misc from TypeExtractor.hh
-  
-  Tests:
-    x) init is called.
-    x) Nested
-    x) Multiple in same scope.
-    x) Multiple in same macro.
+  LOCALOPERANDSSYNTAXCHECK remove:
+    1) just typedef local types and PP add "const/&" to the aliases.
+  local(no-const-ref-local-type) [const/ref] -> typel(local-C++-type)
+  (C++-type) -> type(C++-type)
+  PP: distinguish between "keyword(...)" and keyword-as-identifier
+  x) Properly document memext spec.
