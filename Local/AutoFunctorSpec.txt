@@ -51,6 +51,7 @@ memset:
   1) Member variables of the functor.
   2) For more info see bound-variables and set-variables sections.
 
+// DONE.
 bound-variables:
   1) Variables whose values are bound to variables of the same name from 
     the enclosing scope(s).
@@ -64,6 +65,7 @@ bound-variables:
     convertible to" from the type of the variable that they respectively bind in
     their outer scope.
 
+// DONE.
 set-variables:
   1) Variables whose values are determined by user specified expressions.
   2) If implicitly typed, the types of such variables are determined by the
@@ -91,6 +93,7 @@ local():
   IMPL detail: in C++11 treat such types as regular types for the purposes of 
     codegen? (TODO.)
 
+// DONE.
 this_:
   1) If encountered as a bound variable name, then it will bind to the "this" 
     keyword.
