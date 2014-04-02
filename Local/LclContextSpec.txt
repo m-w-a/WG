@@ -4,20 +4,6 @@
 
 Note: All terms not defined here should be referenced in AutoFunctorSpec.txt
 
-context-manager:
-  1) The type of the context manager object as specified in LCLCCONTEXT macro 
-    determines whether the associated context handlers are called by const or 
-    not. (Therefore any reference specification for the said type is ignored.)
-    Rationale:
-      The context scope is a subscope of the LCLCONTEXT macro scope, therefore 
-      the context manager object is already visible in it. The only reason its 
-      type needs to be specified is because it needs to call "onexit" at the end 
-      of the context scope, and the only way to do this without having to require
-      it to be specified in both the start and end macros is to cache a reference
-      to it in some locally generated object. Unfortunately, having to specify 
-      the type, either implicity or explicitly, allows for a const variation to
-      creep in, thus effecting the calls to the context handlers.
-
 adhoc-context-handlers:
   1) At least one handler must be specified.
 
@@ -42,26 +28,17 @@ lclcontext-start-macro :=
 
 lclcontext-spec :=
     with-dcln [ lclcontext-spec ]
-  | with-set-dcln [ lclcontext-spec ]
   | with-adhoc-dcln [ lclcontext-spec ]
 
 with-dcln :=
-  with( bound-context-manager ) [ entered_as( type-var-dcln ) ]
-
-with-set-dcln :=
-  with_set( set-context-manager ) [ entered_as( type-var-dcln ) ]
-
-bound-context-manager := 
-  bound-var-dcln
-
-set-context-manager :=
-  set-var-dcln
+  with( context-manager-expr ) [ entered_as( type-var-dcln ) ]
 
 with-adhoc-decln :=
-  with_adhoc(  ) varbind bound-tuple-seq adhoc-context-handlers
+    with_adhoc [ varbind bound-tuple-seq ] adhoc-context-handlers
+  | with_adhoc( simple-declaration ) 
+    [ varbind bound-tuple-seq ]
+    [onenter( compound-statement )] [onexit( compound-statement )]
 
-adhoc-context-handlers :=
-  [onenter( compound-statement )] [onexit( compound-statement )]
-
+context-manager-expr := A C++ expression that evaluates to a context manager.
 compound-statement := See C++ standard.
-
+simple-declaration := See C++ standard. 
