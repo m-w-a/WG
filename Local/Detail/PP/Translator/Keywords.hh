@@ -9,9 +9,21 @@
 //Public APIs
 //###########
 
-#define WG_PP_KEYWORDS_EAT_HEADKEYWORD(tokens) \
+#define WG_PP_KEYWORDS_EATHEAD_VOID(tokens) \
   BOOST_PP_EXPAND( \
-    BOOST_PP_CAT(WG_PP_KEYWORDS_EAT_, tokens))
+    BOOST_PP_CAT(WG_PP_KEYWORDS_EAT_VOID_, tokens))
+
+#define WG_PP_KEYWORDS_EATHEAD_TYPE(tokens) \
+  BOOST_PP_EXPAND( \
+    BOOST_PP_CAT(WG_PP_KEYWORDS_EAT_TYPE_, tokens))
+
+#define WG_PP_KEYWORDS_EATHEAD_CONST(tokens) \
+  BOOST_PP_EXPAND( \
+    BOOST_PP_CAT(WG_PP_KEYWORDS_EAT_CONST_, tokens))
+
+#define WG_PP_KEYWORDS_EATHEAD_REF(tokens) \
+  BOOST_PP_EXPAND( \
+    BOOST_PP_CAT(WG_PP_KEYWORDS_EAT_REF_, tokens))
 
 #define WG_PP_KEYWORDS_STARTSWITH_VOID(tokens) \
   WG_PP_KEYWORDS_STARTSWITH_VOID_IMPL(tokens)
@@ -71,11 +83,12 @@
     tokens, \
     WG_PP_KEYWORDS_BEGINSWITH_ref_)
 
-#define WG_PP_KEYWORDS_EAT_void
-#define WG_PP_KEYWORDS_EAT_this_
-#define WG_PP_KEYWORDS_EAT_type
-#define WG_PP_KEYWORDS_EAT_local
-#define WG_PP_KEYWORDS_EAT_const
-#define WG_PP_KEYWORDS_EAT_ref
+#define WG_PP_KEYWORDS_EAT_VOID_void
+
+#define WG_PP_KEYWORDS_EAT_TYPE_type
+
+#define WG_PP_KEYWORDS_EAT_CONST_const
+
+#define WG_PP_KEYWORDS_EAT_REF_ref
 
 #endif /* WG_PP_TRANSLATOR_KEYWORDS_HH_ */
