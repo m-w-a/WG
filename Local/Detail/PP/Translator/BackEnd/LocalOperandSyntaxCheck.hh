@@ -118,7 +118,7 @@
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN2( \
   varrootname, gettypemacro, getobjmacro, indx, dcln)
     BOOST_PP_IIF( \
-      WG_PP_KEYWORDS_STARTSWITH_LOCAL( gettypemacro(dcln) ), \
+      WG_PP_KEYWORDS_STARTSWITH_LCLTYPE( gettypemacro(dcln) ), \
       WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN3, \
       WG_PP_MAPTO_NOTHING_ARG5) \
     (varrootname, gettypemacro, getobjmacro, indx, dcln)

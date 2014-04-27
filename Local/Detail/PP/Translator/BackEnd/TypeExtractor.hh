@@ -57,7 +57,7 @@
 
 #define WG_PP_PARSEDTYPE_ISLOCALTYPE_IMPL(parsedtype) \
   BOOST_PP_IIF( \
-    WG_PP_KEYWORDS_STARTSWITH_LOCAL(parsedtype), \
+    WG_PP_KEYWORDS_STARTSWITH_LCLTYPE(parsedtype), \
     1, \
     0)
 
@@ -73,7 +73,7 @@
         WG_PP_PARSEDTYPE_LOCALTYPE_PARSE_, parsedtype) BOOST_PP_COMMA() \
       elem \
     BOOST_PP_RPAREN() )
-#define WG_PP_PARSEDTYPE_LOCALTYPE_PARSE_local(operand) operand , BOOST_PP_NIL
+#define WG_PP_PARSEDTYPE_LOCALTYPE_PARSE_lcltype(operand) operand , BOOST_PP_NIL
 #define WG_PP_PARSEDTYPE_LOCALTYPE_PARSE2(operand, prefixed_qualseq, elem) \
   BOOST_PP_IIF( \
     elem, \
