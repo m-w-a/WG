@@ -7,7 +7,7 @@
     WG_LCLCLASS \
     (Local1, \
      derives (protected Base) \
-     memext (local(Param0Type) name)  (var) \
+     memext (lcltype(Param0Type) name)  (var) \
      memint (score, 21) ) \
       void init() \
       { \
@@ -20,7 +20,7 @@
     WG_LCLCLASS \
     (Local2, \
      derives (protected Base) \
-     memext (local(Param0Type) name)  (var) \
+     memext (lcltype(Param0Type) name)  (var) \
      memint (score, 21) ) \
       void init() \
       { \

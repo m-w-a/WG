@@ -8,7 +8,7 @@ TEST(wg_lclclass_memintexplicit, EnsureTypeOfNotUsed)
 {
   try
   {
-    WG_LCLCLASS(Local, memint ((int) value, 1.2f) )
+    WG_LCLCLASS(Local, memint (type(int) value, 1.2f) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST(value);
@@ -29,7 +29,7 @@ TEST(wg_lclclass_memintexplicit, OkIfMemTypeGloballyScoped)
   {
     WG_LCLCLASS
     (Local,
-      memint ((::boost::tuple<bool>) assigner, ::boost::make_tuple(true)) )
+      memint (type(::boost::tuple<bool>) assigner, ::boost::make_tuple(true)) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST(assigner);
@@ -52,9 +52,9 @@ TEST(wg_lclclass_memintexplicit, OkIf3MemOfVaryingMutabilitySet)
     WG_LCLCLASS
     (CalculateVolume,
       memint
-        ((short const) radius, 2)
-        ((int const) height, 10)
-        ((long) volume, radius * height) )
+        (type(short const) radius, 2)
+        (type(int const) height, 10)
+        (type(long) volume, radius * height) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISCONST(radius);
@@ -79,7 +79,7 @@ TEST(wg_lclclass_memintexplicit, OkIfNoQlfdLocalTypeSet)
     WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
 
     WG_LCLCLASS
-    (UseLocalKeyword, memint (local(SomeLocalClass) obj, SomeLocalClass()) )
+    (UseLocalKeyword, memint (lcltype(SomeLocalClass) obj, SomeLocalClass()) )
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST(obj);
@@ -100,7 +100,7 @@ TEST(wg_lclclass_memintexplicit, OkIfConstQlfdLocalTypeSet)
     WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
 
     WG_LCLCLASS
-    (UseLocalKeyword, memint (local(SomeLocalClass) const obj, SomeLocalClass()) )
+    (UseLocalKeyword, memint (lcltype(SomeLocalClass) const obj, SomeLocalClass()) )
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST(obj);

@@ -14,7 +14,7 @@ TEST(wg_lclclass_allcombo, Tester)
     WG_LCLCLASS
     (Local,
      derives (protected Base)
-     memext ((std::string const) name) (var)
+     memext (type(std::string const) name) (var)
      memint (score, 21) )
       void init()
       {

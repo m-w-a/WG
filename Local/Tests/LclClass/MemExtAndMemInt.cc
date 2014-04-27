@@ -12,8 +12,8 @@ TEST(wg_lclclass_memextandmemint, ExplicitAndExplicit)
 
     WG_LCLCLASS
     (MultiVar,
-      memext ((short) id)
-      memint ((std::string const &) name, "BigFoot") )
+      memext (type(short) id)
+      memint (type(std::string const &) name, "BigFoot") )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST(id);
@@ -40,7 +40,7 @@ TEST(wg_lclclass_memextandmemint, ExplicitAndImplicit)
 
     WG_LCLCLASS
     (MultiVar,
-      memext ((short) id)
+      memext (type(short) id)
       memint (const name, std::string("BigFoot")) )
       void init()
       {
@@ -69,7 +69,7 @@ TEST(wg_lclclass_memextandmemint, ImplicitAndExplicit)
     WG_LCLCLASS
     (MultiVar,
       memext (id)
-      memint ((std::string const &) name, "BigFoot") )
+      memint (type(std::string const &) name, "BigFoot") )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST(id);

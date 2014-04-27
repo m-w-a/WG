@@ -10,7 +10,7 @@ struct IsCalled
   static void run()
   {
     int var = 0;
-    WG_LCLCLASS(Local, memext ((int &) var) )
+    WG_LCLCLASS(Local, memext (type(int &) var) )
       void init()
       {
         ++var;

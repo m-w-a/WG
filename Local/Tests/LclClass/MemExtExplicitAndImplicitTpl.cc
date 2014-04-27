@@ -16,7 +16,7 @@ struct OkIf3MemOfVaryingMutabilitySet
 
     WG_LCLCLASS_TPL
     (CalculateVolume,
-      memext (const radius) ((int) height) (const volume) )
+      memext (const radius) (type(int) height) (const volume) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISCONST_TPL(radius);
