@@ -13,6 +13,7 @@
   #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/CodeGenCPP11.hh>
 #endif
 #include <boost/preprocessor.hpp>
+#include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/ErrorReporter.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/LclFunction/SpecNormalize.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/SymbolTable.hh>
@@ -80,7 +81,7 @@
 #define WG_PP_LCLFUNCTION_REPORTERRORS( \
   name, istpl, return_type, params_seq, varbind_seq, varset_seq, \
   psbl_error_tokens) \
-    psbl_error_tokens
+    WG_PP_EATTAILTOKEN_BOOST_PP_NIL(psbl_error_tokens)
 
 #define WG_PP_LCLFUNCTION_STARTCODEGEN( \
   name, istpl, return_type, params_seq, varbind_seq, varset_seq, \
