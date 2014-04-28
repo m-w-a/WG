@@ -7,10 +7,10 @@
 
 //Unit Tests.
 #define S1 type(SomeGlobalType &)
-#define S2 local(SomeLocalType *)
-#define S3 local(SomeLocalType *) (const)
-#define S4 local(SomeLocalType *) (ref)
-#define S5 local(SomeLocalType *) (const) (ref)
+#define S2 lcltype(SomeLocalType *)
+#define S3 lcltype(SomeLocalType *) (const)
+#define S4 lcltype(SomeLocalType *) (ref)
+#define S5 lcltype(SomeLocalType *) (const) (ref)
 
 /*
 WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(S1)

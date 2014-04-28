@@ -58,10 +58,13 @@
 
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONLOCAL(explicitvardcln) \
   WG_PP_VARDCLN_EXPLICIT_EXPAND1( \
-    BOOST_PP_CAT(WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONLOCAL_, explicitvardcln) ) \
-  BOOST_PP_RPAREN()
-#define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONLOCAL_type(explicittype) \
-  (WG_PP_MARKER_NOOP type (explicittype)) BOOST_PP_LPAREN()
+    WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONLOCAL2 \
+    BOOST_PP_LPAREN() \
+      WG_PP_KEYWORDS_ADDCOMMAAFTER_TYPETUPLE(explicitvardcln) \
+    BOOST_PP_RPAREN() )
+
+#define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONLOCAL2(typetuple, var) \
+  (WG_PP_MARKER_NOOP typetuple) (var)
 
 //-------------------
 // Local Type Macros.
@@ -71,16 +74,12 @@
   WG_PP_VARDCLN_EXPLICIT_EXPAND2( \
     WG_PP_VARDCLN_EXPLICIT_TUPLIZE_LOCAL2 \
     BOOST_PP_LPAREN() \
-      BOOST_PP_CAT( \
-        WG_PP_VARDCLN_EXPLICIT_TUPLIZE_LOCAL_, \
-        explicitvardcln) \
+      WG_PP_KEYWORDS_ADDCOMMAAFTER_LCLTYPETUPLE(explicitvardcln) \
     BOOST_PP_RPAREN() )
-#define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_LOCAL_lcltype(localvalue) \
-  localvalue BOOST_PP_COMMA()
 
-#define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_LOCAL2(localvalue, tq_varname) \
+#define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_LOCAL2(lcltypetuple, tq_varname) \
   BOOST_PP_LPAREN() \
-    WG_PP_MARKER_NOOP lcltype (localvalue) \
+    WG_PP_MARKER_NOOP lcltypetuple \
     WG_PP_VARDCLN_EXPLICIT_TUPLIZE_LOCAL3(tq_varname)
 
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_LOCAL3(tq_varname) \

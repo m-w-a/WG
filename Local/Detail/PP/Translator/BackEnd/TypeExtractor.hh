@@ -55,6 +55,8 @@
 //Utils
 //-----
 
+#define WG_PP_PARSEDTYPE_EXPAND1(x) x
+
 #define WG_PP_PARSEDTYPE_ISLOCALTYPE_IMPL(parsedtype) \
   BOOST_PP_IIF( \
     WG_PP_KEYWORDS_STARTSWITH_LCLTYPE(parsedtype), \
@@ -66,19 +68,20 @@
 //  local type operand or lib-type-qualifier-seq, depending on whether
 //  elem was 0 or 1 respectively.
 #define WG_PP_PARSEDTYPE_LOCALTYPE_PARSE(parsedtype, elem) \
-  BOOST_PP_EXPAND( \
+  WG_PP_PARSEDTYPE_EXPAND1( \
     WG_PP_PARSEDTYPE_LOCALTYPE_PARSE2 \
     BOOST_PP_LPAREN() \
-      BOOST_PP_CAT( \
-        WG_PP_PARSEDTYPE_LOCALTYPE_PARSE_, parsedtype) BOOST_PP_COMMA() \
+      WG_PP_KEYWORDS_ADDCOMMAAFTER_LCLTYPETUPLE(parsedtype) \
+      BOOST_PP_EMPTY BOOST_PP_COMMA() \
       elem \
     BOOST_PP_RPAREN() )
-#define WG_PP_PARSEDTYPE_LOCALTYPE_PARSE_lcltype(operand) operand , BOOST_PP_NIL
-#define WG_PP_PARSEDTYPE_LOCALTYPE_PARSE2(operand, prefixed_qualseq, elem) \
-  BOOST_PP_IIF( \
-    elem, \
-    WG_PP_EATHEADTOKEN_BOOST_PP_NIL(prefixed_qualseq) BOOST_PP_EMPTY, \
-    operand BOOST_PP_EMPTY) ()
+
+#define WG_PP_PARSEDTYPE_LOCALTYPE_PARSE2( \
+  lcltypetuple, prefixed_qualseq, elem) \
+    BOOST_PP_IIF( \
+      elem, \
+      prefixed_qualseq, \
+      WG_PP_KEYWORDS_LCLTYPE_OPERAND(lcltypetuple) BOOST_PP_EMPTY) ()
 
 //-------------------------------
 //WG_PP_PARSEDTYPE_EXTRACTCPPTYPE
@@ -141,7 +144,7 @@
 
 #define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE_LOCAL( \
   parsedtype, istpl) \
-    WG_PP_PARSEDTYPE_LOCALTYPE_PARSE(parsedtype, 0) \
+    WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND(parsedtype) \
     BOOST_PP_CAT( \
       WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE_LOCAL, \
       BOOST_PP_SEQ_CAT( \
