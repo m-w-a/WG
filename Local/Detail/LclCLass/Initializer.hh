@@ -13,7 +13,7 @@ namespace detail
 struct initializer
 {
 protected:
-  void init() BOOST_NO_CXX11_NOEXCEPT { /* noop */ }
+  void init() BOOST_NOEXCEPT { /* noop */ }
 };
 
 }
