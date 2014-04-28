@@ -49,7 +49,7 @@
       WG_PP_VARDCLN_IMPLICIT_TUPLIZE2 \
       BOOST_PP_IIF( \
         WG_PP_KEYWORDS_STARTSWITH_CONST(implicitvardcln), \
-        ( 1, WG_PP_KEYWORDS_EAT_HEADKEYWORD(implicitvardcln), hasvalueexpr, \
+        ( 1, WG_PP_KEYWORDS_EATHEAD_CONST(implicitvardcln), hasvalueexpr, \
           valueexpr, istpl ), \
         ( 0, implicitvardcln, hasvalueexpr, valueexpr, istpl ) ))
 
@@ -65,7 +65,7 @@
         BOOST_PP_SEQ_ENUM( \
           BOOST_PP_IIF( \
             WG_PP_KEYWORDS_STARTSWITH_REF(implicitvardcln), \
-            (1)  ( WG_PP_KEYWORDS_EAT_HEADKEYWORD(implicitvardcln) ), \
+            (1)  ( WG_PP_KEYWORDS_EATHEAD_REF(implicitvardcln) ), \
             (0) ( implicitvardcln ) ) \
           BOOST_PP_EXPR_IIF( \
             hasvalueexpr, \

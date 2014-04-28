@@ -13,9 +13,25 @@
 //EatHead
 //-------
 
-#define WG_PP_KEYWORDS_EAT_HEADKEYWORD(tokens) \
+#define WG_PP_KEYWORDS_EATHEAD_VOID(tokens) \
   BOOST_PP_EXPAND( \
-    BOOST_PP_CAT(WG_PP_KEYWORDS_EAT_, tokens))
+    BOOST_PP_CAT(WG_PP_KEYWORDS_EATHEAD_VOID_, tokens))
+
+#define WG_PP_KEYWORDS_EATHEAD_TYPE(tokens) \
+  BOOST_PP_EXPAND( \
+    BOOST_PP_CAT(WG_PP_KEYWORDS_EATHEAD_TYPE_, tokens))
+
+#define WG_PP_KEYWORDS_EATHEAD_LCLTYPE(tokens) \
+  BOOST_PP_EXPAND( \
+    BOOST_PP_CAT(WG_PP_KEYWORDS_EATHEAD_LCLTYPE_, tokens))
+
+#define WG_PP_KEYWORDS_EATHEAD_CONST(tokens) \
+  BOOST_PP_EXPAND( \
+    BOOST_PP_CAT(WG_PP_KEYWORDS_EATHEAD_CONST_, tokens))
+
+#define WG_PP_KEYWORDS_EATHEAD_REF(tokens) \
+  BOOST_PP_EXPAND( \
+    BOOST_PP_CAT(WG_PP_KEYWORDS_EATHEAD_REF_, tokens))
 
 //----------
 //StartsWith
@@ -113,12 +129,15 @@
     tokens, \
     WG_PP_KEYWORDS_BEGINSWITH_ref_)
 
-#define WG_PP_KEYWORDS_EAT_void
-#define WG_PP_KEYWORDS_EAT_this_
-#define WG_PP_KEYWORDS_EAT_type
-#define WG_PP_KEYWORDS_EAT_lcltype
-#define WG_PP_KEYWORDS_EAT_const
-#define WG_PP_KEYWORDS_EAT_ref
+//-------
+//EatHead
+//-------
+
+#define WG_PP_KEYWORDS_EATHEAD_VOID_void
+#define WG_PP_KEYWORDS_EATHEAD_TYPE_type
+#define WG_PP_KEYWORDS_EATHEAD_LCLTYPE_lcltype
+#define WG_PP_KEYWORDS_EATHEAD_CONST_const
+#define WG_PP_KEYWORDS_EATHEAD_REF_ref
 
 //-------
 //Operand
@@ -127,20 +146,20 @@
 #if ! BOOST_PP_VARIADICS
 
   #define WG_PP_KEYWORDS_TYPE_OPERAND_IMPL(typetuple) \
-    BOOST_PP_SEQ_ELEM(0, WG_PP_KEYWORDS_EAT_HEADKEYWORD(typetuple) )
+    BOOST_PP_SEQ_ELEM(0, WG_PP_KEYWORDS_EATHEAD_TYPE(typetuple) )
 
   #define WG_PP_KEYWORDS_LCLTYPE_OPERAND_IMPL(lcltypetuple) \
-    BOOST_PP_SEQ_ELEM(0, WG_PP_KEYWORDS_EAT_HEADKEYWORD(lcltypetuple) )
+    BOOST_PP_SEQ_ELEM(0, WG_PP_KEYWORDS_EATHEAD_LCLTYPE(lcltypetuple) )
 
 #else
 
   #define WG_PP_KEYWORDS_TYPE_OPERAND_IMPL(typetuple) \
     WG_PP_KEYWORDS_NAMEDTUPLE_OPERAND( \
-      typetuple, WG_PP_KEYWORDS_EAT_HEADKEYWORD)
+      typetuple, WG_PP_KEYWORDS_EATHEAD_TYPE)
 
   #define WG_PP_KEYWORDS_LCLTYPE_OPERAND_IMPL(lcltypetuple) \
     WG_PP_KEYWORDS_NAMEDTUPLE_OPERAND( \
-      lcltypetuple, WG_PP_KEYWORDS_EAT_HEADKEYWORD)
+      lcltypetuple, WG_PP_KEYWORDS_EATHEAD_LCLTYPE)
 
   #define WG_PP_KEYWORDS_NAMEDTUPLE_OPERAND(namedtuple, eatnamemacro) \
     WG_PP_KEYWORDS_EXPAND1( \
@@ -163,14 +182,14 @@
       type \
       WG_PP_KEYWORDS_EXPAND2( \
         WG_PP_ADDCOMMA_AFTERTUPLE_ARITY1 \
-        WG_PP_KEYWORDS_EAT_HEADKEYWORD(typetuple_prefixed_tokens) )
+        WG_PP_KEYWORDS_EATHEAD_TYPE(typetuple_prefixed_tokens) )
 
   #define WG_PP_KEYWORDS_ADDCOMMAAFTER_LCLTYPETUPLE_IMPL( \
     lcltypetuple_prefixed_tokens) \
       lcltype \
       WG_PP_KEYWORDS_EXPAND3( \
         WG_PP_ADDCOMMA_AFTERTUPLE_ARITY1 \
-        WG_PP_KEYWORDS_EAT_HEADKEYWORD(lcltypetuple_prefixed_tokens) )
+        WG_PP_KEYWORDS_EATHEAD_LCLTYPE(lcltypetuple_prefixed_tokens) )
 
 #else
 
@@ -179,14 +198,14 @@
       type \
       WG_PP_KEYWORDS_EXPAND4( \
         WG_PP_ADDCOMMA_AFTERTUPLE_ARITYN \
-        WG_PP_KEYWORDS_EAT_HEADKEYWORD(typetuple_prefixed_tokens) )
+        WG_PP_KEYWORDS_EATHEAD_TYPE(typetuple_prefixed_tokens) )
 
   #define WG_PP_KEYWORDS_ADDCOMMAAFTER_LCLTYPETUPLE_IMPL( \
     lcltypetuple_prefixed_tokens) \
       lcltype \
       WG_PP_KEYWORDS_EXPAND5( \
         WG_PP_ADDCOMMA_AFTERTUPLE_ARITYN \
-        WG_PP_KEYWORDS_EAT_HEADKEYWORD(lcltypetuple_prefixed_tokens) )
+        WG_PP_KEYWORDS_EATHEAD_LCLTYPE(lcltypetuple_prefixed_tokens) )
 
 #endif
 

@@ -37,7 +37,7 @@
         1, \
         /* vardcln might itself be a keyword, therefore append BOOST_PP_NIL */ \
         /* to avoid empty macro arg UB in C++03. */ \
-        WG_PP_KEYWORDS_EAT_HEADKEYWORD(vardcln BOOST_PP_NIL)) ), \
+        WG_PP_KEYWORDS_EATHEAD_LCLTYPE(vardcln BOOST_PP_NIL)) ), \
     1, \
     0)
 
@@ -49,7 +49,7 @@
         1, \
         /* vardcln might itself be a keyword, therefore append BOOST_PP_NIL */ \
         /* to avoid empty macro arg UB in C++03. */ \
-        WG_PP_KEYWORDS_EAT_HEADKEYWORD(vardcln BOOST_PP_NIL)) ), \
+        WG_PP_KEYWORDS_EATHEAD_TYPE(vardcln BOOST_PP_NIL)) ), \
     1, \
     0)
 

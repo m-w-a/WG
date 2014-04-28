@@ -53,7 +53,7 @@
   WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_RETURN( \
     BOOST_PP_IIF( \
       WG_PP_KEYWORDS_STARTSWITH_VOID(spec), \
-      WG_PP_KEYWORDS_EAT_HEADKEYWORD(spec), \
+      WG_PP_KEYWORDS_EATHEAD_VOID(spec), \
       spec), \
     specoptions)
 
