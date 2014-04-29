@@ -241,6 +241,7 @@ test_lclclass_SOURCES = \
     ../LclClass/TestMain.cc \
     ../LclClass/Derives.cc \
     ../LclClass/DerivesTpl.cc \
+    ../LclClass/MacroParamNamesAsVarNames.cc \
     ../LclClass/MemExtExplicit.cc \
     ../LclClass/MemExtExplicitTpl.cc \
     ../LclClass/MemExtImplicit.cc \
