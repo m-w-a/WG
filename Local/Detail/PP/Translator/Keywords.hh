@@ -10,6 +10,13 @@
 //###########
 
 //-------
+//Keyword
+//-------
+
+#define WG_PP_KEYWORDS_TYPE type
+#define WG_PP_KEYWORDS_LCLTYPE lcltype
+
+//-------
 //EatHead
 //-------
 
@@ -149,10 +156,10 @@
 #define WG_PP_KEYWORDS_REPLACEOPERAND_IMPL(keyword_tuple, replacement) \
   BOOST_PP_IIF( \
     WG_PP_KEYWORDS_STARTSWITH_TYPE(keyword_tuple), \
-    type, \
+    WG_PP_KEYWORDS_TYPE, \
     BOOST_PP_IIF( \
       WG_PP_KEYWORDS_STARTSWITH_LCLTYPE(keyword_tuple), \
-      lcltype, \
+      WG_PP_KEYWORDS_LCLTYPE, \
       WG_PP_MARKER_ERROR ERROR_invalid_internal_state WG_PP_MAPTO_NOTHING_ARG1) ) \
     ( replacement )
 
@@ -186,14 +193,14 @@
 
   #define WG_PP_KEYWORDS_ADDCOMMAAFTER_TYPETUPLE_IMPL( \
     typetuple_prefixed_tokens) \
-      type \
+      WG_PP_KEYWORDS_TYPE \
       WG_PP_KEYWORDS_EXPAND2( \
         WG_PP_ADDCOMMA_AFTERTUPLE_ARITY1 \
         WG_PP_KEYWORDS_EATHEAD_TYPE(typetuple_prefixed_tokens) )
 
   #define WG_PP_KEYWORDS_ADDCOMMAAFTER_LCLTYPETUPLE_IMPL( \
     lcltypetuple_prefixed_tokens) \
-      lcltype \
+      WG_PP_KEYWORDS_LCLTYPE \
       WG_PP_KEYWORDS_EXPAND3( \
         WG_PP_ADDCOMMA_AFTERTUPLE_ARITY1 \
         WG_PP_KEYWORDS_EATHEAD_LCLTYPE(lcltypetuple_prefixed_tokens) )
@@ -202,14 +209,14 @@
 
   #define WG_PP_KEYWORDS_ADDCOMMAAFTER_TYPETUPLE_IMPL( \
     typetuple_prefixed_tokens) \
-      type \
+      WG_PP_KEYWORDS_TYPE \
       WG_PP_KEYWORDS_EXPAND4( \
         WG_PP_ADDCOMMA_AFTERTUPLE_ARITYN \
         WG_PP_KEYWORDS_EATHEAD_TYPE(typetuple_prefixed_tokens) )
 
   #define WG_PP_KEYWORDS_ADDCOMMAAFTER_LCLTYPETUPLE_IMPL( \
     lcltypetuple_prefixed_tokens) \
-      lcltype \
+      WG_PP_KEYWORDS_LCLTYPE \
       WG_PP_KEYWORDS_EXPAND5( \
         WG_PP_ADDCOMMA_AFTERTUPLE_ARITYN \
         WG_PP_KEYWORDS_EATHEAD_LCLTYPE(lcltypetuple_prefixed_tokens) )

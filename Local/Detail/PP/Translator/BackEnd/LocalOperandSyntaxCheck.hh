@@ -129,7 +129,7 @@
       /* NOTE: we're only interested in the operand of the local specifier.*/ \
       /* This is because we want to test that no const or & appears alongside*/ \
       /* that operand*/ \
-      WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND( gettypemacro(dcln) ), \
+      WG_PP_PARSEDTYPE_LCLTYPE_OPERAND( gettypemacro(dcln) ), \
       getobjmacro(dcln), \
       varrootname, \
       indx)

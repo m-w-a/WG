@@ -18,14 +18,11 @@
 //Public APIs
 //###########
 
-#define WG_PP_PARSEDTYPE_ISLOCALTYPE(parsedtype) \
-  WG_PP_PARSEDTYPE_ISLOCALTYPE_IMPL(parsedtype)
-
 // parsedlocaltype: parsed-local-type
 // Result: local-nonconst-nonref-type
 //
 // (For definition of terms see SymbolTable documentation.)
-#define WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND(parsedlocaltype) \
+#define WG_PP_PARSEDTYPE_LCLTYPE_OPERAND(parsedlocaltype) \
   WG_PP_PARSEDTYPE_LOCALTYPE_PARSE(parsedlocaltype, 0)
 
 // parsedtype: parsed-explicit-or-deduced-type
@@ -57,7 +54,7 @@
 
 #define WG_PP_PARSEDTYPE_EXPAND1(x) x
 
-#define WG_PP_PARSEDTYPE_ISLOCALTYPE_IMPL(parsedtype) \
+#define WG_PP_PARSEDTYPE_ISLOCALTYPE(parsedtype) \
   BOOST_PP_IIF( \
     WG_PP_KEYWORDS_STARTSWITH_LCLTYPE(parsedtype), \
     1, \
@@ -97,7 +94,7 @@
   BOOST_PP_TUPLE_ELEM(1, 0, WG_PP_KEYWORDS_EATHEAD_TYPE(parsedtype))
 
 #define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_LOCAL(parsedtype) \
-  WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND(parsedtype) \
+  WG_PP_PARSEDTYPE_LCLTYPE_OPERAND(parsedtype) \
   BOOST_PP_CAT( \
     WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_LOCAL, \
     BOOST_PP_SEQ_CAT( \
@@ -138,13 +135,13 @@
     parsedtype, istpl) \
       WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE_NONLOCAL( \
         /* Put arg into correct form by mimicking non-local type. */ \
-        type( WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_LOCAL(parsedtype) ), \
+        WG_PP_KEYWORDS_TYPE( WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_LOCAL(parsedtype) ), \
         istpl)
 #endif
 
 #define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE_LOCAL( \
   parsedtype, istpl) \
-    WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND(parsedtype) \
+    WG_PP_PARSEDTYPE_LCLTYPE_OPERAND(parsedtype) \
     BOOST_PP_CAT( \
       WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE_LOCAL, \
       BOOST_PP_SEQ_CAT( \
