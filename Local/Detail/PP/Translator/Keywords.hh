@@ -2,8 +2,8 @@
 #define WG_PP_TRANSLATOR_KEYWORDS_HH_
 
 #include <boost/preprocessor.hpp>
+#include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/TokenMatching.hh>
-#include <WG/Local/Detail/PP/Seq.hh>
 
 //###########
 //Public APIs
@@ -58,6 +58,9 @@
 //-------
 //Operand
 //-------
+
+#define WG_PP_KEYWORDS_REPLACEOPERAND(keyword_tuple, replacement) \
+  WG_PP_KEYWORDS_REPLACEOPERAND_IMPL(keyword_tuple, replacement)
 
 #define WG_PP_KEYWORDS_TYPE_OPERAND(typetuple) \
   WG_PP_KEYWORDS_TYPE_OPERAND_IMPL(typetuple)
@@ -143,31 +146,35 @@
 //Operand
 //-------
 
+#define WG_PP_KEYWORDS_REPLACEOPERAND_IMPL(keyword_tuple, replacement) \
+  BOOST_PP_IIF( \
+    WG_PP_KEYWORDS_STARTSWITH_TYPE(keyword_tuple), \
+    type, \
+    BOOST_PP_IIF( \
+      WG_PP_KEYWORDS_STARTSWITH_LCLTYPE(keyword_tuple), \
+      lcltype, \
+      WG_PP_MARKER_ERROR ERROR_invalid_internal_state WG_PP_MAPTO_NOTHING_ARG1) ) \
+    ( replacement )
+
+#define WG_PP_KEYWORDS_TYPE_OPERAND_IMPL(typetuple) \
+  WG_PP_KEYWORDS_NAMEDTUPLE_OPERAND( \
+    typetuple, WG_PP_KEYWORDS_EATHEAD_TYPE)
+
+#define WG_PP_KEYWORDS_LCLTYPE_OPERAND_IMPL(lcltypetuple) \
+  WG_PP_KEYWORDS_NAMEDTUPLE_OPERAND( \
+    lcltypetuple, WG_PP_KEYWORDS_EATHEAD_LCLTYPE)
+
 #if ! BOOST_PP_VARIADICS
-
-  #define WG_PP_KEYWORDS_TYPE_OPERAND_IMPL(typetuple) \
-    BOOST_PP_SEQ_ELEM(0, WG_PP_KEYWORDS_EATHEAD_TYPE(typetuple) )
-
-  #define WG_PP_KEYWORDS_LCLTYPE_OPERAND_IMPL(lcltypetuple) \
-    BOOST_PP_SEQ_ELEM(0, WG_PP_KEYWORDS_EATHEAD_LCLTYPE(lcltypetuple) )
-
-#else
-
-  #define WG_PP_KEYWORDS_TYPE_OPERAND_IMPL(typetuple) \
-    WG_PP_KEYWORDS_NAMEDTUPLE_OPERAND( \
-      typetuple, WG_PP_KEYWORDS_EATHEAD_TYPE)
-
-  #define WG_PP_KEYWORDS_LCLTYPE_OPERAND_IMPL(lcltypetuple) \
-    WG_PP_KEYWORDS_NAMEDTUPLE_OPERAND( \
-      lcltypetuple, WG_PP_KEYWORDS_EATHEAD_LCLTYPE)
 
   #define WG_PP_KEYWORDS_NAMEDTUPLE_OPERAND(namedtuple, eatnamemacro) \
     WG_PP_KEYWORDS_EXPAND1( \
-      WG_PP_SEQ_FLATTEN \
-      BOOST_PP_LPAREN() \
-        BOOST_PP_VARIADIC_TO_SEQ \
-          eatnamemacro(namedtuple) \
-      BOOST_PP_RPAREN() )
+      WG_PP_IDENTITY_ARG1 eatnamemacro(namedtuple) )
+
+#else
+
+  #define WG_PP_KEYWORDS_NAMEDTUPLE_OPERAND(namedtuple, eatnamemacro) \
+    WG_PP_KEYWORDS_EXPAND1( \
+      WG_PP_IDENTITY_ARGN eatnamemacro(namedtuple) )
 
 #endif
 

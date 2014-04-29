@@ -6,6 +6,7 @@
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/Utils.hh>
 #include <WG/Local/Detail/PP/Translator/Markers.hh>
+#include <WG/Local/Detail/PP/Translator/Keywords.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/TypeExtractor.hh>
 
 //###########
@@ -242,8 +243,11 @@
 #define WG_PP_TYPEALIASER_REPLACETYPE_REPLACEMENTDCLN_ALLTYPES2( \
   istpl, typealiasername, dclnspec, indx, dcln) \
     WG_PP_MARKER_NOOP \
-    type \
+    WG_PP_KEYWORDS_REPLACEOPERAND \
     ( \
+      WG_PP_TRNSLTR_MARKERS_EATHEADMARKER( \
+        WG_PP_TYPEALIASER_REPLACETYPE_DATASEQ_DCLNSPEC_GETTYPEMACRO(dclnspec) \
+        (dcln) ), \
       WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
       typealiasername::WG_PP_TYPEALIASER_ALIASNAME( \
         WG_PP_TYPEALIASER_REPLACETYPE_DATASEQ_DCLNSPEC_ALIASROOTNAME(dclnspec), \
