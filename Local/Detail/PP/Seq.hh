@@ -158,11 +158,13 @@
   (seq, indx, elem)
 
 #define WG_PP_SEQ_FLATTEN_IMPL(seq) \
-  WG_PP_SEQ_FOR_EACH( \
-    WG_PP_SEQ_FLATTEN_IMPL_ELEMENT, \
-    ~, \
-    seq)
-#define WG_PP_SEQ_FLATTEN_IMPL_ELEMENT(r, data, elem) elem
+  BOOST_PP_CAT( \
+    BOOST_PP_EXPAND(WG_PP_SEQ_FLATTEN_FUNC1 seq), \
+    _ERASED)
+#define WG_PP_SEQ_FLATTEN_FUNC1(elem) elem WG_PP_SEQ_FLATTEN_FUNC2
+#define WG_PP_SEQ_FLATTEN_FUNC2(elem) elem WG_PP_SEQ_FLATTEN_FUNC1
+#define WG_PP_SEQ_FLATTEN_FUNC1_ERASED
+#define WG_PP_SEQ_FLATTEN_FUNC2_ERASED
 
 #define WG_PP_SEQ_ELEM_IMPL_00(indx, seq) BOOST_PP_NIL
 #define WG_PP_SEQ_ELEM_IMPL_01(indx, seq) BOOST_PP_NIL
