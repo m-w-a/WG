@@ -1,7 +1,9 @@
 #ifndef WG_LCLFUNCTION_DETAIL_GLOBALFUNCTORTYPECPP11_HH_
 #define WG_LCLFUNCTION_DETAIL_GLOBALFUNCTORTYPECPP11_HH_
 
-#include <boost/mpl/size.hpp>
+#include <boost/function_types/result_type.hpp>
+#include <boost/function_types/parameter_types.hpp>
+#include <boost/function_types/function_arity.hpp>
 #include <WG/Local/Detail/PP/LclFunction/FunctionOperatorTypeCPP11.hh>
 
 namespace wg
@@ -18,28 +20,19 @@ WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP11_DCLNS()
 #define FUNCTIONOPERATORTYPE \
   WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP11_NAME() \
   < \
-    global_functor_type \
-    < \
-      LOCALFUNCTORTYPE, \
-      LCLFUNCTION_RETTYPE, \
-      LCLFUNCTION_PARAMTYPES, \
-      CAPTUREDVARSTYPE \
-    >, \
+    global_functor_type<LOCALFUNCTORTYPE, LCLFUNCTIONTYPE, CAPTUREDVARSTYPE>, \
     LOCALFUNCTORTYPE, \
-    LCLFUNCTION_RETTYPE, \
-    LCLFUNCTION_PARAMTYPES, \
-    boost::mpl::size<LCLFUNCTION_PARAMTYPES>::value \
+    typename boost::function_types::result_type<LCLFUNCTIONTYPE>::type, \
+    boost::function_types::parameter_types<LCLFUNCTIONTYPE>, \
+    boost::function_types::function_arity<LCLFUNCTIONTYPE>::value \
   >
 
 // LOCALFUNCTORTYPE: The local functor type (C++11).
-// LCLFUNCTION_PARAMTYPES:
-//   An mpl vector of the specified local function param
-//   types.
+// LCLFUNCTIONTYPE: The specified local function type.
 // CAPTUREDVARSTYPE: A tuple of captured local variables, if any.
 template<
   typename LOCALFUNCTORTYPE,
-  typename LCLFUNCTION_RETTYPE,
-  typename LCLFUNCTION_PARAMTYPES,
+  typename LCLFUNCTIONTYPE,
   typename CAPTUREDVARSTYPE>
 class global_functor_type :
   public FUNCTIONOPERATORTYPE
@@ -50,7 +43,7 @@ class global_functor_type :
 #undef FUNCTIONOPERATORTYPE
 
 public:
-  typedef LOCALFUNCTORTYPE local_functor_type;
+  typedef LCLFUNCTIONTYPE function_type;
   typedef CAPTUREDVARSTYPE captured_vars_type;
 
 public:

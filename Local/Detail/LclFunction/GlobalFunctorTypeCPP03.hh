@@ -1,15 +1,14 @@
 #ifndef WG_LCLFUNCTION_DETAIL_GLOBALFUNCTORTYPECPP03_HH_
 #define WG_LCLFUNCTION_DETAIL_GLOBALFUNCTORTYPECPP03_HH_
 
-#include <boost/mpl/transform.hpp>
 #include <boost/mpl/vector.hpp>
-#include <boost/mpl/size.hpp>
 #include <boost/mpl/push_front.hpp>
 #include <boost/mpl/push_back.hpp>
+#include <boost/function_types/result_type.hpp>
+#include <boost/function_types/parameter_types.hpp>
 #include <boost/function_types/function_pointer.hpp>
+#include <boost/function_types/function_arity.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/type_traits/add_const.hpp>
-#include <boost/type_traits/add_reference.hpp>
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/int.hpp>
 #include <WG/Local/Detail/PP/LclFunction/FunctionOperatorTypeCPP03.hh>
@@ -27,28 +26,20 @@ WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_DCLNS()
 #define FUNCTIONOPERATORTYPE \
   WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_NAME() \
   < \
-    global_functor_type \
-    < \
-      LCLFUNCTION_RETTYPE, \
-      LCLFUNCTION_PARAMTYPES, \
-      CAPTUREDVARSTYPE \
-    >, \
-    LCLFUNCTION_RETTYPE, \
-    LCLFUNCTION_PARAMTYPES, \
-    boost::mpl::size<LCLFUNCTION_PARAMTYPES>::value \
+    global_functor_type<LCLFUNCTIONTYPE, CAPTUREDVARSTYPE>, \
+    typename boost::function_types::result_type<LCLFUNCTIONTYPE>::type, \
+    boost::function_types::parameter_types<LCLFUNCTIONTYPE>, \
+    boost::function_types::function_arity<LCLFUNCTIONTYPE>::value \
   >
 
-// LCLFUNCTION_PARAMTYPES:
-//   An mpl vector of the specified local function param
-//   types.
+// LCLFUNCTIONTYPE: The specified local function type.
 // CAPTUREDVARSTYPE: A tuple of captured local variables, if any.
 // NOTE:
 //   USERCALLBACK method type cannot be passed as a template parameter to
 //   this class because its signature contains the type of this class as a
 //   parameter. Hence, it has to be constructed using TMP techniques.
 template<
-  typename LCLFUNCTION_RETTYPE,
-  typename LCLFUNCTION_PARAMTYPES,
+  typename LCLFUNCTIONTYPE,
   typename CAPTUREDVARSTYPE>
 class global_functor_type :
   public FUNCTIONOPERATORTYPE
@@ -59,15 +50,10 @@ class global_functor_type :
 #undef FUNCTIONOPERATORTYPE
 
 public:
+  typedef LCLFUNCTIONTYPE function_type;
   typedef CAPTUREDVARSTYPE captured_var_types;
 
 private:
-  typedef
-    typename boost::mpl::transform
-    <
-      typename base_class_type::parameter_types,
-      boost::add_reference<boost::mpl::_1>
-    >::type add_refd_param_types;
   // Synthesize the call back type.
   // This functions prototype should match
   // local_functor_type_cpp03::user_callback.
@@ -78,7 +64,7 @@ private:
       <
         typename boost::mpl::push_front
         <
-          add_refd_param_types,
+          typename base_class_type::parameter_types,
           global_functor_type WG_PP_LCLFUNCTION_CONSTINVARIANCE_KEYWORD_CONST &
         >::type,
         typename base_class_type::result_type

@@ -36,7 +36,16 @@
 //   Rationale:
 //     SEQ_ENUM introduces commas into the token seq, therefore it's impossible
 //     to use with non-variadic macros.
-#define WG_PP_SEQ_ENUM(seq) WG_PP_SEQ_ENUM_IMPL(seq)
+#define WG_PP_SEQ_ENUM(seq) \
+  WG_PP_SEQ_ENUM_IMPL(seq)
+
+// Handles empty sequences.
+// NOTE: maps empty sequences to NOTHING!
+//   Rationale:
+//     SEQ_ENUM_TRAILING introduces commas into the token seq, therefore it's
+//     impossible to use with non-variadic macros.
+#define WG_PP_SEQ_ENUM_TRAILING(seq) \
+  WG_PP_SEQ_ENUM_TRAILING_IMPL(seq)
 
 // Maps to BOOST_PP_NIL if seq is nil
 #define WG_PP_SEQ_FOR_EACH(macro, data, seq) \
@@ -142,6 +151,13 @@
 #define WG_PP_SEQ_ENUM_IMPL(seq) \
   BOOST_PP_CAT( \
     WG_PP_SEQ_ENUM_IMPL_, \
+    WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) (seq)
+
+#define WG_PP_SEQ_ENUM_TRAILING_IMPL_0(seq)
+#define WG_PP_SEQ_ENUM_TRAILING_IMPL_1(seq) , BOOST_PP_SEQ_ENUM(seq)
+#define WG_PP_SEQ_ENUM_TRAILING_IMPL(seq) \
+  BOOST_PP_CAT( \
+    WG_PP_SEQ_ENUM_TRAILING_IMPL_, \
     WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) (seq)
 
 #define WG_PP_SEQ_REPLACE_IMPL_00(seq, indx, elem) BOOST_PP_NIL

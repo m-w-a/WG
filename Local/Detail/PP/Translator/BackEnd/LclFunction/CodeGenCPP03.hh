@@ -37,14 +37,10 @@
   function_name, symbtbl, global_functor_type_name) \
     wg::lclfunction::detail::global_functor_type \
     < \
-      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl), \
-      boost::mpl::vector \
-      < \
-        WG_PP_SEQ_ENUM( \
-          WG_PP_SEQ_APPLY_TRANSFORM( \
-            WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_TYPE_PARAMS, \
-            WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_PARAMS(symbtbl)) ) \
-      >, \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
+      ( \
+        WG_PP_SEQ_ENUM(WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_PARAMS(symbtbl)) \
+      ), \
       WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME(function_name) \
     >
 

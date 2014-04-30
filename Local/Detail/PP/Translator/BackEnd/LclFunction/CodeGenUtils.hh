@@ -318,35 +318,8 @@
       WG_PP_LCLFUNCTION_SYMBOLTABLE_RETTYPE(symbtbl)), \
     void)
 
-// Expands to:
-//   Comma seperated add_referenced parameter list of the user specified
-//   local function. The add_reference is for efficiency, since the parameter
-//   values are being forwarded from another function.
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST(symbtbl) \
-  WG_PP_SEQ_NOTHING_FOR_EACH_I( \
-    BOOST_PP_CAT( \
-      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY_, \
-      WG_PP_LCLFUNCTION_SYMBOLTABLE_ISTPL(symbtbl) ), \
-    ~, \
-    WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_PARAMS(symbtbl) )
-
-// WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY_0( \
-  r, data, indx, dcln) \
-    , WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY_CMN(dcln)
-
-// WG_PP_SEQ_FOR_EACH_I functor.
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY_1( \
-  r, data, indx, dcln) \
-    , typename \
-      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY_CMN(dcln)
-
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST_ENTRY_CMN( \
-  dcln) \
-    boost::add_reference \
-    < \
-      WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_TYPE_PARAMS(dcln) \
-    >::type WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_OBJ_PARAMS(dcln)
+  WG_PP_SEQ_ENUM_TRAILING(WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_PARAMS(symbtbl))
 
 //-------------
 //GlobalFunctor
