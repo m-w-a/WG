@@ -98,7 +98,7 @@
 
 #define WG_PP_IS_ODD(num) BOOST_PP_MOD(num,2)
 #define WG_PP_IS_EVEN(num) \
-  BOOST_PP_NOT(WG_PP_IS_ODD(num))
+  BOOST_PP_COMPL(WG_PP_IS_ODD(num))
 
 #define WG_PP_IS_MOD3_R0(num) \
   BOOST_PP_EQUAL(BOOST_PP_MOD(num,3), 0)

@@ -57,7 +57,7 @@
   isconstqualified, implicitvardcln, hasvalueexpr, valueexpr, istpl) \
     WG_PP_VARDCLN_IMPLICIT_EXPAND2( \
       BOOST_PP_IIF( \
-        BOOST_PP_NOT(hasvalueexpr), \
+        BOOST_PP_COMPL(hasvalueexpr), \
         WG_PP_VARDCLN_IMPLICIT_TUPLIZE_BOUND, \
         WG_PP_VARDCLN_IMPLICIT_TUPLIZE_SET) \
       BOOST_PP_LPAREN() \

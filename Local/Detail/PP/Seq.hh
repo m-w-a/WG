@@ -96,7 +96,7 @@
 #define WG_PP_SEQ_CAT_IMPL(seq) \
   BOOST_PP_CAT( \
     WG_PP_SEQ_CAT_IMPL_, \
-    BOOST_PP_NOT(WG_PP_SEQ_ISNIL(seq))) (seq)
+    BOOST_PP_COMPL(WG_PP_SEQ_ISNIL(seq))) (seq)
 
 #define WG_PP_SEQ_FOR_EACH_IMPL_0(macro, data, seq) BOOST_PP_NIL
 #define WG_PP_SEQ_FOR_EACH_IMPL_1(macro, data, seq) \
@@ -154,7 +154,7 @@
     BOOST_PP_CAT( \
       WG_PP_SEQ_REPLACE_IMPL_, \
       WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)), \
-    BOOST_PP_NOT(WG_PP_STARTSWITH_BOOST_PP_NIL(indx))) \
+    BOOST_PP_COMPL(WG_PP_STARTSWITH_BOOST_PP_NIL(indx))) \
   (seq, indx, elem)
 
 #define WG_PP_SEQ_FLATTEN_IMPL(seq) \
@@ -174,7 +174,7 @@
   BOOST_PP_CAT( \
     BOOST_PP_CAT( \
       WG_PP_SEQ_ELEM_IMPL_, \
-      BOOST_PP_NOT(WG_PP_STARTSWITH_BOOST_PP_NIL(indx))), \
+      BOOST_PP_COMPL(WG_PP_STARTSWITH_BOOST_PP_NIL(indx))), \
     WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) \
   (indx, seq)
 
