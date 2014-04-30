@@ -10,13 +10,9 @@ x) Better Syntax Error Checking/Reporting:
 
 Misc.
 -----
-x) Breakup Keywords.
-
 LocalOperandsSyntaxCheck tests.
 ErrorReporting tests.
 ERROR_ -> WG_LCL_ERROR_ ?
-
-x) NOT/AND/OR to their bit counter parts.
 
 ExpandN:
   test
@@ -26,8 +22,5 @@ LclFunction:
   modified call traits.
   Binder: local namespace to lclfunction namespace?
   Exception specification
-  x) Function variable types.
-  x) PP: distinguish between "keyword(...)" and keyword-as-identifier
-  x) (C++-type) -> type(C++-type)
 
 Tests: comparing arrays cleanup.
