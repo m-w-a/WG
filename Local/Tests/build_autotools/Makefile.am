@@ -327,7 +327,8 @@ LCLFUNCTION_SRC = \
     ../LclFunction/StandardTypenames.cc \
     ../LclFunction/StandardTypenamesTpl.cc \
     ../LclFunction/MultipleUseInSameMacro.cc \
-    ../LclFunction/MultipleUseInSameMacroTpl.cc
+    ../LclFunction/MultipleUseInSameMacroTpl.cc \
+    ../LclFunction/MacroParamNamesAsVarNames.cc
 
 test_lclfunction_cpp03_SOURCES = $(LCLFUNCTION_SRC)
 test_lclfunction_cpp11_SOURCES = $(LCLFUNCTION_SRC)
