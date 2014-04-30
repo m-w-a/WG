@@ -247,7 +247,7 @@
       WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME(function_name) ;
 
 #define WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPE(symbtbl) \
-  boost::tuple \
+  ::boost::tuple \
   < \
     WG_PP_SEQ_ENUM( \
       WG_PP_SEQ_JOIN_ARG2( \
@@ -300,7 +300,7 @@
 #define WG_PP_LCLFUNCTION_CGUTILS_UNPACKEDCAPTUREDVALUES_DCLN_ENTRY_IMPL( \
   istpl, cvobjname, offset, gettypemacro, getobjmacro, indx, dcln) \
     WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-    boost::add_reference \
+    ::boost::add_reference \
     < \
       WG_PP_PARSEDTYPE_EXTRACTCPPTYPE( gettypemacro(dcln) ) \
     >::type \

@@ -22,9 +22,9 @@ WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP11_DCLNS()
   < \
     global_functor_type<LOCALFUNCTORTYPE, LCLFUNCTIONTYPE, CAPTUREDVARSTYPE>, \
     LOCALFUNCTORTYPE, \
-    typename boost::function_types::result_type<LCLFUNCTIONTYPE>::type, \
-    boost::function_types::parameter_types<LCLFUNCTIONTYPE>, \
-    boost::function_types::function_arity<LCLFUNCTIONTYPE>::value \
+    typename ::boost::function_types::result_type<LCLFUNCTIONTYPE>::type, \
+    ::boost::function_types::parameter_types<LCLFUNCTIONTYPE>, \
+    ::boost::function_types::function_arity<LCLFUNCTIONTYPE>::value \
   >
 
 // LOCALFUNCTORTYPE: The local functor type (C++11).

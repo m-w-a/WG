@@ -24,13 +24,13 @@ TEST(wg_autofunctor_assignto, OkIfNonLocalExplicitAndGloballyScoped)
 {
   try
   {
-    ::boost::tuple<bool> didAssign = boost::make_tuple(false);
+    ::boost::tuple<bool> didAssign = ::boost::make_tuple(false);
 
     WG_AUTOFUNCTOR
     (assign,
       assignto ((::boost::tuple<bool>) didAssign) )
     {
-      return boost::make_tuple(true);
+      return ::boost::make_tuple(true);
     }
     WG_AUTOFUNCTOR_END;
 

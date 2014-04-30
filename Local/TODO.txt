@@ -8,21 +8,15 @@ x) Better Syntax Error Checking/Reporting:
   missing type in implicit-type-var-dcln ?
   missing var in "..." ?
 
-x) Tests: tpl -> _tpl
-
 Misc.
 -----
-Why not BOOST_IDENTITY_TYPE_TPL?
-
-Breakup Keywords.
+x) Breakup Keywords.
 
 LocalOperandsSyntaxCheck tests.
 ErrorReporting tests.
 ERROR_ -> WG_LCL_ERROR_ ?
-x) WG_PP_TYPEALIASER_DCLN -> just do implicit.
-x) WG_PP_ERROR -> WG_PP_MARKER_ERROR
 
-NOT/AND/OR to their bit counter parts.
+x) NOT/AND/OR to their bit counter parts.
 
 ExpandN:
   test
@@ -31,16 +25,9 @@ ExpandN:
 LclFunction:
   modified call traits.
   Binder: local namespace to lclfunction namespace?
-  x) Multiple in same macro.
-  x) varbind/varset -> membind/memset NO
-    x) And modify docs accordingly.
   Exception specification
-  Function variable types.
+  x) Function variable types.
+  x) PP: distinguish between "keyword(...)" and keyword-as-identifier
+  x) (C++-type) -> type(C++-type)
 
-LclClass:
-  LOCALOPERANDSSYNTAXCHECK remove:
-    1) just typedef local types and PP add "const/&" to the aliases.
-  local(no-const-ref-local-type) [const/ref] -> typel(local-C++-type)
-  (C++-type) -> type(C++-type)
-  PP: distinguish between "keyword(...)" and keyword-as-identifier
-  x) Properly document memext spec.
+Tests: comparing arrays cleanup.

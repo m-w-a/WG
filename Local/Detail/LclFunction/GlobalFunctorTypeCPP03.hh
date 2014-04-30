@@ -27,9 +27,9 @@ WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_DCLNS()
   WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_NAME() \
   < \
     global_functor_type<LCLFUNCTIONTYPE, CAPTUREDVARSTYPE>, \
-    typename boost::function_types::result_type<LCLFUNCTIONTYPE>::type, \
-    boost::function_types::parameter_types<LCLFUNCTIONTYPE>, \
-    boost::function_types::function_arity<LCLFUNCTIONTYPE>::value \
+    typename ::boost::function_types::result_type<LCLFUNCTIONTYPE>::type, \
+    ::boost::function_types::parameter_types<LCLFUNCTIONTYPE>, \
+    ::boost::function_types::function_arity<LCLFUNCTIONTYPE>::value \
   >
 
 // LCLFUNCTIONTYPE: The specified local function type.
@@ -58,11 +58,11 @@ private:
   // This functions prototype should match
   // local_functor_type_cpp03::user_callback.
   typedef
-    typename boost::mpl::push_back
+    typename ::boost::mpl::push_back
     <
-      typename boost::mpl::push_front
+      typename ::boost::mpl::push_front
       <
-        typename boost::mpl::push_front
+        typename ::boost::mpl::push_front
         <
           typename base_class_type::parameter_types,
           global_functor_type WG_PP_LCLFUNCTION_CONSTINVARIANCE_KEYWORD_CONST &
@@ -74,7 +74,7 @@ private:
 
 public:
   typedef
-    typename boost::function_types::function_pointer<mpl_callback_type>::type
+    typename ::boost::function_types::function_pointer<mpl_callback_type>::type
       callback_type;
 
 public:

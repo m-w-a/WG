@@ -36,7 +36,7 @@ WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE(S5, 0)
 struct SomeGlobalType {};
 void testGlobalType()
 {
-  using namespace boost;
+  using namespace ::boost;
   typedef SomeGlobalType & S1Type;
 
   WG_PP_TESTS_UTIL_ISSAMETYPE(

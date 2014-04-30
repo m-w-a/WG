@@ -10,7 +10,7 @@ namespace Utils
 
 std::streambuf & getNullStreambuf()
 {
-  using namespace boost::iostreams;
+  using namespace ::boost::iostreams;
   static stream_buffer<null_sink> nullStreambuf((null_sink()));
   
   return nullStreambuf;

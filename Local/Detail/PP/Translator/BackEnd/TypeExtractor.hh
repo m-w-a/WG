@@ -34,10 +34,10 @@
 
 // parsedtype: parsed-explicit-or-deduced-type
 // Result:
-//   1) if type non-local: boost::call_traits<extracted-type>::type
+//   1) if type non-local: ::boost::call_traits<extracted-type>::type
 //   2) else:
 //     1) if C++03: "extracted-local-type const &", else:
-//     2) boost::call_traits<extracted-type>::type
+//     2) ::boost::call_traits<extracted-type>::type
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE( \
@@ -120,7 +120,7 @@
 #define WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE_NONLOCAL( \
   parsedtype, istpl) \
     WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-    boost::call_traits \
+    ::boost::call_traits \
     < \
       WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_NONLOCAL(parsedtype) \
     >::param_type

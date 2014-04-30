@@ -32,12 +32,12 @@ Standard Type Names
     etc...
 
 Boost::Function
-  Local function objects maybe assigned to boost::function objects. The const
-  qualification of such boost::function objects will not affect how the local
+  Local function objects maybe assigned to ::boost::function objects. The const
+  qualification of such ::boost::function objects will not affect how the local
   function object is called. This to allow the following use case:
     struct signaler
     {
-      typedef boost::function<void()> callback_type;
+      typedef ::boost::function<void()> callback_type;
       
       explicit signaler(callback_type const & callback)
       : m_callback(callback)

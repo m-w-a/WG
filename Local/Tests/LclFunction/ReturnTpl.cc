@@ -13,7 +13,7 @@ struct OkIfReturnSpecified
   {
     T retval = false;
 
-    WG_LCLFUNCTION_TPL(rettest, return (typename boost::add_const<T>::type) )
+    WG_LCLFUNCTION_TPL(rettest, return (typename ::boost::add_const<T>::type) )
     {
       return true;
     }
