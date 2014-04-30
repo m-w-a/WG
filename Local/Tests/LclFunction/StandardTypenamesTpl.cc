@@ -12,6 +12,7 @@ struct VoidResultType
   {
     WG_LCLFUNCTION_TPL(noop, return (T) )
     {
+      EXPECT_TRUE(( ::boost::is_same<T (), function_type>::value ));
       EXPECT_TRUE(( ::boost::is_same<T, result_type>::value ));
     }WG_LCLFUNCTION_END;
   }
@@ -35,6 +36,7 @@ struct IntResultType
   {
     WG_LCLFUNCTION_TPL(noop, return (T) )
     {
+      EXPECT_TRUE(( ::boost::is_same<T (), function_type>::value ));
       EXPECT_TRUE(( ::boost::is_same<T, result_type>::value ));
 
       return T();
@@ -60,6 +62,7 @@ struct Arg1Type
   {
     WG_LCLFUNCTION_TPL(noop, params (T arg1) )
     {
+      EXPECT_TRUE(( ::boost::is_same<void (T), function_type>::value ));
       EXPECT_TRUE(( ::boost::is_same<T, arg1_type>::value ));
     }WG_LCLFUNCTION_END;
   }
@@ -84,6 +87,8 @@ struct Arg3Type
     WG_LCLFUNCTION_TPL(noop,
       params (T1 arg1) (T2 arg2) (T3 arg3) )
     {
+      EXPECT_TRUE((
+        ::boost::is_same<void (T1, T2, T3), function_type>::value ));
       EXPECT_TRUE(( ::boost::is_same<T1, arg1_type>::value ));
       EXPECT_TRUE(( ::boost::is_same<T2, arg2_type>::value ));
       EXPECT_TRUE(( ::boost::is_same<T3, arg3_type>::value ));

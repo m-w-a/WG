@@ -365,6 +365,8 @@
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN_IMPL2( \
   symbtbl, global_functor_type_name, istpl) \
     typedef WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
+      global_functor_type_name::function_type function_type ; \
+    typedef WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
       global_functor_type_name::result_type result_type ; \
     BOOST_PP_REPEAT( \
       WG_PP_SEQ_SIZE( \
