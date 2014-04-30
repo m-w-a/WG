@@ -10,7 +10,7 @@ TEST(wg_lclfunction_recursive, Fibonacci)
     int fib = 0;
 
     WG_LCLFUNCTION(calculateFibonacci,
-      return (int) params ((int const) input) )
+      return (int) params (int const input) )
     {
       if(input > 1)
       {

@@ -7,7 +7,7 @@
     WG_LCLFUNCTION_TPL \
     (makeGingerBreadCookie1, \
       return (int) \
-      params ((bool) salt) ((bool) sugar) \
+      params (bool salt) (bool sugar) \
       varbind (const pinchOfSalt) \
       varset (const dos, dashOfSugar) ) \
     { \
@@ -20,7 +20,7 @@
     WG_LCLFUNCTION_TPL \
     (makeGingerBreadCookie2, \
       return (int) \
-      params ((bool) salt) ((bool) sugar) \
+      params (bool salt) (bool sugar) \
       varbind (const pinchOfSalt) \
       varset (const dos, dashOfSugar) ) \
     { \

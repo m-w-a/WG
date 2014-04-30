@@ -8,7 +8,7 @@ TEST(wg_lclfunction_boost_function, OkIfCopyAssigned)
 {
   try
   {
-    WG_LCLFUNCTION(square, return (int) params ((int) x) )
+    WG_LCLFUNCTION(square, return (int) params (int x) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(x);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, x);
@@ -29,7 +29,7 @@ TEST(wg_lclfunction_boost_function, OkayIfConstRefAssigned)
 {
   try
   {
-    WG_LCLFUNCTION(square, return (int) params ((int) x) )
+    WG_LCLFUNCTION(square, return (int) params (int x) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(x);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, x);
@@ -53,7 +53,7 @@ struct OkIfReturnedFromFunction
   typedef boost::function<int(int)> square_type;
   static square_type run()
   {
-    WG_LCLFUNCTION(square, return(int) params((int) x) )
+    WG_LCLFUNCTION(square, return(int) params(int x) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(x);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, x);

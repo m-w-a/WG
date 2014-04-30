@@ -18,7 +18,7 @@ struct TestTpl
     WG_LCLFUNCTION_TPL
     (makeGingerBreadCookie,
       return (int)
-      params ((bool) salt) ((bool) sugar)
+      params (bool salt) (bool sugar)
       varbind (const pinchOfSalt)
       varset (const dos, dashOfSugar) )
     {

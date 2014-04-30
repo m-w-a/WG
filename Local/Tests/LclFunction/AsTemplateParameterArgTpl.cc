@@ -16,7 +16,7 @@ struct StdForEach
 
     WG_LCLFUNCTION_TPL
     (accumulate,
-      params ((T const) datum)
+      params (T const datum)
       varbind (ref sum)
       varset (runningOffset, 0) )
     {

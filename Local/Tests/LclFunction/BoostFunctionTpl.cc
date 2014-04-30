@@ -11,7 +11,7 @@ struct OkIfCopyAssigned
 {
   static void run()
   {
-    WG_LCLFUNCTION_TPL(square, return (T) params ((T) x) )
+    WG_LCLFUNCTION_TPL(square, return (T) params (T x) )
     {
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, x);
 
@@ -42,7 +42,7 @@ struct OkIfConstRefAssigned
 {
   static void run()
   {
-    WG_LCLFUNCTION_TPL(square, return (T) params ((T) x) )
+    WG_LCLFUNCTION_TPL(square, return (T) params (T x) )
     {
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, x);
 
@@ -74,7 +74,7 @@ struct OkIfReturnedFromFunction
   typedef boost::function<T (T)> square_type;
   static square_type run()
   {
-    WG_LCLFUNCTION_TPL(square, return(T) params((T) x) )
+    WG_LCLFUNCTION_TPL(square, return(T) params(T x) )
     {
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, x);
 
