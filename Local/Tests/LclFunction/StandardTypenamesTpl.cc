@@ -81,7 +81,8 @@ struct Arg3Type
 {
   static void run()
   {
-    WG_LCLFUNCTION_TPL(noop, params ((T1) arg1) ((T2) arg2) ((T3) arg3) )
+    WG_LCLFUNCTION_TPL(noop,
+      params ((T1) arg1) ((T2) arg2) ((T3) arg3) )
     {
       EXPECT_TRUE(( boost::is_same<T1, arg1_type>::value ));
       EXPECT_TRUE(( boost::is_same<T2, arg2_type>::value ));

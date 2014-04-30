@@ -18,7 +18,7 @@ struct OkIfUsing21Combo
 
     WG_LCLFUNCTION_TPL
     (calculateVolume,
-      varbind ((T1 &) volume) ((T2 const) pressure)
+      varbind (type(T1 &) volume) (type(T2 const) pressure)
       varset (numerator, numMoles * R * temp) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(volume);

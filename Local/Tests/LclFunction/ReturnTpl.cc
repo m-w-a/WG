@@ -13,8 +13,7 @@ struct OkIfReturnSpecified
   {
     T retval = false;
 
-    WG_LCLFUNCTION_TPL
-    (rettest, return (typename boost::add_const<T>::type) )
+    WG_LCLFUNCTION_TPL(rettest, return (typename boost::add_const<T>::type) )
     {
       return true;
     }
@@ -46,8 +45,7 @@ struct OkIfGloballyScopedReturn
   {
     ::boost::tuple<T1> retval = ::boost::make_tuple(false);
 
-    WG_LCLFUNCTION_TPL
-    (rettest, return (::boost::tuple<T1> const) )
+    WG_LCLFUNCTION_TPL(rettest, return (::boost::tuple<T1> const) )
     {
       return ::boost::make_tuple(true);
     }

@@ -15,7 +15,7 @@ TEST(wg_lclfunction_varbindexplicitandvarsetimplicit, OkIfUsing21Combo)
 
     WG_LCLFUNCTION
     (calculateVolume,
-      varbind ((int &) volume) ((int const) pressure)
+      varbind (type(int &) volume) (type(int const) pressure)
       varset (numerator, numMoles * R * temp) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(volume);

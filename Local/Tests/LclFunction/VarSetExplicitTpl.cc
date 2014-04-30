@@ -18,7 +18,7 @@ struct OkIf1VarSet
 
     WG_LCLFUNCTION_TPL
     (check,
-      varset ((T &) didAssign, proxy.didAssign) )
+      varset (type(T &) didAssign, proxy.didAssign) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(didAssign);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, didAssign);
@@ -57,9 +57,9 @@ struct OkIf3VarOfVaryingMutabilitySet
 
     WG_LCLFUNCTION_TPL
     (calculateVolume,
-      varset ((T1 const) radius, cylinder.radius)
-        ((T2 const) height, cylinder.height)
-        ((T3 &) volume, cylinder.volume) )
+      varset (type(T1 const) radius, cylinder.radius)
+        (type(T2 const) height, cylinder.height)
+        (type(T3 &) volume, cylinder.volume) )
     {
       WG_TESTHELPER_ASSERT_ISCONST_TPL(radius);
       WG_TESTHELPER_ASSERT_ISCONST_TPL(height);

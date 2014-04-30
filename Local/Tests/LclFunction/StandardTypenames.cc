@@ -44,7 +44,8 @@ TEST(wg_lclfunction_standardtypenames, Arg3Type)
 {
   try
   {
-    WG_LCLFUNCTION(noop, params ((char) arg1) ((int) arg2) ((long) arg3) )
+    WG_LCLFUNCTION(noop,
+      params ((char) arg1) ((int) arg2) ((long) arg3) )
     {
       EXPECT_TRUE(( boost::is_same<char, arg1_type>::value ));
       EXPECT_TRUE(( boost::is_same<int, arg2_type>::value ));

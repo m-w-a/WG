@@ -13,7 +13,7 @@ TEST(wg_lclfunction_varbindexplicitandimplicit,
     int const velocity = 2;
 
     WG_LCLFUNCTION
-    (calculateForce, varbind (ref force) ((int const) mass) (velocity) )
+    (calculateForce, varbind (ref force) (type(int const) mass) (velocity) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(force);
       WG_TESTHELPER_ASSERT_ISCONST(mass);

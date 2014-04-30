@@ -10,7 +10,7 @@ TEST(wg_lclfunction_varbindexplicit, EnsureTypeOfNotUsed)
   {
     float value = 1.2f;
 
-    WG_LCLFUNCTION(bindByDiffType, varbind ((int const) value) )
+    WG_LCLFUNCTION(bindByDiffType, varbind (type(int const) value) )
     {
       WG_TESTHELPER_ASSERT_ISCONST(value);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, value);
@@ -29,7 +29,7 @@ TEST(wg_lclfunction_varbindexplicit, OkIf1VarBound)
   {
     bool didBind = false;
 
-    WG_LCLFUNCTION(check, varbind ((bool &) didBind) )
+    WG_LCLFUNCTION(check, varbind (type(bool &) didBind) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(didBind);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, didBind);
@@ -50,7 +50,7 @@ TEST(wg_lclfunction_varbindexplicit, OkIfGloballyScoped1VarBound)
   {
     ::boost::tuple<bool> didBind = ::boost::make_tuple(false);
 
-    WG_LCLFUNCTION(check, varbind ((::boost::tuple<bool> &) didBind) )
+    WG_LCLFUNCTION(check, varbind (type(::boost::tuple<bool> &) didBind) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(didBind);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
@@ -76,7 +76,7 @@ TEST(wg_lclfunction_varbindexplicit, OkIf3VarsOfVaryingMutabilityBound)
 
     WG_LCLFUNCTION
     (calculateForce,
-      varbind ((int &) force) ((int const) mass) ((int const) velocity) )
+      varbind (type(int &) force) (type(int const) mass) (type(int const) velocity) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(force);
       WG_TESTHELPER_ASSERT_ISCONST(mass);
@@ -108,7 +108,7 @@ struct OkIfKeywordThisUBound
     didBindThis = false;
 
     WG_LCLFUNCTION
-    (bindThisU, varbind ((OkIfKeywordThisUBound * const) this_) )
+    (bindThisU, varbind (type(OkIfKeywordThisUBound * const) this_) )
     {
       WG_TESTHELPER_ASSERT_ISCONST(this_);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(

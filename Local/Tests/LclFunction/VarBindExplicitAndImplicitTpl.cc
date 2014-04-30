@@ -15,7 +15,7 @@ struct OkIf3ArgsOfVaryingMutabilityBound
     T3 const velocity = 2;
 
     WG_LCLFUNCTION_TPL
-    (calculateForce, varbind (ref force) ((int const) mass) (velocity) )
+    (calculateForce, varbind (ref force) (type(int const) mass) (velocity) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(force);
       WG_TESTHELPER_ASSERT_ISCONST_TPL(mass);

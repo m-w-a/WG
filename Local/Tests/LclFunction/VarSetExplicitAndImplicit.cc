@@ -14,7 +14,7 @@ TEST(wg_lclfunction_varsetexplicitandimplicit,
 
     WG_LCLFUNCTION
     (calculateForce,
-      varset (ref force, force) ((int const) mass, mass) (velocity, velocity) )
+      varset (ref force, force) (type(int const) mass, mass) (velocity, velocity) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(force);
       WG_TESTHELPER_ASSERT_ISCONST(mass);

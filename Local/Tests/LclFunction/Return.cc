@@ -31,8 +31,7 @@ TEST(wg_lclfunction_return, OkIfGloballyScoped)
   {
     ::boost::tuple<bool> retval = ::boost::make_tuple(false);
 
-    WG_LCLFUNCTION
-    (rettest, return (::boost::tuple<bool>) )
+    WG_LCLFUNCTION(rettest, return (::boost::tuple<bool>) )
     {
       return ::boost::make_tuple(true);
     }
