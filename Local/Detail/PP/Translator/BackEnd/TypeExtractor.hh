@@ -4,7 +4,6 @@
 #include <boost/preprocessor.hpp>
 #include <boost/call_traits.hpp>
 #include <boost/type_traits/add_const.hpp>
-#include <boost/type_traits/add_reference.hpp>
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Translator/Keywords.hh>
 #include <WG/Local/Detail/PP/Translator/Utils.hh>
