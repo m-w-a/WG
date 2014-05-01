@@ -49,7 +49,7 @@
       WG_PP_VARDCLN_IMPLICIT_TUPLIZE2 \
       BOOST_PP_IIF( \
         WG_PP_KEYWORDS_STARTSWITH_CONST(implicitvardcln), \
-        ( 1, WG_PP_KEYWORDS_EAT_HEADKEYWORD(implicitvardcln), hasvalueexpr, \
+        ( 1, WG_PP_KEYWORDS_EATHEAD_CONST(implicitvardcln), hasvalueexpr, \
           valueexpr, istpl ), \
         ( 0, implicitvardcln, hasvalueexpr, valueexpr, istpl ) ))
 
@@ -57,7 +57,7 @@
   isconstqualified, implicitvardcln, hasvalueexpr, valueexpr, istpl) \
     WG_PP_VARDCLN_IMPLICIT_EXPAND2( \
       BOOST_PP_IIF( \
-        BOOST_PP_NOT(hasvalueexpr), \
+        BOOST_PP_COMPL(hasvalueexpr), \
         WG_PP_VARDCLN_IMPLICIT_TUPLIZE_BOUND, \
         WG_PP_VARDCLN_IMPLICIT_TUPLIZE_SET) \
       BOOST_PP_LPAREN() \
@@ -65,7 +65,7 @@
         BOOST_PP_SEQ_ENUM( \
           BOOST_PP_IIF( \
             WG_PP_KEYWORDS_STARTSWITH_REF(implicitvardcln), \
-            (1)  ( WG_PP_KEYWORDS_EAT_HEADKEYWORD(implicitvardcln) ), \
+            (1)  ( WG_PP_KEYWORDS_EATHEAD_REF(implicitvardcln) ), \
             (0) ( implicitvardcln ) ) \
           BOOST_PP_EXPR_IIF( \
             hasvalueexpr, \
@@ -99,17 +99,17 @@
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_01(expr, istpl) \
   WG_PP_MARKER_DEDUCEDTYPE \
     type( WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-      boost::add_reference< WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) >::type )
+      ::boost::add_reference< WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) >::type )
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_10(expr, istpl) \
   WG_PP_MARKER_DEDUCEDTYPE \
     type( WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-      boost::add_const< WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) >::type )
+      ::boost::add_const< WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) >::type )
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_11(expr, istpl) \
   WG_PP_MARKER_DEDUCEDTYPE \
     type( \
-      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_reference \
+      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) ::boost::add_reference \
       < \
-        WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_const \
+        WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) ::boost::add_const \
         < \
           WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) \
         >::type \
@@ -123,11 +123,11 @@
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_10(bvar, istpl) \
   WG_PP_MARKER_DEDUCEDTYPE \
   type( \
-    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_const \
+    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) ::boost::add_const \
     < \
-      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_pointer \
+      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) ::boost::add_pointer \
       < \
-        WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_const \
+        WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) ::boost::add_const \
         < \
           WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, *this) \
         >::type \

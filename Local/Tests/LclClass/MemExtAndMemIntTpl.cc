@@ -15,8 +15,8 @@ struct ExplictAndExplicit
 
     WG_LCLCLASS_TPL
     (MultiVar,
-      memext ((T1) id)
-      memint ((T2 const &) name, "BigFoot") )
+      memext (type(T1) id)
+      memint (type(T2 const &) name, "BigFoot") )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(id);
@@ -54,7 +54,7 @@ struct ExplicitAndImplicit
 
     WG_LCLCLASS_TPL
     (MultiVar,
-      memext ((T1) id)
+      memext (type(T1) id)
       memint (const ref name, T2("BigFoot")) )
       void init()
       {
@@ -94,7 +94,7 @@ struct ImplicitAndExplicit
     WG_LCLCLASS_TPL
     (MultiVar,
       memext (id)
-      memint ((T2 const &) name, "BigFoot") )
+      memint (type(T2 const &) name, "BigFoot") )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(id);

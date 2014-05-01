@@ -10,7 +10,7 @@ TEST(wg_lclfunction_varsetexplicit, EnsureTypeOfNotUsed)
   {
     float val = 1.2f;
 
-    WG_LCLFUNCTION(setToDiffType, varset ((int) value, val) )
+    WG_LCLFUNCTION(setToDiffType, varset (type(int) value, val) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(value);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, value);
@@ -34,7 +34,7 @@ TEST(wg_lclfunction_varsetexplicit, OkIf1VarSet)
 
     WG_LCLFUNCTION
     (check,
-      varset ((bool &) didAssign, proxy.didAssign) )
+      varset (type(bool &) didAssign, proxy.didAssign) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(didAssign);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, didAssign);
@@ -57,7 +57,7 @@ TEST(wg_lclfunction_varsetexplicit, OkIfGloballyScoped1VarSet)
 
     WG_LCLFUNCTION
     (check,
-      varset ((::boost::tuple<bool> &) assigner, didAssign) )
+      varset (type(::boost::tuple<bool> &) assigner, didAssign) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(assigner);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
@@ -86,9 +86,9 @@ TEST(wg_lclfunction_varsetexplicit, OkIf3VarOfVaryingMutabilitySet)
 
     WG_LCLFUNCTION
     (calculateVolume,
-      varset ((int const) radius, cylinder.radius)
-        ((int const) height, cylinder.height)
-        ((int &) volume, cylinder.volume) )
+      varset (type(int const) radius, cylinder.radius)
+        (type(int const) height, cylinder.height)
+        (type(int &) volume, cylinder.volume) )
     {
       WG_TESTHELPER_ASSERT_ISCONST(radius);
       WG_TESTHELPER_ASSERT_ISCONST(height);

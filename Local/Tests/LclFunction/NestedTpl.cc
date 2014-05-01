@@ -63,7 +63,7 @@ struct TwoLevel
 
       ++count;
 
-      WG_LCLFUNCTION_TPL(twoStep, params ((int &) count) )
+      WG_LCLFUNCTION_TPL(twoStep, params (int & count) )
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(count);
         WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(int, count);

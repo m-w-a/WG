@@ -8,11 +8,11 @@
 #include <WG/Local/Detail/PP/Translator/Markers.hh>
 
 //Unit Tests.
-#define SG1 (SomeGlobalType const *) sgvar1
-#define SL1 local(SomeLocalType *) slvar1
-#define SL2 local(SomeLocalType *) const slvar2
-#define SL3 local(SomeLocalType *) ref slvar3
-#define SL4 local(SomeLocalType *) const ref slvar4
+#define SG1 type(SomeGlobalType const *) sgvar1
+#define SL1 lcltype(SomeLocalType *) slvar1
+#define SL2 lcltype(SomeLocalType *) const slvar2
+#define SL3 lcltype(SomeLocalType *) ref slvar3
+#define SL4 lcltype(SomeLocalType *) const ref slvar4
 /*
 WG_PP_VARDCLN_EXPLICIT_TUPLIZE(SG1, 0)
 WG_PP_VARDCLN_EXPLICIT_TUPLIZE(SL1, 0)
@@ -24,12 +24,12 @@ WG_PP_VARDCLN_EXPLICIT_TUPLIZE(SPE2, 0)
 WG_PP_VARDCLN_EXPLICIT_TUPLIZE(SPE3, 1)
 
 //EXPECTED:
-//(SomeGlobalType const) (sgvar1)
-//( local(SomeLocalType *) ) (slvar1)
-//( local(SomeLocalType *) (const) ) (slvar2)
-//( local(SomeLocalType *) (ref) ) (slvar3)
-//( local(SomeLocalType *) (const)(ref) ) (slvar4)
-//( (int) (spevar1) )
+//(WG_PP_NOOP type(SomeGlobalType const) ) (sgvar1)
+//(WG_PP_NOOP local(SomeLocalType *) ) (slvar1)
+//(WG_PP_NOOP local(SomeLocalType *) ) (const) ) (slvar2)
+//(WG_PP_NOOP local(SomeLocalType *) ) (ref) ) (slvar3)
+//(WG_PP_NOOP local(SomeLocalType *) ) (const)(ref) ) (slvar4)
+//(WG_PP_NOOP type(int)) (spevar1)
 */
 
 //-----

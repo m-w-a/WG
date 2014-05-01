@@ -15,7 +15,7 @@ TEST(wg_lclfunction_allcombo, Test)
     WG_LCLFUNCTION
     (makeGingerBreadCookie,
       return (int)
-      params ((bool) salt) ((bool) sugar)
+      params (bool salt) (bool sugar)
       varbind (const pinchOfSalt)
       varset (const dos, dashOfSugar) )
     {

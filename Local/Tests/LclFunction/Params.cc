@@ -10,7 +10,7 @@ TEST(wg_lclfunction_params, OkIf1ArgPassedByValue)
   {
     int value = 10;
 
-    WG_LCLFUNCTION(checkValue, params ((int) value) )
+    WG_LCLFUNCTION(checkValue, params (int value) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(value);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, value);
@@ -31,7 +31,7 @@ TEST(wg_lclfunction_params, OkIf1ArgPassedByRef)
   try
   {
     int value = 10;
-    WG_LCLFUNCTION(checkValue, params ((int &) value) )
+    WG_LCLFUNCTION(checkValue, params (int & value) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(value);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, value);
@@ -54,7 +54,7 @@ TEST(wg_lclfunction_params, OkIf1ArgPassedByConstRef)
     int value = 10;
     WG_LCLFUNCTION
     (checkValue,
-      params ((int const &) value) )
+      params (int const & value) )
     {
       WG_TESTHELPER_ASSERT_ISCONST(value);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, value);
@@ -76,7 +76,7 @@ TEST(wg_lclfunction_params, OkIfGloballyScoped1ArgUsed)
 
     WG_LCLFUNCTION
     (checkValue,
-      params ((::boost::tuple<bool>) wasCalled) )
+      params (::boost::tuple<bool> wasCalled) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(wasCalled);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
@@ -100,7 +100,7 @@ TEST(wg_lclfunction_params, OkIf3ArgsUsed)
 
     WG_LCLFUNCTION
     (calculateForce,
-      params ((int &) force) ((int const) mass) ((int const) velocity) )
+      params (int & force) (int const mass) (int const velocity) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(force);
       WG_TESTHELPER_ASSERT_ISCONST(mass);

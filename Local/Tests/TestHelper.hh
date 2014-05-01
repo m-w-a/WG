@@ -104,7 +104,7 @@ template <typename T>
 struct first_nonarray_elem;
 
 template <typename T, std::size_t N>
-typename boost::remove_all_extents<T>::type *
+typename ::boost::remove_all_extents<T>::type *
   address_of_first_nonarray_elem(T (&arr)[N])
 {
   return first_nonarray_elem<T[N]>::address_of(arr);
@@ -121,9 +121,9 @@ typename boost::remove_all_extents<T>::type *
 #define WG_TESTHELPER_ASSERT_CONST(identifier, isnotflag, istpl) \
   EXPECT_TRUE(( \
     BOOST_PP_EXPR_IIF(isnotflag, ! ) \
-    boost::is_const \
+    ::boost::is_const \
     < \
-      BOOST_PP_EXPR_IIF(istpl, typename) boost::remove_pointer \
+      BOOST_PP_EXPR_IIF(istpl, typename) ::boost::remove_pointer \
       < \
         BOOST_TYPEOF(&(identifier)) \
       >::type \
@@ -158,7 +158,7 @@ WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(obj.var)
 #define WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
   expectedtype, objtotest, istpl) \
     EXPECT_TRUE(( \
-      boost::is_same \
+      ::boost::is_same \
       < \
         expectedtype, \
         BOOST_PP_IIF(istpl, BOOST_TYPEOF_TPL, BOOST_TYPEOF) (objtotest) \
@@ -176,14 +176,14 @@ struct first_nonarray_elem
 {
   static T * address_of(T & first_elem)
   {
-    return boost::addressof(first_elem);
+    return ::boost::addressof(first_elem);
   }
 };
 
 template <typename T, std::size_t N>
 struct first_nonarray_elem<T[N]>
 {
-  static typename boost::remove_all_extents<T>::type * address_of(T (&arr)[N])
+  static typename ::boost::remove_all_extents<T>::type * address_of(T (&arr)[N])
   {
     return first_nonarray_elem<T>::address_of(*arr);
   }

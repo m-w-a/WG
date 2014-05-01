@@ -38,11 +38,10 @@
     wg::lclfunction::detail::cpp11::global_functor_type \
     < \
       WG_PP_LCLFUNCTION_CG_CPP11_LOCALFUNCTORTYPE_NAME(function_name), \
-      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl), \
-      boost::mpl::vector \
-      < \
-        WG_PP_SEQ_ENUM( WG_PP_LCLFUNCTION_SYMBOLTABLE_TYPESEQ_PARAMS(symbtbl) ) \
-      >, \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
+      ( \
+        WG_PP_SEQ_ENUM(WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_PARAMS(symbtbl)) \
+      ), \
       WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME(function_name) \
     >
 

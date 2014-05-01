@@ -20,7 +20,7 @@ struct OkIf3MemOfVaryingMutabilitySet
       memint
         (const radius, 2)
         (height, 10)
-        ((long const) volume, radius * height) )
+        (type(long const) volume, radius * height) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISCONST(radius);

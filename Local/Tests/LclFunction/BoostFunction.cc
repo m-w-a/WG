@@ -8,7 +8,7 @@ TEST(wg_lclfunction_boost_function, OkIfCopyAssigned)
 {
   try
   {
-    WG_LCLFUNCTION(square, return (int) params ((int) x) )
+    WG_LCLFUNCTION(square, return (int) params (int x) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(x);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, x);
@@ -18,7 +18,7 @@ TEST(wg_lclfunction_boost_function, OkIfCopyAssigned)
 
     WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, square(3));
 
-    boost::function<int(int)> f = square;
+    ::boost::function<int(int)> f = square;
 
     EXPECT_EQ(16, f(4));
   }
@@ -29,7 +29,7 @@ TEST(wg_lclfunction_boost_function, OkayIfConstRefAssigned)
 {
   try
   {
-    WG_LCLFUNCTION(square, return (int) params ((int) x) )
+    WG_LCLFUNCTION(square, return (int) params (int x) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(x);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, x);
@@ -39,7 +39,7 @@ TEST(wg_lclfunction_boost_function, OkayIfConstRefAssigned)
 
     WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, square(3));
 
-    boost::function<int(int)> f = boost::cref(square);
+    ::boost::function<int(int)> f = ::boost::cref(square);
 
     EXPECT_EQ(16, f(4));
   }
@@ -50,10 +50,10 @@ namespace
 {
 struct OkIfReturnedFromFunction
 {
-  typedef boost::function<int(int)> square_type;
+  typedef ::boost::function<int(int)> square_type;
   static square_type run()
   {
-    WG_LCLFUNCTION(square, return(int) params((int) x) )
+    WG_LCLFUNCTION(square, return(int) params(int x) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST(x);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, x);

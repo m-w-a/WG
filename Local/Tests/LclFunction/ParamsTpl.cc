@@ -13,7 +13,7 @@ struct OkIf1ArgPassedByValue
   {
     T value = 10;
 
-    WG_LCLFUNCTION_TPL(checkValue, params ((T) value) )
+    WG_LCLFUNCTION_TPL(checkValue, params (T value) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(value);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, value);
@@ -45,7 +45,7 @@ struct OkIf1ArgPassedByRef
   static void run()
   {
     T value = 10;
-    WG_LCLFUNCTION_TPL(checkValue, params ((T &) value) )
+    WG_LCLFUNCTION_TPL(checkValue, params (T & value) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(value);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, value);
@@ -79,7 +79,7 @@ struct OkIf1ArgPassedByConstRef
     T value = 10;
     WG_LCLFUNCTION_TPL
     (checkValue,
-      params ((T const &) value) )
+      params (T const & value) )
     {
       WG_TESTHELPER_ASSERT_ISCONST_TPL(value);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, value);
@@ -111,7 +111,7 @@ struct OkIfGloballyScoped1ArgUsed
 
     WG_LCLFUNCTION_TPL
     (checkValue,
-      params ((::boost::tuple<T1>) wasCalled) )
+      params (::boost::tuple<T1> wasCalled) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(wasCalled);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
@@ -146,7 +146,7 @@ struct OkIf3ArgsUsed
 
     WG_LCLFUNCTION_TPL
     (calculateForce,
-      params ((T1 &) force) ((T2 const) mass) ((T3 const) velocity) )
+      params (T1 & force) (T2 const mass) (T3 const velocity) )
     {
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(force);
       WG_TESTHELPER_ASSERT_ISCONST_TPL(mass);

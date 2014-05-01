@@ -8,7 +8,7 @@ TEST(wg_lclclass_memextexplicit, 1Var)
 {
   try
   {
-    WG_LCLCLASS(Local, memext ((int) value) )
+    WG_LCLCLASS(Local, memext (type(int) value) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST(value);
@@ -34,7 +34,7 @@ TEST(wg_lclclass_memextexplicit, 3Vars)
 
     WG_LCLCLASS
     (MultiVar,
-      memext ((short) id) ((int const) age) ((std::string const &) name) )
+      memext (type(short) id) (type(int const) age) (type(std::string const &) name) )
       void init()
       {
         WG_TESTHELPER_ASSERT_ISNOTCONST(id);
@@ -67,7 +67,7 @@ TEST(wg_lclclass_memextexplicit, LocalTypeNonQlfd)
     WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
     SomeLocalClass localObj;
 
-    WG_LCLCLASS(AnotherLocalClass, memext (local(SomeLocalClass) value) )
+    WG_LCLCLASS(AnotherLocalClass, memext (lcltype(SomeLocalClass) value) )
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST(value);
@@ -93,7 +93,7 @@ TEST(wg_lclclass_memextexplicit, LocalTypeConstQlfd)
     WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
     SomeLocalClass localObj;
 
-    WG_LCLCLASS(AnotherLocalClass, memext (local(SomeLocalClass) const value) )
+    WG_LCLCLASS(AnotherLocalClass, memext (lcltype(SomeLocalClass) const value) )
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST(value);
@@ -119,7 +119,7 @@ TEST(wg_lclclass_memextexplicit, LocalTypeRefQlfd)
     WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
     SomeLocalClass localObj;
 
-    WG_LCLCLASS(AnotherLocalClass, memext (local(SomeLocalClass) ref value) )
+    WG_LCLCLASS(AnotherLocalClass, memext (lcltype(SomeLocalClass) ref value) )
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST(value);
@@ -146,7 +146,7 @@ TEST(wg_lclclass_memextexplicit, LocalTypeConstRefQlfd)
     SomeLocalClass localObj;
 
     WG_LCLCLASS
-    (AnotherLocalClass, memext (local(SomeLocalClass) const ref value) )
+    (AnotherLocalClass, memext (lcltype(SomeLocalClass) const ref value) )
       void init()
       {
         WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST(value);

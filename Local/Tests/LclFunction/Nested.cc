@@ -49,7 +49,7 @@ TEST(wg_lclfunction_nested, TwoLevel)
 
       ++count;
 
-      WG_LCLFUNCTION(twoStep, params ((int &) count) )
+      WG_LCLFUNCTION(twoStep, params (int & count) )
       {
         WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
         WG_TESTHELPER_ASSERT_ISNOTCONST(count);

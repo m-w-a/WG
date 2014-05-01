@@ -53,7 +53,7 @@
 #define WG_PP_LCLFUNCTION_FUNCTIONOPERATORUTILS_ARGTYPEDCLNS_ENTRY( \
   z, indx, data) \
   typedef \
-    typename boost::mpl::at<parameter_types, boost::mpl::int_<indx> >::type \
+    typename ::boost::mpl::at<parameter_types, ::boost::mpl::int_<indx> >::type \
       WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS_ARGTYPENAME(indx) ;
 
 #endif /* WG_PP_LOCAL_DETAIL_LCLFUNCTION_FUNCTIONOPERATORUTILS_HH_ */

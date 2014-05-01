@@ -6,10 +6,9 @@
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
 
-//################
-//Interface Impls.
-//  (Implements interfaces required by external macros.)
-//################
+//###########
+//Public APIs
+//###########
 
 #define WG_PP_LCLCLASS_SYMBOLTABLE_MODULEID(symbtbl) \
   WG_PP_LCLCLASS_ST_GET(symbtbl, MODULEID)
@@ -17,61 +16,89 @@
 #define WG_PP_LCLCLASS_SYMBOLTABLE_ISTPL(symbtbl) \
   WG_PP_LCLCLASS_ST_GET(symbtbl, ISTPL)
 
-//Returns: { BOOST_PP_NIL | derives-tuple-seq }
+// Returns: { BOOST_PP_NIL | derives-tuple-seq }
 #define WG_PP_LCLCLASS_SYMBOLTABLE_DERIVESSEQ(symbtbl) \
   WG_PP_LCLCLASS_ST_GET(symbtbl, DERIVESSEQ)
 
-//Returns: { BOOST_PP_NIL | {(parsed-explicit-or-deduced-type)}+ }
-#define WG_PP_LCLCLASS_SYMBOLTABLE_TYPESEQ_MEMEXT(symbtbl) \
-  WG_PP_LCLCLASS_ST_GET(symbtbl, TYPESEQ_MEMEXT)
+//------
+//MemExt
+//------
 
-//Returns: { BOOST_PP_NIL | {(var-name)}+ }
-#define WG_PP_LCLCLASS_SYMBOLTABLE_OBJSEQ_MEMEXT(symbtbl) \
-  WG_PP_LCLCLASS_ST_GET(symbtbl, OBJSEQ_MEMEXT)
+// dcln: memext-dcln
+// Returns: parsed-explicit-or-deduced-type
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_GETTYPE_MEMEXT(dcln) \
+  WG_PP_SEQ_ELEM(0, dcln)
 
-//See WG_PP_LCLCLASS_SYMBOLTABLE_OBJSEQ_MEMEXT.
-#define WG_PP_LCLCLASS_SYMBOLTABLE_VALUESEQ_MEMEXT(symbtbl) \
-  WG_PP_LCLCLASS_SYMBOLTABLE_OBJSEQ_MEMEXT(symbtbl)
+// dcln: memext-dcln
+// type: the replacement type for dcln.
+// Returns: memext-dcln
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_SETTYPE_MEMEXT(dcln, type) \
+  WG_PP_SEQ_REPLACE(dcln, 0, type)
+
+// Returns: var-name
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_OBJ_MEMEXT(dcln) \
+  WG_PP_SEQ_ELEM(1, dcln)
+
+// Returns: { BOOST_PP_NIL | { (memext-dcln) }+ }
+#define WG_PP_LCLCLASS_SYMBOLTABLE_GETDCLNS_MEMEXT(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, DCLNS_MEMEXT)
+
+#define WG_PP_LCLCLASS_SYMBOLTABLE_SETDCLNS_MEMEXT(symbtbl, dclns) \
+  WG_PP_STUTIL_SYMBOLTABLE_REPLACE( \
+    symbtbl, WG_PP_LCLCLASS_SYMBOLTABLE_INDX(DCLNS_MEMEXT), dclns)
+
+// Returns: { integer }
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_SIZE_MEMEXT(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, DCLNS_SIZE_MEMEXT)
+
+// Returns: { BOOST_PP_NIL | integer }
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_THISU_MARKER_MEMEXT(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, DCLNS_THISU_MARKER_MEMEXT)
+
+//------
+//MemInt
+//------
+
+// dcln: memint-dcln
+// Returns: parsed-explicit-type-or-deduced-type
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_GETTYPE_MEMINT(dcln) \
+  WG_PP_SEQ_ELEM(0, dcln)
+
+// dcln: memint-dcln
+// type: the replacement type for dcln.
+// Returns: memint-dcln
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_SETTYPE_MEMINT(dcln, type) \
+  WG_PP_SEQ_REPLACE(dcln, 0, type)
+
+// dcln: memint-dcln
+// Returns: var-name
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_OBJ_MEMINT(dcln) \
+  WG_PP_SEQ_ELEM(1, dcln)
+
+// dcln: memint-dcln
+// Returns: value-expr
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_VALUE_MEMINT(dcln) \
+  WG_PP_SEQ_ELEM(2, dcln)
+
+// Returns: { BOOST_PP_NIL | { (memint-dcln) }+ }
+#define WG_PP_LCLCLASS_SYMBOLTABLE_GETDCLNS_MEMINT(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, DCLNS_MEMINT)
+
+#define WG_PP_LCLCLASS_SYMBOLTABLE_SETDCLNS_MEMINT(symbtbl, dclns) \
+  WG_PP_STUTIL_SYMBOLTABLE_REPLACE( \
+    symbtbl, WG_PP_LCLCLASS_SYMBOLTABLE_INDX(DCLNS_MEMINT), dclns)
+
+// Returns: { integer }
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_SIZE_MEMINT(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, DCLNS_SIZE_MEMINT)
+
+//-----
+//Misc.
+//-----
 
 //Returns: { integer }
-#define WG_PP_LCLCLASS_SYMBOLTABLE_XXX_SIZE_MEMEXT(symbtbl) \
-  WG_PP_LCLCLASS_ST_GET(symbtbl, XXX_SIZE_MEMEXT)
-
-//Returns: { BOOST_PP_NIL | integer }
-#define WG_PP_LCLCLASS_SYMBOLTABLE_OBJSEQ_THISU_MARKER_MEMEXT(symbtbl) \
-  WG_PP_LCLCLASS_ST_GET(symbtbl, OBJSEQ_THISU_MARKER_MEMEXT)
-
-//Returns: { BOOST_PP_NIL | {(parsed-explicit-type-or-deduced-type)}+ }
-#define WG_PP_LCLCLASS_SYMBOLTABLE_TYPESEQ_MEMINT(symbtbl) \
-  WG_PP_LCLCLASS_ST_GET(symbtbl, TYPESEQ_MEMINT)
-
-//Returns: { BOOST_PP_NIL | {(var-name)}+ }
-#define WG_PP_LCLCLASS_SYMBOLTABLE_OBJSEQ_MEMINT(symbtbl) \
-  WG_PP_LCLCLASS_ST_GET(symbtbl, OBJSEQ_MEMINT)
-
-//Returns: { BOOST_PP_NIL | {(value-expr)}+ }
-#define WG_PP_LCLCLASS_SYMBOLTABLE_VALUESEQ_MEMINT(symbtbl) \
-  WG_PP_LCLCLASS_ST_GET(symbtbl, VALUESEQ_MEMINT)
-
-//Returns: { integer }
-#define WG_PP_LCLCLASS_SYMBOLTABLE_XXX_SIZE_MEMINT(symbtbl) \
-  WG_PP_LCLCLASS_ST_GET(symbtbl, XXX_SIZE_MEMINT)
-
-//Returns: { integer }
-#define WG_PP_LCLCLASS_SYMBOLTABLE_TOTALXXX_SIZE(symbtbl) \
-  WG_PP_LCLCLASS_ST_GET(symbtbl, TOTALXXX_SIZE)
-
-//#######################
-//STUTIL Interface Impls.
-//#######################
-
-// suffix: must match one of the following: WG_PP_LCLCLASS_ST_INDX_<suffix>
-#define WG_PP_LCLCLASS_SYMBOLTABLE_INDX(suffix) \
-  BOOST_PP_CAT(WG_PP_LCLCLASS_ST_INDX_, suffix)
-
-//###########
-//Public APIs
-//###########
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_TOTALSIZE(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, DCLNS_TOTALSIZE)
 
 //-----
 //NOTE:
@@ -102,6 +129,9 @@
 //OUTPUT:
 //-------
 //A SymbolTable whose values are accessible using the public API.
+//
+//memext-dcln: normalized-bound-tuple
+//memint-dcln: normalized-set-tuple
 #define WG_PP_LCLCLASS_SYMBOLTABLE_CREATE( \
   istpl, \
   derives_nrmlzd_tuple, \
@@ -117,23 +147,24 @@
 //Impl Macros
 //###########
 
+// suffix: must match one of the following: WG_PP_LCLCLASS_ST_INDX_<suffix>
+#define WG_PP_LCLCLASS_SYMBOLTABLE_INDX(suffix) \
+  BOOST_PP_CAT(WG_PP_LCLCLASS_ST_INDX_, suffix)
+
 #define WG_PP_LCLCLASS_ST_INDX_MODULEID 0
 
 #define WG_PP_LCLCLASS_ST_INDX_ISTPL 1
 
 #define WG_PP_LCLCLASS_ST_INDX_DERIVESSEQ 2
 
-#define WG_PP_LCLCLASS_ST_INDX_TYPESEQ_MEMEXT 3
-#define WG_PP_LCLCLASS_ST_INDX_OBJSEQ_MEMEXT 4
-#define WG_PP_LCLCLASS_ST_INDX_XXX_SIZE_MEMEXT 5
-#define WG_PP_LCLCLASS_ST_INDX_OBJSEQ_THISU_MARKER_MEMEXT 6
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_MEMEXT 3
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_THISU_MARKER_MEMEXT 4
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_SIZE_MEMEXT 5
 
-#define WG_PP_LCLCLASS_ST_INDX_TYPESEQ_MEMINT 7
-#define WG_PP_LCLCLASS_ST_INDX_OBJSEQ_MEMINT 8
-#define WG_PP_LCLCLASS_ST_INDX_VALUESEQ_MEMINT 9
-#define WG_PP_LCLCLASS_ST_INDX_XXX_SIZE_MEMINT 10
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_MEMINT 6
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_SIZE_MEMINT 7
 
-#define WG_PP_LCLCLASS_ST_INDX_TOTALXXX_SIZE 11
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_TOTALSIZE 8
 
 // suffix: must match one of the following: WG_PP_LCLCLASS_ST_INDX_<suffix>
 #define WG_PP_LCLCLASS_ST_GET(symbtbl, suffix) \
@@ -153,37 +184,32 @@
     WG_PP_LCLCLASS_SYMBOLTABLE_CREATE_IMPL2( \
       istpl, \
       derives_nrmlzd_tuple, \
-      WG_PP_STUTIL_BOUNDTUPLESEQ_TO_TYPESEQ(memext_nrmlzd_tupleseq), \
-      WG_PP_STUTIL_BOUNDTUPLESEQ_TO_OBJSEQ(memext_nrmlzd_tupleseq), \
-      WG_PP_STUTIL_SETTUPLESEQ_TO_TYPESEQ(memint_nrmlzd_tupleseq), \
-      WG_PP_STUTIL_SETTUPLESEQ_TO_OBJSEQ(memint_nrmlzd_tupleseq), \
-      WG_PP_STUTIL_SETTUPLESEQ_TO_VALUESEQ(memint_nrmlzd_tupleseq) )
+      WG_PP_STUTIL_NRMLZDBOUNDTUPLESEQ_TO_BOUNDDCLNSEQ(memext_nrmlzd_tupleseq), \
+      WG_PP_STUTIL_NRMLZDSETTUPLESEQ_TO_SETDCLNSEQ(memint_nrmlzd_tupleseq) )
 
 #define WG_PP_LCLCLASS_SYMBOLTABLE_CREATE_IMPL2( \
   istpl, \
-  derives_seq, \
-  memext_type_seq, memext_obj_seq, \
-  memint_type_seq, memint_obj_seq, memint_value_seq) \
+  derives_nrmlzd_tuple, \
+  memext_dcln_seq, \
+  memint_dcln_seq) \
     WG_PP_LCLCLASS_SYMBOLTABLE_CREATE_IMPL3( \
-      (11, \
+      (8, \
         (WG_PP_LCLCLASS_SYMBOLTABLE, \
         istpl, \
-        derives_seq, \
-        memext_type_seq, \
-        memext_obj_seq, \
-        WG_PP_SEQ_SIZE(memext_type_seq), \
-        WG_PP_STUTIL_THISU_INDX(memext_obj_seq), \
-        memint_type_seq, \
-        memint_obj_seq, \
-        memint_value_seq, \
-        WG_PP_SEQ_SIZE(memint_type_seq) )) \
+        derives_nrmlzd_tuple, \
+        memext_dcln_seq, \
+        WG_PP_STUTIL_THISU_INDX( \
+          memext_dcln_seq, WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_OBJ_MEMEXT), \
+        WG_PP_SEQ_SIZE(memext_dcln_seq), \
+        memint_dcln_seq, \
+        WG_PP_SEQ_SIZE(memint_dcln_seq) )) \
     )
 
 #define WG_PP_LCLCLASS_SYMBOLTABLE_CREATE_IMPL3(wiparray) \
   BOOST_PP_ARRAY_PUSH_BACK( \
     wiparray, \
     BOOST_PP_ADD( \
-      WG_PP_LCLCLASS_SYMBOLTABLE_XXX_SIZE_MEMEXT(wiparray), \
-      WG_PP_LCLCLASS_SYMBOLTABLE_XXX_SIZE_MEMINT(wiparray) ))
+      WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_SIZE_MEMEXT(wiparray), \
+      WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_SIZE_MEMINT(wiparray) ))
 
 #endif /* WG_PP_LCLCLASS_SYMBOLTABLE_HH_ */

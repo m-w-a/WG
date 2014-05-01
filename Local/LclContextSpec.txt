@@ -2,13 +2,7 @@
 //Semantics:
 //----------
 
-Note: All terms not defined here should be referenced in LclFunctorSpec.txt
-
-explicit-type:
-  1) It does not make sense for an explicitly typed context manager to be 
-    qualified const since an object of this type will be used to call the 
-    non-const methods onenter and onexit. Hence any const qualifications will
-    result in a compile-time error.
+Note: All terms not defined here should be referenced in AutoFunctorSpec.txt
 
 adhoc-context-handlers:
   1) At least one handler must be specified.
@@ -19,7 +13,7 @@ adhoc-context-handlers:
 
 special symbols:
   [...] specifies an optional BNF expression.
-terminals: with type assigns_to varbind varset on_enter on_exit on_exception
+terminals: with with_adhoc entered_as on_enter on_exit
 
 lclcontext-usage :=
   lclcontext-start-macro ( lclcontext-spec )
@@ -33,23 +27,18 @@ lclcontext-start-macro :=
   | WG_LCLCONTEXT_NOEX_TPL
 
 lclcontext-spec :=
-    with-decln-seq
-  | with-adhoc-seq
-
-with-decln-seq :=
-    with-decln-seq with-dcln
-  | with-dcln
+    with-dcln [ lclcontext-spec ]
+  | with-adhoc-dcln [ lclcontext-spec ]
 
 with-dcln :=
-  with( context-manager-expr ) 
-  [ type( explicit-type ) ] [ assigns_to( type-var-dcln ) ]
+  with( context-manager-expr ) [ entered_as( type-var-dcln ) ]
 
-with-adhoc-seq :=
-  with_adhoc( varbind-seq varset-seq adhoc-context-handlers )
+with-adhoc-decln :=
+    with_adhoc [ varbind bound-tuple-seq ] adhoc-context-handlers
+  | with_adhoc( simple-declaration ) 
+    [ varbind bound-tuple-seq ]
+    [onenter( compound-statement )] [onexit( compound-statement )]
 
-adhoc-context-handlers :=
-  [onenter( statement )] [onexit( statement )] [onthrow( statement )]
-
+context-manager-expr := A C++ expression that evaluates to a context manager.
 compound-statement := See C++ standard.
-context-manager-expr :=
-  An expression that is or produces a context manager object.
+simple-declaration := See C++ standard. 

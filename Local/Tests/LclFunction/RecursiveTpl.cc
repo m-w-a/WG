@@ -12,8 +12,8 @@ struct Fibonacci
   {
     T fib = 0;
 
-    WG_LCLFUNCTION_TPL
-    (calculateFibonacci, return (T) params ((T const) input) )
+    WG_LCLFUNCTION_TPL(calculateFibonacci,
+      return (T) params (T const input) )
     {
       if(input > 1)
       {

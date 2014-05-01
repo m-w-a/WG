@@ -13,7 +13,7 @@ TEST(wg_lclfunction_astemplateparameterarg, StdForEach)
 
     WG_LCLFUNCTION
     (accumulate,
-      params ((int const) datum)
+      params (int const datum)
       varbind (ref sum)
       varset (runningOffset, 0) )
     {

@@ -17,7 +17,7 @@ struct Tester
     WG_LCLCLASS_TPL
     (Local,
      derives (protected Base)
-     memext ((T const) name) (var)
+     memext (type(T const) name) (var)
      memint (score, 21) )
       void init()
       {

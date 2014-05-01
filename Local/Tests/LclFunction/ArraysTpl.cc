@@ -27,7 +27,7 @@ Arr<ElemType>::Type const arrPrototype =
 template <typename T>
 bool isEqualToPrototype(T const & rhs)
 {
-  using namespace boost;
+  using namespace ::boost;
   using namespace wg::local::tests;
 
   std::size_t const arrPrototypeCount =

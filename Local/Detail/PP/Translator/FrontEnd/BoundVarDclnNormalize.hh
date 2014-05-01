@@ -13,7 +13,7 @@
 // boundvardcln:
 //   bound-var-dcln
 // Expands to the following:
-//   {(parsed-explicit-or-deduced-type) (bound-var-name)}+
+//   (parsed-explicit-or-deduced-type) (bound-var-name)
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_BOUNDVARDCLN_NORMALIZE(boundvardcln) \
@@ -22,7 +22,7 @@
 // boundvardcln:
 //   bound-var-dcln
 // Expands to the following:
-//   {(parsed-explicit-or-deduced-type) (bound-var-name)}+
+//   (parsed-explicit-or-deduced-type) (bound-var-name)
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_BOUNDVARDCLN_NORMALIZE_TPL(boundvardcln) \
@@ -31,7 +31,7 @@
 // boundvardcln:
 //   nlt-bound-var-dcln
 // Expands to the following:
-//   {(parsed-explicit-non-local-type-or-deduced-type) (bound-var-name)}+
+//   (parsed-explicit-non-local-type-or-deduced-type) (bound-var-name)
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_BOUNDVARDCLN_NLT_NORMALIZE(boundvardcln) \
@@ -40,7 +40,7 @@
 // boundvardcln:
 //   nlt-bound-var-dcln
 // Expands to the following:
-//   {(parsed-explicit-non-local-type-or-deduced-type) (bound-var-name)}+
+//   (parsed-explicit-non-local-type-or-deduced-type) (bound-var-name)
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_BOUNDVARDCLN_NLT_NORMALIZE_TPL(boundvardcln) \

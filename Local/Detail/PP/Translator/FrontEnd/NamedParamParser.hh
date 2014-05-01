@@ -3,7 +3,6 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/PP.hh>
-#include <WG/Local/Detail/PP/Translator/Keywords.hh>
 
 //###########
 //Public APIs
@@ -26,7 +25,9 @@
 //   the next expected named param.
 //
 // Preconditions:
-//   WG_PP_KEYWORDS_STARTSWITH_<currentkeyword>(...) must be defined.
+//   <moduleid>_STARTSWITH(currentkeyword, tokens) macro must be defined such
+//   that it returns a 1 if "tokens" starts with "currentkeyword" else it
+//   returns a 0.
 //
 // Expands to:
 //   1) <moduleid>_FOUND_<currentkeyword>(spec, specoptions, nexttransform)
@@ -58,7 +59,7 @@
   spec, moduleid, currentkeyword, nextkeyword) \
     BOOST_PP_CAT( \
       WG_PP_NAMEDPARAMPARSER_MACRONAME_IMPL, \
-      BOOST_PP_CAT(WG_PP_KEYWORDS_STARTSWITH_, currentkeyword) (spec)) \
+      WG_PP_UCAT_ARG2(moduleid, STARTSWITH) (currentkeyword, spec)) \
     (spec, moduleid, currentkeyword, nextkeyword)
 #define WG_PP_NAMEDPARAMPARSER_MACRONAME_IMPL0( \
   spec, moduleid, currentkeyword, nextkeyword) \
@@ -76,7 +77,7 @@
   spec, specoptions, moduleid, currentkeyword, nextkeyword) \
     BOOST_PP_CAT( \
       WG_PP_NAMEDPARAMPARSER_MACROPARAMS_IMPL, \
-      BOOST_PP_CAT(WG_PP_KEYWORDS_STARTSWITH_, currentkeyword) (spec)) \
+      WG_PP_UCAT_ARG2(moduleid, STARTSWITH) (currentkeyword, spec)) \
     (spec, specoptions, moduleid, currentkeyword, nextkeyword)
 #define WG_PP_NAMEDPARAMPARSER_MACROPARAMS_IMPL0( \
   spec, specoptions, moduleid, currentkeyword, nextkeyword) \

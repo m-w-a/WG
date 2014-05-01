@@ -8,19 +8,11 @@ x) Better Syntax Error Checking/Reporting:
   missing type in implicit-type-var-dcln ?
   missing var in "..." ?
 
-Tests: tpl -> _tpl
-
 Misc.
 -----
-Why not BOOST_IDENTITY_TYPE_TPL?
-
 LocalOperandsSyntaxCheck tests.
 ErrorReporting tests.
-Error -> WG_LCL_ERROR ?
-x) WG_PP_TYPEALIASER_DCLN -> just do implicit.
-x) WG_PP_ERROR -> WG_PP_MARKER_ERROR
-
-NOT/AND/OR to their bit counter parts.
+ERROR_ -> WG_LCL_ERROR_ ?
 
 ExpandN:
   test
@@ -29,16 +21,6 @@ ExpandN:
 LclFunction:
   modified call traits.
   Binder: local namespace to lclfunction namespace?
-  x) Multiple in same macro.
+  Exception specification
 
-LclClass:
-  WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE -> call_traits
-  remove WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDREFERENCE
-  remove WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AND_ADDCONSTADDREFERENCE
-  remove any misc from TypeExtractor.hh
-  
-  Tests:
-    x) init is called.
-    x) Nested
-    x) Multiple in same scope.
-    x) Multiple in same macro.
+Tests: comparing arrays cleanup.
