@@ -48,8 +48,7 @@ TEST(wg_lclfunction_codegenspec, cpp11)
   typedef wg::lclfunction::detail::cpp11::global_functor_type
   <
     local_functor_typeXXX128,
-    RETURN_TYPE(),
-    ::boost::mpl::vector<PARAMS_LIST()>,
+    RETURN_TYPE() ( PARAMS_LIST() ),
     captured_vars_typeXXX128
   > global_functor_typeXXX128;
   

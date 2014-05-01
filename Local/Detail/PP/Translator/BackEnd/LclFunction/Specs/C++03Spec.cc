@@ -46,8 +46,7 @@ TEST(wg_lclfunction_codegenspec, cpp03)
 
   typedef wg::lclfunction::detail::global_functor_type
   <
-    RETURN_TYPE(),
-    ::boost::mpl::vector<PARAMS_LIST()>,
+    RETURN_TYPE() ( PARAMS_LIST() ),
     captured_vars_typeXXX32
   > global_functor_typeXXX32;
   /* Note: double parenthesis around ctor param to prevent most vexing parse
