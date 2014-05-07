@@ -56,8 +56,8 @@ TEST(wg_lclfunction_macroparamnamesasvarnames, VarSetImplicit)
 
     WG_LCLFUNCTION(check, varset (ref type, proxy.didAssign) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(type);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(bool, type);
+      WG_TESTHELPER_ASSERT_ISNOTCONST(type);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, type);
 
       type = true;
     }WG_LCLFUNCTION_END;
@@ -80,8 +80,8 @@ TEST(wg_lclfunction_macroparamnamesasvarnames, VarSetExplicit)
 
     WG_LCLFUNCTION(check, varset (type(bool &) type, proxy.didAssign) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(type);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(bool, type);
+      WG_TESTHELPER_ASSERT_ISNOTCONST(type);
+      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, type);
 
       type = true;
     }WG_LCLFUNCTION_END;

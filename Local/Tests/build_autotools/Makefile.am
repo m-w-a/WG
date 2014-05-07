@@ -330,7 +330,8 @@ LCLFUNCTION_SRC = \
     ../LclFunction/FunctionSignatureTypenamesAndConstantsTpl.cc \
     ../LclFunction/LclFunctionTypeOf.cc \
     ../LclFunction/LclFunctionTypeOfTpl.cc \
-    ../LclFunction/MacroParamNamesAsVarNames.cc
+    ../LclFunction/MacroParamNamesAsVarNames.cc \
+    ../LclFunction/MacroParamNamesAsVarNamesTpl.cc
 
 test_lclfunction_cpp03_SOURCES = $(LCLFUNCTION_SRC)
 test_lclfunction_cpp11_SOURCES = $(LCLFUNCTION_SRC)
