@@ -18,7 +18,7 @@ struct Fibonacci
       if(input > 1)
       {
         WG_TESTHELPER_ASSERT_ISCONST_TPL(input);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(int, input);
+        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, input);
 
         return calculateFibonacci(input - 1) + calculateFibonacci(input - 2);
       }
