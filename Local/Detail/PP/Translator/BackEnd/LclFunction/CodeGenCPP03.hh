@@ -35,7 +35,7 @@
 
 #define WG_PP_LCLFUNCTION_CG_CPP03_GLOBALFUNCTORTYPE_TYPE( \
   function_name, symbtbl, global_functor_type_name) \
-    wg::lclfunction::detail::global_functor_type \
+    ::wg::lclfunction::detail::global_functor_type \
     < \
       WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
       ( \
@@ -50,20 +50,28 @@
 
 #define WG_PP_LCLFUNCTION_CG_CPP03_LOCALFUNCTORTYPE_START(symbtbl, function_name) \
   struct local_functor_type \
+    : public WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME(function_name) \
   { \
-    typedef WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME(function_name) \
-      captured_values_type; \
+  public: \
     typedef WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME(function_name) \
       global_functor_type; \
     \
-    WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN( \
+    WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_NONDEPENDENTDCLNS( \
       symbtbl, global_functor_type) \
     \
-    void set_caller(global_functor_type & functor) \
+    static void set_caller(global_functor_type & functor) \
     { \
       functor.set_caller(&local_functor_type::user_callback); \
     } \
     \
+  private: \
+    /* Declared and purposefully not defined. This struct is uninstantiable */ \
+    local_functor_type(); \
+    /* Declared and purposefully not defined. This struct is uninstantiable */ \
+    ~local_functor_type(); \
+  private: \
+    typedef WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME(function_name) \
+      captured_values_type; \
   private: \
     WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_USERCALLBACKMETHOD_START( \
       symbtbl, function_name, global_functor_type, captured_values_type)
@@ -104,8 +112,8 @@
 
 #define WG_PP_LCLFUNCTION_CG_CPP03_END_IMPL() \
     WG_PP_LCLFUNCTION_CG_CPP03_LOCALFUNCTORTYPE_END() \
-    local_functor_type local_functor_obj; \
-    local_functor_obj.set_caller( WG_PP_LCLFUNCTION_CG_CPP03_SCOPEDFUNCTOROBJ() ); \
+    local_functor_type:: \
+      set_caller( WG_PP_LCLFUNCTION_CG_CPP03_SCOPEDFUNCTOROBJ() ); \
   } //Block Scope.
 
 #endif /* WG_PP_LCLFUNCTION_CODEGENCPP03_HH_ */

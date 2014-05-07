@@ -45,7 +45,7 @@ TEST(wg_lclfunction_codegenspec, cpp11)
   typedef ::boost::tuple<CAPTURED_VAR_TYPE1> captured_vars_typeXXX128;
 
   struct local_functor_typeXXX128;
-  typedef wg::lclfunction::detail::cpp11::global_functor_type
+  typedef ::wg::lclfunction::detail::cpp11::global_functor_type
   <
     local_functor_typeXXX128,
     RETURN_TYPE() ( PARAMS_LIST() ),

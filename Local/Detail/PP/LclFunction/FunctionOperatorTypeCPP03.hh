@@ -2,6 +2,7 @@
 #define WG_PP_LOCAL_DETAIL_LCLFUNCTION_FUNCTIONOPERATORTYPECPP03_HH_
 
 #include <boost/preprocessor.hpp>
+#include <boost/function_types/function_arity.hpp>
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/LclFunction/FunctionOperatorUtils.hh>
 #include <WG/Local/Detail/PP/LclFunction/ConstInvariance.hh>
@@ -29,10 +30,9 @@
   /* Declared and purposefully not defined. */ \
   template \
   < \
-    typename DERIVED, \
-    typename LCLFUNCTION_RETTYPE, \
-    typename LCLFUNCTION_PARAMTYPES, \
-    int ARITY \
+    typename Derived, \
+    typename LclFunctionType, \
+    int arity = ::boost::function_types::function_arity<LclFunctionType>::value \
   > \
   class WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_NAME() ; \
   \
@@ -100,20 +100,18 @@
   /* Partial specialize on function operator arity. */ \
   template \
   < \
-    typename DERIVED, \
-    typename LCLFUNCTION_RETTYPE, \
-    typename LCLFUNCTION_PARAMTYPES \
+    typename Derived, \
+    typename LclFunctionType \
   > \
-  class \
-    WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_NAME() \
-    <DERIVED, LCLFUNCTION_RETTYPE, LCLFUNCTION_PARAMTYPES, argcount> \
+  class WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_NAME() \
+  <Derived, LclFunctionType, argcount> \
   { \
-    typedef DERIVED derived_type; \
+    typedef Derived derived_type; \
+    \
+    WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS_FUNCTORCOMPONENTDCLNS( \
+      LclFunctionType, argcount) \
     \
   public: \
-    WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS_FUNCTORCOMPONENTDCLNS( \
-      LCLFUNCTION_RETTYPE, LCLFUNCTION_PARAMTYPES, argcount) \
-    \
     /* The function operator that is exposed to the user and is the public */ \
     /* interface of the local function object. */ \
     /* This interface is created from WG_LCLFUNCTION's params specification. */ \

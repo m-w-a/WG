@@ -4,13 +4,8 @@
 #include <boost/mpl/vector.hpp>
 #include <boost/mpl/push_front.hpp>
 #include <boost/mpl/push_back.hpp>
-#include <boost/function_types/result_type.hpp>
-#include <boost/function_types/parameter_types.hpp>
 #include <boost/function_types/function_pointer.hpp>
-#include <boost/function_types/function_arity.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/mpl/at.hpp>
-#include <boost/mpl/int.hpp>
 #include <WG/Local/Detail/PP/LclFunction/FunctionOperatorTypeCPP03.hh>
 #include <WG/Local/Detail/PP/LclFunction/ConstInvariance.hh>
 
@@ -27,9 +22,7 @@ WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_DCLNS()
   WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_NAME() \
   < \
     global_functor_type<LCLFUNCTIONTYPE, CAPTUREDVARSTYPE>, \
-    typename ::boost::function_types::result_type<LCLFUNCTIONTYPE>::type, \
-    ::boost::function_types::parameter_types<LCLFUNCTIONTYPE>, \
-    ::boost::function_types::function_arity<LCLFUNCTIONTYPE>::value \
+    LCLFUNCTIONTYPE \
   >
 
 // LCLFUNCTIONTYPE: The specified local function type.
@@ -50,7 +43,6 @@ class global_functor_type :
 #undef FUNCTIONOPERATORTYPE
 
 public:
-  typedef LCLFUNCTIONTYPE function_type;
   typedef CAPTUREDVARSTYPE captured_var_types;
 
 private:
@@ -87,8 +79,6 @@ public:
   {
     this->m_CallBack = callback;
   }
-
-  using base_class_type::operator();
 
 private:
   callback_type m_CallBack;

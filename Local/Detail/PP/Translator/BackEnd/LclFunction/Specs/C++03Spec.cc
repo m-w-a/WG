@@ -44,7 +44,7 @@ TEST(wg_lclfunction_codegenspec, cpp03)
   /* PP iterator over captured var types for template params. */
   typedef ::boost::tuple<CAPTURED_VAR_TYPE1> captured_vars_typeXXX32;
 
-  typedef wg::lclfunction::detail::global_functor_type
+  typedef ::wg::lclfunction::detail::global_functor_type
   <
     RETURN_TYPE() ( PARAMS_LIST() ),
     captured_vars_typeXXX32

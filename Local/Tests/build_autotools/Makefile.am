@@ -324,10 +324,12 @@ LCLFUNCTION_SRC = \
     ../LclFunction/ReturnTpl.cc \
     ../LclFunction/Recursive.cc \
     ../LclFunction/RecursiveTpl.cc \
-    ../LclFunction/StandardTypenames.cc \
-    ../LclFunction/StandardTypenamesTpl.cc \
     ../LclFunction/MultipleUseInSameMacro.cc \
     ../LclFunction/MultipleUseInSameMacroTpl.cc \
+    ../LclFunction/FunctionSignatureTypenamesAndConstants.cc \
+    ../LclFunction/FunctionSignatureTypenamesAndConstantsTpl.cc \
+    ../LclFunction/LclFunctionTypeOf.cc \
+    ../LclFunction/LclFunctionTypeOfTpl.cc \
     ../LclFunction/MacroParamNamesAsVarNames.cc
 
 test_lclfunction_cpp03_SOURCES = $(LCLFUNCTION_SRC)

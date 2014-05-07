@@ -3,8 +3,8 @@
 
 #include <boost/preprocessor.hpp>
 #include <boost/mpl/vector.hpp>
-#include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/SymbolTable.hh>
 #include <WG/Local/Detail/LclFunction/GlobalFunctorTypeCPP11.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/SymbolTable.hh>
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/CodeGenUtils.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/ID.hh>
@@ -35,7 +35,7 @@
 
 #define WG_PP_LCLFUNCTION_CG_CPP11_GLOBALFUNCTORTYPE_TYPE( \
   symbtbl, function_name) \
-    wg::lclfunction::detail::cpp11::global_functor_type \
+    ::wg::lclfunction::detail::cpp11::global_functor_type \
     < \
       WG_PP_LCLFUNCTION_CG_CPP11_LOCALFUNCTORTYPE_NAME(function_name), \
       WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
@@ -56,15 +56,22 @@
 #define WG_PP_LCLFUNCTION_CG_CPP11_LOCALFUNCTORTYPE_START( \
   symbtbl, function_name) \
     struct WG_PP_LCLFUNCTION_CG_CPP11_LOCALFUNCTORTYPE_NAME(function_name) \
+      : public WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME(function_name) \
     { \
+    public: \
       typedef WG_PP_LCLFUNCTION_CGUTILS_CAPTUREDVALUES_TYPENAME(function_name) \
         captured_vars_type; \
       typedef WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME(function_name) \
         global_functor_type; \
+    private: \
+      /* Declared and purposefully not defined. This struct is uninstantiable */ \
+      WG_PP_LCLFUNCTION_CG_CPP11_LOCALFUNCTORTYPE_NAME(function_name)(); \
+      /* Declared and purposefully not defined. This struct is uninstantiable */ \
+      ~WG_PP_LCLFUNCTION_CG_CPP11_LOCALFUNCTORTYPE_NAME(function_name)(); \
       \
-      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN( \
+    public: \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_NONDEPENDENTDCLNS( \
         symbtbl, global_functor_type) \
-      \
       WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_USERCALLBACKMETHOD_START( \
         symbtbl, function_name, global_functor_type, captured_vars_type)
 

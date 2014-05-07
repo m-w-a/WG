@@ -2,6 +2,7 @@
 #define WG_PP_LOCAL_DETAIL_LCLFUNCTION_FUNCTIONOPERATORTYPECPP11_HH_
 
 #include <boost/preprocessor.hpp>
+#include <boost/function_types/function_arity.hpp>
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/LclFunction/FunctionOperatorUtils.hh>
 #include <WG/Local/Detail/PP/LclFunction/ConstInvariance.hh>
@@ -29,11 +30,10 @@
   /* Declared and purposefully not defined. */ \
   template \
   < \
-    typename DERIVED, \
-    typename LCLFUNCTION_RETTYPE, \
-    typename LCLFUNCTION_PARAMTYPES, \
-    typename LOCALFUNCTORTYPE, \
-    int ARITY \
+    typename Derived, \
+    typename LclFunctionType, \
+    typename LocalFunctorType, \
+    int arity = ::boost::function_types::function_arity<LclFunctionType>::value \
   > \
   class WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP11_NAME() ; \
   \
@@ -80,7 +80,7 @@
     BOOST_PP_ENUM_TRAILING_PARAMS( \
       argcount, \
       WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP11_OPERATOR_ARGROOTNAME()), \
-      dptr->m_CapturedVars);
+    dptr->m_CapturedVars);
 
 //--------
 //Operator
@@ -102,27 +102,24 @@
   /* Partial specialize on function operator arity. */ \
   template \
   < \
-    typename DERIVED, \
-    typename LCLFUNCTION_RETTYPE, \
-    typename LCLFUNCTION_PARAMTYPES, \
-    typename LOCALFUNCTORTYPE \
+    typename Derived, \
+    typename LclFunctionType, \
+    typename LocalFunctorType \
   > \
   class \
     WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP11_NAME() \
     < \
-      DERIVED, \
-      LOCALFUNCTORTYPE, \
-      LCLFUNCTION_RETTYPE, \
-      LCLFUNCTION_PARAMTYPES, \
-     argcount \
+      Derived, \
+      LclFunctionType, \
+      LocalFunctorType, \
+      argcount \
     > \
   { \
-    typedef DERIVED derived_type; \
-    typedef LOCALFUNCTORTYPE local_functor_type; \
+    typedef Derived derived_type; \
+    typedef LocalFunctorType local_functor_type; \
     \
-  public: \
     WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS_FUNCTORCOMPONENTDCLNS( \
-      LCLFUNCTION_RETTYPE, LCLFUNCTION_PARAMTYPES, argcount) \
+      LclFunctionType, argcount) \
     \
     /* The function operator that is exposed to the user and is the public */ \
     /* interface of the local function object. */ \

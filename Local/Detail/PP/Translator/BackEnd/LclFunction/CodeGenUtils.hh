@@ -75,10 +75,10 @@
 //LocalFunctor
 //------------
 
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN( \
-  symbtbl, global_functor_type_name) \
-    WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN_IMPL1( \
-      symbtbl, global_functor_type_name)
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_NONDEPENDENTDCLNS( \
+  symbtbl, global_functor_type) \
+    WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_NONDEPENDENTDCLNS_IMPL( \
+      symbtbl, global_functor_type)
 
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_USERCALLBACKMETHOD_START( \
   symbtbl, function_name, global_functor_type_name, captured_values_type_name) \
@@ -127,7 +127,7 @@
   istpl, getttypemacro, dcln) \
     ( \
       WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-      wg::local::detail::bind_traits \
+      ::wg::local::detail::bind_traits \
       < \
         WG_PP_PARSEDTYPE_EXTRACTCPPTYPE( getttypemacro(dcln) ) \
       >::binder_type \
@@ -355,31 +355,81 @@
 //LocalFunctor
 //------------
 
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN_IMPL1( \
-  symbtbl, global_functor_type_name) \
-    WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN_IMPL2( \
-      symbtbl, \
-      global_functor_type_name, \
-      WG_PP_LCLFUNCTION_SYMBOLTABLE_ISTPL(symbtbl) )
+//FunctionVariableTypeNames
 
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN_IMPL2( \
-  symbtbl, global_functor_type_name, istpl) \
-    typedef WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-      global_functor_type_name::function_type function_type ; \
-    typedef WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-      global_functor_type_name::result_type result_type ; \
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_FUNCTIONVARIABLETYPENAME( \
+  funcvarname) \
+    WG_PP_ID_CAT( \
+      WG_PP_ID_CAT( \
+        WG_PP_LCLFUNCTION_CGUTILS_GLOBALID(), \
+        function_variable_type), \
+     funcvarname)
+
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_FUNCTIONVARIABLETYPENAME_DCLNS( \
+  symbtbl) \
+    WG_PP_SEQ_NOTHING_FOR_EACH_I( \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_FUNCTIONVARIABLETYPENAME_DCLN, \
+      ( WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_GETTYPE_BOUNDVAR ) \
+      ( WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_OBJ_BOUNDVAR ), \
+      WG_PP_LCLFUNCTION_SYMBOLTABLE_GETDCLNS_BOUNDVAR(symbtbl)) \
+    WG_PP_SEQ_NOTHING_FOR_EACH_I( \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_FUNCTIONVARIABLETYPENAME_DCLN, \
+      ( WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_GETTYPE_SETVAR ) \
+      ( WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_OBJ_SETVAR ), \
+      WG_PP_LCLFUNCTION_SYMBOLTABLE_GETDCLNS_SETVAR(symbtbl))
+
+// WG_PP_SEQ_FOR_EACH_I functor.
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_FUNCTIONVARIABLETYPENAME_DCLN( \
+  r, gettypemacro_getobjmacro, indx, dcln) \
+    WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_FUNCTIONVARIABLETYPENAME_DCLN2( \
+      BOOST_PP_SEQ_ELEM(0, gettypemacro_getobjmacro), \
+      BOOST_PP_SEQ_ELEM(1, gettypemacro_getobjmacro), \
+      dcln)
+
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_FUNCTIONVARIABLETYPENAME_DCLN2( \
+  gettypemacro, getobjmacro, dcln) \
+    typedef \
+      WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(gettypemacro(dcln)) \
+        WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_FUNCTIONVARIABLETYPENAME( \
+          getobjmacro(dcln)) ;
+
+//NonDependentDclns
+
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_NONDEPENDENTDCLNS_ARGTYPE( \
+  arity, basetype) \
     BOOST_PP_REPEAT( \
-      WG_PP_SEQ_SIZE( \
-        WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_PARAMS(symbtbl)), \
-      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN_ARGTYPES, \
-      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) global_functor_type_name )
+      arity, \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_NONDEPENDENTDCLNS_ARGTYPE_ENTRY, \
+      basetype)
 
-// BOOST_PP_REPEAT functor.
-#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_STANDARDTYPENAMES_DCLN_ARGTYPES( \
-  z, indx, scope_prefix_tokens) \
-    typedef scope_prefix_tokens:: \
-      WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS_ARGTYPENAME(indx) \
-        WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS_ARGTYPENAME(indx) ;
+#define \
+  WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_NONDEPENDENTDCLNS_ARGTYPE_ENTRY( \
+    z, indx, basetype) \
+      typedef \
+        typename basetype:: \
+          WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS_ARGTYPENAME(indx) \
+            WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS_ARGTYPENAME(indx) ;
+
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_NONDEPENDENTDCLNS_IMPL( \
+  symbtbl, global_functor_type) \
+    BOOST_PP_IIF( \
+      WG_PP_LCLFUNCTION_SYMBOLTABLE_ISTPL(symbtbl), \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_NONDEPENDENTDCLNS_IMPL2, \
+      WG_PP_MAPTO_NOTHING_ARG2) (symbtbl, global_functor_type)
+
+#define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_NONDEPENDENTDCLNS_IMPL2( \
+  symbtbl, global_functor_type) \
+    public: \
+      /* Non-dependent name declarations. */ \
+      typedef typename global_functor_type::function_type function_type; \
+      using global_functor_type::arity; \
+      typedef typename global_functor_type::result_type result_type; \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_NONDEPENDENTDCLNS_ARGTYPE( \
+        WG_PP_SEQ_SIZE( \
+          WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_PARAMS(symbtbl)), \
+        global_functor_type)
+
+//UserCallbackMethod
 
 #define WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_USERCALLBACKMETHOD_START_IMPL( \
   symbtbl, \
@@ -393,6 +443,9 @@
         WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_TRAILINGPARAMLIST(symbtbl), \
         captured_values_type_name & capturedvalues) \
     { \
+      WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_FUNCTIONVARIABLETYPENAME_DCLNS( \
+        symbtbl) \
+      \
       /* To avoid unused var warnings. */ \
       static_cast<void>( function_name ); \
       \
