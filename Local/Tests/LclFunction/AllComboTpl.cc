@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
 {
@@ -22,15 +22,15 @@ struct TestTpl
       varbind (const pinchOfSalt)
       varset (const dos, dashOfSugar) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(salt);
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(sugar);
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(pinchOfSalt);
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(dos);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(salt);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(sugar);
+      WG_TEST_ASSERT_ISCONST_TPL(pinchOfSalt);
+      WG_TEST_ASSERT_ISCONST_TPL(dos);
 
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(bool, salt);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(bool, sugar);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, pinchOfSalt);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, dashOfSugar);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(bool, salt);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(bool, sugar);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, pinchOfSalt);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, dashOfSugar);
 
       return
         salt == pinchOfSalt &&
@@ -38,7 +38,7 @@ struct TestTpl
     }
     WG_LCLFUNCTION_END;
 
-    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
       int, makeGingerBreadCookie(0,0));
 
     success = makeGingerBreadCookie(pinchOfSalt, dashOfSugar);

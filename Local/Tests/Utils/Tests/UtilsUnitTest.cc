@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 TEST(wg_tests_testhelper_equal, OkIfEqual)
 {
@@ -10,7 +10,7 @@ TEST(wg_tests_testhelper_equal, OkIfEqual)
 
     Arr2x3 arr1 = { {0, 1, 2}, {3, 4, 5} };
 
-    EXPECT_TRUE( ::wg::lcl::tests::equal(arr1, arr1) );
+    EXPECT_TRUE( ::wg::lcl::test::equal(arr1, arr1) );
   }
   WG_GTEST_CATCH
 }
@@ -24,7 +24,7 @@ TEST(wg_tests_testhelper_equal, OkIfNotEqual)
     Arr2x3 arr1 = { {0, 1, 2}, {3, 4, 5} };
     Arr2x3 arr2 = { {0, 1, 2}, {3, 45, 5} };
 
-    EXPECT_FALSE( ::wg::lcl::tests::equal(arr1, arr2) );
+    EXPECT_FALSE( ::wg::lcl::test::equal(arr1, arr2) );
   }
   WG_GTEST_CATCH
 }

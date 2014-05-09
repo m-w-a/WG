@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 #define WG_LOCAL_TESTS_LCLFUNCTION_MULTIPLEUSEINSAMEMACROTPL_DEFINEFUNCS() \
     WG_LCLFUNCTION_TPL \

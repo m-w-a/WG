@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
 {
@@ -17,8 +17,8 @@ struct OkIf1VarSet
 
     WG_LCLFUNCTION_TPL(check, varset (ref didAssign, proxy.didAssign) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(didAssign);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_TEST_ASSERT_ISNOTCONST_TPL(didAssign);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
         BOOST_TYPEOF(proxy.didAssign), didAssign);
 
       didAssign = true;
@@ -59,13 +59,13 @@ struct OkIf3VarOfVaryingMutabilitySet
         (const height, cylinder.height)
         (ref volume, cylinder.volume) )
     {
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(radius);
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(height);
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(volume);
+      WG_TEST_ASSERT_ISCONST_TPL(radius);
+      WG_TEST_ASSERT_ISCONST_TPL(height);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(volume);
 
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, radius);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, height);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, volume);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, radius);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, height);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, volume);
 
       volume = radius * height;
     }

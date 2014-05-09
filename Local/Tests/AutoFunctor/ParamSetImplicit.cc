@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 #include <boost/typeof/typeof.hpp>
 
 TEST(wg_autofunctor_paramsetimplicit, OkIf1ArgSet)
@@ -17,7 +17,7 @@ TEST(wg_autofunctor_paramsetimplicit, OkIf1ArgSet)
     (oneArgAutoFunctor,
       paramset (ref didAssign, proxy.didAssign) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(bool &, BOOST_TYPEOF(didAssign) &);
+      WG_PP_TEST_IS_SAME_TYPE(bool &, BOOST_TYPEOF(didAssign) &);
       didAssign = true;
     }
     WG_AUTOFUNCTOR_END;
@@ -44,13 +44,13 @@ TEST(wg_autofunctor_paramsetimplicit, OkIf3ArgsOfVaryingMutabilitySet)
         (const height, cylinder.height)
         (ref volume, cylinder.volume) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const,
         BOOST_TYPEOF(radius) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const,
         BOOST_TYPEOF(height) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int &, BOOST_TYPEOF(volume) &)
 
       volume = radius * height;

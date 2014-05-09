@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
 {
@@ -21,12 +21,12 @@ struct OkIfUsing21Combo
       varbind (ref volume) (const pressure)
       varset (const numerator, numMoles * R * temp) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(volume);
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(pressure);
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(numerator);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(volume);
+      WG_TEST_ASSERT_ISCONST_TPL(pressure);
+      WG_TEST_ASSERT_ISCONST_TPL(numerator);
 
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, volume);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, pressure);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, volume);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, pressure);
 
       volume = numerator / pressure;
     }

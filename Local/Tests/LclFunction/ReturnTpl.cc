@@ -2,7 +2,7 @@
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
 #include <boost/tuple/tuple.hpp>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
 {
@@ -19,7 +19,7 @@ struct OkIfReturnSpecified
     }
     WG_LCLFUNCTION_END;
 
-    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, rettest());
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, rettest());
 
     retval = rettest();
 
@@ -51,7 +51,7 @@ struct OkIfGloballyScopedReturn
     }
     WG_LCLFUNCTION_END;
 
-    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
       ::boost::tuple<T1>, rettest());
 
     retval = rettest();

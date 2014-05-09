@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 #include <WG/Local/LclClass.hh>
 #include <string>
 
@@ -19,8 +19,8 @@ struct OneVar
     WG_LCLCLASS_TPL(Local, memext (type(int) value) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(value);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, value);
+        WG_TEST_ASSERT_ISNOTCONST_TPL(value);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, value);
       }
     public:
       T getValue() const { return value; }
@@ -56,13 +56,13 @@ struct ThreeVars
       memext (type(T1) id) (type(T2 const) age) (type(T3 const &) name) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(id);
-        WG_TESTHELPER_ASSERT_ISCONST_TPL(age);
-        WG_TESTHELPER_ASSERT_ISCONST_TPL(name);
+        WG_TEST_ASSERT_ISNOTCONST_TPL(id);
+        WG_TEST_ASSERT_ISCONST_TPL(age);
+        WG_TEST_ASSERT_ISCONST_TPL(name);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, age);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, name);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, age);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, name);
       }
     public:
       T1 const & getId() const { return id; }
@@ -72,9 +72,9 @@ struct ThreeVars
 
     MultiVar obj(id, age, name);
 
-    WG_TESTHELPER_ASSERT_ISNOTREFERENCE(id, obj.getId());
-    WG_TESTHELPER_ASSERT_ISNOTREFERENCE(age, obj.getAge());
-    WG_TESTHELPER_ASSERT_ISREFERENCE(name, obj.getName());
+    WG_TEST_ASSERT_ISNOTREFERENCE(id, obj.getId());
+    WG_TEST_ASSERT_ISNOTREFERENCE(age, obj.getAge());
+    WG_TEST_ASSERT_ISREFERENCE(name, obj.getName());
   }
 };
 }
@@ -94,14 +94,14 @@ struct LocalTypeNonQlfd
 {
   static void run()
   {
-    WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
+    WG_TEST_LOCALTYPE_DECLARE(SomeLocalClass);
     SomeLocalClass localObj;
 
     WG_LCLCLASS_TPL(AnotherLocalClass, memext (lcltype(SomeLocalClass) value) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_TPL(value);
-        WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF(
+        WG_TEST_ASSERT_LOCALTYPE_ISNOTCONST_TPL(value);
+        WG_TEST_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF(
           SomeLocalClass, value);
       }
     public:
@@ -110,7 +110,7 @@ struct LocalTypeNonQlfd
 
     AnotherLocalClass anotherLocalObj(localObj);
 
-    WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTREFERENCE(
+    WG_TEST_ASSERT_LOCALTYPE_ISNOTREFERENCE(
       localObj, anotherLocalObj.getValue());
   }
 };
@@ -131,15 +131,15 @@ struct LocalTypeConstQlfd
 {
   static void run()
   {
-    WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
+    WG_TEST_LOCALTYPE_DECLARE(SomeLocalClass);
     SomeLocalClass localObj;
 
     WG_LCLCLASS_TPL
     (AnotherLocalClass, memext (lcltype(SomeLocalClass) const value) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST_TPL(value);
-        WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF(
+        WG_TEST_ASSERT_LOCALTYPE_ISCONST_TPL(value);
+        WG_TEST_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF(
           SomeLocalClass, value);
       }
     public:
@@ -148,7 +148,7 @@ struct LocalTypeConstQlfd
 
     AnotherLocalClass anotherLocalObj(localObj);
 
-    WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTREFERENCE(
+    WG_TEST_ASSERT_LOCALTYPE_ISNOTREFERENCE(
       localObj, anotherLocalObj.getValue());
   }
 };
@@ -169,15 +169,15 @@ struct LocalTypeRefQlfd
 {
   static void run()
   {
-    WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
+    WG_TEST_LOCALTYPE_DECLARE(SomeLocalClass);
     SomeLocalClass localObj;
 
     WG_LCLCLASS_TPL
     (AnotherLocalClass, memext (lcltype(SomeLocalClass) ref value) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_TPL(value);
-        WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF(
+        WG_TEST_ASSERT_LOCALTYPE_ISNOTCONST_TPL(value);
+        WG_TEST_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF(
           SomeLocalClass, value);
       }
     public:
@@ -186,7 +186,7 @@ struct LocalTypeRefQlfd
 
     AnotherLocalClass anotherLocalObj(localObj);
 
-    WG_TESTHELPER_ASSERT_LOCALTYPE_ISREFERENCE(
+    WG_TEST_ASSERT_LOCALTYPE_ISREFERENCE(
       localObj, anotherLocalObj.getValue());
   }
 };
@@ -207,15 +207,15 @@ struct LocalTypeConstRefQlfd
 {
   static void run()
   {
-    WG_TESTHELPER_LOCALTYPE_DECLARE(SomeLocalClass);
+    WG_TEST_LOCALTYPE_DECLARE(SomeLocalClass);
     SomeLocalClass localObj;
 
     WG_LCLCLASS_TPL
     (AnotherLocalClass, memext (lcltype(SomeLocalClass) const ref value) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST_TPL(value);
-        WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF(
+        WG_TEST_ASSERT_LOCALTYPE_ISCONST_TPL(value);
+        WG_TEST_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF(
           SomeLocalClass, value);
       }
     public:
@@ -224,7 +224,7 @@ struct LocalTypeConstRefQlfd
 
     AnotherLocalClass anotherLocalObj(localObj);
 
-    WG_TESTHELPER_ASSERT_LOCALTYPE_ISREFERENCE(
+    WG_TEST_ASSERT_LOCALTYPE_ISREFERENCE(
       localObj, anotherLocalObj.getValue());
   }
 };

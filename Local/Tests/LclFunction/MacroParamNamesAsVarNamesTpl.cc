@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
 {
@@ -14,8 +14,8 @@ struct VarBindImplicit
 
     WG_LCLFUNCTION_TPL(check, varbind (ref type) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(type);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, type);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(type);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, type);
 
       type = true;
     }WG_LCLFUNCTION_END;
@@ -46,8 +46,8 @@ struct VarBindExplicit
 
     WG_LCLFUNCTION_TPL(check, varbind (type(T &) type) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(type);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, type);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(type);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, type);
 
       type = true;
     }WG_LCLFUNCTION_END;
@@ -81,8 +81,8 @@ struct VarSetImplicit
 
     WG_LCLFUNCTION_TPL(check, varset (ref type, proxy.didAssign) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(type);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, type);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(type);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, type);
 
       type = true;
     }WG_LCLFUNCTION_END;
@@ -116,8 +116,8 @@ struct VarSetExplicit
 
     WG_LCLFUNCTION_TPL(check, varset (type(T &) type, proxy.didAssign) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(type);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, type);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(type);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, type);
 
       type = true;
     }WG_LCLFUNCTION_END;

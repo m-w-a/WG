@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 #include <boost/typeof/typeof.hpp>
 #include <utility>
 #include <boost/tuple/tuple.hpp>
@@ -12,7 +12,7 @@ TEST(wg_autofunctor_paramsetexplicit, EnsureTypeOfNotUsed)
   {
     WG_AUTOFUNCTOR(setToDiffType, paramset ((int) value, 1.2f) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int, BOOST_TYPEOF(value));
       EXPECT_EQ(1, value);
     }
@@ -34,7 +34,7 @@ TEST(wg_autofunctor_paramsetexplicit, OkIf1ArgSet)
     (oneArgAutoFunctor,
       paramset ((bool &) didAssign, proxy.didAssign) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(bool &, BOOST_TYPEOF(didAssign) &);
+      WG_PP_TEST_IS_SAME_TYPE(bool &, BOOST_TYPEOF(didAssign) &);
       didAssign = true;
     }
     WG_AUTOFUNCTOR_END;
@@ -54,7 +54,7 @@ TEST(wg_autofunctor_paramsetexplicit, OkIfGloballyScoped1ArgSet)
     (oneArgAutoFunctor,
       paramset ((::boost::tuple<bool> &) assigner, didAssign) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         BOOST_IDENTITY_TYPE((::boost::tuple<bool> &)),
         BOOST_TYPEOF(assigner) &);
       assigner.get<0>() = true;
@@ -83,11 +83,11 @@ TEST(wg_autofunctor_paramsetexplicit, OkIf3ArgsOfVaryingMutabilitySet)
         ((int const) height, cylinder.height)
         ((int &) volume, cylinder.volume) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const, BOOST_TYPEOF(radius) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const, BOOST_TYPEOF(height) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int &, BOOST_TYPEOF(volume) &);
 
       volume = radius * height;

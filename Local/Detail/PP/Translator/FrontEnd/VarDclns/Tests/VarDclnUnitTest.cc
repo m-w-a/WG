@@ -1,4 +1,4 @@
-#include <WG/Local/Tests/test.h>
+#include <WG/Local/Tests/Utils/PreprocessorUnitTester.hh>
 #include "../VarDcln.hh"
 
 //Unit Tests.

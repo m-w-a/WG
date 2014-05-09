@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 TEST(wg_lclfunction_allcombo, Test)
 {
@@ -19,14 +19,14 @@ TEST(wg_lclfunction_allcombo, Test)
       varbind (const pinchOfSalt)
       varset (const dos, dashOfSugar) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST(salt);
-      WG_TESTHELPER_ASSERT_ISNOTCONST(sugar);
-      WG_TESTHELPER_ASSERT_ISCONST(pinchOfSalt);
-      WG_TESTHELPER_ASSERT_ISCONST(dos);
+      WG_TEST_ASSERT_ISNOTCONST(salt);
+      WG_TEST_ASSERT_ISNOTCONST(sugar);
+      WG_TEST_ASSERT_ISCONST(pinchOfSalt);
+      WG_TEST_ASSERT_ISCONST(dos);
 
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, salt);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, sugar);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, pinchOfSalt);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, salt);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, sugar);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, pinchOfSalt);
 
       return
         salt == pinchOfSalt &&
@@ -34,7 +34,7 @@ TEST(wg_lclfunction_allcombo, Test)
     }
     WG_LCLFUNCTION_END;
 
-    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
       int, makeGingerBreadCookie(0,0));
 
     success = makeGingerBreadCookie(pinchOfSalt, dashOfSugar);

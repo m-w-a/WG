@@ -2,7 +2,7 @@
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
 #include <boost/typeof/typeof.hpp>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
 {
@@ -15,8 +15,8 @@ struct OkIf1VarBound
 
     WG_LCLFUNCTION_TPL(check, varbind (ref didBind) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(didBind);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, didBind);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(didBind);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, didBind);
 
       didBind = true;
     }WG_LCLFUNCTION_END;
@@ -51,13 +51,13 @@ struct OkIf3VarsOfVaryingMutabilityBound
     (calculateForce,
       varbind (ref force) (const mass) (const velocity) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(force);
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(mass);
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(velocity);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(force);
+      WG_TEST_ASSERT_ISCONST_TPL(mass);
+      WG_TEST_ASSERT_ISCONST_TPL(velocity);
 
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, force);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, mass);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, velocity);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, force);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, mass);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, velocity);
 
       force = mass * velocity;
     }
@@ -92,8 +92,8 @@ struct OkIfKeywordThisUBound
     WG_LCLFUNCTION_TPL
     (bindThisU, varbind (this_) )
     {
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(this_);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_TEST_ASSERT_ISCONST_TPL(this_);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
         OkIfKeywordThisUBound<T> *, this_);
 
       this_->didBindThis = true;
@@ -127,8 +127,8 @@ struct OkIfLocalFunctionBound
 
     WG_LCLFUNCTION_TPL(bindVar, varbind (ref didBind) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(didBind);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, didBind);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(didBind);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, didBind);
 
       didBind = true;
     }WG_LCLFUNCTION_END;

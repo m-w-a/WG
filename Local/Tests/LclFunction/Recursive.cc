@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 TEST(wg_lclfunction_recursive, Fibonacci)
 {
@@ -14,8 +14,8 @@ TEST(wg_lclfunction_recursive, Fibonacci)
     {
       if(input > 1)
       {
-        WG_TESTHELPER_ASSERT_ISCONST(input);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, input);
+        WG_TEST_ASSERT_ISCONST(input);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, input);
 
         return calculateFibonacci(input - 1) + calculateFibonacci(input - 2);
       }
@@ -23,7 +23,7 @@ TEST(wg_lclfunction_recursive, Fibonacci)
     }
     WG_LCLFUNCTION_END;
 
-    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
       int, calculateFibonacci(5));
 
     fib = calculateFibonacci(4);

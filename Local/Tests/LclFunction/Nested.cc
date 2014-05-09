@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 TEST(wg_lclfunction_nested, OneLevel)
 {
@@ -11,15 +11,15 @@ TEST(wg_lclfunction_nested, OneLevel)
 
     WG_LCLFUNCTION(oneStep, varbind (ref count) )
     {
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
-      WG_TESTHELPER_ASSERT_ISNOTCONST(count);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
+      WG_TEST_ASSERT_ISNOTCONST(count);
 
       ++count;
 
       WG_LCLFUNCTION(twoStep, varbind (ref count) )
       {
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
-        WG_TESTHELPER_ASSERT_ISNOTCONST(count);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
+        WG_TEST_ASSERT_ISNOTCONST(count);
 
         count += 2;
       }
@@ -44,22 +44,22 @@ TEST(wg_lclfunction_nested, TwoLevel)
 
     WG_LCLFUNCTION(oneStep, varbind (ref count) )
     {
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
-      WG_TESTHELPER_ASSERT_ISNOTCONST(count);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
+      WG_TEST_ASSERT_ISNOTCONST(count);
 
       ++count;
 
       WG_LCLFUNCTION(twoStep, params (int & count) )
       {
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
-        WG_TESTHELPER_ASSERT_ISNOTCONST(count);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
+        WG_TEST_ASSERT_ISNOTCONST(count);
 
         count += 2;
 
         WG_LCLFUNCTION(threeStep, varset (ref var, count) )
         {
-          WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
-          WG_TESTHELPER_ASSERT_ISNOTCONST(count);
+          WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
+          WG_TEST_ASSERT_ISNOTCONST(count);
 
           var += 3;
         }

@@ -180,8 +180,8 @@ TESTS = \
     $(TEST_WG_LCLFUNCTION_CPP11_APPNAME)
 
 test_testutils_SOURCES = \
-    ../Detail/Tests/TestMain.cc \
-    ../Detail/Tests/TestHelperUnitTest.cc
+    ../Utils/Tests/TestMain.cc \
+    ../Utils/Tests/UtilsUnitTest.cc
 
 test_pp_pp_SOURCES = ../../Detail/PP/Tests/PPUnitTest.cc
 test_pp_wgseq_SOURCES = ../../Detail/PP/Tests/SeqUnitTest.cc

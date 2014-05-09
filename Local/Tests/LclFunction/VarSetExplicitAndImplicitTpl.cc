@@ -2,7 +2,7 @@
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
 #include <utility>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
 {
@@ -19,13 +19,13 @@ struct OkIf3ArgsOfVaryingMutabilityBound
     (calculateForce,
       varset (ref force, force) (type(int const) mass, mass) (velocity, velocity) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(force);
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(mass);
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(velocity);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(force);
+      WG_TEST_ASSERT_ISCONST_TPL(mass);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(velocity);
 
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, force);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(int, mass);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, velocity);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, force);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(int, mass);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, velocity);
 
       force = mass * velocity;
     }

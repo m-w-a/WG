@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 TEST(wg_lclfunction_macroparamnamesasvarnames, VarBindImplicit)
 {
@@ -11,8 +11,8 @@ TEST(wg_lclfunction_macroparamnamesasvarnames, VarBindImplicit)
 
     WG_LCLFUNCTION(check, varbind (ref type) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST(type);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, type);
+      WG_TEST_ASSERT_ISNOTCONST(type);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, type);
 
       type = true;
     }WG_LCLFUNCTION_END;
@@ -32,8 +32,8 @@ TEST(wg_lclfunction_macroparamnamesasvarnames, VarBindExplicit)
 
     WG_LCLFUNCTION(check, varbind (type(bool &) type) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST(type);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, type);
+      WG_TEST_ASSERT_ISNOTCONST(type);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, type);
 
       type = true;
     }WG_LCLFUNCTION_END;
@@ -56,8 +56,8 @@ TEST(wg_lclfunction_macroparamnamesasvarnames, VarSetImplicit)
 
     WG_LCLFUNCTION(check, varset (ref type, proxy.didAssign) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST(type);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, type);
+      WG_TEST_ASSERT_ISNOTCONST(type);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, type);
 
       type = true;
     }WG_LCLFUNCTION_END;
@@ -80,8 +80,8 @@ TEST(wg_lclfunction_macroparamnamesasvarnames, VarSetExplicit)
 
     WG_LCLFUNCTION(check, varset (type(bool &) type, proxy.didAssign) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST(type);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, type);
+      WG_TEST_ASSERT_ISNOTCONST(type);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, type);
 
       type = true;
     }WG_LCLFUNCTION_END;

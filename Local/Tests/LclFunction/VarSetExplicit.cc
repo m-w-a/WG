@@ -2,7 +2,7 @@
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
 #include <boost/tuple/tuple.hpp>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 TEST(wg_lclfunction_varsetexplicit, EnsureTypeOfNotUsed)
 {
@@ -12,8 +12,8 @@ TEST(wg_lclfunction_varsetexplicit, EnsureTypeOfNotUsed)
 
     WG_LCLFUNCTION(setToDiffType, varset (type(int) value, val) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST(value);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, value);
+      WG_TEST_ASSERT_ISNOTCONST(value);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, value);
 
       EXPECT_EQ(1, value);
     }WG_LCLFUNCTION_END;
@@ -36,8 +36,8 @@ TEST(wg_lclfunction_varsetexplicit, OkIf1VarSet)
     (check,
       varset (type(bool &) didAssign, proxy.didAssign) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST(didAssign);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, didAssign);
+      WG_TEST_ASSERT_ISNOTCONST(didAssign);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, didAssign);
 
       didAssign = true;
     }WG_LCLFUNCTION_END;
@@ -59,8 +59,8 @@ TEST(wg_lclfunction_varsetexplicit, OkIfGloballyScoped1VarSet)
     (check,
       varset (type(::boost::tuple<bool> &) assigner, didAssign) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST(assigner);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_TEST_ASSERT_ISNOTCONST(assigner);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
         ::boost::tuple<bool>, assigner);
 
       assigner.get<0>() = true;
@@ -90,13 +90,13 @@ TEST(wg_lclfunction_varsetexplicit, OkIf3VarOfVaryingMutabilitySet)
         (type(int const) height, cylinder.height)
         (type(int &) volume, cylinder.volume) )
     {
-      WG_TESTHELPER_ASSERT_ISCONST(radius);
-      WG_TESTHELPER_ASSERT_ISCONST(height);
-      WG_TESTHELPER_ASSERT_ISNOTCONST(volume);
+      WG_TEST_ASSERT_ISCONST(radius);
+      WG_TEST_ASSERT_ISCONST(height);
+      WG_TEST_ASSERT_ISNOTCONST(volume);
 
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, radius);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, height);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, volume);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, radius);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, height);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, volume);
 
       volume = radius * height;
     }

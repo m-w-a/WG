@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 #include <boost/type_traits/is_array.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <cstddef>
@@ -30,10 +30,10 @@ TEST(wg_lclfunction_arrays, BindByValue)
     int const origArr_1_1 = arr[1][1];
     WG_LCLFUNCTION(arrBindByValue, varbind (arr) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST(arr);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(Arr, arr);
+      WG_TEST_ASSERT_ISNOTCONST(arr);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(Arr, arr);
 
-      EXPECT_TRUE( ::wg::lcl::tests::equal(arr, arrPrototype) );
+      EXPECT_TRUE( ::wg::lcl::test::equal(arr, arrPrototype) );
 
       arr[1][1] += 10;
     }
@@ -56,10 +56,10 @@ TEST(wg_lclfunction_arrays, BindByRef)
     int const origArr_1_1 = arr[1][1];
     WG_LCLFUNCTION(arrBindByRef, varbind (ref arr) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST(arr);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(Arr, arr);
+      WG_TEST_ASSERT_ISNOTCONST(arr);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(Arr, arr);
 
-      EXPECT_TRUE( ::wg::lcl::tests::equal(arr, arrPrototype) );
+      EXPECT_TRUE( ::wg::lcl::test::equal(arr, arrPrototype) );
 
       arr[1][1] += 10;
     }
@@ -82,10 +82,10 @@ TEST(wg_lclfunction_arrays, SetByValue)
     int const origArr_1_1 = arr[1][1];
     WG_LCLFUNCTION(arrSetByValue, varset (someArr, arr) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST(arr);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(Arr, arr);
+      WG_TEST_ASSERT_ISNOTCONST(arr);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(Arr, arr);
 
-      EXPECT_TRUE( ::wg::lcl::tests::equal(someArr, arrPrototype) );
+      EXPECT_TRUE( ::wg::lcl::test::equal(someArr, arrPrototype) );
 
       someArr[1][1] += 10;
     }
@@ -108,10 +108,10 @@ TEST(wg_lclfunction_arrays, SetByRef)
     int const origArr_1_1 = arr[1][1];
     WG_LCLFUNCTION(arrSetByRef, varset (ref someArr, arr) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST(arr);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(Arr, arr);
+      WG_TEST_ASSERT_ISNOTCONST(arr);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(Arr, arr);
 
-      EXPECT_TRUE( ::wg::lcl::tests::equal(someArr, arrPrototype) );
+      EXPECT_TRUE( ::wg::lcl::test::equal(someArr, arrPrototype) );
 
       someArr[1][1] += 10;
     }

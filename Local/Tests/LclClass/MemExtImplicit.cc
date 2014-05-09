@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 #include <WG/Local/LclClass.hh>
 #include <boost/typeof/typeof.hpp>
 
@@ -13,8 +13,8 @@ TEST(wg_lclclass_memextimplicit, Mimic1Var)
     WG_LCLCLASS(Local, memext (var) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST(var);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, var);
+        WG_TEST_ASSERT_ISNOTCONST(var);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, var);
       }
     public:
       BOOST_TYPEOF(var) const & getVar() const { return var; }
@@ -22,7 +22,7 @@ TEST(wg_lclclass_memextimplicit, Mimic1Var)
 
     Local v(var);
 
-    WG_TESTHELPER_ASSERT_ISNOTREFERENCE(var, v.getVar());
+    WG_TEST_ASSERT_ISNOTREFERENCE(var, v.getVar());
   }
   WG_GTEST_CATCH
 }
@@ -36,8 +36,8 @@ TEST(wg_lclclass_memextimplicit, Mimic1VarByRef)
     WG_LCLCLASS(Local, memext (ref var) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST(var);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, var);
+        WG_TEST_ASSERT_ISNOTCONST(var);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(bool, var);
       }
     public:
       BOOST_TYPEOF(var) const & getVar() const { return var; }
@@ -45,7 +45,7 @@ TEST(wg_lclclass_memextimplicit, Mimic1VarByRef)
 
     Local v(var);
 
-    WG_TESTHELPER_ASSERT_ISREFERENCE(var, v.getVar());
+    WG_TEST_ASSERT_ISREFERENCE(var, v.getVar());
   }
   WG_GTEST_CATCH
 }
@@ -59,8 +59,8 @@ TEST(wg_lclclass_memextimplicit, Mimic1VarByConst)
     WG_LCLCLASS(Local, memext (const red) )
       void didMimicType() const
       {
-        WG_TESTHELPER_ASSERT_ISCONST(red);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, red);
+        WG_TEST_ASSERT_ISCONST(red);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, red);
       }
     public:
       BOOST_TYPEOF(red) const & getRed() const { return red; }
@@ -68,7 +68,7 @@ TEST(wg_lclclass_memextimplicit, Mimic1VarByConst)
 
     Local v(red);
 
-    WG_TESTHELPER_ASSERT_ISNOTREFERENCE(red, v.getRed());
+    WG_TEST_ASSERT_ISNOTREFERENCE(red, v.getRed());
   }
   WG_GTEST_CATCH
 }
@@ -82,8 +82,8 @@ TEST(wg_lclclass_memextimplicit, Mimic1VarByConstRef)
     WG_LCLCLASS(Local, memext (const ref blue) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISCONST(blue);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, blue);
+        WG_TEST_ASSERT_ISCONST(blue);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, blue);
       }
     public:
       BOOST_TYPEOF(blue) const & getBlue() const
@@ -94,7 +94,7 @@ TEST(wg_lclclass_memextimplicit, Mimic1VarByConstRef)
 
     Local v(blue);
 
-    WG_TESTHELPER_ASSERT_ISREFERENCE(blue, v.getBlue());
+    WG_TEST_ASSERT_ISREFERENCE(blue, v.getBlue());
   }
   WG_GTEST_CATCH
 }
@@ -113,13 +113,13 @@ TEST(wg_lclclass_memextimplicit, Mimic3Vars)
     )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST(force);
-        WG_TESTHELPER_ASSERT_ISCONST(mass);
-        WG_TESTHELPER_ASSERT_ISCONST(velocity);
+        WG_TEST_ASSERT_ISNOTCONST(force);
+        WG_TEST_ASSERT_ISCONST(mass);
+        WG_TEST_ASSERT_ISCONST(velocity);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, force);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, mass);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, velocity);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, force);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, mass);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, velocity);
       }
     public:
       BOOST_TYPEOF(force) const & getForce() const { return force; }
@@ -129,9 +129,9 @@ TEST(wg_lclclass_memextimplicit, Mimic3Vars)
 
     CalculateForce c(force, mass, velocity);
 
-    WG_TESTHELPER_ASSERT_ISREFERENCE(force, c.getForce());
-    WG_TESTHELPER_ASSERT_ISNOTREFERENCE(mass, c.getMass());
-    WG_TESTHELPER_ASSERT_ISREFERENCE(velocity, c.getVelocity());
+    WG_TEST_ASSERT_ISREFERENCE(force, c.getForce());
+    WG_TEST_ASSERT_ISNOTREFERENCE(mass, c.getMass());
+    WG_TEST_ASSERT_ISREFERENCE(velocity, c.getVelocity());
   }
   WG_GTEST_CATCH
 }
@@ -146,8 +146,8 @@ struct MimicThisU
     (Local, memext (this_) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISCONST(this_);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(MimicThisU *, this_);
+        WG_TEST_ASSERT_ISCONST(this_);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(MimicThisU *, this_);
       }
     public:
       BOOST_TYPEOF(this_) const & getThisU() const { return this_; }
@@ -155,7 +155,7 @@ struct MimicThisU
 
     Local v(this);
 
-    WG_TESTHELPER_ASSERT_ISREFERENCE(*this, *v.getThisU());
+    WG_TEST_ASSERT_ISREFERENCE(*this, *v.getThisU());
   }
 };
 }

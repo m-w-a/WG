@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 TEST(wg_lclfunction_varbindexplicitandvarsetimplicit, OkIfUsing21Combo)
 {
@@ -18,12 +18,12 @@ TEST(wg_lclfunction_varbindexplicitandvarsetimplicit, OkIfUsing21Combo)
       varbind (type(int &) volume) (type(int const) pressure)
       varset (numerator, numMoles * R * temp) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST(volume);
-      WG_TESTHELPER_ASSERT_ISCONST(pressure);
-      WG_TESTHELPER_ASSERT_ISNOTCONST(numerator);
+      WG_TEST_ASSERT_ISNOTCONST(volume);
+      WG_TEST_ASSERT_ISCONST(pressure);
+      WG_TEST_ASSERT_ISNOTCONST(numerator);
 
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, volume);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, pressure);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, volume);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, pressure);
 
       volume = numerator / pressure;
     }

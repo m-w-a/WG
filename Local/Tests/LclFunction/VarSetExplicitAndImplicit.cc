@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclFunction.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 TEST(wg_lclfunction_varsetexplicitandimplicit,
   OkIf3ArgsOfVaryingMutabilityBound)
@@ -16,13 +16,13 @@ TEST(wg_lclfunction_varsetexplicitandimplicit,
     (calculateForce,
       varset (ref force, force) (type(int const) mass, mass) (velocity, velocity) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST(force);
-      WG_TESTHELPER_ASSERT_ISCONST(mass);
-      WG_TESTHELPER_ASSERT_ISNOTCONST(velocity);
+      WG_TEST_ASSERT_ISNOTCONST(force);
+      WG_TEST_ASSERT_ISCONST(mass);
+      WG_TEST_ASSERT_ISNOTCONST(velocity);
 
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, force);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, mass);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, velocity);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, force);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, mass);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, velocity);
 
       force = mass * velocity;
     }
