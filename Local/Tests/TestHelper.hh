@@ -99,7 +99,7 @@
 
 namespace wg
 {
-namespace local
+namespace lcl
 {
 namespace tests
 {
@@ -163,7 +163,7 @@ bool equal(T (&arr1)[N], U (&arr2)[N]);
 
 namespace wg
 {
-namespace local
+namespace lcl
 {
 namespace tests
 {

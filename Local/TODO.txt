@@ -18,6 +18,9 @@ ExpandN:
   test
   AUTOFUNCTOR -> ...
 
+LclClass:
+  SpecNormalizeUnitTest.cc
+
 LclFunction:
   Binder: local namespace to lclfunction namespace?
   Exception specification
@@ -30,7 +33,7 @@ LclFunction:
   x)MacroParamNamesAsVarNamesTpl.cc
 
 Tests: 
-  comparing arrays cleanup.
+  x)comparing arrays cleanup.
   
   //Description:
   //Use these macros to ensure that the declared local function is invoked at least

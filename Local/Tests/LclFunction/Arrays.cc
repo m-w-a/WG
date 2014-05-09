@@ -33,7 +33,7 @@ TEST(wg_lclfunction_arrays, BindByValue)
       WG_TESTHELPER_ASSERT_ISNOTCONST(arr);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(Arr, arr);
 
-      EXPECT_TRUE( ::wg::local::tests::equal(arr, arrPrototype) );
+      EXPECT_TRUE( ::wg::lcl::tests::equal(arr, arrPrototype) );
 
       arr[1][1] += 10;
     }
@@ -59,7 +59,7 @@ TEST(wg_lclfunction_arrays, BindByRef)
       WG_TESTHELPER_ASSERT_ISNOTCONST(arr);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(Arr, arr);
 
-      EXPECT_TRUE( ::wg::local::tests::equal(arr, arrPrototype) );
+      EXPECT_TRUE( ::wg::lcl::tests::equal(arr, arrPrototype) );
 
       arr[1][1] += 10;
     }
@@ -85,7 +85,7 @@ TEST(wg_lclfunction_arrays, SetByValue)
       WG_TESTHELPER_ASSERT_ISNOTCONST(arr);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(Arr, arr);
 
-      EXPECT_TRUE( ::wg::local::tests::equal(someArr, arrPrototype) );
+      EXPECT_TRUE( ::wg::lcl::tests::equal(someArr, arrPrototype) );
 
       someArr[1][1] += 10;
     }
@@ -111,7 +111,7 @@ TEST(wg_lclfunction_arrays, SetByRef)
       WG_TESTHELPER_ASSERT_ISNOTCONST(arr);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(Arr, arr);
 
-      EXPECT_TRUE( ::wg::local::tests::equal(someArr, arrPrototype) );
+      EXPECT_TRUE( ::wg::lcl::tests::equal(someArr, arrPrototype) );
 
       someArr[1][1] += 10;
     }

@@ -42,7 +42,7 @@ struct BindByValue
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(arr);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
 
-      EXPECT_TRUE( ::wg::local::tests::equal(arr, arrPrototype) );
+      EXPECT_TRUE( ::wg::lcl::tests::equal(arr, arrPrototype) );
 
       arr[1][1] += 10;
     }
@@ -80,7 +80,7 @@ struct BindByRef
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(arr);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
 
-      EXPECT_TRUE( ::wg::local::tests::equal(arr, arrPrototype) );
+      EXPECT_TRUE( ::wg::lcl::tests::equal(arr, arrPrototype) );
 
       arr[1][1] += 10;
     }
@@ -118,7 +118,7 @@ struct SetByValue
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(arr);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
 
-      EXPECT_TRUE( ::wg::local::tests::equal(someArr, arrPrototype) );
+      EXPECT_TRUE( ::wg::lcl::tests::equal(someArr, arrPrototype) );
 
       someArr[1][1] += 10;
     }
@@ -156,7 +156,7 @@ struct SetByRef
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(arr);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
 
-      EXPECT_TRUE( ::wg::local::tests::equal(someArr, arrPrototype) );
+      EXPECT_TRUE( ::wg::lcl::tests::equal(someArr, arrPrototype) );
 
       someArr[1][1] += 10;
     }
