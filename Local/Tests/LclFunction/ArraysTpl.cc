@@ -6,9 +6,6 @@
 #include <boost/typeof/typeof.hpp>
 #include <cstddef>
 #include <cstring>
-#include <boost/range/algorithm/equal.hpp>
-
-using ::wg::local::tests::flat_array_view;
 
 namespace
 {
@@ -45,8 +42,7 @@ struct BindByValue
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(arr);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
 
-      EXPECT_TRUE(
-        boost::equal(flat_array_view(arr), flat_array_view(arrPrototype)) );
+      EXPECT_TRUE( ::wg::local::tests::equal(arr, arrPrototype) );
 
       arr[1][1] += 10;
     }
@@ -84,8 +80,7 @@ struct BindByRef
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(arr);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
 
-      EXPECT_TRUE(
-        boost::equal(flat_array_view(arr), flat_array_view(arrPrototype)) );
+      EXPECT_TRUE( ::wg::local::tests::equal(arr, arrPrototype) );
 
       arr[1][1] += 10;
     }
@@ -123,8 +118,7 @@ struct SetByValue
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(arr);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
 
-      EXPECT_TRUE(
-        boost::equal(flat_array_view(someArr), flat_array_view(arrPrototype)) );
+      EXPECT_TRUE( ::wg::local::tests::equal(someArr, arrPrototype) );
 
       someArr[1][1] += 10;
     }
@@ -162,8 +156,7 @@ struct SetByRef
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(arr);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
 
-      EXPECT_TRUE(
-        boost::equal(flat_array_view(someArr), flat_array_view(arrPrototype)) );
+      EXPECT_TRUE( ::wg::local::tests::equal(someArr, arrPrototype) );
 
       someArr[1][1] += 10;
     }

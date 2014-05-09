@@ -6,6 +6,7 @@ include $(top_srcdir)/WG/ExternalLibsNoInstall/build_autotools/GTestFlags.am
 ###########################
 
 noinst_PROGRAMS = \
+	test_testutils \
     test_pp_pp \
     test_pp_wgseq \
     test_pp_tokenmatch \
@@ -44,6 +45,12 @@ TEST_WG_AUTOFUNCTOR_APPALTPATH = \
     $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTOR_APPNAME)
 TEST_WG_AUTOFUNCTOR_APPBUILDLOC = \
     $(abs_builddir)/$(TEST_WG_AUTOFUNCTOR_APPNAME)
+
+TEST_WG_TESTUTILS_APPNAME = test_testutils$(EXEEXT)
+TEST_WG_TESTUTILS_APPALTPATH = \
+    $(TEST_BIN_DIR)/$(TEST_WG_TESTUTILS_APPNAME)
+TEST_WG_TESTUTILS_APPBUILDLOC = \
+    $(abs_builddir)/$(TEST_WG_TESTUTILS_APPNAME)
 
 TEST_WG_LCLCLASS_CPP03_APPNAME = test_lclclass_cpp03$(EXEEXT)
 TEST_WG_LCLCLASS_CPP03_APPALTPATH = \
@@ -88,6 +95,7 @@ TEST_WG_LCLFUNCTION_CPP11_APPBUILDLOC = \
 #Custom init.
 all-local : \
     $(TEST_BIN_DIR) \
+    $(TEST_WG_TESTUTILS_APPALTPATH) \
     $(TEST_WG_LCLCLASS_CPP03_APPALTPATH) \
     $(TEST_WG_LCLCLASS_CPP11_APPALTPATH) \
     $(TEST_WG_AUTOFUNCTOR_APPALTPATH) \
@@ -104,6 +112,12 @@ $(TEST_WG_AUTOFUNCTOR_APPALTPATH) : $(TEST_WG_AUTOFUNCTOR_APPBUILDLOC)
       $(LN_S) -f \
           $(TEST_WG_AUTOFUNCTOR_APPBUILDLOC) \
           $(TEST_WG_AUTOFUNCTOR_APPNAME); )
+
+$(TEST_WG_TESTUTILS_APPALTPATH) : $(TEST_WG_TESTUTILS_APPBUILDLOC)
+	( cd $(TEST_BIN_DIR); \
+      $(LN_S) -f \
+          $(TEST_WG_TESTUTILS_APPBUILDLOC) \
+          $(TEST_WG_TESTUTILS_APPNAME); )
 
 $(TEST_WG_LCLCLASS_CPP03_APPALTPATH) : $(TEST_WG_LCLCLASS_CPP03_APPBUILDLOC)
 	( cd $(TEST_BIN_DIR); \
@@ -144,6 +158,7 @@ $(TEST_WG_LCLFUNCTION_CPP11_APPALTPATH) : $(TEST_WG_LCLFUNCTION_CPP11_APPBUILDLO
 #Custom finalize.
 clean-local : \
     rm -rf $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTOR_APPNAME) \
+    rm -rf $(TEST_BIN_DIR)$(TEST_WG_TESTUTILS_APPNAME) \
     rm -rf $(TEST_BIN_DIR)/$(TEST_WG_LCLCLASS_CPP03_APPNAME) \
     rm -rf $(TEST_BIN_DIR)/$(TEST_WG_LCLCLASS_CPP11_APPNAME) \
     rm -rf $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPNAME) \
@@ -158,10 +173,15 @@ clean-local : \
 # Don't add test_autofunctor_cf_* to TESTS since they're compile-failure tests.
 TESTS = \
     $(TEST_WG_AUTOFUNCTOR_APPNAME) \
+    $(TEST_WG_TESTUTILS_APPNAME) \
     $(TEST_WG_LCLCLASS_CPP03_APPNAME) \
     $(TEST_WG_LCLCLASS_CPP11_APPNAME) \
     $(TEST_WG_LCLFUNCTION_CPP03_APPNAME) \
     $(TEST_WG_LCLFUNCTION_CPP11_APPNAME)
+
+test_testutils_SOURCES = \
+    ../Detail/Tests/TestMain.cc \
+    ../Detail/Tests/TestHelperUnitTest.cc
 
 test_pp_pp_SOURCES = ../../Detail/PP/Tests/PPUnitTest.cc
 test_pp_wgseq_SOURCES = ../../Detail/PP/Tests/SeqUnitTest.cc
@@ -355,6 +375,10 @@ test_autofunctor_CPPFLAGS = \
     $(AM_CPPFLAGS) \
     $(GTEST_CPPFLAGS)
 
+test_testutils_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
+    $(GTEST_CPPFLAGS)
+
 test_lclclass_cpp03_CPPFLAGS = \
     $(AM_CPPFLAGS) \
     $(GTEST_CPPFLAGS)
@@ -393,6 +417,9 @@ AM_CXXFLAGS += \
 test_autofunctor_CXXFLAGS = \
     $(AM_CXXFLAGS)
 
+test_testutils_CXXFLAGS = \
+    $(AM_CXXFLAGS)
+
 test_lclclass_cpp03_CXXFLAGS = \
     $(AM_CXXFLAGS) \
     -std=gnu++98
@@ -425,6 +452,7 @@ GTEST_LTLIB = \
     $(top_builddir)/WG/ExternalLibsNoInstall/build_autotools/libgtest.la
 
 test_autofunctor_LDADD = $(GTEST_LTLIB)
+test_testutils_LDADD = $(GTEST_LTLIB)
 test_lclclass_cpp03_LDADD = $(GTEST_LTLIB)
 test_lclclass_cpp11_LDADD = $(GTEST_LTLIB)
 test_lclfunction_cpp03_LDADD = $(GTEST_LTLIB)

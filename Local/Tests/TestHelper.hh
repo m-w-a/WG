@@ -4,13 +4,14 @@
 #include <cstddef>
 #include <utility>
 #include <boost/type_traits/remove_all_extents.hpp>
+#include <boost/range/algorithm/equal.hpp>
+#include <boost/utility/addressof.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/preprocessor/control/if.hpp>
 #include <boost/preprocessor/control/expr_iif.hpp>
 #include <boost/typeof/typeof.hpp>
-#include <boost/utility/addressof.hpp>
 
 //###########
 //Public APIs
@@ -103,13 +104,8 @@ namespace local
 namespace tests
 {
 
-template <typename T, std::size_t N>
-std::pair
-<
-  typename boost::remove_all_extents<T>::type *,
-  typename boost::remove_all_extents<T>::type *
->
-  flat_array_view(T (&arr)[N]);
+template <typename T, typename U, std::size_t N>
+bool equal(T (&arr1)[N], U (&arr2)[N]);
 
 }
 }
@@ -228,6 +224,12 @@ std::pair
   flat_array_view(T (&arr)[N])
 {
   return detail::flat_array_view_t<T[N]>::range(arr);
+}
+
+template <typename T, typename U, std::size_t N>
+bool equal(T (&arr1)[N], U (&arr2)[N])
+{
+  return boost::equal(flat_array_view(arr1), flat_array_view(arr2));
 }
 
 }
