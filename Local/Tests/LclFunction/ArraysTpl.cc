@@ -6,7 +6,9 @@
 #include <boost/typeof/typeof.hpp>
 #include <cstddef>
 #include <cstring>
-#include <algorithm>
+#include <boost/range/algorithm/equal.hpp>
+
+using ::wg::local::tests::flat_array_view;
 
 namespace
 {
@@ -23,22 +25,6 @@ Arr<ElemType>::Type const arrPrototype =
     {0, 1, 2},
     {3, 4, 5}
   };
-
-template <typename T>
-bool isEqualToPrototype(T const & rhs)
-{
-  using namespace ::boost;
-  using namespace wg::local::tests;
-
-  std::size_t const arrPrototypeCount =
-    sizeof(arrPrototype) /
-    sizeof(typename remove_all_extents<BOOST_TYPEOF(arrPrototype)>::type);
-
-  return std::equal(
-    address_of_first_nonarray_elem(arrPrototype),
-    address_of_first_nonarray_elem(arrPrototype) + arrPrototypeCount,
-    address_of_first_nonarray_elem(rhs));
-}
 
 }
 
@@ -59,7 +45,8 @@ struct BindByValue
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(arr);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
 
-      EXPECT_TRUE(isEqualToPrototype(arr));
+      EXPECT_TRUE(
+        boost::equal(flat_array_view(arr), flat_array_view(arrPrototype)) );
 
       arr[1][1] += 10;
     }
@@ -97,7 +84,8 @@ struct BindByRef
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(arr);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
 
-      EXPECT_TRUE(isEqualToPrototype(arr));
+      EXPECT_TRUE(
+        boost::equal(flat_array_view(arr), flat_array_view(arrPrototype)) );
 
       arr[1][1] += 10;
     }
@@ -135,7 +123,8 @@ struct SetByValue
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(arr);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
 
-      EXPECT_TRUE(isEqualToPrototype(someArr));
+      EXPECT_TRUE(
+        boost::equal(flat_array_view(someArr), flat_array_view(arrPrototype)) );
 
       someArr[1][1] += 10;
     }
@@ -173,7 +162,8 @@ struct SetByRef
       WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(arr);
       WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
 
-      EXPECT_TRUE(isEqualToPrototype(someArr));
+      EXPECT_TRUE(
+        boost::equal(flat_array_view(someArr), flat_array_view(arrPrototype)) );
 
       someArr[1][1] += 10;
     }
