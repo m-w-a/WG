@@ -3,6 +3,7 @@
 
 #include <boost/preprocessor.hpp>
 #include <boost/function_types/function_arity.hpp>
+#include <WG/Local/Detail/LclFunction/GlobalFunctorBaseType.hh>
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/LclFunction/FunctionOperatorUtils.hh>
 #include <WG/Local/Detail/PP/LclFunction/ConstInvariance.hh>
@@ -114,6 +115,7 @@
       LocalFunctorType, \
       argcount \
     > \
+  : public global_functor_base_type \
   { \
     typedef Derived derived_type; \
     typedef LocalFunctorType local_functor_type; \
