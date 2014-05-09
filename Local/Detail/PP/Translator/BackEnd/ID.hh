@@ -1,6 +1,8 @@
 #ifndef WG_PP_ID_HH_
 #define WG_PP_ID_HH_
 
+#include <boost/preprocessor.hpp>
+
 //###########
 //Public APIs
 //###########
