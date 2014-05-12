@@ -21,6 +21,7 @@ noinst_PROGRAMS = \
     test_autofunctor_errorreporting_invalidnamedparameters \
     test_autofunctor_errorreporting_refthisu \
     test_pp_lclfunction_keywords \
+    test_lclfunction_testutils \
     test_lclfunction_cpp03 \
     test_lclfunction_cpp11 \
     test_lclfunction_codegenspec_cpp03 \
@@ -78,6 +79,12 @@ TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP11_APPALTPATH = \
 TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP11_APPBUILDLOC = \
     $(abs_builddir)/$(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP11_APPNAME)
 
+TEST_WG_LCLFUNCTION_TESTUTILS_APPNAME = test_lclfunction_testutils$(EXEEXT)
+TEST_WG_LCLFUNCTION_TESTUTILS_APPALTPATH = \
+    $(TEST_BIN_DIR)\$(TEST_WG_LCLFUNCTION_TESTUTILS_APPNAME)
+TEST_WG_LCLFUNCTION_TESTUTILS_APPBUILDLOC = \
+    $(abs_builddir)/$(TEST_WG_LCLFUNCTION_TESTUTILS_APPNAME)
+
 TEST_WG_LCLFUNCTION_CPP03_APPNAME = \
     test_lclfunction_cpp03$(EXEEXT)
 TEST_WG_LCLFUNCTION_CPP03_APPALTPATH = \
@@ -99,6 +106,7 @@ all-local : \
     $(TEST_WG_LCLCLASS_CPP03_APPALTPATH) \
     $(TEST_WG_LCLCLASS_CPP11_APPALTPATH) \
     $(TEST_WG_AUTOFUNCTOR_APPALTPATH) \
+    $(TEST_WG_LCLFUNCTION_TESTUTILS_APPNAME) \
     $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPALTPATH) \
     $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP11_APPALTPATH) \
     $(TEST_WG_LCLFUNCTION_CPP03_APPALTPATH) \
@@ -130,6 +138,12 @@ $(TEST_WG_LCLCLASS_CPP11_APPALTPATH) : $(TEST_WG_LCLCLASS_CPP11_APPBUILDLOC)
       $(LN_S) -f \
           $(TEST_WG_LCLCLASS_CPP11_APPBUILDLOC) \
           $(TEST_WG_LCLCLASS_CPP11_APPNAME); )
+
+$(TEST_WG_LCLFUNCTION_TESTUTILS_APPALTPATH) : $(TEST_WG_LCLFUNCTION_TESTUTILS_APPBUILDLOC)
+	( cd $(TEST_BIN_DIR); \
+      $(LN_S) -f \
+          $(TEST_WG_LCLFUNCTION_TESTUTILS_APPBUILDLOC) \
+          $(TEST_WG_LCLFUNCTION_TESTUTILS_APPNAME); )
 
 $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPALTPATH) : $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPBUILDLOC)
 	( cd $(TEST_BIN_DIR); \
@@ -163,6 +177,7 @@ clean-local : \
     rm -rf $(TEST_BIN_DIR)/$(TEST_WG_LCLCLASS_CPP11_APPNAME) \
     rm -rf $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPNAME) \
     rm -rf $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP11_APPNAME) \
+    rm -rf $(TEST_WG_LCLFUNCTION_TESTUTILS_APPNAME) \
     rm -rf $(TEST_WG_LCLFUNCTION_CPP03_APPNAME) \
     rm -rf $(TEST_WG_LCLFUNCTION_CPP11_APPNAME)
 
@@ -176,6 +191,7 @@ TESTS = \
     $(TEST_WG_TESTUTILS_APPNAME) \
     $(TEST_WG_LCLCLASS_CPP03_APPNAME) \
     $(TEST_WG_LCLCLASS_CPP11_APPNAME) \
+    $(TEST_WG_LCLFUNCTION_TESTUTILS_APPNAME) \
     $(TEST_WG_LCLFUNCTION_CPP03_APPNAME) \
     $(TEST_WG_LCLFUNCTION_CPP11_APPNAME)
 
@@ -304,6 +320,12 @@ LCLCLASS_SRC = \
 test_lclclass_cpp03_SOURCES = $(LCLCLASS_SRC)
 test_lclclass_cpp11_SOURCES = $(LCLCLASS_SRC)
 
+test_lclfunction_testutils_SOURCES = \
+    ../LclFunction/Utils/Detail/Source/LclFunctionCallRegistrar.cc \
+    ../LclFunction/Utils/Detail/Source/LclFunctionCallVerifier.cc \
+    ../LclFunction/Utils/Tests/TestMain.cc \
+    ../LclFunction/Utils/Tests/TestLclFunctionUnitTest.cc
+
 LCLFUNCTION_SRC = \
     ../LclFunction/TestMain.cc \
     ../LclFunction/Arrays.cc \
@@ -387,6 +409,10 @@ test_lclclass_cpp11_CPPFLAGS = \
     $(AM_CPPFLAGS) \
     $(GTEST_CPPFLAGS)
 
+test_lclfunction_testutils_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
+    $(GTEST_CPPFLAGS)
+
 test_lclfunction_cpp03_CPPFLAGS = \
     $(AM_CPPFLAGS) \
     $(GTEST_CPPFLAGS)
@@ -428,6 +454,9 @@ test_lclclass_cpp11_CXXFLAGS = \
     $(AM_CXXFLAGS) \
     -std=gnu++11
 
+test_lclfunction_testutils_CXXFLAGS = \
+    $(AM_CXXFLAGS)
+
 test_lclfunction_cpp03_CXXFLAGS = \
     $(AM_CXXFLAGS) \
     -std=gnu++98
@@ -455,6 +484,7 @@ test_autofunctor_LDADD = $(GTEST_LTLIB)
 test_testutils_LDADD = $(GTEST_LTLIB)
 test_lclclass_cpp03_LDADD = $(GTEST_LTLIB)
 test_lclclass_cpp11_LDADD = $(GTEST_LTLIB)
+test_lclfunction_testutils_LDADD = $(GTEST_LTLIB)
 test_lclfunction_cpp03_LDADD = $(GTEST_LTLIB)
 test_lclfunction_cpp11_LDADD = $(GTEST_LTLIB)
 test_lclfunction_codegenspec_cpp03_LDADD = $(GTEST_LTLIB)
