@@ -41,20 +41,16 @@ TEST(wg_test_lclfunction, NotOkIfMarkedButNotcalledAndVerified)
 {
   try
   {
-    try
+    WG_TEST_LCLFUNCTION(noop, void)
     {
-      WG_TEST_LCLFUNCTION(noop, void)
-      {
-        WG_TEST_LCLFUNCTION_MARKCALL(noop);
-      }
-      WG_TEST_LCLFUNCTION_END
-
-      //noop();
-      EXPECT_NONFATAL_FAILURE(
-        WG_TEST_LCLFUNCTION_VERIFYCALL(noop),
-        "uncalled or unmarked local function: ");
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
     }
-    WG_GTEST_CATCH
+    WG_TEST_LCLFUNCTION_END
+
+    //noop();
+    EXPECT_NONFATAL_FAILURE(
+      WG_TEST_LCLFUNCTION_VERIFYCALL(noop),
+      "uncalled or unmarked local function: ");
   }
   WG_GTEST_CATCH
 }

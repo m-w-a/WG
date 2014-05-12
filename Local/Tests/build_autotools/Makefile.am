@@ -324,7 +324,8 @@ test_lclfunction_testutils_SOURCES = \
     ../LclFunction/Utils/Detail/Source/LclFunctionCallRegistrar.cc \
     ../LclFunction/Utils/Detail/Source/LclFunctionCallVerifier.cc \
     ../LclFunction/Utils/Tests/TestMain.cc \
-    ../LclFunction/Utils/Tests/TestLclFunctionUnitTest.cc
+    ../LclFunction/Utils/Tests/TestLclFunctionUnitTest.cc \
+    ../LclFunction/Utils/Tests/TestLclFunctionTplUnitTest.cc
 
 LCLFUNCTION_SRC = \
     ../LclFunction/TestMain.cc \
