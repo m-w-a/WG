@@ -3,6 +3,7 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/LclFunction.hh>
+#include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Tests/LclFunction/Utils/Detail/LclFunctionCallVerifier.hh>
 #include <WG/Local/Tests/LclFunction/Utils/Detail/LclFunctionCallRegistrar.hh>
 
@@ -55,11 +56,15 @@
 //-----
 
 #define WG_TEST_LCLFUNCTION_ID() wg_test_lclfunction
+#define WG_TEST_LCLFUNCTION_ID_DELIMITER() XXX
 
 #define WG_TEST_LCLFUNCTION_VERIFIER_NAME(lclfunction_name) \
-  BOOST_PP_CAT( \
-    BOOST_PP_CAT(WG_TEST_LCLFUNCTION_ID(), XXX), \
-    lclfunction_name)
+  WG_PP_CAT_ARG5( \
+    WG_TEST_LCLFUNCTION_ID(), \
+    WG_TEST_LCLFUNCTION_ID_DELIMITER(), \
+    lclfunction_name, \
+    WG_TEST_LCLFUNCTION_ID_DELIMITER(), \
+    verifier_obj)
 
 //------------------------
 //WG_TEST_LCLFUNCTION/_TPL
