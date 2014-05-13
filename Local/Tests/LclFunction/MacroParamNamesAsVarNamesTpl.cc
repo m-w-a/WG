@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
+#include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
@@ -12,15 +12,18 @@ struct VarBindImplicit
   {
     T type = false;
 
-    WG_LCLFUNCTION_TPL(check, varbind (ref type) )
+    WG_TEST_LCLFUNCTION_TPL(check, varbind (ref type) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(check);
+
       WG_TEST_ASSERT_ISNOTCONST_TPL(type);
       WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, type);
 
       type = true;
-    }WG_LCLFUNCTION_END;
+    }WG_TEST_LCLFUNCTION_END;
 
     check();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(check);
 
     EXPECT_TRUE(type);
   }
@@ -44,15 +47,18 @@ struct VarBindExplicit
   {
     T type = false;
 
-    WG_LCLFUNCTION_TPL(check, varbind (type(T &) type) )
+    WG_TEST_LCLFUNCTION_TPL(check, varbind (type(T &) type) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(check);
+
       WG_TEST_ASSERT_ISNOTCONST_TPL(type);
       WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, type);
 
       type = true;
-    }WG_LCLFUNCTION_END;
+    }WG_TEST_LCLFUNCTION_END;
 
     check();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(check);
 
     EXPECT_TRUE(type);
   }
@@ -79,15 +85,18 @@ struct VarSetImplicit
       T didAssign;
     } proxy = {false};
 
-    WG_LCLFUNCTION_TPL(check, varset (ref type, proxy.didAssign) )
+    WG_TEST_LCLFUNCTION_TPL(check, varset (ref type, proxy.didAssign) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(check);
+
       WG_TEST_ASSERT_ISNOTCONST_TPL(type);
       WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, type);
 
       type = true;
-    }WG_LCLFUNCTION_END;
+    }WG_TEST_LCLFUNCTION_END;
 
     check();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(check);
 
     EXPECT_TRUE(proxy.didAssign);
   }
@@ -114,15 +123,18 @@ struct VarSetExplicit
       T didAssign;
     } proxy = {false};
 
-    WG_LCLFUNCTION_TPL(check, varset (type(T &) type, proxy.didAssign) )
+    WG_TEST_LCLFUNCTION_TPL(check, varset (type(T &) type, proxy.didAssign) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(check);
+
       WG_TEST_ASSERT_ISNOTCONST_TPL(type);
       WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, type);
 
       type = true;
-    }WG_LCLFUNCTION_END;
+    }WG_TEST_LCLFUNCTION_END;
 
     check();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(check);
 
     EXPECT_TRUE(proxy.didAssign);
   }

@@ -1,9 +1,15 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
 #include <algorithm>
 #include <vector>
 #include <WG/Local/Tests/Utils/Utils.hh>
+
+// Use release macros since:
+//   1) these tests aren't intended to exercise the declared lclfunction obj,
+//      rather they are intended to exercise the std::for_each copies.
+//   2) all the tested lclfunctions have verifiable side-effects that when
+//      not invoked will result in test failure.
+#include <WG/Local/LclFunction.hh>
 
 TEST(wg_lclfunction_astemplateparameterarg, StdForEach)
 {

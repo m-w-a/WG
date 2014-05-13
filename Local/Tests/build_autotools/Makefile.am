@@ -329,6 +329,8 @@ test_lclfunction_testutils_SOURCES = \
 
 LCLFUNCTION_SRC = \
     ../LclFunction/TestMain.cc \
+    ../LclFunction/Utils/Detail/Source/LclFunctionCallRegistrar.cc \
+    ../LclFunction/Utils/Detail/Source/LclFunctionCallVerifier.cc \
     ../LclFunction/Arrays.cc \
     ../LclFunction/ArraysTpl.cc \
     ../LclFunction/AllCombo.cc \

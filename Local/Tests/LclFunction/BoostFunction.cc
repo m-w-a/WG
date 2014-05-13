@@ -1,8 +1,14 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
 #include <boost/function.hpp>
 #include <WG/Local/Tests/Utils/Utils.hh>
+
+// Use release macros since:
+//   1) these tests aren't intended to exercise the declared lclfunction,
+//      rather they are intended to exercise their Boost.Function copies.
+//   2) all the tested lclfunctions have verifiable side-effects that when
+//      not invoked will result in test failure.
+#include <WG/Local/LclFunction.hh>
 
 TEST(wg_lclfunction_boost_function, OkIfCopyAssigned)
 {

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
+#include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
@@ -12,9 +12,11 @@ struct Fibonacci
   {
     T fib = 0;
 
-    WG_LCLFUNCTION_TPL(calculateFibonacci,
+    WG_TEST_LCLFUNCTION_TPL(calculateFibonacci,
       return (T) params (T const input) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(calculateFibonacci);
+
       if(input > 1)
       {
         WG_TEST_ASSERT_ISCONST_TPL(input);
@@ -24,12 +26,13 @@ struct Fibonacci
       }
       else return input;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
       T, calculateFibonacci(5));
 
     fib = calculateFibonacci(4);
+    WG_TEST_LCLFUNCTION_VERIFYCALL(calculateFibonacci);
 
     EXPECT_EQ(fib, 3);
   }

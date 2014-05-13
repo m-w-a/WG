@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
+#include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <boost/type_traits/is_same.hpp>
 
 //---------------
@@ -13,14 +13,17 @@ TEST(wg_lclfunction_typeof, VarBindExplicitByValue)
   {
     int var = 11;
 
-    WG_LCLFUNCTION(noop, varbind (type(int) var) )
+    WG_TEST_LCLFUNCTION(noop, varbind (type(int) var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), int>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
   WG_GTEST_CATCH
 }
@@ -31,14 +34,17 @@ TEST(wg_lclfunction_typeof, VarBindExplicitByRef)
   {
     int var = 11;
 
-    WG_LCLFUNCTION(noop, varbind (type(int &) var) )
+    WG_TEST_LCLFUNCTION(noop, varbind (type(int &) var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), int &>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
   WG_GTEST_CATCH
 }
@@ -49,14 +55,17 @@ TEST(wg_lclfunction_typeof, VarBindExplicitByConst)
   {
     int var = 11;
 
-    WG_LCLFUNCTION(noop, varbind (type(int const) var) )
+    WG_TEST_LCLFUNCTION(noop, varbind (type(int const) var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), int const>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
   WG_GTEST_CATCH
 }
@@ -71,15 +80,18 @@ TEST(wg_lclfunction_typeof, VarBindImplicitByValue)
   {
     int var = 11;
 
-    WG_LCLFUNCTION(noop, varbind (var) )
+    WG_TEST_LCLFUNCTION(noop, varbind (var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE((
         boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var)>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
   WG_GTEST_CATCH
 }
@@ -90,15 +102,18 @@ TEST(wg_lclfunction_typeof, VarBindImplicitByRef)
   {
     int var = 11;
 
-    WG_LCLFUNCTION(noop, varbind (ref var) )
+    WG_TEST_LCLFUNCTION(noop, varbind (ref var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE((
         boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
   WG_GTEST_CATCH
 }
@@ -109,8 +124,10 @@ TEST(wg_lclfunction_typeof, VarBindImplicitByConst)
   {
     int var = 11;
 
-    WG_LCLFUNCTION(noop, varbind (const var) )
+    WG_TEST_LCLFUNCTION(noop, varbind (const var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE((
         boost::is_same
@@ -119,9 +136,10 @@ TEST(wg_lclfunction_typeof, VarBindImplicitByConst)
           BOOST_TYPEOF(var) const
         >::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
   WG_GTEST_CATCH
 }
@@ -132,8 +150,10 @@ TEST(wg_lclfunction_typeof, VarBindImplicitByConstRef)
   {
     int var = 11;
 
-    WG_LCLFUNCTION(noop, varbind (const ref var) )
+    WG_TEST_LCLFUNCTION(noop, varbind (const ref var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE((
         boost::is_same
@@ -142,9 +162,10 @@ TEST(wg_lclfunction_typeof, VarBindImplicitByConstRef)
           BOOST_TYPEOF(var) const &
         >::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
   WG_GTEST_CATCH
 }
@@ -157,14 +178,17 @@ TEST(wg_lclfunction_typeof, VarSetExplicitByValue)
 {
   try
   {
-    WG_LCLFUNCTION(noop, varset (type(int) var, 5) )
+    WG_TEST_LCLFUNCTION(noop, varset (type(int) var, 5) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), int>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
   WG_GTEST_CATCH
 }
@@ -175,14 +199,17 @@ TEST(wg_lclfunction_typeof, VarSetExplicitByRef)
   {
     int var = 11;
 
-    WG_LCLFUNCTION(noop, varset (type(int &) var, var) )
+    WG_TEST_LCLFUNCTION(noop, varset (type(int &) var, var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), int &>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
   WG_GTEST_CATCH
 }
@@ -191,14 +218,17 @@ TEST(wg_lclfunction_typeof, VarSetExplicitByConst)
 {
   try
   {
-    WG_LCLFUNCTION(noop, varset (type(int const) var, 5) )
+    WG_TEST_LCLFUNCTION(noop, varset (type(int const) var, 5) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), int const>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
   WG_GTEST_CATCH
 }
@@ -211,15 +241,18 @@ TEST(wg_lclfunction_typeof, VarSetImplicitByValue)
 {
   try
   {
-    WG_LCLFUNCTION(noop, varset (var, 11) )
+    WG_TEST_LCLFUNCTION(noop, varset (var, 11) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE((
         boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var)>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
   WG_GTEST_CATCH
 }
@@ -230,15 +263,18 @@ TEST(wg_lclfunction_typeof, VarSetImplicitByRef)
   {
     int var = 11;
 
-    WG_LCLFUNCTION(noop, varset (ref var, var) )
+    WG_TEST_LCLFUNCTION(noop, varset (ref var, var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE((
         boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
   WG_GTEST_CATCH
 }
@@ -247,8 +283,10 @@ TEST(wg_lclfunction_typeof, VarSetImplicitByConst)
 {
   try
   {
-    WG_LCLFUNCTION(noop, varset (const var, 11) )
+    WG_TEST_LCLFUNCTION(noop, varset (const var, 11) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE((
         boost::is_same
@@ -257,9 +295,10 @@ TEST(wg_lclfunction_typeof, VarSetImplicitByConst)
           BOOST_TYPEOF(var) const
         >::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
   WG_GTEST_CATCH
 }
@@ -270,8 +309,10 @@ TEST(wg_lclfunction_typeof, VarSetImplicitByConstRef)
   {
     int var = 11;
 
-    WG_LCLFUNCTION(noop, varset (const ref var, var) )
+    WG_TEST_LCLFUNCTION(noop, varset (const ref var, var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE((
         boost::is_same
@@ -280,9 +321,10 @@ TEST(wg_lclfunction_typeof, VarSetImplicitByConstRef)
           BOOST_TYPEOF(var) const &
         >::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
   WG_GTEST_CATCH
 }

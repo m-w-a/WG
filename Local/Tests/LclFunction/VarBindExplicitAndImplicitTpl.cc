@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
+#include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
@@ -14,9 +14,11 @@ struct OkIf3ArgsOfVaryingMutabilityBound
     int const mass = 10;
     T3 const velocity = 2;
 
-    WG_LCLFUNCTION_TPL
+    WG_TEST_LCLFUNCTION_TPL
     (calculateForce, varbind (ref force) (type(int const) mass) (velocity) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(calculateForce);
+
       WG_TEST_ASSERT_ISNOTCONST_TPL(force);
       WG_TEST_ASSERT_ISCONST_TPL(mass);
       WG_TEST_ASSERT_ISNOTCONST_TPL(velocity);
@@ -27,9 +29,10 @@ struct OkIf3ArgsOfVaryingMutabilityBound
 
       force = mass * velocity;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     calculateForce();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(calculateForce);
 
     EXPECT_EQ(force, 20);
   }

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
+#include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <boost/typeof/typeof.hpp>
 #include <WG/Local/Tests/Utils/Utils.hh>
 
@@ -13,15 +13,18 @@ struct OkIf1VarBound
   {
     T didBind = false;
 
-    WG_LCLFUNCTION_TPL(check, varbind (ref didBind) )
+    WG_TEST_LCLFUNCTION_TPL(check, varbind (ref didBind) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(check);
+
       WG_TEST_ASSERT_ISNOTCONST_TPL(didBind);
       WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, didBind);
 
       didBind = true;
-    }WG_LCLFUNCTION_END;
+    }WG_TEST_LCLFUNCTION_END;
 
     check();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(check);
 
     EXPECT_TRUE(didBind);
   }
@@ -47,10 +50,12 @@ struct OkIf3VarsOfVaryingMutabilityBound
     T2 const mass = 10;
     T3 const velocity = 2;
 
-    WG_LCLFUNCTION_TPL
+    WG_TEST_LCLFUNCTION_TPL
     (calculateForce,
       varbind (ref force) (const mass) (const velocity) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(calculateForce);
+
       WG_TEST_ASSERT_ISNOTCONST_TPL(force);
       WG_TEST_ASSERT_ISCONST_TPL(mass);
       WG_TEST_ASSERT_ISCONST_TPL(velocity);
@@ -61,9 +66,10 @@ struct OkIf3VarsOfVaryingMutabilityBound
 
       force = mass * velocity;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     calculateForce();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(calculateForce);
 
     EXPECT_EQ(force, 20);
   }
@@ -89,18 +95,21 @@ struct OkIfKeywordThisUBound
   {
     didBindThis = false;
 
-    WG_LCLFUNCTION_TPL
+    WG_TEST_LCLFUNCTION_TPL
     (bindThisU, varbind (this_) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(bindThisU);
+
       WG_TEST_ASSERT_ISCONST_TPL(this_);
       WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
         OkIfKeywordThisUBound<T> *, this_);
 
       this_->didBindThis = true;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     bindThisU();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(bindThisU);
 
     EXPECT_TRUE(didBindThis);
   }
@@ -125,20 +134,26 @@ struct OkIfLocalFunctionBound
   {
     T didBind = false;
 
-    WG_LCLFUNCTION_TPL(bindVar, varbind (ref didBind) )
+    WG_TEST_LCLFUNCTION_TPL(bindVar, varbind (ref didBind) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(bindVar);
+
       WG_TEST_ASSERT_ISNOTCONST_TPL(didBind);
       WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, didBind);
 
       didBind = true;
-    }WG_LCLFUNCTION_END;
+    }WG_TEST_LCLFUNCTION_END;
 
-    WG_LCLFUNCTION_TPL(bindFunc, varbind (ref bindVar) )
+    WG_TEST_LCLFUNCTION_TPL(bindFunc, varbind (ref bindVar) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(bindFunc);
+
       bindVar();
-    }WG_LCLFUNCTION_END;
+    }WG_TEST_LCLFUNCTION_END;
 
     bindFunc();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(bindVar);
+    WG_TEST_LCLFUNCTION_VERIFYCALL(bindFunc);
 
     EXPECT_TRUE(didBind);
   }

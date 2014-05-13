@@ -36,13 +36,10 @@ lclfunction_registrar_t::~lclfunction_registrar_t()
 void lclfunction_registrar_t::register_call_for(
   global_functor_base_type const & lclfunction)
 {
-  if( ! m_registry.insert(&lclfunction).second )
-  {
-    ADD_FAILURE()
-      << "Duplicate register attempt for lclfunction at address: "
-      << std::hex
-      << &lclfunction;
-  }
+  //Note:
+  //  attempted duplicate insertions are not an error since a lclfunction
+  //  may be used in a for loop.
+  (void)m_registry.insert(&lclfunction);
 }
 
 void lclfunction_registrar_t::unregister_call_for(

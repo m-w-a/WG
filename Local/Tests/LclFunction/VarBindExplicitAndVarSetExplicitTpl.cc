@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
+#include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
@@ -16,11 +16,13 @@ struct OkIfUsing21Combo
     T4 const R = 5;
     T5 const temp = 4;
 
-    WG_LCLFUNCTION_TPL
+    WG_TEST_LCLFUNCTION_TPL
     (calculateVolume,
       varbind (type(T1 &) volume) (type(T2 const) pressure)
       varset (type(int const) numerator, numMoles * R * temp) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(calculateVolume);
+
       WG_TEST_ASSERT_ISNOTCONST_TPL(volume);
       WG_TEST_ASSERT_ISCONST_TPL(pressure);
       WG_TEST_ASSERT_ISCONST_TPL(numerator);
@@ -31,9 +33,10 @@ struct OkIfUsing21Combo
 
       volume = numerator / pressure;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     calculateVolume();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(calculateVolume);
 
     EXPECT_EQ(volume, 30);
   }

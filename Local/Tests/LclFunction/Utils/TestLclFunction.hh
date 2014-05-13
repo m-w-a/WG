@@ -26,6 +26,9 @@
 //  entity using a local RAII object. If neither WG_TEST_LCLFUNCTION_MARKCALL nor
 //  WG_TEST_LCLFUNCTION_VERIFYCALL are invoked using the same lclfunction name
 //  then the test will fail.
+//Note:
+//  Neither of these macros change the output of WG_LCLFUNCTION/_TPL or
+//  WG_LCLFUNCTION_END, therefore unit tests should reflect production use.
 //------------------------------------------------------------------------------//
 
 #define WG_TEST_LCLFUNCTION(name, spec)  \

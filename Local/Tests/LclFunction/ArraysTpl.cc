@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
+#include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 #include <boost/type_traits/is_array.hpp>
 #include <boost/typeof/typeof.hpp>
@@ -37,8 +37,10 @@ struct BindByValue
     std::memcpy(arr, arrPrototype, sizeof(arr));
 
     T const origArr_1_1 = arr[1][1];
-    WG_LCLFUNCTION_TPL(arrBindByValue, varbind (arr) )
+    WG_TEST_LCLFUNCTION_TPL(arrBindByValue, varbind (arr) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(arrBindByValue);
+
       WG_TEST_ASSERT_ISNOTCONST_TPL(arr);
       WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
 
@@ -46,9 +48,10 @@ struct BindByValue
 
       arr[1][1] += 10;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     arrBindByValue();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(arrBindByValue);
 
     EXPECT_EQ(origArr_1_1, arr[1][1]);
   }
@@ -75,8 +78,10 @@ struct BindByRef
     std::memcpy(arr, arrPrototype, sizeof(arr));
 
     T const origArr_1_1 = arr[1][1];
-    WG_LCLFUNCTION_TPL(arrBindByRef, varbind (ref arr) )
+    WG_TEST_LCLFUNCTION_TPL(arrBindByRef, varbind (ref arr) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(arrBindByRef);
+
       WG_TEST_ASSERT_ISNOTCONST_TPL(arr);
       WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
 
@@ -84,9 +89,10 @@ struct BindByRef
 
       arr[1][1] += 10;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     arrBindByRef();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(arrBindByRef);
 
     EXPECT_NE(origArr_1_1, arr[1][1]);
   }
@@ -113,8 +119,10 @@ struct SetByValue
     std::memcpy(arr, arrPrototype, sizeof(arr));
 
     T const origArr_1_1 = arr[1][1];
-    WG_LCLFUNCTION_TPL(arrSetByValue, varset (someArr, arr) )
+    WG_TEST_LCLFUNCTION_TPL(arrSetByValue, varset (someArr, arr) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(arrSetByValue);
+
       WG_TEST_ASSERT_ISNOTCONST_TPL(arr);
       WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
 
@@ -122,9 +130,10 @@ struct SetByValue
 
       someArr[1][1] += 10;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     arrSetByValue();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(arrSetByValue);
 
     EXPECT_EQ(origArr_1_1, arr[1][1]);
   }
@@ -151,8 +160,10 @@ struct SetByRef
     std::memcpy(arr, arrPrototype, sizeof(arr));
 
     T const origArr_1_1 = arr[1][1];
-    WG_LCLFUNCTION_TPL(arrSetByRef, varset (ref someArr, arr) )
+    WG_TEST_LCLFUNCTION_TPL(arrSetByRef, varset (ref someArr, arr) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(arrSetByRef);
+
       WG_TEST_ASSERT_ISNOTCONST_TPL(arr);
       WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(ArrType, arr);
 
@@ -160,9 +171,10 @@ struct SetByRef
 
       someArr[1][1] += 10;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     arrSetByRef();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(arrSetByRef);
 
     EXPECT_NE(origArr_1_1, arr[1][1]);
   }
