@@ -1,4 +1,4 @@
-#include <WG/Local/Tests/test.h>
+#include <WG/Local/Tests/Utils/PreprocessorUnitTester.hh>
 #include <WG/Local/Detail/PP/Tests/Util.hh>
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/TypeExtractor.hh>
@@ -25,10 +25,10 @@ WG_PP_VARDCLN_EXPLICIT_TUPLIZE(SPE3, 1)
 
 //EXPECTED:
 //(WG_PP_NOOP type(SomeGlobalType const) ) (sgvar1)
-//(WG_PP_NOOP local(SomeLocalType *) ) (slvar1)
-//(WG_PP_NOOP local(SomeLocalType *) ) (const) ) (slvar2)
-//(WG_PP_NOOP local(SomeLocalType *) ) (ref) ) (slvar3)
-//(WG_PP_NOOP local(SomeLocalType *) ) (const)(ref) ) (slvar4)
+//(WG_PP_NOOP lcltype(SomeLocalType *) ) (slvar1)
+//(WG_PP_NOOP lcltype(SomeLocalType *) ) (const) ) (slvar2)
+//(WG_PP_NOOP lcltype(SomeLocalType *) ) (ref) ) (slvar3)
+//(WG_PP_NOOP lcltype(SomeLocalType *) ) (const)(ref) ) (slvar4)
 //(WG_PP_NOOP type(int)) (spevar1)
 */
 

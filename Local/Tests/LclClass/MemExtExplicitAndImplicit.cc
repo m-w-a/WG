@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 #include <WG/Local/LclClass.hh>
 
 TEST(wg_lclclass_memextexplicitandimplicit, OkIf3MemOfVaryingMutabilitySet)
@@ -16,13 +16,13 @@ TEST(wg_lclclass_memextexplicitandimplicit, OkIf3MemOfVaryingMutabilitySet)
       memext (const radius) (type(int) height) (const volume) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISCONST(radius);
-        WG_TESTHELPER_ASSERT_ISNOTCONST(height);
-        WG_TESTHELPER_ASSERT_ISCONST(volume);
+        WG_TEST_ASSERT_ISCONST(radius);
+        WG_TEST_ASSERT_ISNOTCONST(height);
+        WG_TEST_ASSERT_ISCONST(volume);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(short, radius);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, height);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(long, volume);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(short, radius);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, height);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(long, volume);
 
         EXPECT_EQ(2, radius);
         EXPECT_EQ(10, height);

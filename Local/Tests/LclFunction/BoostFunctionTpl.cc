@@ -1,8 +1,14 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
 #include <boost/function.hpp>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
+
+// Use release macros since:
+//   1) these tests aren't intended to exercise the declared lclfunction,
+//      rather they are intended to exercise their Boost.Function copies.
+//   2) all the tested lclfunctions have verifiable side-effects that when
+//      not invoked will result in test failure.
+#include <WG/Local/LclFunction.hh>
 
 namespace
 {
@@ -13,12 +19,12 @@ struct OkIfCopyAssigned
   {
     WG_LCLFUNCTION_TPL(square, return (T) params (T x) )
     {
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, x);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, x);
 
       return x * x;
     }WG_LCLFUNCTION_END;
 
-    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, square(3));
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, square(3));
 
     ::boost::function<T (T)> f = square;
 
@@ -44,12 +50,12 @@ struct OkIfConstRefAssigned
   {
     WG_LCLFUNCTION_TPL(square, return (T) params (T x) )
     {
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, x);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, x);
 
       return x * x;
     }WG_LCLFUNCTION_END;
 
-    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, square(3));
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, square(3));
 
     ::boost::function<T (T)> f = ::boost::cref(square);
 
@@ -76,12 +82,12 @@ struct OkIfReturnedFromFunction
   {
     WG_LCLFUNCTION_TPL(square, return(T) params(T x) )
     {
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, x);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, x);
 
       return x * x;
     }WG_LCLFUNCTION_END;
 
-    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, square(3));
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, square(3));
 
     return square;
   }

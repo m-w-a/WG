@@ -18,6 +18,9 @@ ExpandN:
   test
   AUTOFUNCTOR -> ...
 
+LclClass:
+  SpecNormalizeUnitTest.cc
+
 LclFunction:
   Binder: local namespace to lclfunction namespace?
   Exception specification
@@ -30,23 +33,4 @@ LclFunction:
   x)MacroParamNamesAsVarNamesTpl.cc
 
 Tests: 
-  comparing arrays cleanup.
-  
-  //Description:
-  //Use these macros to ensure that the declared local function is invoked at least
-  //once in the test, else the test will fail. This is to ensure that we don't 
-  //forget to call the local function and generate false positives.
-  //How to Use:
-  //All calls to WG_LCLFUNCTION/_TPL should be replaced with WG_TEST_LCLFUNCTION/_TPL
-  //WG_TEST_LCLFUNCTION_MARKCALL should be invoked in the local function body.
-  //WG_TEST_LCLFUNCTION_VERIFYCALL should be invoked after the local function 
-  //has been invoked.
-  //How it Works:
-  //WG_TEST_LCLFUNCTION/_TPL will register the pair (Test *, lclfunction_name) 
-  //with a global entity
-  //using a local RAII object. If neither WG_TEST_LCLFUNCTION_MARKCALL nor 
-  //WG_TEST_LCLFUNCTION_VERIFYCALL are called using the same lclfunction name
-  //then the test will fail.
-  WG_TEST_LCLFUNCTION(...)
-  WG_TEST_LCLFUNCTION_MARKCALL(lclfunction_name);
-  WG_TEST_LCLFUNCTION_VERIFYCALL(lclfunction_name);
+  x)comparing arrays cleanup.

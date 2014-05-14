@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 #include <WG/Local/LclClass.hh>
 #include <string>
 
@@ -19,11 +19,11 @@ struct ExplictAndExplicit
       memint (type(T2 const &) name, "BigFoot") )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(id);
-        WG_TESTHELPER_ASSERT_ISCONST_TPL(name);
+        WG_TEST_ASSERT_ISNOTCONST_TPL(id);
+        WG_TEST_ASSERT_ISCONST_TPL(name);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, name);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, name);
 
         EXPECT_EQ(id, 987);
         EXPECT_EQ("BigFoot", name);
@@ -58,11 +58,11 @@ struct ExplicitAndImplicit
       memint (const ref name, T2("BigFoot")) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(id);
-        WG_TESTHELPER_ASSERT_ISCONST_TPL(name);
+        WG_TEST_ASSERT_ISNOTCONST_TPL(id);
+        WG_TEST_ASSERT_ISCONST_TPL(name);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, name);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, name);
 
         EXPECT_EQ(id, 987);
         EXPECT_EQ("BigFoot", name);
@@ -97,11 +97,11 @@ struct ImplicitAndExplicit
       memint (type(T2 const &) name, "BigFoot") )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(id);
-        WG_TESTHELPER_ASSERT_ISCONST_TPL(name);
+        WG_TEST_ASSERT_ISNOTCONST_TPL(id);
+        WG_TEST_ASSERT_ISCONST_TPL(name);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, name);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, name);
 
         EXPECT_EQ(id, 987);
         EXPECT_EQ("BigFoot", name);
@@ -136,11 +136,11 @@ struct ImplicitAndImplicit
       memint (const ref name, T2("BigFoot")) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(id);
-        WG_TESTHELPER_ASSERT_ISCONST_TPL(name);
+        WG_TEST_ASSERT_ISNOTCONST_TPL(id);
+        WG_TEST_ASSERT_ISCONST_TPL(name);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, name);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, name);
 
         EXPECT_EQ(id, 987);
         EXPECT_EQ("BigFoot", name);

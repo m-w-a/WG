@@ -1,5 +1,5 @@
 #include <WG/Local/AutoFunctor.hh>
-#include <WG/Local/Tests/test.h>
+#include <WG/Local/Tests/Utils/PreprocessorUnitTester.hh>
 #include <WG/Local/Detail/PP/TokenMatching.hh>
 
 #define WG_PP_KEYWORDS_STARTSWITH_INVALIDNAMEDPARAMETERS_ERRMSG(tokens) \

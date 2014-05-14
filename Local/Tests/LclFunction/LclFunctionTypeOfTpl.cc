@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
+#include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <boost/type_traits/is_same.hpp>
 
 //---------------
@@ -16,14 +16,17 @@ struct VarBindExplicitByValue
   {
     T var = 11;
 
-    WG_LCLFUNCTION_TPL(noop, varbind (type(T) var) )
+    WG_TEST_LCLFUNCTION_TPL(noop, varbind (type(T) var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
 };
 }
@@ -45,14 +48,17 @@ struct VarBindExplicitByRef
   {
     T var = 11;
 
-    WG_LCLFUNCTION_TPL(noop, varbind (type(T &) var) )
+    WG_TEST_LCLFUNCTION_TPL(noop, varbind (type(T &) var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T &>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
 };
 }
@@ -74,14 +80,17 @@ struct VarBindExplicitByConst
   {
     T var = 11;
 
-    WG_LCLFUNCTION_TPL(noop, varbind (type(T const) var) )
+    WG_TEST_LCLFUNCTION_TPL(noop, varbind (type(T const) var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T const>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
 };
 }
@@ -107,15 +116,18 @@ struct VarBindImplicit
   {
     T var = 11;
 
-    WG_LCLFUNCTION_TPL(noop, varbind (var) )
+    WG_TEST_LCLFUNCTION_TPL(noop, varbind (var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE((
         boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var)>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
 };
 }
@@ -137,15 +149,18 @@ struct VarBindImplicitByRef
   {
     T var = 11;
 
-    WG_LCLFUNCTION_TPL(noop, varbind (ref var) )
+    WG_TEST_LCLFUNCTION_TPL(noop, varbind (ref var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE((
         boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
 };
 }
@@ -167,8 +182,10 @@ struct VarBindImplicitByConst
   {
     T var = 11;
 
-    WG_LCLFUNCTION_TPL(noop, varbind (const var) )
+    WG_TEST_LCLFUNCTION_TPL(noop, varbind (const var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE((
         boost::is_same
@@ -177,9 +194,10 @@ struct VarBindImplicitByConst
           BOOST_TYPEOF(var) const
         >::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
 };
 }
@@ -202,8 +220,10 @@ struct VarBindImplicitByConstRef
   {
     T var = 11;
 
-    WG_LCLFUNCTION_TPL(noop, varbind (const ref var) )
+    WG_TEST_LCLFUNCTION_TPL(noop, varbind (const ref var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE((
         boost::is_same
@@ -212,9 +232,10 @@ struct VarBindImplicitByConstRef
           BOOST_TYPEOF(var) const &
         >::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
 };
 }
@@ -238,14 +259,17 @@ struct VarSetExplicitByValue
 {
   static void run()
   {
-    WG_LCLFUNCTION_TPL(noop, varset (type(T) var, 5) )
+    WG_TEST_LCLFUNCTION_TPL(noop, varset (type(T) var, 5) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
 };
 }
@@ -268,14 +292,17 @@ struct VarSetExplicitByRef
   {
     T var = 11;
 
-    WG_LCLFUNCTION_TPL(noop, varset (type(T &) var, var) )
+    WG_TEST_LCLFUNCTION_TPL(noop, varset (type(T &) var, var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T &>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
 };
 }
@@ -295,14 +322,17 @@ struct VarSetExplicitByConst
 {
   static void run()
   {
-    WG_LCLFUNCTION_TPL(noop, varset (type(T const) var, 5) )
+    WG_TEST_LCLFUNCTION_TPL(noop, varset (type(T const) var, 5) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T const>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
 };
 }
@@ -326,15 +356,18 @@ struct VarSetImplicitByValue
 {
   static void run()
   {
-    WG_LCLFUNCTION_TPL(noop, varset (var, 11) )
+    WG_TEST_LCLFUNCTION_TPL(noop, varset (var, 11) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE((
         boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var)>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
 };
 }
@@ -356,15 +389,18 @@ struct VarSetImplicitByRef
   {
     T var = 11;
 
-    WG_LCLFUNCTION_TPL(noop, varset (ref var, var) )
+    WG_TEST_LCLFUNCTION_TPL(noop, varset (ref var, var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE((
         boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
 };
 }
@@ -384,8 +420,10 @@ struct VarSetImplicitByConst
 {
   static void run()
   {
-    WG_LCLFUNCTION_TPL(noop, varset (const var, 11) )
+    WG_TEST_LCLFUNCTION_TPL(noop, varset (const var, 11) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE((
         boost::is_same
@@ -394,9 +432,10 @@ struct VarSetImplicitByConst
           BOOST_TYPEOF(var) const
         >::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
 };
 }
@@ -418,8 +457,10 @@ struct VarSetImplicitByConstRef
   {
     T var = 11;
 
-    WG_LCLFUNCTION_TPL(noop, varset (const ref var, var) )
+    WG_TEST_LCLFUNCTION_TPL(noop, varset (const ref var, var) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(noop);
+
       (void)var;
       EXPECT_TRUE((
         boost::is_same
@@ -428,9 +469,10 @@ struct VarSetImplicitByConstRef
           BOOST_TYPEOF(var) const &
         >::value ));
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
     noop();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
 };
 }

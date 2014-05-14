@@ -82,9 +82,9 @@
 
 /*
 //Unit Tests.
-#define S1 ( (T const * ) var1 , &this->m_Foo )
-#define S2 ( local(U) var2 , catInTheHat )
-#define S3 ( local(U *) ref var3 , mouse << in << the << hole )
+#define S1 ( type(T const * ) var1 , &this->m_Foo )
+#define S2 ( lcltype(U) var2 , catInTheHat )
+#define S3 ( lcltype(U *) ref var3 , mouse << in << the << hole )
 
 #include <boost/preprocessor/expand.hpp>
 
@@ -93,9 +93,9 @@ BOOST_PP_EXPAND(WG_PP_SETVARDCLN_NORMALIZE S2)
 BOOST_PP_EXPAND(WG_PP_SETVARDCLN_NORMALIZE S3)
 
 //EXPECTED:
-//(T const *) (var1) (&this->m_Foo)
-//(local(U)) ( var2 ) (catInTheHat)
-//(local(U *) (ref)) ( var3 ) (mouse << in << the << hole)
+//( type(T const *) ) (var1) (&this->m_Foo)
+//( lcltype(U) ) ( var2 ) (catInTheHat)
+//( lcltype(U *) (ref) ) ( var3 ) (mouse << in << the << hole)
 */
 
 #endif //WG_PP_SETVARDCLNNORMALIZE_HH_

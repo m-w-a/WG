@@ -2,7 +2,7 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
 #include <boost/typeof/typeof.hpp>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 TEST(wg_autofunctor_parambindexplicitandimplicit,
   OkIf3ArgsOfVaryingMutabilityBound)
@@ -16,11 +16,11 @@ TEST(wg_autofunctor_parambindexplicitandimplicit,
     WG_AUTOFUNCTOR
     (calculateForce, parambind (ref force) ((int const) mass) (velocity) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int &, BOOST_TYPEOF(force) &);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const, BOOST_TYPEOF(mass) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int, BOOST_TYPEOF(velocity));
 
       force = mass * velocity;

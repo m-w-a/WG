@@ -1,5 +1,5 @@
-#ifndef WG_LOCAL_TESTS_TESTHELPER_HH_
-#define WG_LOCAL_TESTS_TESTHELPER_HH_
+#ifndef WG_LOCAL_TEST_UTILS_HH_
+#define WG_LOCAL_TEST_UTILS_HH_
 
 #include <cstddef>
 #include <utility>
@@ -22,38 +22,38 @@
 //----------------
 
 // Declares a local type with name "name".
-#define WG_TESTHELPER_LOCALTYPE_DECLARE(name) \
-  WG_TESTHELPER_LOCALTYPE_DECLARE_IMPL(name)
+#define WG_TEST_LOCALTYPE_DECLARE(name) \
+  WG_TEST_LOCALTYPE_DECLARE_IMPL(name)
 
 // obj:
 //   An object or a reference to an object of some type that was declared using
-//   the WG_TESTHELPER_LOCALTYPE_DECLARE macro.
-#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST(obj) \
-  WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST_IMPL(obj)
+//   the WG_TEST_LOCALTYPE_DECLARE macro.
+#define WG_TEST_ASSERT_LOCALTYPE(obj) \
+  WG_TEST_ASSERT_LOCALTYPE_IMPL(obj)
 
-// See WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST.
-#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST_TPL(obj) \
-  WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST_TPL_IMPL(obj)
+// See WG_TEST_ASSERT_LOCALTYPE.
+#define WG_TEST_ASSERT_LOCALTYPE_TPL(obj) \
+  WG_TEST_ASSERT_LOCALTYPE_TPL_IMPL(obj)
 
-// See WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST.
-#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST(obj) \
-  WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_IMPL(obj)
+// See WG_TEST_ASSERT_LOCALTYPE.
+#define WG_TEST_ASSERT_LOCALTYPE_ISNOTCONST(obj) \
+  WG_TEST_ASSERT_LOCALTYPE_ISNOTCONST_IMPL(obj)
 
-// See WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST.
-#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_TPL(obj) \
-  WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_TPL_IMPL(obj)
-
-// Tests whether lvalue1 references lvalue2.
-#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISREFERENCE(lvalue1, lvalue2) \
-  WG_TESTHELPER_ASSERT_ISREFERENCE(lvalue1, lvalue2)
+// See WG_TEST_ASSERT_LOCALTYPE.
+#define WG_TEST_ASSERT_LOCALTYPE_ISNOTCONST_TPL(obj) \
+  WG_TEST_ASSERT_LOCALTYPE_ISNOTCONST_TPL_IMPL(obj)
 
 // Tests whether lvalue1 references lvalue2.
-#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTREFERENCE(lvalue1, lvalue2) \
-  WG_TESTHELPER_ASSERT_ISNOTREFERENCE(lvalue1, lvalue2)
+#define WG_TEST_ASSERT_LOCALTYPE_ISREFERENCE(lvalue1, lvalue2) \
+  WG_TEST_ASSERT_ISREFERENCE(lvalue1, lvalue2)
 
-#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF( \
+// Tests whether lvalue1 references lvalue2.
+#define WG_TEST_ASSERT_LOCALTYPE_ISNOTREFERENCE(lvalue1, lvalue2) \
+  WG_TEST_ASSERT_ISNOTREFERENCE(lvalue1, lvalue2)
+
+#define WG_TEST_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF( \
   expectedtype, objtotest) \
-    WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
+    WG_TEST_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
       expectedtype, objtotest)
 
 //-------------------
@@ -62,46 +62,46 @@
 
 // Local types can't be used in template parameters in C++03, therefore lvalue1
 // is deemed to be a reference if its address compares equal to lvalue2.
-#define WG_TESTHELPER_ASSERT_ISREFERENCE(lvalue1, lvalue2) \
+#define WG_TEST_ASSERT_ISREFERENCE(lvalue1, lvalue2) \
   EXPECT_TRUE( &(lvalue1) == &(lvalue2) )
 
-// See WG_TESTHELPER_ASSERT_ISREFERENCE for rationale.
-#define WG_TESTHELPER_ASSERT_ISNOTREFERENCE(lvalue1, lvalue2) \
+// See WG_TEST_ASSERT_ISREFERENCE for rationale.
+#define WG_TEST_ASSERT_ISNOTREFERENCE(lvalue1, lvalue2) \
   EXPECT_TRUE( &(lvalue1) != &(lvalue2) )
 
 // identifier:
 //   The type of identifier must not be a local one.
-#define WG_TESTHELPER_ASSERT_ISCONST(identifier) \
-  WG_TESTHELPER_ASSERT_CONST(identifier, 0, 0)
+#define WG_TEST_ASSERT_ISCONST(identifier) \
+  WG_TEST_ASSERT_CONST(identifier, 0, 0)
 
-// See WG_TESTHELPER_ASSERT_ISCONST.
-#define WG_TESTHELPER_ASSERT_ISCONST_TPL(identifier) \
-  WG_TESTHELPER_ASSERT_CONST(identifier, 0, 1)
+// See WG_TEST_ASSERT_ISCONST.
+#define WG_TEST_ASSERT_ISCONST_TPL(identifier) \
+  WG_TEST_ASSERT_CONST(identifier, 0, 1)
 
 // identifier:
 //   The type of identifier must not be a local one.
-#define WG_TESTHELPER_ASSERT_ISNOTCONST(identifier) \
-  WG_TESTHELPER_ASSERT_CONST(identifier, 1, 0)
+#define WG_TEST_ASSERT_ISNOTCONST(identifier) \
+  WG_TEST_ASSERT_CONST(identifier, 1, 0)
 
-// See WG_TESTHELPER_ASSERT_ISNOTCONST.
-#define WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(identifier) \
-  WG_TESTHELPER_ASSERT_CONST(identifier, 1, 1)
+// See WG_TEST_ASSERT_ISNOTCONST.
+#define WG_TEST_ASSERT_ISNOTCONST_TPL(identifier) \
+  WG_TEST_ASSERT_CONST(identifier, 1, 1)
 
-#define WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF( \
+#define WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF( \
   expectedtype, objtotest) \
-    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
       expectedtype, objtotest, 0)
 
-#define WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL( \
+#define WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL( \
   expectedtype, objtotest) \
-    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
       expectedtype, objtotest, 1)
 
 namespace wg
 {
-namespace local
+namespace lcl
 {
-namespace tests
+namespace test
 {
 
 template <typename T, typename U, std::size_t N>
@@ -115,7 +115,7 @@ bool equal(T (&arr1)[N], U (&arr2)[N]);
 //Impls.
 //######
 
-#define WG_TESTHELPER_ASSERT_CONST(identifier, isnotflag, istpl) \
+#define WG_TEST_ASSERT_CONST(identifier, isnotflag, istpl) \
   EXPECT_TRUE(( \
     BOOST_PP_EXPR_IIF(isnotflag, ! ) \
     ::boost::is_const \
@@ -126,33 +126,33 @@ bool equal(T (&arr1)[N], U (&arr2)[N]);
       >::type \
     >::value ))
 
-#define WG_TESTHELPER_LOCALTYPE_DECLARE_IMPL(name) \
+#define WG_TEST_LOCALTYPE_DECLARE_IMPL(name) \
   struct name \
   { \
     /* This variable must not have const type! */ \
     int var; \
   };
 
-#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST_IMPL(obj) \
-  WG_TESTHELPER_ASSERT_ISCONST( (obj).var )
+#define WG_TEST_ASSERT_LOCALTYPE_IMPL(obj) \
+  WG_TEST_ASSERT_ISCONST( (obj).var )
 
-#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISCONST_TPL_IMPL(obj) \
-  WG_TESTHELPER_ASSERT_ISCONST_TPL( (obj).var )
+#define WG_TEST_ASSERT_LOCALTYPE_TPL_IMPL(obj) \
+  WG_TEST_ASSERT_ISCONST_TPL( (obj).var )
 
-#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_IMPL(obj) \
-  WG_TESTHELPER_ASSERT_ISNOTCONST( (obj).var )
+#define WG_TEST_ASSERT_LOCALTYPE_ISNOTCONST_IMPL(obj) \
+  WG_TEST_ASSERT_ISNOTCONST( (obj).var )
 
-#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISNOTCONST_TPL_IMPL(obj) \
-  WG_TESTHELPER_ASSERT_ISNOTCONST_TPL( (obj).var )
+#define WG_TEST_ASSERT_LOCALTYPE_ISNOTCONST_TPL_IMPL(obj) \
+  WG_TEST_ASSERT_ISNOTCONST_TPL( (obj).var )
 
-#define WG_TESTHELPER_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
+#define WG_TEST_ASSERT_LOCALTYPE_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
   expectedtype, objtotest) \
     { \
       expectedtype const * check = &(objtotest); \
       (void)check; \
     }
 
-#define WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
+#define WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_IMPL( \
   expectedtype, objtotest, istpl) \
     EXPECT_TRUE(( \
       ::boost::is_same \
@@ -163,9 +163,9 @@ bool equal(T (&arr1)[N], U (&arr2)[N]);
 
 namespace wg
 {
-namespace local
+namespace lcl
 {
-namespace tests
+namespace test
 {
 
 namespace detail
@@ -236,4 +236,4 @@ bool equal(T (&arr1)[N], U (&arr2)[N])
 }
 }
 
-#endif /* WG_LOCAL_TESTS_TESTHELPER_HH_ */
+#endif /* WG_LOCAL_TEST_UTILS_HH_ */

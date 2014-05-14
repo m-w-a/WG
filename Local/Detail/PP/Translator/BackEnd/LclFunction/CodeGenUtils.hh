@@ -127,7 +127,7 @@
   istpl, getttypemacro, dcln) \
     ( \
       WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-      ::wg::local::detail::bind_traits \
+      ::wg::lcl::detail::bind_traits \
       < \
         WG_PP_PARSEDTYPE_EXTRACTCPPTYPE( getttypemacro(dcln) ) \
       >::binder_type \

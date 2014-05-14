@@ -2,7 +2,7 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
 #include <boost/typeof/typeof.hpp>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 #include <utility>
 #include <boost/tuple/tuple.hpp>
 
@@ -14,7 +14,7 @@ TEST(wg_autofunctor_parambindexplicit, EnsureTypeOfNotUsed)
 
     WG_AUTOFUNCTOR(bindByDiffType, parambind ((int const) value) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const, BOOST_TYPEOF(value) const);
       EXPECT_EQ(1, value);
     }
@@ -31,7 +31,7 @@ TEST(wg_autofunctor_parambindexplicit, OkIf1ArgBound)
 
     WG_AUTOFUNCTOR(oneArgAutoFunctor, parambind ((bool &) didArgumentBind) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         bool &, BOOST_TYPEOF(didArgumentBind) &);
 
       didArgumentBind = true;
@@ -53,7 +53,7 @@ TEST(wg_autofunctor_parambindexplicit, OkIfGloballyScoped1ArgBound)
     (oneArgAutoFunctor,
       parambind ((::boost::tuple<bool> &) didArgumentBind) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         BOOST_IDENTITY_TYPE((::boost::tuple<bool> &)),
         BOOST_TYPEOF(didArgumentBind) &);
 
@@ -78,11 +78,11 @@ TEST(wg_autofunctor_parambindexplicit, OkIf3ArgsOfVaryingMutabilityBound)
     (calculateForce,
       parambind ((int &) force) ((int const) mass) ((int const) velocity) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int &, BOOST_TYPEOF(force) &);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const, BOOST_TYPEOF(mass) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const, BOOST_TYPEOF(velocity) const);
 
       force = mass * velocity;

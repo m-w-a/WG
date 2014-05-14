@@ -8,7 +8,7 @@
 
 namespace wg
 {
-namespace local
+namespace lcl
 {
 namespace detail
 {

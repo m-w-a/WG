@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 #include <WG/Local/LclClass.hh>
 #include <string>
 
@@ -16,11 +16,11 @@ TEST(wg_lclclass_memextandmemint, ExplicitAndExplicit)
       memint (type(std::string const &) name, "BigFoot") )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST(id);
-        WG_TESTHELPER_ASSERT_ISCONST(name);
+        WG_TEST_ASSERT_ISNOTCONST(id);
+        WG_TEST_ASSERT_ISCONST(name);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(short, id);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(std::string, name);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(short, id);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(std::string, name);
 
         EXPECT_EQ(id, 987);
         EXPECT_EQ("BigFoot", name);
@@ -44,11 +44,11 @@ TEST(wg_lclclass_memextandmemint, ExplicitAndImplicit)
       memint (const name, std::string("BigFoot")) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST(id);
-        WG_TESTHELPER_ASSERT_ISCONST(name);
+        WG_TEST_ASSERT_ISNOTCONST(id);
+        WG_TEST_ASSERT_ISCONST(name);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(short, id);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(std::string, name);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(short, id);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(std::string, name);
 
         EXPECT_EQ(id, 987);
         EXPECT_EQ("BigFoot", name);
@@ -72,11 +72,11 @@ TEST(wg_lclclass_memextandmemint, ImplicitAndExplicit)
       memint (type(std::string const &) name, "BigFoot") )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST(id);
-        WG_TESTHELPER_ASSERT_ISCONST(name);
+        WG_TEST_ASSERT_ISNOTCONST(id);
+        WG_TEST_ASSERT_ISCONST(name);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(short, id);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(std::string, name);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(short, id);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(std::string, name);
 
         EXPECT_EQ(id, 987);
         EXPECT_EQ("BigFoot", name);
@@ -100,11 +100,11 @@ TEST(wg_lclclass_memextandmemint, ImplicitAndImplicit)
       memint (const name, std::string("BigFoot")) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST(id);
-        WG_TESTHELPER_ASSERT_ISCONST(name);
+        WG_TEST_ASSERT_ISNOTCONST(id);
+        WG_TEST_ASSERT_ISCONST(name);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(short, id);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(std::string, name);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(short, id);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(std::string, name);
 
         EXPECT_EQ(id, 987);
         EXPECT_EQ("BigFoot", name);
