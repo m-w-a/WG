@@ -17,6 +17,9 @@ TEST(wg_lclfunction_return, OkIfSpecified)
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(rettest),
+      rettest);
     WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, rettest());
 
     retval = rettest();
@@ -40,6 +43,9 @@ TEST(wg_lclfunction_return, OkIfGloballyScoped)
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(rettest),
+      rettest);
     WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
       ::boost::tuple<bool>, rettest());
 

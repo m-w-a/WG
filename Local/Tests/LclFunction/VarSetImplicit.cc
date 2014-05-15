@@ -22,6 +22,10 @@ TEST(wg_lclfunction_varsetimplicit, OkIf1VarSet)
       didAssign = true;
     }WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
+
     check();
     WG_TEST_LCLFUNCTION_VERIFYCALL(check);
 
@@ -59,6 +63,10 @@ TEST(wg_lclfunction_varsetimplicit, OkIf3VarsOfVaryingMutabilitySet)
 
       volume = radius * height;
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(calculateVolume),
+      calculateVolume);
 
     calculateVolume();
     WG_TEST_LCLFUNCTION_VERIFYCALL(calculateVolume);

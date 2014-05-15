@@ -38,6 +38,10 @@ struct StdForEach
       ++runningOffset;
     }WG_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(accumulate),
+      accumulate);
+
     T const dataCount = 5;
     T data[dataCount] = { 0, 1, 2, 3, 4 };
 

@@ -21,6 +21,10 @@ TEST(wg_lclfunction_params, OkIf1ArgPassedByValue)
       EXPECT_EQ(11, value);
     }WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(checkValue),
+      checkValue);
+
     checkValue(value);
     WG_TEST_LCLFUNCTION_VERIFYCALL(checkValue);
 
@@ -44,6 +48,10 @@ TEST(wg_lclfunction_params, OkIf1ArgPassedByRef)
       ++value;
       EXPECT_EQ(11, value);
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(checkValue),
+      checkValue);
 
     checkValue(value);
     WG_TEST_LCLFUNCTION_VERIFYCALL(checkValue);
@@ -70,6 +78,10 @@ TEST(wg_lclfunction_params, OkIf1ArgPassedByConstRef)
       EXPECT_EQ(11, value);
     }WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(checkValue),
+      checkValue);
+
     ++value;
     checkValue(value);
     WG_TEST_LCLFUNCTION_VERIFYCALL(checkValue);
@@ -95,6 +107,10 @@ TEST(wg_lclfunction_params, OkIfGloballyScoped1ArgUsed)
 
       EXPECT_FALSE(wasCalled.get<0>());
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(checkValue),
+      checkValue);
 
     checkValue(wasCalled);
     WG_TEST_LCLFUNCTION_VERIFYCALL(checkValue);
@@ -126,6 +142,10 @@ TEST(wg_lclfunction_params, OkIf3ArgsUsed)
 
       force = mass * velocity;
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(calculateForce),
+      calculateForce);
 
     calculateForce(force, mass, velocity);
     WG_TEST_LCLFUNCTION_VERIFYCALL(calculateForce);

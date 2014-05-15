@@ -2,6 +2,7 @@
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <boost/type_traits/is_same.hpp>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 //---------------
 //VarBindExplicit
@@ -24,6 +25,10 @@ struct VarBindExplicitByValue
       EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), T>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -57,6 +62,10 @@ struct VarBindExplicitByRef
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
+
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
@@ -88,6 +97,10 @@ struct VarBindExplicitByConst
       EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), T const>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -126,6 +139,10 @@ struct VarBindImplicit
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
+
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
@@ -158,6 +175,10 @@ struct VarBindImplicitByRef
         boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -195,6 +216,10 @@ struct VarBindImplicitByConst
         >::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -234,6 +259,10 @@ struct VarBindImplicitByConstRef
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
+
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
@@ -268,6 +297,10 @@ struct VarSetExplicitByValue
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
+
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
@@ -301,6 +334,10 @@ struct VarSetExplicitByRef
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
+
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
@@ -330,6 +367,10 @@ struct VarSetExplicitByConst
       EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), T const>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -366,6 +407,10 @@ struct VarSetImplicitByValue
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
+
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
@@ -398,6 +443,10 @@ struct VarSetImplicitByRef
         boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -433,6 +482,10 @@ struct VarSetImplicitByConst
         >::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -470,6 +523,10 @@ struct VarSetImplicitByConstRef
         >::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);

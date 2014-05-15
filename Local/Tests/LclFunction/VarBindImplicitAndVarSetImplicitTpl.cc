@@ -34,6 +34,10 @@ struct OkIfUsing21Combo
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(calculateVolume),
+      calculateVolume);
+
     calculateVolume();
     WG_TEST_LCLFUNCTION_VERIFYCALL(calculateVolume);
 

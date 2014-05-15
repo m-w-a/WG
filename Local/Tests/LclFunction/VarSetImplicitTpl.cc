@@ -26,6 +26,10 @@ struct OkIf1VarSet
       didAssign = true;
     }WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
+
     check();
     WG_TEST_LCLFUNCTION_VERIFYCALL(check);
 
@@ -75,6 +79,10 @@ struct OkIf3VarOfVaryingMutabilitySet
       volume = radius * height;
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(calculateVolume),
+      calculateVolume);
 
     calculateVolume();
     WG_TEST_LCLFUNCTION_VERIFYCALL(calculateVolume);

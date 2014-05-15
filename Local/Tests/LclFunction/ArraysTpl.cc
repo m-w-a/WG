@@ -50,6 +50,10 @@ struct BindByValue
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(arrBindByValue),
+      arrBindByValue);
+
     arrBindByValue();
     WG_TEST_LCLFUNCTION_VERIFYCALL(arrBindByValue);
 
@@ -90,6 +94,10 @@ struct BindByRef
       arr[1][1] += 10;
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(arrBindByRef),
+      arrBindByRef);
 
     arrBindByRef();
     WG_TEST_LCLFUNCTION_VERIFYCALL(arrBindByRef);
@@ -132,6 +140,10 @@ struct SetByValue
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(arrSetByValue),
+      arrSetByValue);
+
     arrSetByValue();
     WG_TEST_LCLFUNCTION_VERIFYCALL(arrSetByValue);
 
@@ -172,6 +184,10 @@ struct SetByRef
       someArr[1][1] += 10;
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(arrSetByRef),
+      arrSetByRef);
 
     arrSetByRef();
     WG_TEST_LCLFUNCTION_VERIFYCALL(arrSetByRef);

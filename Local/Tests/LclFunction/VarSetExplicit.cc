@@ -20,6 +20,10 @@ TEST(wg_lclfunction_varsetexplicit, EnsureTypeOfNotUsed)
       EXPECT_EQ(1, value);
     }WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(setToDiffType),
+      setToDiffType);
+
     setToDiffType();
     WG_TEST_LCLFUNCTION_VERIFYCALL(setToDiffType);
   }
@@ -47,6 +51,10 @@ TEST(wg_lclfunction_varsetexplicit, OkIf1VarSet)
       didAssign = true;
     }WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
+
     check();
     WG_TEST_LCLFUNCTION_VERIFYCALL(check);
 
@@ -73,6 +81,10 @@ TEST(wg_lclfunction_varsetexplicit, OkIfGloballyScoped1VarSet)
 
       assigner.get<0>() = true;
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
 
     check();
     WG_TEST_LCLFUNCTION_VERIFYCALL(check);
@@ -112,6 +124,10 @@ TEST(wg_lclfunction_varsetexplicit, OkIf3VarOfVaryingMutabilitySet)
       volume = radius * height;
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(calculateVolume),
+      calculateVolume);
 
     calculateVolume();
     WG_TEST_LCLFUNCTION_VERIFYCALL(calculateVolume);

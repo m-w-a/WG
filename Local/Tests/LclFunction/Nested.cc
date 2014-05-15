@@ -29,10 +29,18 @@ TEST(wg_lclfunction_nested, OneLevel)
       }
       WG_TEST_LCLFUNCTION_END;
 
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+        WG_LCLFUNCTION_TYPENAME(twoStep),
+        twoStep);
+
       twoStep();
       WG_TEST_LCLFUNCTION_VERIFYCALL(twoStep);
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(oneStep),
+      oneStep);
 
     oneStep();
     WG_TEST_LCLFUNCTION_VERIFYCALL(oneStep);
@@ -77,15 +85,27 @@ TEST(wg_lclfunction_nested, TwoLevel)
         }
         WG_TEST_LCLFUNCTION_END;
 
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+          WG_LCLFUNCTION_TYPENAME(threeStep),
+          threeStep);
+
         threeStep();
         WG_TEST_LCLFUNCTION_VERIFYCALL(threeStep);
       }
       WG_TEST_LCLFUNCTION_END;
 
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+        WG_LCLFUNCTION_TYPENAME(twoStep),
+        twoStep);
+
       twoStep(count);
       WG_TEST_LCLFUNCTION_VERIFYCALL(twoStep);
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(oneStep),
+      oneStep);
 
     oneStep();
     WG_TEST_LCLFUNCTION_VERIFYCALL(oneStep);

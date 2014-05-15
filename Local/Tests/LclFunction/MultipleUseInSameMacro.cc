@@ -18,6 +18,10 @@
     } \
     WG_TEST_LCLFUNCTION_END; \
     \
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF( \
+      WG_LCLFUNCTION_TYPENAME(makeGingerBreadCookie1), \
+      makeGingerBreadCookie1); \
+    \
     WG_TEST_LCLFUNCTION \
     (makeGingerBreadCookie2, \
       return (int) \
@@ -30,7 +34,10 @@
         salt == pinchOfSalt && \
         sugar == dos; \
     } \
-    WG_TEST_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END; \
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF( \
+      WG_LCLFUNCTION_TYPENAME(makeGingerBreadCookie2), \
+      makeGingerBreadCookie2); \
 
 TEST(wg_lclfunction_multipleuseinsamemacro, Test)
 {
