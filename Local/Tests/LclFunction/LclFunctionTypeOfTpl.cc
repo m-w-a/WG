@@ -21,7 +21,7 @@ struct VarBindExplicitByValue
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), T>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
 
@@ -53,7 +53,7 @@ struct VarBindExplicitByRef
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T &>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), T &>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
 
@@ -85,7 +85,7 @@ struct VarBindExplicitByConst
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T const>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), T const>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
 
@@ -122,7 +122,7 @@ struct VarBindImplicit
 
       (void)var;
       EXPECT_TRUE((
-        boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var)>::value ));
+        boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), BOOST_TYPEOF(var)>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
 
@@ -155,7 +155,7 @@ struct VarBindImplicitByRef
 
       (void)var;
       EXPECT_TRUE((
-        boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
+        boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
 
@@ -190,7 +190,7 @@ struct VarBindImplicitByConst
       EXPECT_TRUE((
         boost::is_same
         <
-          WG_LCLFUNCTION_TYPEOF(var),
+          WG_LCLFUNCTION_VAR_TYPEOF(var),
           BOOST_TYPEOF(var) const
         >::value ));
     }
@@ -228,7 +228,7 @@ struct VarBindImplicitByConstRef
       EXPECT_TRUE((
         boost::is_same
         <
-          WG_LCLFUNCTION_TYPEOF(var),
+          WG_LCLFUNCTION_VAR_TYPEOF(var),
           BOOST_TYPEOF(var) const &
         >::value ));
     }
@@ -264,7 +264,7 @@ struct VarSetExplicitByValue
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), T>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
 
@@ -297,7 +297,7 @@ struct VarSetExplicitByRef
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T &>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), T &>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
 
@@ -327,7 +327,7 @@ struct VarSetExplicitByConst
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T const>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), T const>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
 
@@ -362,7 +362,7 @@ struct VarSetImplicitByValue
 
       (void)var;
       EXPECT_TRUE((
-        boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var)>::value ));
+        boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), BOOST_TYPEOF(var)>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
 
@@ -395,7 +395,7 @@ struct VarSetImplicitByRef
 
       (void)var;
       EXPECT_TRUE((
-        boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
+        boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
 
@@ -428,7 +428,7 @@ struct VarSetImplicitByConst
       EXPECT_TRUE((
         boost::is_same
         <
-          WG_LCLFUNCTION_TYPEOF(var),
+          WG_LCLFUNCTION_VAR_TYPEOF(var),
           BOOST_TYPEOF(var) const
         >::value ));
     }
@@ -465,7 +465,7 @@ struct VarSetImplicitByConstRef
       EXPECT_TRUE((
         boost::is_same
         <
-          WG_LCLFUNCTION_TYPEOF(var),
+          WG_LCLFUNCTION_VAR_TYPEOF(var),
           BOOST_TYPEOF(var) const &
         >::value ));
     }

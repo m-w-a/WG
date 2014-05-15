@@ -6,7 +6,7 @@
   #define WG_PP_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY 15
 #endif
 
-#define WG_LCLFUNCTION_TYPEOF(funcvarname) \
+#define WG_LCLFUNCTION_VAR_TYPEOF(funcvarname) \
   WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_FUNCTIONVARIABLETYPENAME(funcvarname)
 
 #include <boost/config.hpp>
