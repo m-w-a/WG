@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 #include <WG/Local/LclClass.hh>
 
@@ -39,9 +38,5 @@ struct OkIf3MemOfVaryingMutabilitySet
 }
 TEST(wg_lclclass_memextexplicitandimplicit_tpl, OkIf3MemOfVaryingMutabilitySet)
 {
-  try
-  {
-    OkIf3MemOfVaryingMutabilitySet<short, int, long>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf3MemOfVaryingMutabilitySet<short, int, long>::run();
 }

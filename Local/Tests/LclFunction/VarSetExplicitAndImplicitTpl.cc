@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <utility>
 #include <WG/Local/Tests/Utils/Utils.hh>
@@ -47,9 +46,5 @@ struct OkIf3ArgsOfVaryingMutabilityBound
 TEST(wg_lclfunction_varsetexplicitandimplicit_tpl,
   OkIf3ArgsOfVaryingMutabilityBound)
 {
-  try
-  {
-    OkIf3ArgsOfVaryingMutabilityBound<int, int>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf3ArgsOfVaryingMutabilityBound<int, int>::run();
 }

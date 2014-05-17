@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <boost/function.hpp>
 #include <WG/Local/Tests/Utils/Utils.hh>
 
@@ -12,50 +11,42 @@
 
 TEST(wg_lclfunction_boost_function, OkIfCopyAssigned)
 {
-  try
+  WG_LCLFUNCTION(square, return (int) params (int x) )
   {
-    WG_LCLFUNCTION(square, return (int) params (int x) )
-    {
-      WG_TEST_ASSERT_ISNOTCONST(x);
-      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, x);
+    WG_TEST_ASSERT_ISNOTCONST(x);
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, x);
 
-      return x * x;
-    }WG_LCLFUNCTION_END;
+    return x * x;
+  }WG_LCLFUNCTION_END;
 
-    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
-      WG_LCLFUNCTION_TYPENAME(square),
-      square);
-    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, square(3));
+  WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+    WG_LCLFUNCTION_TYPENAME(square),
+    square);
+  WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, square(3));
 
-    ::boost::function<int(int)> f = square;
+  ::boost::function<int(int)> f = square;
 
-    EXPECT_EQ(16, f(4));
-  }
-  WG_GTEST_CATCH
+  EXPECT_EQ(16, f(4));
 }
 
 TEST(wg_lclfunction_boost_function, OkayIfConstRefAssigned)
 {
-  try
+  WG_LCLFUNCTION(square, return (int) params (int x) )
   {
-    WG_LCLFUNCTION(square, return (int) params (int x) )
-    {
-      WG_TEST_ASSERT_ISNOTCONST(x);
-      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, x);
+    WG_TEST_ASSERT_ISNOTCONST(x);
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, x);
 
-      return x * x;
-    }WG_LCLFUNCTION_END;
+    return x * x;
+  }WG_LCLFUNCTION_END;
 
-    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
-      WG_LCLFUNCTION_TYPENAME(square),
-      square);
-    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, square(3));
+  WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+    WG_LCLFUNCTION_TYPENAME(square),
+    square);
+  WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, square(3));
 
-    ::boost::function<int(int)> f = ::boost::cref(square);
+  ::boost::function<int(int)> f = ::boost::cref(square);
 
-    EXPECT_EQ(16, f(4));
-  }
-  WG_GTEST_CATCH
+  EXPECT_EQ(16, f(4));
 }
 
 namespace
@@ -84,11 +75,7 @@ struct OkIfReturnedFromFunction
 }
 TEST(wg_lclfunction_boost_function, OkIfReturnedFromFunction)
 {
-  try
-  {
-    OkIfReturnedFromFunction::square_type square = OkIfReturnedFromFunction::run();
+  OkIfReturnedFromFunction::square_type square = OkIfReturnedFromFunction::run();
 
-    EXPECT_EQ(16, square(4));
-  }
-  WG_GTEST_CATCH
+  EXPECT_EQ(16, square(4));
 }

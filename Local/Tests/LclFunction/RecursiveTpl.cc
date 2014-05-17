@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 
@@ -43,9 +42,5 @@ struct Fibonacci
 }
 TEST(wg_lclfunction_recursive_tpl, Fibonacci)
 {
-  try
-  {
-    Fibonacci<int>::run();
-  }
-  WG_GTEST_CATCH
+  Fibonacci<int>::run();
 }

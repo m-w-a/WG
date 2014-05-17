@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <boost/function.hpp>
 #include <WG/Local/Tests/Utils/Utils.hh>
 
@@ -37,11 +36,7 @@ struct OkIfCopyAssigned
 }
 TEST(wg_lclfunction_boost_function_tpl, OkIfCopyAssigned)
 {
-  try
-  {
-    OkIfCopyAssigned<int>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfCopyAssigned<int>::run();
 }
 
 namespace
@@ -71,11 +66,7 @@ struct OkIfConstRefAssigned
 }
 TEST(wg_lclfunction_boost_function_tpl, OkIfConstRefAssigned)
 {
-  try
-  {
-    OkIfConstRefAssigned<int>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfConstRefAssigned<int>::run();
 }
 
 namespace
@@ -104,12 +95,8 @@ struct OkIfReturnedFromFunction
 }
 TEST(wg_lclfunction_boost_function_tpl, OkIfReturnedFromFunction)
 {
-  try
-  {
-    OkIfReturnedFromFunction<int>::square_type square =
-      OkIfReturnedFromFunction<int>::run();
+  OkIfReturnedFromFunction<int>::square_type square =
+    OkIfReturnedFromFunction<int>::run();
 
-    EXPECT_EQ(16, square(4));
-  }
-  WG_GTEST_CATCH
+  EXPECT_EQ(16, square(4));
 }

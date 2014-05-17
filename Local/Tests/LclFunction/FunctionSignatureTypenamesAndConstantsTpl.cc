@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <boost/type_traits/is_same.hpp>
 #include <WG/Local/Tests/Utils/Utils.hh>
@@ -37,20 +36,12 @@ struct ResultType<R ()>
 
 TEST(wg_lclfunction_signaturetypenamesandconstants_tpl, VoidResultType)
 {
-  try
-  {
-    ResultType<void ()>::run();
-  }
-  WG_GTEST_CATCH
+  ResultType<void ()>::run();
 }
 
 TEST(wg_lclfunction_signaturetypenamesandconstants_tpl, IntResultType)
 {
-  try
-  {
-    ResultType<int ()>::run();
-  }
-  WG_GTEST_CATCH
+  ResultType<int ()>::run();
 }
 
 namespace
@@ -84,11 +75,7 @@ struct Arg1Type<R (T1)>
 }
 TEST(wg_lclfunction_signaturetypenamesandconstants_tpl, Arg1Type)
 {
-  try
-  {
-    Arg1Type<void (char)>::run();
-  }
-  WG_GTEST_CATCH
+  Arg1Type<void (char)>::run();
 }
 
 namespace
@@ -126,9 +113,5 @@ struct Arg3Type<R (T1, T2, T3)>
 }
 TEST(wg_lclfunction_signaturetypenamesandconstants_tpl, Arg3Type)
 {
-  try
-  {
-    Arg3Type<void (char, int const, long const &)>::run();
-  }
-  WG_GTEST_CATCH
+  Arg3Type<void (char, int const, long const &)>::run();
 }

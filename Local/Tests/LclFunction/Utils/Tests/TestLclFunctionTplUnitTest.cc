@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 #include <gtest/gtest-spi.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 
 namespace
@@ -28,11 +27,7 @@ struct OkIfMarkedAndCalledAndVerified
 }
 TEST(wg_test_lclfunction_tpl, OkIfMarkedAndCalledAndVerified)
 {
-  try
-  {
-    OkIfMarkedAndCalledAndVerified<ignored>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfMarkedAndCalledAndVerified<ignored>::run();
 }
 
 namespace
@@ -57,11 +52,7 @@ struct NotOkIfUnmarkedButCalledAndVerified
 }
 TEST(wg_test_lclfunction_tpl, NotOkIfUnmarkedButCalledAndVerified)
 {
-  try
-  {
-    NotOkIfUnmarkedButCalledAndVerified<ignored>::run();
-  }
-  WG_GTEST_CATCH
+  NotOkIfUnmarkedButCalledAndVerified<ignored>::run();
 }
 
 namespace
@@ -86,11 +77,7 @@ struct NotOkIfMarkedButNotcalledAndVerified
 }
 TEST(wg_test_lclfunction_tpl, NotOkIfMarkedButNotcalledAndVerified)
 {
-  try
-  {
-    NotOkIfMarkedButNotcalledAndVerified<ignored>::run();
-  }
-  WG_GTEST_CATCH
+  NotOkIfMarkedButNotcalledAndVerified<ignored>::run();
 }
 
 namespace
@@ -115,9 +102,5 @@ struct NotOkIfMarkedAndCalledButUnverified
 }
 TEST(wg_test_lclfunction_tpl, NotOkIfMarkedAndCalledButUnverified)
 {
-  try
-  {
-    NotOkIfMarkedAndCalledButUnverified<ignored>::run();
-  }
-  WG_GTEST_CATCH
+  NotOkIfMarkedAndCalledButUnverified<ignored>::run();
 }

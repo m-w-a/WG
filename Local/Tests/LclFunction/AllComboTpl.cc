@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 
@@ -55,9 +54,5 @@ struct TestTpl
 }
 TEST(wg_lclfunction_allcombo_tpl, Test)
 {
-  try
-  {
-    TestTpl<bool, int>::run();
-  }
-  WG_GTEST_CATCH
+  TestTpl<bool, int>::run();
 }

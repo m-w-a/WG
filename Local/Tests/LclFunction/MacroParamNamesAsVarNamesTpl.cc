@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 
@@ -35,11 +34,7 @@ struct VarBindImplicit
 }
 TEST(wg_lclfunction_macroparamnamesasvarnames_tpl, VarBindImplicit)
 {
-  try
-  {
-    VarBindImplicit<bool>::run();
-  }
-  WG_GTEST_CATCH
+  VarBindImplicit<bool>::run();
 }
 
 namespace
@@ -74,11 +69,7 @@ struct VarBindExplicit
 }
 TEST(wg_lclfunction_macroparamnamesasvarnames_tpl, VarBindExplicit)
 {
-  try
-  {
-    VarBindExplicit<bool>::run();
-  }
-  WG_GTEST_CATCH
+  VarBindExplicit<bool>::run();
 }
 
 namespace
@@ -116,11 +107,7 @@ struct VarSetImplicit
 }
 TEST(wg_lclfunction_macroparamnamesasvarnames_tpl, VarSetImplicit)
 {
-  try
-  {
-    VarSetImplicit<bool>::run();
-  }
-  WG_GTEST_CATCH
+  VarSetImplicit<bool>::run();
 }
 
 namespace
@@ -158,9 +145,5 @@ struct VarSetExplicit
 }
 TEST(wg_lclfunction_macroparamnamesasvarnames_tpl, VarSetExplicit)
 {
-  try
-  {
-    VarSetExplicit<bool>::run();
-  }
-  WG_GTEST_CATCH
+  VarSetExplicit<bool>::run();
 }

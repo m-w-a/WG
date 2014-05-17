@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclClass.hh>
 #include <string>
 
@@ -32,18 +31,14 @@
 
 TEST(wg_lclclass_multipleuseinsamemacro, Tester)
 {
-  try
-  {
-    struct Base { enum { ID = 11 }; };
+  struct Base { enum { ID = 11 }; };
 
-    bool var = false;
+  bool var = false;
 
-    struct Param0Type {};
+  struct Param0Type {};
 
-    WG_LCLCLASS_TESTS_MULTIPLEUSEINSAMEMACRO_DEFINETYPES();
+  WG_LCLCLASS_TESTS_MULTIPLEUSEINSAMEMACRO_DEFINETYPES();
 
-    Local1 l1(Param0Type(), var);
-    Local2 l2(Param0Type(), var);
-  }
-  WG_GTEST_CATCH
+  Local1 l1(Param0Type(), var);
+  Local2 l2(Param0Type(), var);
 }

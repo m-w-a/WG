@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <boost/type_traits/is_same.hpp>
 #include <WG/Local/Tests/Utils/Utils.hh>
@@ -37,11 +36,7 @@ struct VarBindExplicitByValue
 }
 TEST(wg_lclfunction_typeof_tpl, VarBindExplicitByValue)
 {
-  try
-  {
-    VarBindExplicitByValue<int>::run();
-  }
-  WG_GTEST_CATCH
+  VarBindExplicitByValue<int>::run();
 }
 
 namespace
@@ -73,11 +68,7 @@ struct VarBindExplicitByRef
 }
 TEST(wg_lclfunction_typeof_tpl, VarBindExplicitByRef)
 {
-  try
-  {
-    VarBindExplicitByRef<int>::run();
-  }
-  WG_GTEST_CATCH
+  VarBindExplicitByRef<int>::run();
 }
 
 namespace
@@ -109,11 +100,7 @@ struct VarBindExplicitByConst
 }
 TEST(wg_lclfunction_typeof_tpl, VarBindExplicitByConst)
 {
-  try
-  {
-    VarBindExplicitByConst<int>::run();
-  }
-  WG_GTEST_CATCH
+  VarBindExplicitByConst<int>::run();
 }
 
 //---------------
@@ -150,11 +137,7 @@ struct VarBindImplicit
 }
 TEST(wg_lclfunction_typeof_tpl, VarBindImplicitByValue)
 {
-  try
-  {
-    VarBindImplicit<int>::run();
-  }
-  WG_GTEST_CATCH
+  VarBindImplicit<int>::run();
 }
 
 namespace
@@ -187,11 +170,7 @@ struct VarBindImplicitByRef
 }
 TEST(wg_lclfunction_typeof_tpl, VarBindImplicitByRef)
 {
-  try
-  {
-    VarBindImplicitByRef<int>::run();
-  }
-  WG_GTEST_CATCH
+  VarBindImplicitByRef<int>::run();
 }
 
 namespace
@@ -228,11 +207,7 @@ struct VarBindImplicitByConst
 }
 TEST(wg_lclfunction_typeof_tpl, VarBindImplicitByConst)
 {
-  try
-  {
-    VarBindImplicitByConst<int>::run();
-  }
-  WG_GTEST_CATCH
+  VarBindImplicitByConst<int>::run();
 }
 
 
@@ -270,11 +245,7 @@ struct VarBindImplicitByConstRef
 }
 TEST(wg_lclfunction_typeof_tpl, VarBindImplicitByConstRef)
 {
-  try
-  {
-    VarBindImplicitByConstRef<int>::run();
-  }
-  WG_GTEST_CATCH
+  VarBindImplicitByConstRef<int>::run();
 }
 
 //---------------
@@ -308,11 +279,7 @@ struct VarSetExplicitByValue
 }
 TEST(wg_lclfunction_typeof_tpl, VarSetExplicitByValue)
 {
-  try
-  {
-    VarSetExplicitByValue<int>::run();
-  }
-  WG_GTEST_CATCH
+  VarSetExplicitByValue<int>::run();
 }
 
 
@@ -345,11 +312,7 @@ struct VarSetExplicitByRef
 }
 TEST(wg_lclfunction_typeof_tpl, VarSetExplicitByRef)
 {
-  try
-  {
-    VarSetExplicitByRef<int>::run();
-  }
-  WG_GTEST_CATCH
+  VarSetExplicitByRef<int>::run();
 }
 
 namespace
@@ -379,11 +342,7 @@ struct VarSetExplicitByConst
 }
 TEST(wg_lclfunction_typeof_tpl, VarSetExplicitByConst)
 {
-  try
-  {
-    VarSetExplicitByConst<int>::run();
-  }
-  WG_GTEST_CATCH
+  VarSetExplicitByConst<int>::run();
 }
 
 //--------------
@@ -418,11 +377,7 @@ struct VarSetImplicitByValue
 }
 TEST(wg_lclfunction_typeof_tpl, VarSetImplicitByValue)
 {
-  try
-  {
-    VarSetImplicitByValue<void>::run();
-  }
-  WG_GTEST_CATCH
+  VarSetImplicitByValue<void>::run();
 }
 
 namespace
@@ -455,11 +410,7 @@ struct VarSetImplicitByRef
 }
 TEST(wg_lclfunction_typeof_tpl, VarSetImplicitByRef)
 {
-  try
-  {
-    VarSetImplicitByRef<int>::run();
-  }
-  WG_GTEST_CATCH
+  VarSetImplicitByRef<int>::run();
 }
 
 namespace
@@ -494,11 +445,7 @@ struct VarSetImplicitByConst
 }
 TEST(wg_lclfunction_typeof_tpl, VarSetImplicitByConst)
 {
-  try
-  {
-    VarSetImplicitByConst<int>::run();
-  }
-  WG_GTEST_CATCH
+  VarSetImplicitByConst<int>::run();
 }
 
 namespace
@@ -535,9 +482,5 @@ struct VarSetImplicitByConstRef
 }
 TEST(wg_lclfunction_typeof_tpl, VarSetImplicitByConstRef)
 {
-  try
-  {
-    VarSetImplicitByConstRef<int>::run();
-  }
-  WG_GTEST_CATCH
+  VarSetImplicitByConstRef<int>::run();
 }

@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <boost/tuple/tuple.hpp>
 #include <WG/Local/Tests/Utils/Utils.hh>
@@ -34,11 +33,7 @@ struct OkIfReturnSpecified
 }
 TEST(wg_lclfunction_returntpl, OkIfReturnSpecified)
 {
-  try
-  {
-    OkIfReturnSpecified<bool>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfReturnSpecified<bool>::run();
 }
 
 namespace
@@ -72,10 +67,6 @@ struct OkIfGloballyScopedReturn
 }
 TEST(wg_lclfunction_returntpl, OkIfGloballyScopedReturn)
 {
-  try
-  {
-    OkIfGloballyScopedReturn<bool>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfGloballyScopedReturn<bool>::run();
 }
 

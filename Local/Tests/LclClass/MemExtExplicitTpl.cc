@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 #include <WG/Local/LclClass.hh>
 #include <string>
@@ -33,11 +32,7 @@ struct OneVar
 }
 TEST(wg_lclclass_memextexplicit_tpl, 1Var)
 {
-  try
-  {
-    OneVar<int>::run();
-  }
-  WG_GTEST_CATCH
+  OneVar<int>::run();
 }
 
 namespace
@@ -80,11 +75,7 @@ struct ThreeVars
 }
 TEST(wg_lclclass_memextexplicit_tpl, 3Vars)
 {
-  try
-  {
-    ThreeVars<short, int, std::string>::run();
-  }
-  WG_GTEST_CATCH
+  ThreeVars<short, int, std::string>::run();
 }
 
 namespace
@@ -117,11 +108,7 @@ struct LocalTypeNonQlfd
 }
 TEST(wg_lclclass_memextexplicit_tpl, LocalTypeNonQlfd)
 {
-  try
-  {
-    LocalTypeNonQlfd<ignore>::run();
-  }
-  WG_GTEST_CATCH
+  LocalTypeNonQlfd<ignore>::run();
 }
 
 namespace
@@ -155,11 +142,7 @@ struct LocalTypeConstQlfd
 }
 TEST(wg_lclclass_memextexplicit_tpl, LocalTypeConstQlfd)
 {
-  try
-  {
-    LocalTypeConstQlfd<ignore>::run();
-  }
-  WG_GTEST_CATCH
+  LocalTypeConstQlfd<ignore>::run();
 }
 
 namespace
@@ -193,11 +176,7 @@ struct LocalTypeRefQlfd
 }
 TEST(wg_lclclass_memextexplicit_tpl, LocalTypeRefQlfd)
 {
-  try
-  {
-    LocalTypeRefQlfd<ignore>::run();
-  }
-  WG_GTEST_CATCH
+  LocalTypeRefQlfd<ignore>::run();
 }
 
 namespace
@@ -231,9 +210,5 @@ struct LocalTypeConstRefQlfd
 }
 TEST(wg_lclclass_memextexplicit_tpl, LocalTypeConstRefQlfd)
 {
-  try
-  {
-    LocalTypeConstRefQlfd<ignore>::run();
-  }
-  WG_GTEST_CATCH
+  LocalTypeConstRefQlfd<ignore>::run();
 }

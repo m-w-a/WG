@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 
@@ -54,11 +53,7 @@ struct OneLevel
 }
 TEST(wg_lclfunction_nested_tpl, OneLevel)
 {
-  try
-  {
-    OneLevel<int>::run();
-  }
-  WG_GTEST_CATCH
+  OneLevel<int>::run();
 }
 
 namespace
@@ -130,9 +125,5 @@ struct TwoLevel
 }
 TEST(wg_lclfunction_nested_tpl, TwoLevel)
 {
-  try
-  {
-    TwoLevel<int>::run();
-  }
-  WG_GTEST_CATCH
+  TwoLevel<int>::run();
 }

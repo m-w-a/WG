@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclClass.hh>
 
 namespace
@@ -27,9 +26,5 @@ struct TwoLevels
 }
 TEST(wg_lclclass_nested_tpl, TwoLevels)
 {
-  try
-  {
-    TwoLevels<long>::run();
-  }
-  WG_GTEST_CATCH
+  TwoLevels<long>::run();
 }
