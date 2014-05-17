@@ -1,7 +1,6 @@
 WG_LCLFUNCTION_TYPE(name)
   Expands to the implementation dependent type of the object named "name".
 
-// TODO:
 Differences w/Boost.LocalFunction
   x) This library allows the function name to be specified at and only at the 
     top of the local function declaration, unlike Boost::LocalFunction.

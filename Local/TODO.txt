@@ -3,16 +3,16 @@ AutoFunctor
 granularize pp includes ??
 
 x) Better Syntax Error Checking/Reporting:
-  missing type in explicit-type-var-dcln ?
-  missing var in "..." ?
-  missing type in implicit-type-var-dcln ?
-  missing var in "..." ?
+x)  missing type in explicit-type-var-dcln ?
+x)  missing var in "..." ?
+x)  missing type in implicit-type-var-dcln ?
+x)  missing var in "..." ?
 
 Misc.
 -----
 LocalOperandsSyntaxCheck tests.
 x)ErrorReporting tests.
-ERROR_ -> WG_LCL_ERROR_ ?
+x)ERROR_ -> WG_LCL_ERROR_ ?
 
 ExpandN:
   test
@@ -26,7 +26,7 @@ LclFunction:
   x)Exception specification
   x)move function_type to function_operator
   x) using/aliases for nondependent typenames
-  WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS -> WG_PP_LCLFUNCTION_FUNCTIONOPERATORUTILS
+  x)WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS -> WG_PP_LCLFUNCTION_FUNCTIONOPERATORUTILS
   x)*_tpl tests:
     x)move to taking function types as params.
     x)Vary these params with const and reference qualifications.
