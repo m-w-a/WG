@@ -3,6 +3,8 @@
 
 #include <boost/preprocessor.hpp>
 #include <boost/function_types/function_arity.hpp>
+#include <boost/function_types/result_type.hpp>
+#include <boost/function_types/parameter_types.hpp>
 #include <WG/Local/Detail/LclFunction/GlobalFunctorBaseType.hh>
 #include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/LclFunction/FunctionOperatorUtils.hh>
@@ -28,18 +30,38 @@
   function_operator_type
 
 #define WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_DCLNS_IMPL() \
-  /* Declared and purposefully not defined. */ \
+  /* Instantiation of this class will always fail because the local function */ \
+  /* arity exceeds WG_PP_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY. */ \
+  /* This is accomplished by making the destructor private. */ \
+  /* Note: this class purposefully does not derive from global_functor_base_type */ \
+  /*   since this is an invalid class. This fact is used to unit test that */ \
+  /*   WG_PP_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY actually works. */ \
   template \
   < \
     typename Derived, \
     typename LclFunctionType, \
-    int arity = ::boost::function_types::function_arity<LclFunctionType>::value \
+    int Arity = ::boost::function_types::function_arity<LclFunctionType>::value \
   > \
-  class WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_NAME() ; \
+  class WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_NAME() \
+  { \
+  public: \
+    typedef LclFunctionType function_type; \
+    enum { arity = Arity }; \
+    typedef \
+      typename ::boost::function_types::result_type<function_type>::type \
+         result_type; \
+  protected: \
+    typedef \
+      ::boost::function_types::parameter_types<function_type> \
+         parameter_types; \
+  private: \
+    /* Declared and purposefully not defined. */ \
+    ~WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_NAME()(); \
+  }; \
   \
   /* Begin partial specializations. */ \
   BOOST_PP_REPEAT( \
-    WG_PP_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY, \
+    BOOST_PP_INC(WG_PP_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY), \
     WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_DCLNS_ENTRY, \
     ~)
 
@@ -98,7 +120,7 @@
 //-----
 
 #define WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_CLASS(argcount) \
-  /* Partial specialize on function operator arity. */ \
+  /* Partial specialize on function operator Arity. */ \
   template \
   < \
     typename Derived, \

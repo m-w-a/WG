@@ -376,7 +376,9 @@ LCLFUNCTION_SRC = \
     ../LclFunction/LclFunctionTypeOf.cc \
     ../LclFunction/LclFunctionTypeOfTpl.cc \
     ../LclFunction/MacroParamNamesAsVarNames.cc \
-    ../LclFunction/MacroParamNamesAsVarNamesTpl.cc
+    ../LclFunction/MacroParamNamesAsVarNamesTpl.cc \
+    ../LclFunction/LclFunctionConfigParamsMaxArityDefault.cc \
+    ../LclFunction/LclFunctionConfigParamsMaxArityCustom.cc
 
 test_lclfunction_cpp03_SOURCES = $(LCLFUNCTION_SRC)
 test_lclfunction_cpp11_SOURCES = $(LCLFUNCTION_SRC)
