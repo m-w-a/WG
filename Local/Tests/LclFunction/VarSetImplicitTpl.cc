@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 
@@ -39,11 +38,7 @@ struct OkIf1VarSet
 }
 TEST(wg_lclfunction_varsetimplicit_tpl, OkIf1VarSet)
 {
-  try
-  {
-    OkIf1VarSet<bool>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf1VarSet<bool>::run();
 }
 
 namespace
@@ -93,9 +88,5 @@ struct OkIf3VarOfVaryingMutabilitySet
 }
 TEST(wg_lclfunction_varsetimplicit_tpl, OkIf3VarOfVaryingMutabilitySet)
 {
-  try
-  {
-    OkIf3VarOfVaryingMutabilitySet<int, int, int>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf3VarOfVaryingMutabilitySet<int, int, int>::run();
 }

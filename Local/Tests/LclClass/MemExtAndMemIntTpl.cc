@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 #include <WG/Local/LclClass.hh>
 #include <string>
@@ -36,11 +35,7 @@ struct ExplictAndExplicit
 }
 TEST(wg_lclclass_memextandmemint_tpl, ExplictAndExplicit)
 {
-  try
-  {
-    ExplictAndExplicit<short, std::string>::run();
-  }
-  WG_GTEST_CATCH
+  ExplictAndExplicit<short, std::string>::run();
 }
 
 namespace
@@ -75,11 +70,7 @@ struct ExplicitAndImplicit
 }
 TEST(wg_lclclass_memextandmemint_tpl, ExplicitAndImplicit)
 {
-  try
-  {
-    ExplicitAndImplicit<short, std::string>::run();
-  }
-  WG_GTEST_CATCH
+  ExplicitAndImplicit<short, std::string>::run();
 }
 
 namespace
@@ -114,11 +105,7 @@ struct ImplicitAndExplicit
 }
 TEST(wg_lclclass_memextandmemint_tpl, ImplicitAndExplicit)
 {
-  try
-  {
-    ImplicitAndExplicit<short, std::string>::run();
-  }
-  WG_GTEST_CATCH
+  ImplicitAndExplicit<short, std::string>::run();
 }
 
 namespace
@@ -153,9 +140,5 @@ struct ImplicitAndImplicit
 }
 TEST(wg_lclclass_memextandmemint_tpl, ImplicitAndImplicit)
 {
-  try
-  {
-    ImplicitAndExplicit<short, std::string>::run();
-  }
-  WG_GTEST_CATCH
+  ImplicitAndExplicit<short, std::string>::run();
 }

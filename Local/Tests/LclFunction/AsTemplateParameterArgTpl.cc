@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <algorithm>
 #include <vector>
 #include <WG/Local/Tests/Utils/Utils.hh>
@@ -53,9 +52,5 @@ struct StdForEach
 }
 TEST(wg_lclfunction_astemplateparameterarg_tpl, StdForEach)
 {
-  try
-  {
-    StdForEach<int>::run();
-  }
-  WG_GTEST_CATCH
+  StdForEach<int>::run();
 }

@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 #include <WG/Local/LclClass.hh>
 
@@ -26,11 +25,7 @@ struct EnsureTypeOfNotUsed
 }
 TEST(wg_lclclass_memintexplicit_tpl, EnsureTypeOfNotUsed)
 {
-  try
-  {
-    EnsureTypeOfNotUsed<int>::run();
-  }
-  WG_GTEST_CATCH
+  EnsureTypeOfNotUsed<int>::run();
 }
 
 namespace
@@ -64,9 +59,5 @@ struct OkIf3MemOfVaryingMutabilitySet
 }
 TEST(wg_lclclass_memintexplicit_tpl, OkIf3MemOfVaryingMutabilitySet)
 {
-  try
-  {
-    OkIf3MemOfVaryingMutabilitySet<short, int, long>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf3MemOfVaryingMutabilitySet<short, int, long>::run();
 }

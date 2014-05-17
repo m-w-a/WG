@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 #include <WG/Local/LclClass.hh>
 #include <boost/typeof/typeof.hpp>
@@ -31,11 +30,7 @@ struct Mimic1Var
 }
 TEST(wg_lclclass_memextimplicit_tpl, Mimic1Var)
 {
-  try
-  {
-    Mimic1Var<bool>::run();
-  }
-  WG_GTEST_CATCH
+  Mimic1Var<bool>::run();
 }
 
 namespace
@@ -65,11 +60,7 @@ struct Mimic1VarByRef
 }
 TEST(wg_lclclass_memextimplicit_tpl, Mimic1VarByRef)
 {
-  try
-  {
-    Mimic1VarByRef<bool>::run();
-  }
-  WG_GTEST_CATCH
+  Mimic1VarByRef<bool>::run();
 }
 
 namespace
@@ -99,11 +90,7 @@ struct Mimic1VarByConst
 }
 TEST(wg_lclclass_memextimplicit_tpl, Mimic1VarByConst)
 {
-  try
-  {
-    Mimic1VarByConst<int>::run();
-  }
-  WG_GTEST_CATCH
+  Mimic1VarByConst<int>::run();
 }
 
 namespace
@@ -136,11 +123,7 @@ struct Mimic1VarByConstRef
 }
 TEST(wg_lclclass_memextimplicit_tpl, Mimic1VarByConstRef)
 {
-  try
-  {
-    Mimic1VarByConstRef<int>::run();
-  }
-  WG_GTEST_CATCH
+  Mimic1VarByConstRef<int>::run();
 }
 
 namespace
@@ -184,11 +167,7 @@ struct Mimic3Vars
 }
 TEST(wg_lclclass_memextimplicit_tpl, Mimic3Vars)
 {
-  try
-  {
-    Mimic3Vars<short, int, long>::run();
-  }
-  WG_GTEST_CATCH
+  Mimic3Vars<short, int, long>::run();
 }
 
 namespace
@@ -220,11 +199,7 @@ struct MimicThisU
 }
 TEST(wg_lclclass_memextimplicit_tpl, MimicThisU)
 {
-  try
-  {
-    MimicThisU<ignore> obj;
-  }
-  WG_GTEST_CATCH
+  MimicThisU<ignore> obj;
 }
 
 namespace
@@ -253,9 +228,5 @@ struct OkIfMultipleUseInSameScope
 }
 TEST(wg_lclclass_memextimplicit_tpl, OkIfMultipleUseInSameScope)
 {
-  try
-  {
-    OkIfMultipleUseInSameScope<int>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfMultipleUseInSameScope<int>::run();
 }

@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <boost/tuple/tuple.hpp>
 #include <WG/Local/Tests/Utils/Utils.hh>
@@ -37,11 +36,7 @@ struct OkIf1ArgPassedByValue
 }
 TEST(wg_lclfunction_params_tpl, OkIf1ArgPassedByValue)
 {
-  try
-  {
-    OkIf1ArgPassedByValue<int>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf1ArgPassedByValue<int>::run();
 }
 
 namespace
@@ -76,11 +71,7 @@ struct OkIf1ArgPassedByRef
 }
 TEST(wg_lclfunction_params_tpl, OkIf1ArgPassedByRef)
 {
-  try
-  {
-    OkIf1ArgPassedByRef<int>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf1ArgPassedByRef<int>::run();
 }
 
 namespace
@@ -114,11 +105,7 @@ struct OkIf1ArgPassedByConstRef
 }
 TEST(wg_lclfunction_params_tpl, OkIf1ArgPassedByConstRef)
 {
-  try
-  {
-    OkIf1ArgPassedByConstRef<int>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf1ArgPassedByConstRef<int>::run();
 }
 
 namespace
@@ -154,11 +141,7 @@ struct OkIfGloballyScoped1ArgUsed
 }
 TEST(wg_lclfunction_params_tpl, OkIfGloballyScoped1ArgUsed)
 {
-  try
-  {
-    OkIfGloballyScoped1ArgUsed<bool>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfGloballyScoped1ArgUsed<bool>::run();
 }
 
 namespace
@@ -202,9 +185,5 @@ struct OkIf3ArgsUsed
 }
 TEST(wg_lclfunction_params_tpl, OkIf3ArgsUsed)
 {
-  try
-  {
-    OkIf3ArgsUsed<int, int, int>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf3ArgsUsed<int, int, int>::run();
 }

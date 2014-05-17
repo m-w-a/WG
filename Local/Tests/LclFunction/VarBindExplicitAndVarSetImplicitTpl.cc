@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 
@@ -47,9 +46,5 @@ struct OkIfUsing21Combo
 }
 TEST(wg_lclfunction_varbindexplicitandvarsetimplicit_tpl, OkIfUsing21Combo)
 {
-  try
-  {
-    OkIfUsing21Combo<int, int, int, int, int>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfUsing21Combo<int, int, int, int, int>::run();
 }

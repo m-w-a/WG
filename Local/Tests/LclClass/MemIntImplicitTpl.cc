@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 #include <WG/Local/LclClass.hh>
 #include <boost/tuple/tuple.hpp>
@@ -35,11 +34,7 @@ struct OkIfMemValueGloballyScoped
 }
 TEST(wg_lclclass_memintimplicit_tpl, OkIfMemValueGloballyScoped)
 {
-  try
-  {
-    OkIfMemValueGloballyScoped<ignore>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfMemValueGloballyScoped<ignore>::run();
 }
 
 namespace
@@ -73,9 +68,5 @@ struct OkIf3MemOfVaryingMutabilitySet
 }
 TEST(wg_lclclass_memintimplicit_tpl, OkIf3MemOfVaryingMutabilitySet)
 {
-  try
-  {
-    OkIf3MemOfVaryingMutabilitySet<ignore>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf3MemOfVaryingMutabilitySet<ignore>::run();
 }

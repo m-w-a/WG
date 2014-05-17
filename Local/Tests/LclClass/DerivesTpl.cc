@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclClass.hh>
 
 namespace
@@ -31,11 +30,7 @@ struct OkIfPublic
 }
 TEST(wg_lclclass_derives_tpl, OkIfPublic)
 {
-  try
-  {
-    OkIfPublic<ignore>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfPublic<ignore>::run();
 }
 
 namespace
@@ -65,11 +60,7 @@ struct OkIfProtected
 }
 TEST(wg_lclclass_derives_tpl, OkIfProtected)
 {
-  try
-  {
-    OkIfProtected<ignore>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfProtected<ignore>::run();
 }
 
 namespace
@@ -91,11 +82,7 @@ struct OkIfPrivate
 }
 TEST(wg_lclclass_derives_tpl, OkIfPrivate)
 {
-  try
-  {
-    OkIfPrivate<ignore>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfPrivate<ignore>::run();
 }
 
 namespace
@@ -121,11 +108,7 @@ struct OkIfVirtual
 }
 TEST(wg_lclclass_derives_tpl, OkIfVirtual)
 {
-  try
-  {
-    OkIfVirtual<ignore>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfVirtual<ignore>::run();
 }
 
 namespace
@@ -147,11 +130,7 @@ struct OkIfAccessUnspecified
 }
 TEST(wg_lclclass_derives_tpl, OkIfAccessUnspecified)
 {
-  try
-  {
-    OkIfAccessUnspecified<ignore>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfAccessUnspecified<ignore>::run();
 }
 
 namespace
@@ -195,9 +174,5 @@ struct OkIfAllCombo
 }
 TEST(wg_lclclass_derives_tpl, OkIfAllCombo)
 {
-  try
-  {
-    OkIfAllCombo<ignore>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfAllCombo<ignore>::run();
 }

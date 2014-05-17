@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <boost/tuple/tuple.hpp>
 #include <WG/Local/Tests/Utils/Utils.hh>
@@ -34,11 +33,7 @@ struct EnsureTypeOfNotUsed
 }
 TEST(wg_lclfunction_varbindexplicit_tpl, EnsureTypeOfNotUsed)
 {
-  try
-  {
-    EnsureTypeOfNotUsed<int>::run();
-  }
-  WG_GTEST_CATCH
+  EnsureTypeOfNotUsed<int>::run();
 }
 
 namespace
@@ -73,11 +68,7 @@ struct OkIf1VarBound
 }
 TEST(wg_lclfunction_varbindexplicit_tpl, OkIf1VarBound)
 {
-  try
-  {
-    OkIf1VarBound<bool>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf1VarBound<bool>::run();
 }
 
 namespace
@@ -115,11 +106,7 @@ struct OkIfGloballyScoped1VarBound
 }
 TEST(wg_lclfunction_varbindexplicit_tpl, OkIfGloballyScoped1VarBound)
 {
-  try
-  {
-    OkIfGloballyScoped1VarBound<bool>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfGloballyScoped1VarBound<bool>::run();
 }
 
 namespace
@@ -164,11 +151,7 @@ struct OkIf3VarsOfVaryingMutabilityBound
 }
 TEST(wg_lclfunction_varbindexplicit_tpl, OkIf3VarsOfVaryingMutabilityBound)
 {
-  try
-  {
-    OkIf3VarsOfVaryingMutabilityBound<int, int, int>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf3VarsOfVaryingMutabilityBound<int, int, int>::run();
 }
 
 namespace
@@ -208,10 +191,6 @@ struct OkIfKeywordThisUBound
 }
 TEST(wg_lclfunction_varbindexplicit_tpl, OkIfKeywordThisUBound)
 {
-  try
-  {
-    OkIfKeywordThisUBound<bool> obj;
-    obj.run();
-  }
-  WG_GTEST_CATCH
+  OkIfKeywordThisUBound<bool> obj;
+  obj.run();
 }

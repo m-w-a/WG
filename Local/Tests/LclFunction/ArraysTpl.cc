@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 #include <boost/type_traits/is_array.hpp>
@@ -63,11 +62,7 @@ struct BindByValue
 }
 TEST(wg_lclfunction_arrays_tpl, BindByValue)
 {
-  try
-  {
-    BindByValue<ElemType>::run();
-  }
-  WG_GTEST_CATCH
+  BindByValue<ElemType>::run();
 }
 
 namespace
@@ -108,11 +103,7 @@ struct BindByRef
 }
 TEST(wg_lclfunction_arrays_tpl, BindByRef)
 {
-  try
-  {
-    BindByRef<ElemType>::run();
-  }
-  WG_GTEST_CATCH
+  BindByRef<ElemType>::run();
 }
 
 namespace
@@ -153,11 +144,7 @@ struct SetByValue
 }
 TEST(wg_lclfunction_arrays_tpl, SetByValue)
 {
-  try
-  {
-    SetByValue<ElemType>::run();
-  }
-  WG_GTEST_CATCH
+  SetByValue<ElemType>::run();
 }
 
 namespace
@@ -198,9 +185,5 @@ struct SetByRef
 }
 TEST(wg_lclfunction_arrays_tpl, SetByRef)
 {
-  try
-  {
-    SetByRef<ElemType>::run();
-  }
-  WG_GTEST_CATCH
+  SetByRef<ElemType>::run();
 }

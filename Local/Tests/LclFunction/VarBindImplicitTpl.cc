@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <boost/typeof/typeof.hpp>
 #include <WG/Local/Tests/Utils/Utils.hh>
@@ -36,11 +35,7 @@ struct OkIf1VarBound
 }
 TEST(wg_lclfunction_varbindimplicit_tpl, OkIf1VarBound)
 {
-  try
-  {
-    OkIf1VarBound<bool>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf1VarBound<bool>::run();
 }
 
 namespace
@@ -85,11 +80,7 @@ struct OkIf3VarsOfVaryingMutabilityBound
 }
 TEST(wg_lclfunction_varbindimplicit_tpl, OkIf3VarsOfVaryingMutabilityBound)
 {
-  try
-  {
-    OkIf3VarsOfVaryingMutabilityBound<int, int, int>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf3VarsOfVaryingMutabilityBound<int, int, int>::run();
 }
 
 namespace
@@ -129,12 +120,8 @@ struct OkIfKeywordThisUBound
 }
 TEST(wg_lclfunction_varbindimplicit_tpl, OkIfKeywordThisUBound)
 {
-  try
-  {
-    OkIfKeywordThisUBound<bool> obj;
-    obj.run();
-  }
-  WG_GTEST_CATCH
+  OkIfKeywordThisUBound<bool> obj;
+  obj.run();
 }
 
 namespace
@@ -181,9 +168,5 @@ struct OkIfLocalFunctionBound
 }
 TEST(wg_lclfunction_varbindimplicit_tpl, OkIfLocalFunctionBound)
 {
-  try
-  {
-    OkIfLocalFunctionBound<bool>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfLocalFunctionBound<bool>::run();
 }

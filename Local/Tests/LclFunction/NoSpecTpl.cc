@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 
@@ -33,9 +32,5 @@ struct NoSpec
 
 TEST(wg_lclfunction_tpl, NoSpec)
 {
-  try
-  {
-    NoSpec<ignored_type>::run();
-  }
-  WG_GTEST_CATCH
+  NoSpec<ignored_type>::run();
 }

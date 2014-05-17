@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclClass.hh>
 
 namespace
@@ -25,9 +24,5 @@ struct IsCalled
 }
 TEST(wg_lclclass_inithook_tpl, IsCalled)
 {
-  try
-  {
-    IsCalled<int>::run();
-  }
-  WG_GTEST_CATCH
+  IsCalled<int>::run();
 }

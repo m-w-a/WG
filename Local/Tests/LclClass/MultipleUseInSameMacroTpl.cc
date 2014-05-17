@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclClass.hh>
 #include <string>
 
@@ -54,9 +53,5 @@ struct Tester
 }
 TEST(wg_lclclass_multipleuseinsamemacro_tpl, Test)
 {
-  try
-  {
-    Tester<ignore>::run();
-  }
-  WG_GTEST_CATCH
+  Tester<ignore>::run();
 }
