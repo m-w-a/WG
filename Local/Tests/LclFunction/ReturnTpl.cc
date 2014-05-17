@@ -20,6 +20,9 @@ struct OkIfReturnSpecified
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(rettest),
+      rettest);
     WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, rettest());
 
     retval = rettest();
@@ -54,6 +57,9 @@ struct OkIfGloballyScopedReturn
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(rettest),
+      rettest);
     WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
       ::boost::tuple<T1>, rettest());
 

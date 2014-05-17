@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
 {
@@ -17,6 +18,10 @@ struct NoSpec
       WG_TEST_LCLFUNCTION_MARKCALL(nospec);
       wasCalled = true;
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(nospec),
+      nospec);
 
     nospec();
     WG_TEST_LCLFUNCTION_VERIFYCALL(nospec);

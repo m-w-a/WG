@@ -2,6 +2,7 @@
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <boost/type_traits/is_same.hpp>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 TEST(wg_lclfunction_signaturetypenamesandconstants, VoidResultType)
 {
@@ -15,6 +16,10 @@ TEST(wg_lclfunction_signaturetypenamesandconstants, VoidResultType)
       EXPECT_EQ(0, arity);
       EXPECT_TRUE(( ::boost::is_same<void, result_type>::value ));
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -37,6 +42,10 @@ TEST(wg_lclfunction_signaturetypenamesandconstants, IntResultType)
       return 0;
     }WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
+
     (void)noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
@@ -56,6 +65,10 @@ TEST(wg_lclfunction_signaturetypenamesandconstants, OneArg)
       EXPECT_TRUE(( ::boost::is_same<void, result_type>::value ));
       EXPECT_TRUE(( ::boost::is_same<char, arg1_type>::value ));
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop('c');
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -80,6 +93,10 @@ TEST(wg_lclfunction_signaturetypenamesandconstants, ThreeArgs)
       EXPECT_TRUE(( ::boost::is_same<int, arg2_type>::value ));
       EXPECT_TRUE(( ::boost::is_same<long const &, arg3_type>::value ));
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop('a', 0, 1);
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);

@@ -19,6 +19,10 @@ TEST(wg_lclfunction_macroparamnamesasvarnames, VarBindImplicit)
       type = true;
     }WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
+
     check();
     WG_TEST_LCLFUNCTION_VERIFYCALL(check);
 
@@ -42,6 +46,10 @@ TEST(wg_lclfunction_macroparamnamesasvarnames, VarBindExplicit)
 
       type = true;
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
 
     check();
     WG_TEST_LCLFUNCTION_VERIFYCALL(check);
@@ -70,6 +78,10 @@ TEST(wg_lclfunction_macroparamnamesasvarnames, VarSetImplicit)
       type = true;
     }WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
+
     check();
     WG_TEST_LCLFUNCTION_VERIFYCALL(check);
 
@@ -96,6 +108,10 @@ TEST(wg_lclfunction_macroparamnamesasvarnames, VarSetExplicit)
 
       type = true;
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
 
     check();
     WG_TEST_LCLFUNCTION_VERIFYCALL(check);

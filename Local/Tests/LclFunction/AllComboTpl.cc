@@ -41,6 +41,9 @@ struct TestTpl
     WG_TEST_LCLFUNCTION_END;
 
     WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(makeGingerBreadCookie),
+      makeGingerBreadCookie);
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
       int, makeGingerBreadCookie(0,0));
 
     success = makeGingerBreadCookie(pinchOfSalt, dashOfSugar);

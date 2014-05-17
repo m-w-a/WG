@@ -29,6 +29,10 @@ TEST(wg_lclfunction_varbindexplicitandimplicit,
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(calculateForce),
+      calculateForce);
+
     calculateForce();
     WG_TEST_LCLFUNCTION_VERIFYCALL(calculateForce);
 

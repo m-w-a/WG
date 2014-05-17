@@ -22,6 +22,10 @@ struct VarBindImplicit
       type = true;
     }WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
+
     check();
     WG_TEST_LCLFUNCTION_VERIFYCALL(check);
 
@@ -56,6 +60,10 @@ struct VarBindExplicit
 
       type = true;
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
 
     check();
     WG_TEST_LCLFUNCTION_VERIFYCALL(check);
@@ -95,6 +103,10 @@ struct VarSetImplicit
       type = true;
     }WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
+
     check();
     WG_TEST_LCLFUNCTION_VERIFYCALL(check);
 
@@ -132,6 +144,10 @@ struct VarSetExplicit
 
       type = true;
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
 
     check();
     WG_TEST_LCLFUNCTION_VERIFYCALL(check);

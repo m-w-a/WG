@@ -23,6 +23,10 @@ struct EnsureTypeOfNotUsed
       EXPECT_EQ(1, value);
     }WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(bindByDiffType),
+      bindByDiffType);
+
     bindByDiffType();
     WG_TEST_LCLFUNCTION_VERIFYCALL(bindByDiffType);
   }
@@ -55,6 +59,10 @@ struct OkIf1VarBound
 
       didBind = true;
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
 
     check();
     WG_TEST_LCLFUNCTION_VERIFYCALL(check);
@@ -93,6 +101,10 @@ struct OkIfGloballyScoped1VarBound
 
       didBind.template get<0>() = true;
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
 
     check();
     WG_TEST_LCLFUNCTION_VERIFYCALL(check);
@@ -139,6 +151,10 @@ struct OkIf3VarsOfVaryingMutabilityBound
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(calculateForce),
+      calculateForce);
+
     calculateForce();
     WG_TEST_LCLFUNCTION_VERIFYCALL(calculateForce);
 
@@ -178,6 +194,10 @@ struct OkIfKeywordThisUBound
       this_->didBindThis = true;
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(bindThisU),
+      bindThisU);
 
     bindThisU();
     WG_TEST_LCLFUNCTION_VERIFYCALL(bindThisU);

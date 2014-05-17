@@ -22,6 +22,9 @@ TEST(wg_lclfunction_boost_function, OkIfCopyAssigned)
       return x * x;
     }WG_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(square),
+      square);
     WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, square(3));
 
     ::boost::function<int(int)> f = square;
@@ -43,6 +46,9 @@ TEST(wg_lclfunction_boost_function, OkayIfConstRefAssigned)
       return x * x;
     }WG_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(square),
+      square);
     WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, square(3));
 
     ::boost::function<int(int)> f = ::boost::cref(square);
@@ -67,6 +73,9 @@ struct OkIfReturnedFromFunction
       return x * x;
     }WG_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(square),
+      square);
     WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, square(3));
 
     return square;

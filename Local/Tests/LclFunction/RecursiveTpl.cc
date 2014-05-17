@@ -29,6 +29,9 @@ struct Fibonacci
     WG_TEST_LCLFUNCTION_END;
 
     WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(calculateFibonacci),
+      calculateFibonacci);
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
       T, calculateFibonacci(5));
 
     fib = calculateFibonacci(4);

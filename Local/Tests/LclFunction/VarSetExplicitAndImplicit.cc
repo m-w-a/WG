@@ -30,6 +30,10 @@ TEST(wg_lclfunction_varsetexplicitandimplicit,
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(calculateForce),
+      calculateForce);
+
     calculateForce();
     WG_TEST_LCLFUNCTION_VERIFYCALL(calculateForce);
 

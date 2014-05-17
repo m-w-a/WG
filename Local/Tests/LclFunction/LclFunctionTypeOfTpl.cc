@@ -2,6 +2,7 @@
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <boost/type_traits/is_same.hpp>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 //---------------
 //VarBindExplicit
@@ -21,9 +22,13 @@ struct VarBindExplicitByValue
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), T>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -53,9 +58,13 @@ struct VarBindExplicitByRef
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T &>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), T &>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -85,9 +94,13 @@ struct VarBindExplicitByConst
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T const>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), T const>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -122,9 +135,13 @@ struct VarBindImplicit
 
       (void)var;
       EXPECT_TRUE((
-        boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var)>::value ));
+        boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), BOOST_TYPEOF(var)>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -155,9 +172,13 @@ struct VarBindImplicitByRef
 
       (void)var;
       EXPECT_TRUE((
-        boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
+        boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -190,11 +211,15 @@ struct VarBindImplicitByConst
       EXPECT_TRUE((
         boost::is_same
         <
-          WG_LCLFUNCTION_TYPEOF(var),
+          WG_LCLFUNCTION_VAR_TYPEOF(var),
           BOOST_TYPEOF(var) const
         >::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -228,11 +253,15 @@ struct VarBindImplicitByConstRef
       EXPECT_TRUE((
         boost::is_same
         <
-          WG_LCLFUNCTION_TYPEOF(var),
+          WG_LCLFUNCTION_VAR_TYPEOF(var),
           BOOST_TYPEOF(var) const &
         >::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -264,9 +293,13 @@ struct VarSetExplicitByValue
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), T>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -297,9 +330,13 @@ struct VarSetExplicitByRef
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T &>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), T &>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -327,9 +364,13 @@ struct VarSetExplicitByConst
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), T const>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), T const>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -362,9 +403,13 @@ struct VarSetImplicitByValue
 
       (void)var;
       EXPECT_TRUE((
-        boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var)>::value ));
+        boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), BOOST_TYPEOF(var)>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -395,9 +440,13 @@ struct VarSetImplicitByRef
 
       (void)var;
       EXPECT_TRUE((
-        boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
+        boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -428,11 +477,15 @@ struct VarSetImplicitByConst
       EXPECT_TRUE((
         boost::is_same
         <
-          WG_LCLFUNCTION_TYPEOF(var),
+          WG_LCLFUNCTION_VAR_TYPEOF(var),
           BOOST_TYPEOF(var) const
         >::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -465,11 +518,15 @@ struct VarSetImplicitByConstRef
       EXPECT_TRUE((
         boost::is_same
         <
-          WG_LCLFUNCTION_TYPEOF(var),
+          WG_LCLFUNCTION_VAR_TYPEOF(var),
           BOOST_TYPEOF(var) const &
         >::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);

@@ -2,6 +2,7 @@
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <boost/type_traits/is_same.hpp>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
 {
@@ -23,6 +24,10 @@ struct ResultType<R ()>
 
       return R();
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     (void)noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -68,6 +73,10 @@ struct Arg1Type<R (T1)>
       EXPECT_TRUE(( ::boost::is_same<T1, arg1_type>::value ));
     }WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
+
     noop('c');
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
   }
@@ -105,6 +114,10 @@ struct Arg3Type<R (T1, T2, T3)>
       EXPECT_TRUE(( ::boost::is_same<T2, arg2_type>::value ));
       EXPECT_TRUE(( ::boost::is_same<T3, arg3_type>::value ));
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop('a', 0, 1);
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);

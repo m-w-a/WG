@@ -24,6 +24,10 @@ struct OkIf1ArgPassedByValue
       EXPECT_EQ(11, value);
     }WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(checkValue),
+      checkValue);
+
     checkValue(value);
     WG_TEST_LCLFUNCTION_VERIFYCALL(checkValue);
 
@@ -58,6 +62,10 @@ struct OkIf1ArgPassedByRef
       ++value;
       EXPECT_EQ(11, value);
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(checkValue),
+      checkValue);
 
     checkValue(value);
     WG_TEST_LCLFUNCTION_VERIFYCALL(checkValue);
@@ -95,6 +103,10 @@ struct OkIf1ArgPassedByConstRef
       EXPECT_EQ(10, value);
     }WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(checkValue),
+      checkValue);
+
     checkValue(value);
     WG_TEST_LCLFUNCTION_VERIFYCALL(checkValue);
   }
@@ -130,6 +142,10 @@ struct OkIfGloballyScoped1ArgUsed
 
       EXPECT_FALSE(wasCalled.template get<0>());
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(checkValue),
+      checkValue);
 
     checkValue(wasCalled);
     WG_TEST_LCLFUNCTION_VERIFYCALL(checkValue);
@@ -172,6 +188,10 @@ struct OkIf3ArgsUsed
 
       force = mass * velocity;
     }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(calculateForce),
+      calculateForce);
 
     calculateForce(force, mass, velocity);
     WG_TEST_LCLFUNCTION_VERIFYCALL(calculateForce);

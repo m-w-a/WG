@@ -31,6 +31,10 @@ TEST(wg_lclfunction_varbindimplicitandvarsetimplicit, OkIfUsing21Combo)
     }
     WG_TEST_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(calculateVolume),
+      calculateVolume);
+
     calculateVolume();
     WG_TEST_LCLFUNCTION_VERIFYCALL(calculateVolume);
 

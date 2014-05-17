@@ -37,6 +37,9 @@ TEST(wg_lclfunction_allcombo, Test)
     WG_TEST_LCLFUNCTION_END;
 
     WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(makeGingerBreadCookie),
+      makeGingerBreadCookie);
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
       int, makeGingerBreadCookie(0,0));
 
     success = makeGingerBreadCookie(pinchOfSalt, dashOfSugar);

@@ -61,8 +61,6 @@
 //GlobalFunctor
 //-------------
 
-// Expands to:
-//   Line specific id.
 #define WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME(function_name) \
   WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME_IMPL(function_name)
 
@@ -326,8 +324,7 @@
 //-------------
 
 #define  WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME_IMPL(function_name) \
-  WG_PP_LCLFUNCTION_CGUTILS_MAKENAMEUNIQUE( \
-    WG_PP_ID_CAT(global_functor_type, function_name))
+  WG_PP_ID_CAT(global_functor_type, function_name)
 
 #define WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTOROBJ_DCLN_IMPL( \
   symbtbl, function_name) \

@@ -35,6 +35,10 @@ TEST(wg_lclfunction_astemplateparameterarg, StdForEach)
       ++runningOffset;
     }WG_LCLFUNCTION_END;
 
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(accumulate),
+      accumulate);
+
     int const dataCount = 5;
     int data[dataCount] = { 0, 1, 2, 3, 4 };
 

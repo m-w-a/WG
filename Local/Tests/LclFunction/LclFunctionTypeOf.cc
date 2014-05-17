@@ -2,6 +2,7 @@
 #include <WG/GTest/Exceptions.hh>
 #include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <boost/type_traits/is_same.hpp>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 //---------------
 //VarBindExplicit
@@ -18,9 +19,13 @@ TEST(wg_lclfunction_typeof, VarBindExplicitByValue)
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), int>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), int>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -39,9 +44,13 @@ TEST(wg_lclfunction_typeof, VarBindExplicitByRef)
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), int &>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), int &>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -60,9 +69,13 @@ TEST(wg_lclfunction_typeof, VarBindExplicitByConst)
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), int const>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), int const>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -86,9 +99,13 @@ TEST(wg_lclfunction_typeof, VarBindImplicitByValue)
 
       (void)var;
       EXPECT_TRUE((
-        boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var)>::value ));
+        boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), BOOST_TYPEOF(var)>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -108,9 +125,13 @@ TEST(wg_lclfunction_typeof, VarBindImplicitByRef)
 
       (void)var;
       EXPECT_TRUE((
-        boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
+        boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -132,11 +153,15 @@ TEST(wg_lclfunction_typeof, VarBindImplicitByConst)
       EXPECT_TRUE((
         boost::is_same
         <
-          WG_LCLFUNCTION_TYPEOF(var),
+          WG_LCLFUNCTION_VAR_TYPEOF(var),
           BOOST_TYPEOF(var) const
         >::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -158,11 +183,15 @@ TEST(wg_lclfunction_typeof, VarBindImplicitByConstRef)
       EXPECT_TRUE((
         boost::is_same
         <
-          WG_LCLFUNCTION_TYPEOF(var),
+          WG_LCLFUNCTION_VAR_TYPEOF(var),
           BOOST_TYPEOF(var) const &
         >::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -183,9 +212,13 @@ TEST(wg_lclfunction_typeof, VarSetExplicitByValue)
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), int>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), int>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -204,9 +237,13 @@ TEST(wg_lclfunction_typeof, VarSetExplicitByRef)
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), int &>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), int &>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -223,9 +260,13 @@ TEST(wg_lclfunction_typeof, VarSetExplicitByConst)
       WG_TEST_LCLFUNCTION_MARKCALL(noop);
 
       (void)var;
-      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_TYPEOF(var), int const>::value ));
+      EXPECT_TRUE(( boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), int const>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -247,9 +288,13 @@ TEST(wg_lclfunction_typeof, VarSetImplicitByValue)
 
       (void)var;
       EXPECT_TRUE((
-        boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var)>::value ));
+        boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), BOOST_TYPEOF(var)>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -269,9 +314,13 @@ TEST(wg_lclfunction_typeof, VarSetImplicitByRef)
 
       (void)var;
       EXPECT_TRUE((
-        boost::is_same<WG_LCLFUNCTION_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
+        boost::is_same<WG_LCLFUNCTION_VAR_TYPEOF(var), BOOST_TYPEOF(var) &>::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -291,11 +340,15 @@ TEST(wg_lclfunction_typeof, VarSetImplicitByConst)
       EXPECT_TRUE((
         boost::is_same
         <
-          WG_LCLFUNCTION_TYPEOF(var),
+          WG_LCLFUNCTION_VAR_TYPEOF(var),
           BOOST_TYPEOF(var) const
         >::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
@@ -317,11 +370,15 @@ TEST(wg_lclfunction_typeof, VarSetImplicitByConstRef)
       EXPECT_TRUE((
         boost::is_same
         <
-          WG_LCLFUNCTION_TYPEOF(var),
+          WG_LCLFUNCTION_VAR_TYPEOF(var),
           BOOST_TYPEOF(var) const &
         >::value ));
     }
     WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(noop),
+      noop);
 
     noop();
     WG_TEST_LCLFUNCTION_VERIFYCALL(noop);
