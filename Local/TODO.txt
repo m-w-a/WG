@@ -11,7 +11,7 @@ x) Better Syntax Error Checking/Reporting:
 Misc.
 -----
 LocalOperandsSyntaxCheck tests.
-ErrorReporting tests.
+x)ErrorReporting tests.
 ERROR_ -> WG_LCL_ERROR_ ?
 
 ExpandN:
@@ -23,7 +23,7 @@ LclClass:
 
 LclFunction:
   Binder: local namespace to lclfunction namespace?
-  Exception specification
+  x)Exception specification
   x)move function_type to function_operator
   x) using/aliases for nondependent typenames
   WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS -> WG_PP_LCLFUNCTION_FUNCTIONOPERATORUTILS

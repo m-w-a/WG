@@ -142,6 +142,7 @@
   WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_ERRMSG()
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_ERRMSG() \
-  WG_PP_MARKER_ERROR ERROR_ref_keyword_cannot_be_used_with_thisu_keyword
+  WG_PP_MARKER_ERROR \
+  WG_LCL_Error_ref_keyword_cannot_be_used_with_thisu_keyword
 
 #endif //WG_PP_VARDCLN_IMPLICIT_HH_
