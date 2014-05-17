@@ -84,7 +84,7 @@
 // BOOST_PP_ENUM functor.
 #define WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP11_OPERATOR_PARAMLIST_ENTRY( \
   z, indx, data) \
-    WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS_ARGTYPENAME(indx) \
+    WG_PP_LCLFUNCTION_FUNCTIONOPERATORUTILS_ARGTYPENAME(indx) \
     BOOST_PP_CAT( \
       WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP11_OPERATOR_ARGROOTNAME(), indx)
 
@@ -142,7 +142,7 @@
     typedef Derived derived_type; \
     typedef LocalFunctorType local_functor_type; \
     \
-    WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS_FUNCTORCOMPONENTDCLNS( \
+    WG_PP_LCLFUNCTION_FUNCTIONOPERATORUTILS_FUNCTORCOMPONENTDCLNS( \
       LclFunctionType, argcount) \
     \
     /* The function operator that is exposed to the user and is the public */ \
