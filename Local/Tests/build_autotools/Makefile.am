@@ -291,6 +291,8 @@ test_autofunctor_SOURCES = \
 
 LCLCLASS_SRC = \
     ../LclClass/TestMain.cc \
+    ../LclClass/ErrorReporting.cc \
+    ../LclClass/ErrorReportingTpl.cc \
     ../LclClass/Derives.cc \
     ../LclClass/DerivesTpl.cc \
     ../LclClass/MacroParamNamesAsVarNames.cc \
@@ -331,6 +333,8 @@ LCLFUNCTION_SRC = \
     ../LclFunction/TestMain.cc \
     ../LclFunction/Utils/Detail/Source/LclFunctionCallRegistrar.cc \
     ../LclFunction/Utils/Detail/Source/LclFunctionCallVerifier.cc \
+    ../LclFunction/ErrorReporting.cc \
+    ../LclFunction/ErrorReportingTpl.cc \
     ../LclFunction/Arrays.cc \
     ../LclFunction/ArraysTpl.cc \
     ../LclFunction/AllCombo.cc \

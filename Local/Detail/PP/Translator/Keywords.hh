@@ -160,7 +160,8 @@
     BOOST_PP_IIF( \
       WG_PP_KEYWORDS_STARTSWITH_LCLTYPE(keyword_tuple), \
       WG_PP_KEYWORDS_LCLTYPE, \
-      WG_PP_MARKER_ERROR ERROR_invalid_internal_state WG_PP_MAPTO_NOTHING_ARG1) ) \
+      WG_PP_MARKER_ERROR \
+      WG_LCL_Error_invalid_internal_state WG_PP_MAPTO_NOTHING_ARG1) ) \
     ( replacement )
 
 #define WG_PP_KEYWORDS_TYPE_OPERAND_IMPL(typetuple) \

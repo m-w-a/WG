@@ -366,6 +366,6 @@
       BOOST_PP_NIL )
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_WITHADHOC_ERROR_MSG() \
-  ERROR_withadhoc_requires_at_least_one_of_onenter_or_onexit_needs_to_be_specified
+  Error_withadhoc_requires_at_least_one_of_onenter_or_onexit_needs_to_be_specified
 
 #endif /* WG_PP_LCLCONTEXT_SPECNORMALIZE_HH_ */
