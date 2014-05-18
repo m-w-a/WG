@@ -17,7 +17,7 @@ TEST(wg_lclclass_errorreporting, NotOkIfThisURefQualified)
 
 TEST(wg_lclclass_errorreporting, NotOkIfNamedParameterInvalid)
 {
-  // NamedParameterMisspelled
+  // MisspelledNamedParameter
   {
     char const * const errMsg =
       BOOST_PP_STRINGIZE
