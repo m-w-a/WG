@@ -1,0 +1,35 @@
+// regardless of the fact that members are exposed...
+template<typename T>
+struct TBase 
+{
+    typedef T MemberType;
+    MemberType baseMember;
+    MemberType baseFunction() { return MemberType(); }
+};
+ 
+ 
+template<typename T>
+struct TDerived : public TBase<T> 
+{
+    // http://www.parashift.com/c++-faq-lite/nondependent-name-lookup-members.html
+    // tells us to use a `using` declaration.
+    typedef TBase<T> base;
+    using typename base::MemberType;
+    using base::baseFunction;
+    using base::baseMember;
+ 
+void useBaseFunction() 
+{
+    // what I want to be able to write:
+    baseFunction();
+    ++baseMember;
+    MemberType t; // error: expected primary-expression
+}
+};
+ 
+ 
+int main()
+{
+    TDerived<int> d;
+    d.useBaseFunction();
+}
