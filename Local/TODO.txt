@@ -2,17 +2,9 @@ AutoFunctor
 -----------
 granularize pp includes ??
 
-x) Better Syntax Error Checking/Reporting:
-x)  missing type in explicit-type-var-dcln ?
-x)  missing var in "..." ?
-x)  missing type in implicit-type-var-dcln ?
-x)  missing var in "..." ?
-
 Misc.
 -----
 LocalOperandsSyntaxCheck tests.
-x)ErrorReporting tests.
-x)ERROR_ -> WG_LCL_ERROR_ ?
 
 ExpandN:
   test
@@ -23,14 +15,4 @@ LclClass:
 
 LclFunction:
   Binder: local namespace to lclfunction namespace?
-  x)Exception specification
-  x)move function_type to function_operator
-  x) using/aliases for nondependent typenames
-  x)WG_PP_LCLFUNCTION_CGUTILS_FUNCTIONOPERATORUTILS -> WG_PP_LCLFUNCTION_FUNCTIONOPERATORUTILS
-  x)*_tpl tests:
-    x)move to taking function types as params.
-    x)Vary these params with const and reference qualifications.
-  x)MacroParamNamesAsVarNamesTpl.cc
-
-Tests: 
-  x)comparing arrays cleanup.
+  Boost.LocalFunction array bugs.

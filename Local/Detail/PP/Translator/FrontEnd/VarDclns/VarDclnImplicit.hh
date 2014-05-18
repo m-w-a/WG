@@ -45,6 +45,11 @@
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE( \
   implicitvardcln, hasvalueexpr, valueexpr, istpl) \
+    WG_PP_VARDCLN_IMPLICIT_TUPLIZE1( \
+      implicitvardcln BOOST_PP_NIL, hasvalueexpr, valueexpr, istpl)
+
+#define WG_PP_VARDCLN_IMPLICIT_TUPLIZE1( \
+  implicitvardcln, hasvalueexpr, valueexpr, istpl) \
     WG_PP_VARDCLN_IMPLICIT_EXPAND1( \
       WG_PP_VARDCLN_IMPLICIT_TUPLIZE2 \
       BOOST_PP_IIF( \
@@ -80,19 +85,38 @@
         WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_, \
         BOOST_PP_CAT(isconstqualified, isrefqualified) ) (valueexpr, istpl) \
     ) \
-    (var)
+    ( WG_PP_VARDCLN_IMPLICIT_TUPLIZE_VAR(var) )
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_BOUND( \
   isconstqualified, isrefqualified, var, istpl) \
     ( \
-      BOOST_PP_CAT( \
-        BOOST_PP_IIF( \
-          WG_PP_KEYWORDS_STARTSWITH_THISU(var), \
-          WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_, \
-          WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_), \
-        BOOST_PP_CAT(isconstqualified, isrefqualified) ) (var, istpl) \
+      BOOST_PP_IIF( \
+        WG_PP_STARTSWITH_BOOST_PP_NIL(var), \
+        BOOST_PP_NIL WG_PP_MAPTO_NOTHING_ARG4, \
+        WG_PP_VARDCLN_IMPLICIT_TUPLIZE_BOUND_TYPE) \
+      (isconstqualified, isrefqualified, var, istpl) \
     ) \
-    (var)
+    ( WG_PP_VARDCLN_IMPLICIT_TUPLIZE_VAR(var) )
+
+#define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_BOUND_TYPE( \
+  isconstqualified, isrefqualified, var, istpl) \
+    BOOST_PP_CAT( \
+      BOOST_PP_IIF( \
+        WG_PP_KEYWORDS_STARTSWITH_THISU(var), \
+        WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_, \
+        WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_), \
+      BOOST_PP_CAT(isconstqualified, isrefqualified) ) \
+    (WG_PP_EATTAILTOKEN_BOOST_PP_NIL(var), istpl)
+
+#define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_VAR(var) \
+  BOOST_PP_IIF( \
+    WG_PP_STARTSWITH_BOOST_PP_NIL(var), \
+    WG_PP_VARDCLN_IMPLICIT_TUPLIZE_VAR_ERROR, \
+    WG_PP_EATTAILTOKEN_BOOST_PP_NIL) (var)
+
+#define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_VAR_ERROR(var) \
+  WG_PP_MARKER_ERROR \
+  WG_LCL_Error_missing_variable_name
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_00(expr, istpl) \
   WG_PP_MARKER_DEDUCEDTYPE \
