@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
 {
@@ -12,24 +11,30 @@ struct Fibonacci
   {
     T fib = 0;
 
-    WG_LCLFUNCTION_TPL
-    (calculateFibonacci, return (T) params ((T const) input) )
+    WG_TEST_LCLFUNCTION_TPL(calculateFibonacci,
+      return (T) params (T const input) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(calculateFibonacci);
+
       if(input > 1)
       {
-        WG_TESTHELPER_ASSERT_ISCONST_TPL(input);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(int, input);
+        WG_TEST_ASSERT_ISCONST_TPL(input);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, input);
 
         return calculateFibonacci(input - 1) + calculateFibonacci(input - 2);
       }
       else return input;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
-    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(calculateFibonacci),
+      calculateFibonacci);
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
       T, calculateFibonacci(5));
 
     fib = calculateFibonacci(4);
+    WG_TEST_LCLFUNCTION_VERIFYCALL(calculateFibonacci);
 
     EXPECT_EQ(fib, 3);
   }
@@ -37,9 +42,5 @@ struct Fibonacci
 }
 TEST(wg_lclfunction_recursive_tpl, Fibonacci)
 {
-  try
-  {
-    Fibonacci<int>::run();
-  }
-  WG_GTEST_CATCH
+  Fibonacci<int>::run();
 }

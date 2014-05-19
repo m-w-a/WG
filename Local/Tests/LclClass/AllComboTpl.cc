@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclClass.hh>
 #include <string>
 
@@ -17,7 +16,7 @@ struct Tester
     WG_LCLCLASS_TPL
     (Local,
      derives (protected Base)
-     memext ((T const) name) (var)
+     memext (type(T const) name) (var)
      memint (score, 21) )
       void init()
       {
@@ -34,9 +33,5 @@ struct Tester
 }
 TEST(wg_lclclass_allcombo_tpl, Test)
 {
-  try
-  {
-    Tester<std::string>::run();
-  }
-  WG_GTEST_CATCH
+  Tester<std::string>::run();
 }

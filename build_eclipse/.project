@@ -82,6 +82,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>gtest</name>
+			<type>2</type>
+			<location>C:/cygwin/home/HPC/Working/Projects/cpp/WG/ExternalLibsNoInstall/gtest</location>
+		</link>
+		<link>
 			<name>local_function</name>
 			<type>2</type>
 			<location>C:/cygwin/home/HPC/boost_installed/v1_53_0/include/boost/local_function</location>

@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 #include <WG/Local/LclClass.hh>
 #include <boost/tuple/tuple.hpp>
 
@@ -21,8 +20,8 @@ struct OkIfMemValueGloballyScoped
       memint (assigner, ::boost::make_tuple(true)) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(assigner);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+        WG_TEST_ASSERT_ISNOTCONST_TPL(assigner);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
           ::boost::tuple<bool>, assigner);
 
         EXPECT_EQ(true, assigner.get<0>());
@@ -35,11 +34,7 @@ struct OkIfMemValueGloballyScoped
 }
 TEST(wg_lclclass_memintimplicit_tpl, OkIfMemValueGloballyScoped)
 {
-  try
-  {
-    OkIfMemValueGloballyScoped<ignore>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfMemValueGloballyScoped<ignore>::run();
 }
 
 namespace
@@ -57,13 +52,13 @@ struct OkIf3MemOfVaryingMutabilitySet
         (volume, radius * height) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISCONST_TPL(radius);
-        WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(height);
-        WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(volume);
+        WG_TEST_ASSERT_ISCONST_TPL(radius);
+        WG_TEST_ASSERT_ISNOTCONST_TPL(height);
+        WG_TEST_ASSERT_ISNOTCONST_TPL(volume);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(int, radius);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(unsigned long, height);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(unsigned long, volume);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(int, radius);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(unsigned long, height);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(unsigned long, volume);
       }
     WG_LCLCLASS_END;
 
@@ -73,9 +68,5 @@ struct OkIf3MemOfVaryingMutabilitySet
 }
 TEST(wg_lclclass_memintimplicit_tpl, OkIf3MemOfVaryingMutabilitySet)
 {
-  try
-  {
-    OkIf3MemOfVaryingMutabilitySet<ignore>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf3MemOfVaryingMutabilitySet<ignore>::run();
 }

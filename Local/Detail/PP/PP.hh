@@ -52,6 +52,9 @@
 #define WG_PP_IDENTITY_ARG1(x) x
 #define WG_PP_IDENTITY_ARG2(x, y) x y
 #define WG_PP_IDENTITY_ARG3(x, y, z) x y z
+#if BOOST_PP_VARIADICS
+  #define WG_PP_IDENTITY_ARGN(...) __VA_ARGS__
+#endif
 
 #define WG_PP_TUPLIZE_ARG1(x) (x)
 #define WG_PP_TUPLIZE_ARG2(x, y) (x, y)
@@ -89,10 +92,13 @@
 // Usage: BOOST_PP_EXPAND(WG_PP_ADDCOMMA_AFTERTUPLE_ARITY##arity some-tuple-token)
 #define WG_PP_ADDCOMMA_AFTERTUPLE_ARITY1(x) (x) BOOST_PP_COMMA()
 #define WG_PP_ADDCOMMA_AFTERTUPLE_ARITY2(x, y) (x, y) BOOST_PP_COMMA()
+#if BOOST_PP_VARIADICS
+  #define WG_PP_ADDCOMMA_AFTERTUPLE_ARITYN(...) (__VA_ARGS__) BOOST_PP_COMMA()
+#endif
 
 #define WG_PP_IS_ODD(num) BOOST_PP_MOD(num,2)
 #define WG_PP_IS_EVEN(num) \
-  BOOST_PP_NOT(WG_PP_IS_ODD(num))
+  BOOST_PP_COMPL(WG_PP_IS_ODD(num))
 
 #define WG_PP_IS_MOD3_R0(num) \
   BOOST_PP_EQUAL(BOOST_PP_MOD(num,3), 0)

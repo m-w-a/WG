@@ -1,15 +1,15 @@
-#include <WG/Local/Tests/test.h>
+#include <WG/Local/Tests/Utils/PreprocessorUnitTester.hh>
 #include "../VarDcln.hh"
 
 //Unit Tests.
-#define S1 (Foo *)
-#define S2 local(Foo)
-#define S2_1 local(Foo *) const
-#define S2_2 local(Foo *) ref
-#define S2_3 local(Foo *) const ref
-#define S4 const
-#define S5 ref
-#define S6 const ref
+#define S1 type(Foo *) var
+#define S2 lcltype(Foo) var
+#define S2_1 lcltype(Foo *) const var
+#define S2_2 lcltype(Foo *) ref var
+#define S2_3 lcltype(Foo *) const ref var
+#define S4 const var
+#define S5 ref var
+#define S6 const ref var
 
 /*
 WG_PP_VARDCLN_ISEXPLICIT(S1)

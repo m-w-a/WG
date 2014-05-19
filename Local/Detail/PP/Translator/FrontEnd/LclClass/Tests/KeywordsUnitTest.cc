@@ -1,4 +1,4 @@
-#include <WG/Local/Tests/test.h>
+#include <WG/Local/Tests/Utils/PreprocessorUnitTester.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/LclClass/Keywords.hh>
 
 BEGIN WG_PP_LCLCLASS_KEYWORDS_EAT_HEADKEYWORD(derives 1) END

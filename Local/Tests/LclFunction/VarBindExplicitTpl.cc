@@ -1,8 +1,7 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
+#include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <boost/tuple/tuple.hpp>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
 {
@@ -13,25 +12,28 @@ struct EnsureTypeOfNotUsed
   {
     float value = 1.2f;
 
-    WG_LCLFUNCTION_TPL(bindByDiffType, varbind ((T const) value) )
+    WG_TEST_LCLFUNCTION_TPL(bindByDiffType, varbind (type(T const) value) )
     {
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(value);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, value);
+      WG_TEST_LCLFUNCTION_MARKCALL(bindByDiffType);
+
+      WG_TEST_ASSERT_ISCONST_TPL(value);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, value);
 
       EXPECT_EQ(1, value);
-    }WG_LCLFUNCTION_END;
+    }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(bindByDiffType),
+      bindByDiffType);
 
     bindByDiffType();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(bindByDiffType);
   }
 };
 }
 TEST(wg_lclfunction_varbindexplicit_tpl, EnsureTypeOfNotUsed)
 {
-  try
-  {
-    EnsureTypeOfNotUsed<int>::run();
-  }
-  WG_GTEST_CATCH
+  EnsureTypeOfNotUsed<int>::run();
 }
 
 namespace
@@ -43,15 +45,22 @@ struct OkIf1VarBound
   {
     T didBind = false;
 
-    WG_LCLFUNCTION_TPL(check, varbind ((bool &) didBind) )
+    WG_TEST_LCLFUNCTION_TPL(check, varbind (type(bool &) didBind) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(didBind);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(bool, didBind);
+      WG_TEST_LCLFUNCTION_MARKCALL(check);
+
+      WG_TEST_ASSERT_ISNOTCONST_TPL(didBind);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(bool, didBind);
 
       didBind = true;
-    }WG_LCLFUNCTION_END;
+    }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
 
     check();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(check);
 
     EXPECT_TRUE(didBind);
   }
@@ -59,11 +68,7 @@ struct OkIf1VarBound
 }
 TEST(wg_lclfunction_varbindexplicit_tpl, OkIf1VarBound)
 {
-  try
-  {
-    OkIf1VarBound<bool>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf1VarBound<bool>::run();
 }
 
 namespace
@@ -75,18 +80,25 @@ struct OkIfGloballyScoped1VarBound
   {
     ::boost::tuple<T1> didBind = ::boost::make_tuple(false);
 
-    WG_LCLFUNCTION_TPL
+    WG_TEST_LCLFUNCTION_TPL
     (check,
-      varbind ((::boost::tuple<T1> &) didBind) )
+      varbind (type(::boost::tuple<T1> &) didBind) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(didBind);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_TEST_LCLFUNCTION_MARKCALL(check);
+
+      WG_TEST_ASSERT_ISNOTCONST_TPL(didBind);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
         ::boost::tuple<T1>, didBind);
 
       didBind.template get<0>() = true;
-    }WG_LCLFUNCTION_END;
+    }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
 
     check();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(check);
 
     EXPECT_TRUE(didBind.template get<0>());
   }
@@ -94,11 +106,7 @@ struct OkIfGloballyScoped1VarBound
 }
 TEST(wg_lclfunction_varbindexplicit_tpl, OkIfGloballyScoped1VarBound)
 {
-  try
-  {
-    OkIfGloballyScoped1VarBound<bool>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfGloballyScoped1VarBound<bool>::run();
 }
 
 namespace
@@ -112,23 +120,30 @@ struct OkIf3VarsOfVaryingMutabilityBound
     T2 const mass = 10;
     T3 const velocity = 2;
 
-    WG_LCLFUNCTION_TPL
+    WG_TEST_LCLFUNCTION_TPL
     (calculateForce,
-      varbind ((T1 &) force) ((T2 const) mass) ((T3 const) velocity) )
+      varbind (type(T1 &) force) (type(T2 const) mass) (type(T3 const) velocity) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(force);
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(mass);
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(velocity);
+      WG_TEST_LCLFUNCTION_MARKCALL(calculateForce);
 
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, force);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, mass);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, velocity);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(force);
+      WG_TEST_ASSERT_ISCONST_TPL(mass);
+      WG_TEST_ASSERT_ISCONST_TPL(velocity);
+
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, force);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, mass);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, velocity);
 
       force = mass * velocity;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(calculateForce),
+      calculateForce);
 
     calculateForce();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(calculateForce);
 
     EXPECT_EQ(force, 20);
   }
@@ -136,11 +151,7 @@ struct OkIf3VarsOfVaryingMutabilityBound
 }
 TEST(wg_lclfunction_varbindexplicit_tpl, OkIf3VarsOfVaryingMutabilityBound)
 {
-  try
-  {
-    OkIf3VarsOfVaryingMutabilityBound<int, int, int>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf3VarsOfVaryingMutabilityBound<int, int, int>::run();
 }
 
 namespace
@@ -154,18 +165,25 @@ struct OkIfKeywordThisUBound
   {
     didBindThis = false;
 
-    WG_LCLFUNCTION_TPL
-    (bindThisU, varbind ((OkIfKeywordThisUBound * const) this_) )
+    WG_TEST_LCLFUNCTION_TPL
+    (bindThisU, varbind (type(OkIfKeywordThisUBound * const) this_) )
     {
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(this_);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_TEST_LCLFUNCTION_MARKCALL(bindThisU);
+
+      WG_TEST_ASSERT_ISCONST_TPL(this_);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
         OkIfKeywordThisUBound *, this_);
 
       this_->didBindThis = true;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(bindThisU),
+      bindThisU);
 
     bindThisU();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(bindThisU);
 
     EXPECT_TRUE(didBindThis);
   }
@@ -173,10 +191,6 @@ struct OkIfKeywordThisUBound
 }
 TEST(wg_lclfunction_varbindexplicit_tpl, OkIfKeywordThisUBound)
 {
-  try
-  {
-    OkIfKeywordThisUBound<bool> obj;
-    obj.run();
-  }
-  WG_GTEST_CATCH
+  OkIfKeywordThisUBound<bool> obj;
+  obj.run();
 }

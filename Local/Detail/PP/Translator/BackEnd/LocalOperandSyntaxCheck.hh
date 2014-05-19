@@ -118,7 +118,7 @@
 #define WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN2( \
   varrootname, gettypemacro, getobjmacro, indx, dcln)
     BOOST_PP_IIF( \
-      WG_PP_KEYWORDS_STARTSWITH_LOCAL( gettypemacro(dcln) ), \
+      WG_PP_KEYWORDS_STARTSWITH_LCLTYPE( gettypemacro(dcln) ), \
       WG_PP_LOCALOPERANDSYNTAXCHECK_MEMBERVARDLCN3, \
       WG_PP_MAPTO_NOTHING_ARG5) \
     (varrootname, gettypemacro, getobjmacro, indx, dcln)
@@ -129,7 +129,7 @@
       /* NOTE: we're only interested in the operand of the local specifier.*/ \
       /* This is because we want to test that no const or & appears alongside*/ \
       /* that operand*/ \
-      WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND( gettypemacro(dcln) ), \
+      WG_PP_PARSEDTYPE_LCLTYPE_OPERAND( gettypemacro(dcln) ), \
       getobjmacro(dcln), \
       varrootname, \
       indx)

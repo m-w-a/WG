@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 #include <WG/Local/LclClass.hh>
 #include <string>
 
@@ -15,15 +14,15 @@ struct ExplictAndExplicit
 
     WG_LCLCLASS_TPL
     (MultiVar,
-      memext ((T1) id)
-      memint ((T2 const &) name, "BigFoot") )
+      memext (type(T1) id)
+      memint (type(T2 const &) name, "BigFoot") )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(id);
-        WG_TESTHELPER_ASSERT_ISCONST_TPL(name);
+        WG_TEST_ASSERT_ISNOTCONST_TPL(id);
+        WG_TEST_ASSERT_ISCONST_TPL(name);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, name);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, name);
 
         EXPECT_EQ(id, 987);
         EXPECT_EQ("BigFoot", name);
@@ -36,11 +35,7 @@ struct ExplictAndExplicit
 }
 TEST(wg_lclclass_memextandmemint_tpl, ExplictAndExplicit)
 {
-  try
-  {
-    ExplictAndExplicit<short, std::string>::run();
-  }
-  WG_GTEST_CATCH
+  ExplictAndExplicit<short, std::string>::run();
 }
 
 namespace
@@ -54,15 +49,15 @@ struct ExplicitAndImplicit
 
     WG_LCLCLASS_TPL
     (MultiVar,
-      memext ((T1) id)
+      memext (type(T1) id)
       memint (const ref name, T2("BigFoot")) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(id);
-        WG_TESTHELPER_ASSERT_ISCONST_TPL(name);
+        WG_TEST_ASSERT_ISNOTCONST_TPL(id);
+        WG_TEST_ASSERT_ISCONST_TPL(name);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, name);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, name);
 
         EXPECT_EQ(id, 987);
         EXPECT_EQ("BigFoot", name);
@@ -75,11 +70,7 @@ struct ExplicitAndImplicit
 }
 TEST(wg_lclclass_memextandmemint_tpl, ExplicitAndImplicit)
 {
-  try
-  {
-    ExplicitAndImplicit<short, std::string>::run();
-  }
-  WG_GTEST_CATCH
+  ExplicitAndImplicit<short, std::string>::run();
 }
 
 namespace
@@ -94,14 +85,14 @@ struct ImplicitAndExplicit
     WG_LCLCLASS_TPL
     (MultiVar,
       memext (id)
-      memint ((T2 const &) name, "BigFoot") )
+      memint (type(T2 const &) name, "BigFoot") )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(id);
-        WG_TESTHELPER_ASSERT_ISCONST_TPL(name);
+        WG_TEST_ASSERT_ISNOTCONST_TPL(id);
+        WG_TEST_ASSERT_ISCONST_TPL(name);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, name);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, name);
 
         EXPECT_EQ(id, 987);
         EXPECT_EQ("BigFoot", name);
@@ -114,11 +105,7 @@ struct ImplicitAndExplicit
 }
 TEST(wg_lclclass_memextandmemint_tpl, ImplicitAndExplicit)
 {
-  try
-  {
-    ImplicitAndExplicit<short, std::string>::run();
-  }
-  WG_GTEST_CATCH
+  ImplicitAndExplicit<short, std::string>::run();
 }
 
 namespace
@@ -136,11 +123,11 @@ struct ImplicitAndImplicit
       memint (const ref name, T2("BigFoot")) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(id);
-        WG_TESTHELPER_ASSERT_ISCONST_TPL(name);
+        WG_TEST_ASSERT_ISNOTCONST_TPL(id);
+        WG_TEST_ASSERT_ISCONST_TPL(name);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, name);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, id);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, name);
 
         EXPECT_EQ(id, 987);
         EXPECT_EQ("BigFoot", name);
@@ -153,9 +140,5 @@ struct ImplicitAndImplicit
 }
 TEST(wg_lclclass_memextandmemint_tpl, ImplicitAndImplicit)
 {
-  try
-  {
-    ImplicitAndExplicit<short, std::string>::run();
-  }
-  WG_GTEST_CATCH
+  ImplicitAndExplicit<short, std::string>::run();
 }

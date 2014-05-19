@@ -6,6 +6,12 @@
   #define WG_PP_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY 15
 #endif
 
+#define WG_LCLFUNCTION_TYPENAME(lclfunction) \
+  WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME(lclfunction)
+
+#define WG_LCLFUNCTION_VAR_TYPEOF(funcvarname) \
+  WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_FUNCTIONVARIABLETYPENAME(funcvarname)
+
 #include <boost/config.hpp>
 #ifdef BOOST_NO_CXX11_VARIADIC_TEMPLATES
   #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/CodeGenCPP03.hh>
@@ -13,6 +19,7 @@
   #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/CodeGenCPP11.hh>
 #endif
 #include <boost/preprocessor.hpp>
+#include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/ErrorReporter.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/LclFunction/SpecNormalize.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/SymbolTable.hh>
@@ -80,7 +87,7 @@
 #define WG_PP_LCLFUNCTION_REPORTERRORS( \
   name, istpl, return_type, params_seq, varbind_seq, varset_seq, \
   psbl_error_tokens) \
-    psbl_error_tokens
+    WG_PP_EATTAILTOKEN_BOOST_PP_NIL(psbl_error_tokens)
 
 #define WG_PP_LCLFUNCTION_STARTCODEGEN( \
   name, istpl, return_type, params_seq, varbind_seq, varset_seq, \

@@ -8,7 +8,7 @@
 
 namespace wg
 {
-namespace local
+namespace lcl
 {
 namespace detail
 {
@@ -31,11 +31,11 @@ struct bind_traits<T[N]>
   struct binder_type
   {
     // array_type has to be mutable so it can be "initialized".
-    typedef typename boost::remove_const<T>::type array_type[N];
+    typedef typename ::boost::remove_const<T>::type array_type[N];
 
     // Purposefully allow implicit conversion.
     // Rationale:
-    //   1) Array type members of boost::tuple can't be initialized. The work
+    //   1) Array type members of ::boost::tuple can't be initialized. The work
     //     around is to to use a struct wrapper, ie, this class. Therefore we
     //     want to be able to construct an instance of this class directly from
     //     the value of array type.

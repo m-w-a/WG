@@ -1,8 +1,7 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
+#include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
 #include <boost/typeof/typeof.hpp>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
 {
@@ -13,15 +12,22 @@ struct OkIf1VarBound
   {
     T didBind = false;
 
-    WG_LCLFUNCTION_TPL(check, varbind (ref didBind) )
+    WG_TEST_LCLFUNCTION_TPL(check, varbind (ref didBind) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(didBind);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, didBind);
+      WG_TEST_LCLFUNCTION_MARKCALL(check);
+
+      WG_TEST_ASSERT_ISNOTCONST_TPL(didBind);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, didBind);
 
       didBind = true;
-    }WG_LCLFUNCTION_END;
+    }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(check),
+      check);
 
     check();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(check);
 
     EXPECT_TRUE(didBind);
   }
@@ -29,11 +35,7 @@ struct OkIf1VarBound
 }
 TEST(wg_lclfunction_varbindimplicit_tpl, OkIf1VarBound)
 {
-  try
-  {
-    OkIf1VarBound<bool>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf1VarBound<bool>::run();
 }
 
 namespace
@@ -47,23 +49,30 @@ struct OkIf3VarsOfVaryingMutabilityBound
     T2 const mass = 10;
     T3 const velocity = 2;
 
-    WG_LCLFUNCTION_TPL
+    WG_TEST_LCLFUNCTION_TPL
     (calculateForce,
       varbind (ref force) (const mass) (const velocity) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(force);
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(mass);
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(velocity);
+      WG_TEST_LCLFUNCTION_MARKCALL(calculateForce);
 
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, force);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, mass);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, velocity);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(force);
+      WG_TEST_ASSERT_ISCONST_TPL(mass);
+      WG_TEST_ASSERT_ISCONST_TPL(velocity);
+
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, force);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, mass);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, velocity);
 
       force = mass * velocity;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(calculateForce),
+      calculateForce);
 
     calculateForce();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(calculateForce);
 
     EXPECT_EQ(force, 20);
   }
@@ -71,11 +80,7 @@ struct OkIf3VarsOfVaryingMutabilityBound
 }
 TEST(wg_lclfunction_varbindimplicit_tpl, OkIf3VarsOfVaryingMutabilityBound)
 {
-  try
-  {
-    OkIf3VarsOfVaryingMutabilityBound<int, int, int>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf3VarsOfVaryingMutabilityBound<int, int, int>::run();
 }
 
 namespace
@@ -89,18 +94,25 @@ struct OkIfKeywordThisUBound
   {
     didBindThis = false;
 
-    WG_LCLFUNCTION_TPL
+    WG_TEST_LCLFUNCTION_TPL
     (bindThisU, varbind (this_) )
     {
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(this_);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_TEST_LCLFUNCTION_MARKCALL(bindThisU);
+
+      WG_TEST_ASSERT_ISCONST_TPL(this_);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
         OkIfKeywordThisUBound<T> *, this_);
 
       this_->didBindThis = true;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(bindThisU),
+      bindThisU);
 
     bindThisU();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(bindThisU);
 
     EXPECT_TRUE(didBindThis);
   }
@@ -108,12 +120,8 @@ struct OkIfKeywordThisUBound
 }
 TEST(wg_lclfunction_varbindimplicit_tpl, OkIfKeywordThisUBound)
 {
-  try
-  {
-    OkIfKeywordThisUBound<bool> obj;
-    obj.run();
-  }
-  WG_GTEST_CATCH
+  OkIfKeywordThisUBound<bool> obj;
+  obj.run();
 }
 
 namespace
@@ -125,20 +133,34 @@ struct OkIfLocalFunctionBound
   {
     T didBind = false;
 
-    WG_LCLFUNCTION_TPL(bindVar, varbind (ref didBind) )
+    WG_TEST_LCLFUNCTION_TPL(bindVar, varbind (ref didBind) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(didBind);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, didBind);
+      WG_TEST_LCLFUNCTION_MARKCALL(bindVar);
+
+      WG_TEST_ASSERT_ISNOTCONST_TPL(didBind);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, didBind);
 
       didBind = true;
-    }WG_LCLFUNCTION_END;
+    }WG_TEST_LCLFUNCTION_END;
 
-    WG_LCLFUNCTION_TPL(bindFunc, varbind (ref bindVar) )
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(bindVar),
+      bindVar);
+
+    WG_TEST_LCLFUNCTION_TPL(bindFunc, varbind (ref bindVar) )
     {
+      WG_TEST_LCLFUNCTION_MARKCALL(bindFunc);
+
       bindVar();
-    }WG_LCLFUNCTION_END;
+    }WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(bindFunc),
+      bindFunc);
 
     bindFunc();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(bindVar);
+    WG_TEST_LCLFUNCTION_VERIFYCALL(bindFunc);
 
     EXPECT_TRUE(didBind);
   }
@@ -146,9 +168,5 @@ struct OkIfLocalFunctionBound
 }
 TEST(wg_lclfunction_varbindimplicit_tpl, OkIfLocalFunctionBound)
 {
-  try
-  {
-    OkIfLocalFunctionBound<bool>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfLocalFunctionBound<bool>::run();
 }

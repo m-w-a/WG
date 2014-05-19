@@ -2,6 +2,7 @@
 #define WG_LCLCLASS_HH_
 
 #include <boost/preprocessor.hpp>
+#include <WG/Local/Detail/PP/PP.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/LclClass/SpecNormalize.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/ErrorReporter.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclClass/SymbolTable.hh>
@@ -85,7 +86,7 @@
   memext_seq, \
   memint_seq, \
   psbl_error_tokens) \
-    psbl_error_tokens
+    WG_PP_EATTAILTOKEN_BOOST_PP_NIL(psbl_error_tokens)
 
 #define WG_PP_LCLCLASS_CMNIMPL_STARTCODEGEN( \
   name, \

@@ -30,16 +30,6 @@
 //Params
 //------
 
-// dcln: param-dcln
-// Returns: non-local-type
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_TYPE_PARAMS(dcln) \
-  WG_PP_SEQ_ELEM(0, dcln)
-
-// dcln: param-dcln
-// Returns: var-name
-#define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLN_OBJ_PARAMS(dcln) \
-  WG_PP_SEQ_ELEM(1, dcln)
-
 // Returns: { BOOST_PP_NIL | { (param-dcln) }+ }
 #define WG_PP_LCLFUNCTION_SYMBOLTABLE_DCLNS_PARAMS(symbtbl) \
   WG_PP_LCLFUNCTION_ST_GET(symbtbl, DCLNS_PARAMS)
@@ -216,7 +206,7 @@
     WG_PP_LCLFUNCTION_ST_CREATE_IMPL2( \
       istpl, \
       return_type, \
-      WG_PP_STUTIL_NRMLZDBOUNDTUPLESEQ_TO_BOUNDDCLNSEQ(params_nrmlzd_tupleseq), \
+      params_nrmlzd_tupleseq, \
       WG_PP_STUTIL_NRMLZDBOUNDTUPLESEQ_TO_BOUNDDCLNSEQ(varbind_nrmlzd_tupleseq), \
       WG_PP_STUTIL_NRMLZDSETTUPLESEQ_TO_SETDCLNSEQ(varset_nrmlzd_tupleseq) )
 

@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
 {
@@ -16,24 +15,31 @@ struct OkIfUsing21Combo
     T4 const R = 5;
     T5 const temp = 4;
 
-    WG_LCLFUNCTION_TPL
+    WG_TEST_LCLFUNCTION_TPL
     (calculateVolume,
       varbind (ref volume) (const pressure)
-      varset ((int const) numerator, numMoles * R * temp) )
+      varset (type(int const) numerator, numMoles * R * temp) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(volume);
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(pressure);
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(numerator);
+      WG_TEST_LCLFUNCTION_MARKCALL(calculateVolume);
 
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, volume);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, pressure);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(int, numerator);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(volume);
+      WG_TEST_ASSERT_ISCONST_TPL(pressure);
+      WG_TEST_ASSERT_ISCONST_TPL(numerator);
+
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, volume);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, pressure);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(int, numerator);
 
       volume = numerator / pressure;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
+
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(calculateVolume),
+      calculateVolume);
 
     calculateVolume();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(calculateVolume);
 
     EXPECT_EQ(volume, 30);
   }
@@ -41,9 +47,5 @@ struct OkIfUsing21Combo
 }
 TEST(wg_lclfunction_varbindimplicitandvarsetexplicit_tpl, OkIfUsing21Combo)
 {
-  try
-  {
-    OkIfUsing21Combo<int, int, int, int, int>::run();
-  }
-  WG_GTEST_CATCH
+  OkIfUsing21Combo<int, int, int, int, int>::run();
 }

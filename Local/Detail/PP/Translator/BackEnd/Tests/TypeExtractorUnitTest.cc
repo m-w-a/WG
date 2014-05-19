@@ -1,5 +1,5 @@
 #include <boost/config.hpp>
-#include <WG/Local/Tests/test.h>
+#include <WG/Local/Tests/Utils/PreprocessorUnitTester.hh>
 #include <WG/Local/Detail/PP/Tests/Util.hh>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
@@ -7,28 +7,28 @@
 
 //Unit Tests.
 #define S1 type(SomeGlobalType &)
-#define S2 local(SomeLocalType *)
-#define S3 local(SomeLocalType *) (const)
-#define S4 local(SomeLocalType *) (ref)
-#define S5 local(SomeLocalType *) (const) (ref)
+#define S2 lcltype(SomeLocalType *)
+#define S3 lcltype(SomeLocalType *) (const)
+#define S4 lcltype(SomeLocalType *) (ref)
+#define S5 lcltype(SomeLocalType *) (const) (ref)
 
 /*
 WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(S1)
 WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE(S1, 0)
 
-WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND(S2)
+WG_PP_PARSEDTYPE_LCLTYPE_OPERAND(S2)
 WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(S2)
 WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE(S2, 0)
 
-WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND(S3)
+WG_PP_PARSEDTYPE_LCLTYPE_OPERAND(S3)
 WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(S3)
 WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE(S3, 0)
 
-WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND(S4)
+WG_PP_PARSEDTYPE_LCLTYPE_OPERAND(S4)
 WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(S4)
 WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE(S4, 0)
 
-WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND(S5)
+WG_PP_PARSEDTYPE_LCLTYPE_OPERAND(S5)
 WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(S5)
 WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE(S5, 0)
 */
@@ -36,7 +36,7 @@ WG_PP_PARSEDTYPE_EXTRACTCPPTYPE_AS_CALLTRAITSPARAMTYPE(S5, 0)
 struct SomeGlobalType {};
 void testGlobalType()
 {
-  using namespace boost;
+  using namespace ::boost;
   typedef SomeGlobalType & S1Type;
 
   WG_PP_TESTS_UTIL_ISSAMETYPE(
@@ -53,7 +53,7 @@ void testLocalTypeNoQual()
   typedef SomeLocalType * Operand;
 
   WG_PP_TESTS_UTIL_ISSAMETYPE(
-    Operand, WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND(S2))
+    Operand, WG_PP_PARSEDTYPE_LCLTYPE_OPERAND(S2))
 
   WG_PP_TESTS_UTIL_ISSAMETYPE(
     Operand, WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(S2))
@@ -75,7 +75,7 @@ void testLocalTypeConstQual()
   typedef SomeLocalType * Operand;
 
   WG_PP_TESTS_UTIL_ISSAMETYPE(
-    Operand, WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND(S3))
+    Operand, WG_PP_PARSEDTYPE_LCLTYPE_OPERAND(S3))
 
   WG_PP_TESTS_UTIL_ISSAMETYPE(
     Operand const, WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(S3))
@@ -97,7 +97,7 @@ void testLocalTypeRefQual()
   typedef SomeLocalType * Operand;
 
   WG_PP_TESTS_UTIL_ISSAMETYPE(
-    Operand, WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND(S4))
+    Operand, WG_PP_PARSEDTYPE_LCLTYPE_OPERAND(S4))
 
   WG_PP_TESTS_UTIL_ISSAMETYPE(
     Operand &, WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(S4))
@@ -118,7 +118,7 @@ void testLocalTypeConstRefQual()
   typedef SomeLocalType * Operand;
 
   WG_PP_TESTS_UTIL_ISSAMETYPE(
-    Operand, WG_PP_PARSEDTYPE_LOCALTYPE_OPERAND(S5))
+    Operand, WG_PP_PARSEDTYPE_LCLTYPE_OPERAND(S5))
 
   WG_PP_TESTS_UTIL_ISSAMETYPE(
     Operand const &, WG_PP_PARSEDTYPE_EXTRACTCPPTYPE(S5))

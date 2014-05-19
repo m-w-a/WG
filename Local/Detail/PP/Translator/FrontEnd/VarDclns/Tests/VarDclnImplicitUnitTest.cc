@@ -1,4 +1,4 @@
-#include <WG/Local/Tests/test.h>
+#include <WG/Local/Tests/Utils/PreprocessorUnitTester.hh>
 #include <WG/Local/Detail/PP/PP.hh>
 #include "../VarDclnImplicit.hh"
 #include <boost/preprocessor.hpp>
@@ -56,7 +56,7 @@ RESCAN_WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG(VDI6)
   TEST_DIDBIND_TYPE2(expected, actual)
 #define TEST_DIDBIND_TYPE2(expected, actual) \
   BEGIN \
-    boost::is_same<expected, actual>::value == true \
+    ::boost::is_same<expected, actual>::value == true \
   END
 
 #define TEST_DIDBIND_OBJ(expected, actual) \
@@ -90,7 +90,7 @@ void testConstQualBind()
 {
   int var2 = 0;
 
-  using namespace boost;
+  using namespace ::boost;
 #define RESULT RESCAN_WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG(VDI2)
   TEST_DIDBIND_TYPE(
     add_const<BOOST_TYPEOF(var2)>::type, EXTRACT_TYPE(RESULT) )
@@ -102,7 +102,7 @@ void testRefQualBind()
 {
   int var3 = 0;
 
-  using namespace boost;
+  using namespace ::boost;
 #define RESULT RESCAN_WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG(VDI3)
   TEST_DIDBIND_TYPE(
     add_reference<BOOST_TYPEOF(var3)>::type, EXTRACT_TYPE(RESULT) )
@@ -114,7 +114,7 @@ void testConstRefBind()
 {
   int var4 = 0;
 
-  using namespace boost;
+  using namespace ::boost;
 #define RESULT RESCAN_WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG(VDI4)
   TEST_DIDBIND_TYPE(
     add_reference<add_const<BOOST_TYPEOF(var4)>::type>::type,
@@ -127,7 +127,7 @@ struct testNoQualThisUBind
 {
   void operator()()
   {
-    using namespace boost;
+    using namespace ::boost;
 #define RESULT RESCAN_WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG(VDI5)
     TEST_DIDBIND_TYPE(
       BOOST_TYPEOF(this) const,
@@ -141,7 +141,7 @@ struct testConstQualThisUBind
 {
   void operator()()
   {
-    using namespace boost;
+    using namespace ::boost;
 #define RESULT RESCAN_WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG(VDI6)
     TEST_DIDBIND_TYPE(
       add_const<BOOST_TYPEOF(*this)>::type * const,

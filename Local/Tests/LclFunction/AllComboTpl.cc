@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
 {
@@ -15,33 +14,39 @@ struct TestTpl
     T1 pinchOfSalt = true;
     T2 dashOfSugar = 0;
 
-    WG_LCLFUNCTION_TPL
+    WG_TEST_LCLFUNCTION_TPL
     (makeGingerBreadCookie,
       return (int)
-      params ((bool) salt) ((bool) sugar)
+      params (bool salt) (bool sugar)
       varbind (const pinchOfSalt)
       varset (const dos, dashOfSugar) )
     {
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(salt);
-      WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(sugar);
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(pinchOfSalt);
-      WG_TESTHELPER_ASSERT_ISCONST_TPL(dos);
+      WG_TEST_LCLFUNCTION_MARKCALL(makeGingerBreadCookie);
 
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(bool, salt);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(bool, sugar);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, pinchOfSalt);
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, dashOfSugar);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(salt);
+      WG_TEST_ASSERT_ISNOTCONST_TPL(sugar);
+      WG_TEST_ASSERT_ISCONST_TPL(pinchOfSalt);
+      WG_TEST_ASSERT_ISCONST_TPL(dos);
+
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(bool, salt);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(bool, sugar);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, pinchOfSalt);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, dashOfSugar);
 
       return
         salt == pinchOfSalt &&
         sugar == dos;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
-    WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
+      WG_LCLFUNCTION_TYPENAME(makeGingerBreadCookie),
+      makeGingerBreadCookie);
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(
       int, makeGingerBreadCookie(0,0));
 
     success = makeGingerBreadCookie(pinchOfSalt, dashOfSugar);
+    WG_TEST_LCLFUNCTION_VERIFYCALL(makeGingerBreadCookie);
 
     EXPECT_TRUE(success);
   }
@@ -49,9 +54,5 @@ struct TestTpl
 }
 TEST(wg_lclfunction_allcombo_tpl, Test)
 {
-  try
-  {
-    TestTpl<bool, int>::run();
-  }
-  WG_GTEST_CATCH
+  TestTpl<bool, int>::run();
 }

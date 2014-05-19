@@ -75,7 +75,7 @@ set-variables:
   3) In C++03, the set-to expressions may not be array initializers. 
     (This restriction may be worked around, but the extra work was not deemed 
     worth the effort, especially given the existence of better alternative 
-    data types such as std::vector or boost::array.)
+    data types such as std::vector or ::boost::array.)
 
 local():
   Rationale:

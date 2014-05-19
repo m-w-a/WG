@@ -16,7 +16,7 @@ struct OkIfReturnSpecified
     WG_AUTOFUNCTOR_TPL
     (ret,
       assignto (didAssign)
-      return (typename boost::add_const<T>::type) )
+      return (typename ::boost::add_const<T>::type) )
     {
       return true;
     }

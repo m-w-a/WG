@@ -2,7 +2,7 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
 #include <boost/typeof/typeof.hpp>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 TEST(wg_autofunctor_parambindexplicitandparamsetexplicit, OkIfUsing21Combo)
 {
@@ -19,11 +19,11 @@ TEST(wg_autofunctor_parambindexplicitandparamsetexplicit, OkIfUsing21Combo)
       parambind ((int &) volume) ((int const) pressure)
       paramset ((int const) numerator, numMoles * R * temp) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int &, BOOST_TYPEOF(volume) &);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const, BOOST_TYPEOF(pressure) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const, BOOST_TYPEOF(numerator) const);
 
       volume = numerator / pressure;
@@ -52,7 +52,7 @@ TEST(wg_autofunctor_parambindexplicitandparamsetexplicit, OkIfLocalTypeBound)
     (calculateVolume,
       parambind (local(Input) data) paramset ((int &) result, volume) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int &, BOOST_TYPEOF(result) &);
 
       result = (data.numMoles * data.R * data.temp) / data.pressure;

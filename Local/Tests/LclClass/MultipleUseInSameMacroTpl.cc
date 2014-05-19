@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
 #include <WG/Local/LclClass.hh>
 #include <string>
 
@@ -7,7 +6,7 @@
     WG_LCLCLASS_TPL \
     (Local1, \
      derives (protected Base) \
-     memext (local(Param0Type) name) (var) \
+     memext (lcltype(Param0Type) name) (var) \
      memint (score, 21) ) \
       void init() \
       { \
@@ -20,7 +19,7 @@
     WG_LCLCLASS_TPL \
     (Local2, \
      derives (protected Base) \
-     memext (local(Param0Type) name) (var) \
+     memext (lcltype(Param0Type) name) (var) \
      memint (score, 21) ) \
       void init() \
       { \
@@ -54,9 +53,5 @@ struct Tester
 }
 TEST(wg_lclclass_multipleuseinsamemacro_tpl, Test)
 {
-  try
-  {
-    Tester<ignore>::run();
-  }
-  WG_GTEST_CATCH
+  Tester<ignore>::run();
 }

@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 #include <WG/Local/LclClass.hh>
 
 namespace
@@ -16,16 +15,16 @@ struct OkIf3MemOfVaryingMutabilitySet
 
     WG_LCLCLASS_TPL
     (CalculateVolume,
-      memext (const radius) ((int) height) (const volume) )
+      memext (const radius) (type(int) height) (const volume) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISCONST_TPL(radius);
-        WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(height);
-        WG_TESTHELPER_ASSERT_ISCONST_TPL(volume);
+        WG_TEST_ASSERT_ISCONST_TPL(radius);
+        WG_TEST_ASSERT_ISNOTCONST_TPL(height);
+        WG_TEST_ASSERT_ISCONST_TPL(volume);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, radius);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, height);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, volume);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, radius);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, height);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, volume);
 
         EXPECT_EQ(2, radius);
         EXPECT_EQ(10, height);
@@ -39,9 +38,5 @@ struct OkIf3MemOfVaryingMutabilitySet
 }
 TEST(wg_lclclass_memextexplicitandimplicit_tpl, OkIf3MemOfVaryingMutabilitySet)
 {
-  try
-  {
-    OkIf3MemOfVaryingMutabilitySet<short, int, long>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf3MemOfVaryingMutabilitySet<short, int, long>::run();
 }

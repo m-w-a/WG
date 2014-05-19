@@ -1,81 +1,107 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
-#include <WG/Local/LclFunction.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/LclFunction/Utils/TestLclFunction.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 TEST(wg_lclfunction_nested, OneLevel)
 {
-  try
+  int count = 0;
+
+  WG_TEST_LCLFUNCTION(oneStep, varbind (ref count) )
   {
-    int count = 0;
+    WG_TEST_LCLFUNCTION_MARKCALL(oneStep);
 
-    WG_LCLFUNCTION(oneStep, varbind (ref count) )
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
+    WG_TEST_ASSERT_ISNOTCONST(count);
+
+    ++count;
+
+    WG_TEST_LCLFUNCTION(twoStep, varbind (ref count) )
     {
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
-      WG_TESTHELPER_ASSERT_ISNOTCONST(count);
+      WG_TEST_LCLFUNCTION_MARKCALL(twoStep);
 
-      ++count;
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
+      WG_TEST_ASSERT_ISNOTCONST(count);
 
-      WG_LCLFUNCTION(twoStep, varbind (ref count) )
-      {
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
-        WG_TESTHELPER_ASSERT_ISNOTCONST(count);
-
-        count += 2;
-      }
-      WG_LCLFUNCTION_END;
-
-      twoStep();
+      count += 2;
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
-    oneStep();
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(twoStep),
+      twoStep);
 
-    EXPECT_EQ(count, 3);
+    twoStep();
+    WG_TEST_LCLFUNCTION_VERIFYCALL(twoStep);
   }
-  WG_GTEST_CATCH
+  WG_TEST_LCLFUNCTION_END;
+
+  WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+    WG_LCLFUNCTION_TYPENAME(oneStep),
+    oneStep);
+
+  oneStep();
+  WG_TEST_LCLFUNCTION_VERIFYCALL(oneStep);
+
+  EXPECT_EQ(count, 3);
 }
 
 TEST(wg_lclfunction_nested, TwoLevel)
 {
-  try
+  int count = 0;
+
+  WG_TEST_LCLFUNCTION(oneStep, varbind (ref count) )
   {
-    int count = 0;
+    WG_TEST_LCLFUNCTION_MARKCALL(oneStep);
 
-    WG_LCLFUNCTION(oneStep, varbind (ref count) )
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
+    WG_TEST_ASSERT_ISNOTCONST(count);
+
+    ++count;
+
+    WG_TEST_LCLFUNCTION(twoStep, params (int & count) )
     {
-      WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
-      WG_TESTHELPER_ASSERT_ISNOTCONST(count);
+      WG_TEST_LCLFUNCTION_MARKCALL(twoStep);
 
-      ++count;
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
+      WG_TEST_ASSERT_ISNOTCONST(count);
 
-      WG_LCLFUNCTION(twoStep, params ((int &) count) )
+      count += 2;
+
+      WG_TEST_LCLFUNCTION(threeStep, varset (ref var, count) )
       {
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
-        WG_TESTHELPER_ASSERT_ISNOTCONST(count);
+        WG_TEST_LCLFUNCTION_MARKCALL(threeStep);
 
-        count += 2;
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
+        WG_TEST_ASSERT_ISNOTCONST(count);
 
-        WG_LCLFUNCTION(threeStep, varset (ref var, count) )
-        {
-          WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(int, count);
-          WG_TESTHELPER_ASSERT_ISNOTCONST(count);
-
-          var += 3;
-        }
-        WG_LCLFUNCTION_END;
-
-        threeStep();
+        var += 3;
       }
-      WG_LCLFUNCTION_END;
+      WG_TEST_LCLFUNCTION_END;
 
-      twoStep(count);
+      WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+        WG_LCLFUNCTION_TYPENAME(threeStep),
+        threeStep);
+
+      threeStep();
+      WG_TEST_LCLFUNCTION_VERIFYCALL(threeStep);
     }
-    WG_LCLFUNCTION_END;
+    WG_TEST_LCLFUNCTION_END;
 
-    oneStep();
+    WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+      WG_LCLFUNCTION_TYPENAME(twoStep),
+      twoStep);
 
-    EXPECT_EQ(count, 6);
+    twoStep(count);
+    WG_TEST_LCLFUNCTION_VERIFYCALL(twoStep);
   }
-  WG_GTEST_CATCH
+  WG_TEST_LCLFUNCTION_END;
+
+  WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF(
+    WG_LCLFUNCTION_TYPENAME(oneStep),
+    oneStep);
+
+  oneStep();
+  WG_TEST_LCLFUNCTION_VERIFYCALL(oneStep);
+
+  EXPECT_EQ(count, 6);
 }

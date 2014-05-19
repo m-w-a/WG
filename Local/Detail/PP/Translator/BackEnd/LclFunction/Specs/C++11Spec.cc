@@ -42,14 +42,13 @@ TEST(wg_lclfunction_codegenspec, cpp11)
   //Expands to:
   
   /*PP iterator over captured vars for template params. */
-  typedef boost::tuple<CAPTURED_VAR_TYPE1> captured_vars_typeXXX128;
+  typedef ::boost::tuple<CAPTURED_VAR_TYPE1> captured_vars_typeXXX128;
 
   struct local_functor_typeXXX128;
-  typedef wg::lclfunction::detail::cpp11::global_functor_type
+  typedef ::wg::lclfunction::detail::cpp11::global_functor_type
   <
     local_functor_typeXXX128,
-    RETURN_TYPE(),
-    boost::mpl::vector<PARAMS_LIST()>,
+    RETURN_TYPE() ( PARAMS_LIST() ),
     captured_vars_typeXXX128
   > global_functor_typeXXX128;
   
@@ -75,9 +74,9 @@ TEST(wg_lclfunction_codegenspec, cpp11)
       /* To avoid unused var warnings. */
       (void)(LOCAL_FUNCTION_NAME());
       
-      boost::add_reference
+      ::boost::add_reference
       <
-        boost::tuples::element<0, captured_vars_type>::type
+        ::boost::tuples::element<0, captured_vars_type>::type
       >::type
         slope(capturedvars.get<0>());
       

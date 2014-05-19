@@ -45,6 +45,11 @@
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE( \
   implicitvardcln, hasvalueexpr, valueexpr, istpl) \
+    WG_PP_VARDCLN_IMPLICIT_TUPLIZE1( \
+      implicitvardcln BOOST_PP_NIL, hasvalueexpr, valueexpr, istpl)
+
+#define WG_PP_VARDCLN_IMPLICIT_TUPLIZE1( \
+  implicitvardcln, hasvalueexpr, valueexpr, istpl) \
     WG_PP_VARDCLN_IMPLICIT_EXPAND1( \
       WG_PP_VARDCLN_IMPLICIT_TUPLIZE2 \
       BOOST_PP_IIF( \
@@ -57,7 +62,7 @@
   isconstqualified, implicitvardcln, hasvalueexpr, valueexpr, istpl) \
     WG_PP_VARDCLN_IMPLICIT_EXPAND2( \
       BOOST_PP_IIF( \
-        BOOST_PP_NOT(hasvalueexpr), \
+        BOOST_PP_COMPL(hasvalueexpr), \
         WG_PP_VARDCLN_IMPLICIT_TUPLIZE_BOUND, \
         WG_PP_VARDCLN_IMPLICIT_TUPLIZE_SET) \
       BOOST_PP_LPAREN() \
@@ -80,36 +85,57 @@
         WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_, \
         BOOST_PP_CAT(isconstqualified, isrefqualified) ) (valueexpr, istpl) \
     ) \
-    (var)
+    ( WG_PP_VARDCLN_IMPLICIT_TUPLIZE_VAR(var) )
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_BOUND( \
   isconstqualified, isrefqualified, var, istpl) \
     ( \
-      BOOST_PP_CAT( \
-        BOOST_PP_IIF( \
-          WG_PP_KEYWORDS_STARTSWITH_THISU(var), \
-          WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_, \
-          WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_), \
-        BOOST_PP_CAT(isconstqualified, isrefqualified) ) (var, istpl) \
+      BOOST_PP_IIF( \
+        WG_PP_STARTSWITH_BOOST_PP_NIL(var), \
+        BOOST_PP_NIL WG_PP_MAPTO_NOTHING_ARG4, \
+        WG_PP_VARDCLN_IMPLICIT_TUPLIZE_BOUND_TYPE) \
+      (isconstqualified, isrefqualified, var, istpl) \
     ) \
-    (var)
+    ( WG_PP_VARDCLN_IMPLICIT_TUPLIZE_VAR(var) )
+
+#define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_BOUND_TYPE( \
+  isconstqualified, isrefqualified, var, istpl) \
+    BOOST_PP_CAT( \
+      BOOST_PP_IIF( \
+        WG_PP_KEYWORDS_STARTSWITH_THISU(var), \
+        WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_, \
+        WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_), \
+      BOOST_PP_CAT(isconstqualified, isrefqualified) ) \
+    (WG_PP_EATTAILTOKEN_BOOST_PP_NIL(var), istpl)
+
+#define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_VAR(var) \
+  BOOST_PP_IIF( \
+    WG_PP_STARTSWITH_BOOST_PP_NIL(var), \
+    WG_PP_VARDCLN_IMPLICIT_TUPLIZE_VAR_ERROR, \
+    WG_PP_EATTAILTOKEN_BOOST_PP_NIL) (var)
+
+#define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_VAR_ERROR(var) \
+  WG_PP_MARKER_ERROR \
+  WG_LCL_Error_missing_variable_name
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_00(expr, istpl) \
-  WG_PP_MARKER_DEDUCEDTYPE type( WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) )
+  WG_PP_MARKER_DEDUCEDTYPE \
+  WG_PP_KEYWORDS_TYPE ( WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) )
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_01(expr, istpl) \
   WG_PP_MARKER_DEDUCEDTYPE \
-    type( WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-      boost::add_reference< WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) >::type )
+    WG_PP_KEYWORDS_TYPE ( WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
+      ::boost::add_reference< WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) >::type )
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_10(expr, istpl) \
   WG_PP_MARKER_DEDUCEDTYPE \
-    type( WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
-      boost::add_const< WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) >::type )
+    WG_PP_KEYWORDS_TYPE ( WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
+      ::boost::add_const< WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) >::type )
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_11(expr, istpl) \
   WG_PP_MARKER_DEDUCEDTYPE \
-    type( \
-      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_reference \
+    WG_PP_KEYWORDS_TYPE \
+    ( \
+      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) ::boost::add_reference \
       < \
-        WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_const \
+        WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) ::boost::add_const \
         < \
           WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, expr) \
         >::type \
@@ -117,17 +143,19 @@
     )
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_00(bvar, istpl) \
-  WG_PP_MARKER_DEDUCEDTYPE type( WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, this) const )
+  WG_PP_MARKER_DEDUCEDTYPE \
+  WG_PP_KEYWORDS_TYPE ( WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, this) const )
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_01(bvar, istpl) \
   WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_ERRMSG()
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_10(bvar, istpl) \
   WG_PP_MARKER_DEDUCEDTYPE \
-  type( \
-    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_const \
+  WG_PP_KEYWORDS_TYPE \
+  ( \
+    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) ::boost::add_const \
     < \
-      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_pointer \
+      WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) ::boost::add_pointer \
       < \
-        WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) boost::add_const \
+        WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) ::boost::add_const \
         < \
           WG_PP_TRNSLTR_UTILS_TYPEOF(istpl, *this) \
         >::type \
@@ -138,6 +166,7 @@
   WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_ERRMSG()
 
 #define WG_PP_VARDCLN_IMPLICIT_TUPLIZE_TYPE_THISU_ERRMSG() \
-  WG_PP_MARKER_ERROR ERROR_ref_keyword_cannot_be_used_with_thisu_keyword
+  WG_PP_MARKER_ERROR \
+  WG_LCL_Error_ref_keyword_cannot_be_used_with_thisu_keyword
 
 #endif //WG_PP_VARDCLN_IMPLICIT_HH_

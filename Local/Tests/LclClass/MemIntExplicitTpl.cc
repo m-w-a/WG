@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
-#include <WG/GTest/Exceptions.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 #include <WG/Local/LclClass.hh>
 
 namespace
@@ -10,11 +9,11 @@ struct EnsureTypeOfNotUsed
 {
   static void run()
   {
-    WG_LCLCLASS_TPL(Local, memint ((T) value, 1.2f) )
+    WG_LCLCLASS_TPL(Local, memint (type(T) value, 1.2f) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(value);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, value);
+        WG_TEST_ASSERT_ISNOTCONST_TPL(value);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T, value);
 
         EXPECT_EQ(1, value);
       }
@@ -26,11 +25,7 @@ struct EnsureTypeOfNotUsed
 }
 TEST(wg_lclclass_memintexplicit_tpl, EnsureTypeOfNotUsed)
 {
-  try
-  {
-    EnsureTypeOfNotUsed<int>::run();
-  }
-  WG_GTEST_CATCH
+  EnsureTypeOfNotUsed<int>::run();
 }
 
 namespace
@@ -43,18 +38,18 @@ struct OkIf3MemOfVaryingMutabilitySet
     WG_LCLCLASS_TPL
     (CalculateVolume,
       memint
-        ((T1 const) radius, 2)
-        ((T2 const) height, 10)
-        ((T3) volume, radius * height) )
+        (type(T1 const) radius, 2)
+        (type(T2 const) height, 10)
+        (type(T3) volume, radius * height) )
       void init()
       {
-        WG_TESTHELPER_ASSERT_ISCONST_TPL(radius);
-        WG_TESTHELPER_ASSERT_ISCONST_TPL(height);
-        WG_TESTHELPER_ASSERT_ISNOTCONST_TPL(volume);
+        WG_TEST_ASSERT_ISCONST_TPL(radius);
+        WG_TEST_ASSERT_ISCONST_TPL(height);
+        WG_TEST_ASSERT_ISNOTCONST_TPL(volume);
 
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, radius);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, height);
-        WG_TESTHELPER_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, volume);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T1, radius);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T2, height);
+        WG_TEST_ASSERT_ISSAMETYPE_MODULOCONSTANDREF_TPL(T3, volume);
       }
     WG_LCLCLASS_END;
 
@@ -64,9 +59,5 @@ struct OkIf3MemOfVaryingMutabilitySet
 }
 TEST(wg_lclclass_memintexplicit_tpl, OkIf3MemOfVaryingMutabilitySet)
 {
-  try
-  {
-    OkIf3MemOfVaryingMutabilitySet<short, int, long>::run();
-  }
-  WG_GTEST_CATCH
+  OkIf3MemOfVaryingMutabilitySet<short, int, long>::run();
 }
