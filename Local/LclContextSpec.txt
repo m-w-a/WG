@@ -37,7 +37,10 @@ with-adhoc-decln :=
     with_adhoc [ varbind bound-tuple-seq ] adhoc-context-handlers
   | with_adhoc( simple-declaration ) 
     [ varbind bound-tuple-seq ]
-    [onenter( compound-statement )] [onexit( compound-statement )]
+    adhoc-context-handlers
+
+adhoc-context-handlers :=
+  [onenter( compound-statement )] [onexit( compound-statement )]
 
 context-manager-expr := A C++ expression that evaluates to a context manager.
 compound-statement := See C++ standard.
