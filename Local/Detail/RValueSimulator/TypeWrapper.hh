@@ -27,8 +27,6 @@ namespace wg
 {
 namespace rvaluesimulator
 {
-namespace detail
-{
 
 template<typename T, typename IsConst = ::boost::mpl::false_>
 struct type_wrapper : ::boost::mpl::if_<IsConst, T const, T>
@@ -36,7 +34,8 @@ struct type_wrapper : ::boost::mpl::if_<IsConst, T const, T>
 };
 
 template<typename T>
-inline type_wrapper<T> * encode_type(T &, ::boost::mpl::false_ *)
+inline type_wrapper<T> *
+  encode_type(T &, ::boost::mpl::false_ *)
 { return 0; }
 
 template<typename T>
@@ -44,7 +43,6 @@ inline type_wrapper<T, ::boost::mpl::true_> *
   encode_type(T const &, ::boost::mpl::true_ *)
 { return 0; }
 
-}
 }
 }
 

@@ -28,11 +28,13 @@
 #include <boost/mpl/if.hpp>
 #include <WG/Local/Detail/RValueSimulator/Config.hh>
 
+//###########
+//Public APIs
+//###########
+
 namespace wg
 {
 namespace rvaluesimulator
-{
-namespace detail
 {
 
 //----------
@@ -53,53 +55,15 @@ typedef auto_any const & auto_any_t;
 //-------------
 //auto_any_cast
 //-------------
-template<typename T, typename IsConst>
-inline BOOST_DEDUCED_TYPENAME ::boost::mpl::if_<IsConst, T const, T>::type &
-  auto_any_cast(auto_any_t a)
+struct util
 {
-  return static_cast<auto_any_impl<T> const &>(a).item;
-}
-
-//------------------------------------------------------------------------------
-//capture
-//  Captures the result of an expression.
-//  If it's an lvalue a copy of it is made, else a reference to it is held.
-//------------------------------------------------------------------------------
-
-// rvalue
-template<typename T>
-inline auto_any_impl<T> capture(T const & t, ::boost::mpl::true_ *)
-{
-  return auto_any_impl<T>(t);
-}
-
-// lvalue
-template<typename T>
-inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
-{
-  // Cannot seem to get sunpro to handle addressof() with array types.
-#if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))
-  return auto_any_impl<T *>(&t);
-#else
-  return auto_any_impl<T *>(::boost::addressof(t));
-#endif
-}
-
-#ifdef WG_RVALUESIMULATOR_CONFIG_CONSTRVALUEDETECTION_RUNTIME
-  template<typename T>
-  struct simple_variant;
-
-  // The constness of T is erased here, but we will be able to retrieve it with
-  // auto_any_cast and the help of type_wrapper.
-  template<typename T>
-  inline auto_any_impl<simple_variant<T> > capture(T const & t, bool * rvalue)
+  template<typename T, typename IsConst>
+  inline BOOST_DEDUCED_TYPENAME ::boost::mpl::if_<IsConst, T const, T>::type &
+    auto_any_cast(auto_any_t a)
   {
-    // Have to use a variant because we don't know whether to capture by value
-    // or by reference until runtime.
-    return auto_any_impl<simple_variant<T> >(
-      *rvalue ? simple_variant<T>(t) : simple_variant<T>(&t));
+    return static_cast<auto_any_impl<T> const &>(a).item;
   }
-#endif
+};
 
 //--------
 //auto_any
@@ -124,13 +88,74 @@ struct auto_any_impl : auto_any
   : item(t)
   {}
 
+private:
+  friend struct util;
+private:
   // Temporaries of type auto_any_impl will be bound to const auto_any
   // references, but we still want to be able to mutate the stored
   // data, so declare it as mutable.
   mutable T item;
 };
 
+}
+}
+
+//####
+//Impl
+//####
+
+namespace wg
+{
+namespace rvaluesimulator
+{
+namespace detail
+{
+
+//------------------------------------------------------------------------------
+//capture
+//  Captures the result of an expression.
+//  If it's an lvalue a copy of it is made, else a reference to it is held.
+//------------------------------------------------------------------------------
+
+// WG_RVALUESIMULATOR_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
+//   t is a rvalue
+template<typename T>
+inline auto_any_impl<T> capture(T const & t, ::boost::mpl::true_ *)
+{
+  return auto_any_impl<T>(t);
+}
+
+// WG_RVALUESIMULATOR_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
+//   t is a lvalue
+// WG_RVALUESIMULATOR_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
+//   t is an array or a non-const lvalue
+template<typename T>
+inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
+{
+  // Cannot seem to get sunpro to handle addressof() with array types.
+#if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))
+  return auto_any_impl<T *>(&t);
+#else
+  return auto_any_impl<T *>(::boost::addressof(t));
+#endif
+}
+
 #ifdef WG_RVALUESIMULATOR_CONFIG_CONSTRVALUEDETECTION_RUNTIME
+  template<typename T>
+  struct simple_variant;
+
+  // t is const, non-array lvalue or it's an rvalue
+  // The constness of T is erased here, but we will be able to retrieve it with
+  // auto_any_cast and the help of type_wrapper.
+  template<typename T>
+  inline auto_any_impl<simple_variant<T> > capture(T const & t, bool * rvalue)
+  {
+    // Have to use a variant because we don't know whether to capture by value
+    // or by reference until runtime.
+    return auto_any_impl<simple_variant<T> >(
+      *rvalue ? simple_variant<T>(t) : simple_variant<T>(&t));
+  }
+
   //-------------------------------------
   //simple_variant
   //  Holds either a T or a "T const *".

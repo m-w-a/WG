@@ -43,43 +43,20 @@
 #define WG_RVALUESIMULATOR_CAPTURE(expr, is_rvalue_flag) \
   WG_RVALUESIMULATOR_CAPTURE_IMPL(expr, is_rvalue_flag)
 
+// WG_RVALUESIMULATOR_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
+//   expands to:
+//     1) ::boost::mpl::true_ *, if expr is a rvalue, else
+//     2) ::boost::mpl::false_ * if expr is a lvalue.
+// WG_RVALUESIMULATOR_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
+//   expands to:
+//     1) ::boost::mpl::false_ *, if expr is an array or a non-const lvalue
+//     2) bool *, if expr is const, non-array lvalue or it's an rvalue
 #define WG_RVALUESIMULATOR_CAPTURE_CATEGORY(expr) \
   WG_RVALUESIMULATOR_CAPTURE_CATEGORY_IMPL(expr)
 
 //###########
 //Impl Macros
 //###########
-
-namespace wg
-{
-namespace rvaluesimulator
-{
-namespace detail
-{
-
-#ifdef BOOST_NO_CXX11_RVALUE_REFERENCES
-  template<typename T>
-  inline ::boost::mpl::false_ * is_rvalue_(T &, int)
-  {
-    return 0;
-  }
-
-  template<typename T>
-  inline ::boost::mpl::true_ * is_rvalue_(T const &, ...)
-  {
-    return 0;
-  }
-#else
-template<typename T>
-  inline ::boost::is_rvalue_reference<T &&> * is_rvalue_(T &&, int)
-  {
-    return 0;
-  }
-#endif
-
-}
-}
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 // R-values and const R-values supported here with zero runtime overhead
@@ -91,8 +68,25 @@ template<typename T>
   //////////////////////////////////////////////////////////////////////////////
   #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
+    namespace wg
+    {
+    namespace rvaluesimulator
+    {
+    namespace detail
+    {
+
+    template<typename T>
+      inline ::boost::is_rvalue_reference<T &&> * is_rvalue_(T &&, int)
+      {
+        return 0;
+      }
+
     #define WG_RVALUESIMULATOR_CAPTURE_ISRVALUE(expr) \
       ::wg::rvaluesimulator::detail::is_rvalue_((expr), 0)
+
+    }
+    }
+    }
 
   //////////////////////////////////////////////////////////////////////////////
   // Detect at compile-time whether an expression yields an rvalue or
@@ -100,6 +94,29 @@ template<typename T>
   // accept it.
   //////////////////////////////////////////////////////////////////////////////
   #elif defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+
+    namespace wg
+    {
+    namespace rvaluesimulator
+    {
+    namespace detail
+    {
+
+    template<typename T>
+    inline ::boost::mpl::false_ * is_rvalue_(T &, int)
+    {
+      return 0;
+    }
+
+    template<typename T>
+    inline ::boost::mpl::true_ * is_rvalue_(T const &, ...)
+    {
+      return 0;
+    }
+
+    }
+    }
+    }
 
     #define WG_RVALUESIMULATOR_CAPTURE_ISRVALUE(expr) \
       boost::foreach_detail_::and_( \

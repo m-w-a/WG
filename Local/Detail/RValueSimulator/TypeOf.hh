@@ -1,5 +1,5 @@
-#ifndef WG_RVALUESIMULATOR_TYPEOF_HH_
-#define WG_RVALUESIMULATOR_TYPEOF_HH_
+#ifndef WG_RVALUESIMULATOR_ENCODEDTYPEOF_HH_
+#define WG_RVALUESIMULATOR_ENCODEDTYPEOF_HH_
 
 ///////////////////////////////////////////////////////////////////////////////
 // foreach.hpp header file
@@ -25,10 +25,10 @@
 
 // A sneaky way to get the type of an expression without evaluating the
 // expression.
-#define WG_RVALUESIMULATOR_TYPEOF(expr)                                                               \
+#define WG_RVALUESIMULATOR_ENCODEDTYPEOF(expr)                                                               \
     (true \
       ? 0 \
       : ::wg::lclcontext::detail::encode_type( \
-          COL, ::wg::lclcontext::detail::is_const_(expr)))
+          expr, ::wg::lclcontext::detail::is_const_(expr)))
 
-#endif /* WG_RVALUESIMULATOR_TYPEOF_HH_ */
+#endif /* WG_RVALUESIMULATOR_ENCODEDTYPEOF_HH_ */
