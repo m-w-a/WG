@@ -4,7 +4,7 @@
 
 Note: All terms not defined here should be referenced in AutoFunctorSpec.txt
 
-adhoc-context-handlers:
+adhoc-scope-handlers:
   1) At least one handler must be specified.
 
 //---
@@ -31,17 +31,17 @@ lclcontext-spec :=
   | with-adhoc-dcln [ lclcontext-spec ]
 
 with-dcln :=
-  with( context-manager-expr ) [ entered_as( type-var-dcln ) ]
+  with( scope-manager-expr ) [ entered_as( type-var-dcln ) ]
 
 with-adhoc-decln :=
-    with_adhoc [ varbind bound-tuple-seq ] adhoc-context-handlers
+    with_adhoc [ varbind bound-tuple-seq ] adhoc-scope-handlers
   | with_adhoc( simple-declaration ) 
     [ varbind bound-tuple-seq ]
-    adhoc-context-handlers
+    adhoc-scope-handlers
 
-adhoc-context-handlers :=
-  [onenter( compound-statement )] [onexit( compound-statement )]
+adhoc-scope-handlers :=
+  [on_enter( compound-statement )] [on_exit( compound-statement )]
 
-context-manager-expr := A C++ expression that evaluates to a context manager.
+scope-manager-expr := An lvalue C++ expression that evaluates to a scope manager.
 compound-statement := See C++ standard.
 simple-declaration := See C++ standard. 
