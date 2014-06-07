@@ -6,6 +6,24 @@ Note: All terms not defined here should be referenced in AutoFunctorSpec.txt
 
 adhoc-scope-handlers:
   1) At least one handler must be specified.
+scope-manager-expr:
+  Is limited to an lvalue expression because if rvalues are allowed, then the 
+  question of captured by const vs non-const arises which complicates the macro 
+  syntax. So for the sake of simplicity, only lvalue expressions are handled.
+
+on_enter:
+  Upon entering the lclcontext's scope, the on_enter method of each declared 
+  scope manager object is called in the order in which they appeared in the 
+  opening macro, starting from first to last. Any return value is ignored unless 
+  otherwise specified in the lclcontext's opening macro.
+  
+on_exit:
+  Upen exit of the lclcontext's scope for any reason (thrown exception, return 
+  statement, goto?, fall-through) the on_exit method of each declared scope 
+  manager object is called in the reverse order in which they appeared in the 
+  opening macro. If the lclcontext's scope was exited due to an exception being 
+  thrown from that scope then "true" is passed as a parameter to on_exit, else 
+  "false" is passed as a parameter.
 
 //---
 //BNF
