@@ -15,4 +15,8 @@ LclClass:
 
 LclFunction:
   Binder: local namespace to lclfunction namespace?
+  Implementation outline.
   Boost.LocalFunction array bugs.
+  
+  
+BOOST_NO_CXX11_* -> WG_*

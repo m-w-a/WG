@@ -7,7 +7,7 @@
 #ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
   namespace detail = wg::lclfunction::detail::cpp11;
 #else
-  namespace detail = wg::lclfunction::detail;
+  namespace detail = wg::lclfunction::detail::cpp03;
 #endif
 
 TEST(wg_lclfunction_configparamsmaxaritydefault, OkIfLessThanDefault)

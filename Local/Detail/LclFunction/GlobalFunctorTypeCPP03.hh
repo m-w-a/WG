@@ -15,6 +15,8 @@ namespace lclfunction
 {
 namespace detail
 {
+namespace cpp03
+{
 
 WG_PP_LCLFUNCTION_FUNCTIONOPERATORTYPE_CPP03_DCLNS()
 
@@ -87,6 +89,7 @@ private:
     captured_var_types m_CapturedVars;
 };
 
+}
 }
 }
 }

@@ -35,7 +35,7 @@
 
 #define WG_PP_LCLFUNCTION_CG_CPP03_GLOBALFUNCTORTYPE_TYPE( \
   function_name, symbtbl, global_functor_type_name) \
-    ::wg::lclfunction::detail::global_functor_type \
+    ::wg::lclfunction::detail::cpp03::global_functor_type \
     < \
       WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTION_RETURNTYPE(symbtbl) \
       ( \
