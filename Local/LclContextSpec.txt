@@ -25,6 +25,20 @@ on_exit:
   thrown from that scope then "true" is passed as a parameter to on_exit, else 
   "false" is passed as a parameter.
 
+on_exit can only be triggered by the destructor in order for it to be invoked
+*any time* the scope is exited. The destructor doesn't have access to any
+expressions of the enclosing scope so foreach's "downcast" trick using the
+conditional operator can't be used. Hence the destructor's class must know the
+types of each scope manager in order to call on_exit. This means that either
+explicit scope managers or adhoc scope managers have to be type erased since in
+C++03 local classes can't be templated nor be used as template parameters.
+It has been decided to type erase adhoc scope managers since they are generated
+by the library. This means that in C++03 the on_exit call to them will have to
+go through a function pointer, but in C++11 this indirection is not necessary.
+Note: it is necessary to allow the calls to the on_exit method of explicit and
+  adhoc scope managers to be intermixed since the user may intermix them in the
+  opening macro.
+
 //---
 //BNF
 //---
