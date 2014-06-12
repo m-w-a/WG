@@ -1,5 +1,5 @@
-#ifndef WG_RVALUESIMULATOR_DETAIL_TYPEWRAPPER_HH_
-#define WG_RVALUESIMULATOR_DETAIL_TYPEWRAPPER_HH_
+#ifndef WG_LVALUEBINDER_DETAIL_TYPEWRAPPER_HH_
+#define WG_LVALUEBINDER_DETAIL_TYPEWRAPPER_HH_
 
 ///////////////////////////////////////////////////////////////////////////////
 // foreach.hpp header file
@@ -38,8 +38,8 @@ struct type_wrapper;
 
 // Expands to "type_wrapper<T> *", where T represents the type of "expr",
 // without evaluating "expr".
-#define WG_RVALUESIMULATOR_DETAIL_ENCODEDTYPEOF(expr) \
-  WG_RVALUESIMULATOR_DETAIL_ENCODEDTYPEOF_IMPL(expr)
+#define WG_LVALUEBINDER_DETAIL_ENCODEDTYPEOF(expr) \
+  WG_LVALUEBINDER_DETAIL_ENCODEDTYPEOF_IMPL(expr)
 
 //####
 //Impl
@@ -63,7 +63,7 @@ inline type_wrapper<T> * encode_type(T &)
   return 0;
 }
 
-#define WG_RVALUESIMULATOR_DETAIL_ENCODEDTYPEOF_IMPL(expr) \
+#define WG_LVALUEBINDER_DETAIL_ENCODEDTYPEOF_IMPL(expr) \
   (true \
     ? 0 \
     : ::wg::lclcontext::detail::encode_type(expr))
@@ -72,4 +72,4 @@ inline type_wrapper<T> * encode_type(T &)
 }
 }
 
-#endif /* WG_RVALUESIMULATOR_DETAIL_TYPEWRAPPER_HH_ */
+#endif /* WG_LVALUEBINDER_DETAIL_TYPEWRAPPER_HH_ */
