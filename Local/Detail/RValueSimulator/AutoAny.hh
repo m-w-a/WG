@@ -58,8 +58,9 @@ typedef auto_any const & auto_any_t;
 struct util
 {
   template<typename T, typename IsConst>
-  inline BOOST_DEDUCED_TYPENAME ::boost::mpl::if_<IsConst, T const, T>::type &
-    auto_any_cast(auto_any_t a)
+  inline BOOST_DEDUCED_TYPENAME
+    ::boost::mpl::if_<IsConst, T const, T>::type &
+      auto_any_cast(auto_any_t a)
   {
     return static_cast<auto_any_impl<T> const &>(a).item;
   }
@@ -92,7 +93,7 @@ private:
   friend struct util;
 private:
   // Temporaries of type auto_any_impl will be bound to const auto_any
-  // references, but we still want to be able to mutate the stored
+  // references, but we may still want to be able to mutate the stored
   // data, so declare it as mutable.
   mutable T item;
 };
@@ -128,7 +129,7 @@ inline auto_any_impl<T> capture(T const & t, ::boost::mpl::true_ *)
 // WG_RVALUESIMULATOR_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
 //   t is a lvalue
 // WG_RVALUESIMULATOR_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
-//   t is an array or a non-const lvalue
+//   t is an array (all arrays are lvalues) or a non-const lvalue
 template<typename T>
 inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
 {
@@ -145,20 +146,20 @@ inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
   struct simple_variant;
 
   // t is const, non-array lvalue or it's an rvalue
-  // The constness of T is erased here, but we will be able to retrieve it with
-  // auto_any_cast and the help of type_wrapper.
   template<typename T>
   inline auto_any_impl<simple_variant<T> > capture(T const & t, bool * rvalue)
   {
     // Have to use a variant because we don't know whether to capture by value
     // or by reference until runtime.
     return auto_any_impl<simple_variant<T> >(
-      *rvalue ? simple_variant<T>(t) : simple_variant<T>(&t));
+      *rvalue ? simple_variant<T>(t) : simple_variant<T const>(&t));
   }
 
   //-------------------------------------
   //simple_variant
   //  Holds either a T or a "T const *".
+  //  T means an the expression was an rvalue.
+  //  "T const *" means the expression was an lvalue.
   //-------------------------------------
 
   template<typename T>

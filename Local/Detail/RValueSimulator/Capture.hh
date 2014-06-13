@@ -1,5 +1,5 @@
-#ifndef WG_RVALUESIMULATOR_CAPTURE_HH_
-#define WG_RVALUESIMULATOR_CAPTURE_HH_
+#ifndef WG_RVALUESIMULATOR_DETAIL_CAPTURE_HH_
+#define WG_RVALUESIMULATOR_DETAIL_CAPTURE_HH_
 
 ///////////////////////////////////////////////////////////////////////////////
 // foreach.hpp header file
@@ -29,6 +29,7 @@
 #include <boost/type_traits/is_array.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <WG/Local/Detail/RValueSimulator/Config.hh>
+#include <WG/Local/Detail/RValueSimulator/TypeTraits.hh>
 #include <WG/Local/Detail/RValueSimulator/AutoAny.hh>
 
 //###########
@@ -36,12 +37,12 @@
 //###########
 
 // Usage:
-//   auto_any_t captured_obj = WG_RVALUESIMULATOR_CAPTURE(...) ;
+//   auto_any_t captured_obj = WG_RVALUESIMULATOR_DETAIL_CAPTURE(...) ;
 // is_rvalue_flag:
 //   a boolean variable. This will be ignored if
 //   WG_RVALUESIMULATOR_CONFIG_CONSTRVALUEDETECTION_COMPILETIME is defined.
-#define WG_RVALUESIMULATOR_CAPTURE(expr, is_rvalue_flag) \
-  WG_RVALUESIMULATOR_CAPTURE_IMPL(expr, is_rvalue_flag)
+#define WG_RVALUESIMULATOR_DETAIL_CAPTURE(expr, is_rvalue_flag) \
+  WG_RVALUESIMULATOR_DETAIL_CAPTURE_IMPL(expr, is_rvalue_flag)
 
 // WG_RVALUESIMULATOR_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
 //   expands to:
@@ -50,9 +51,9 @@
 // WG_RVALUESIMULATOR_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
 //   expands to:
 //     1) ::boost::mpl::false_ *, if expr is an array or a non-const lvalue
-//     2) bool *, if expr is const, non-array lvalue or it's an rvalue
-#define WG_RVALUESIMULATOR_CAPTURE_CATEGORY(expr) \
-  WG_RVALUESIMULATOR_CAPTURE_CATEGORY_IMPL(expr)
+//     2) bool *, if expr is a const, non-array lvalue or it's an rvalue
+#define WG_RVALUESIMULATOR_DETAIL_CAPTURE_CATEGORY(expr) \
+  WG_RVALUESIMULATOR_DETAIL_CAPTURE_CATEGORY_IMPL(expr)
 
 //###########
 //Impl Macros
@@ -81,7 +82,7 @@
         return 0;
       }
 
-    #define WG_RVALUESIMULATOR_CAPTURE_ISRVALUE(expr) \
+    #define WG_RVALUESIMULATOR_DETAIL_CAPTURE_ISRVALUE(expr) \
       ::wg::rvaluesimulator::detail::is_rvalue_((expr), 0)
 
     }
@@ -114,23 +115,6 @@
       return 0;
     }
 
-    }
-    }
-    }
-
-    #define WG_RVALUESIMULATOR_CAPTURE_ISRVALUE(expr) \
-      boost::foreach_detail_::and_( \
-        boost::foreach_detail_::not_(boost::foreach_detail_::is_array_(expr)) , \
-        (true ? 0 : ::wg::rvaluesimulator::detail::is_rvalue_( \
-          (true ? ::wg::rvaluesimulator::detail::make_probe(expr) : (expr)), 0) ) )
-
-    namespace wg
-    {
-    namespace rvaluesimulator
-    {
-    namespace detail
-    {
-
     template<typename T>
     struct rvalue_probe;
 
@@ -162,27 +146,34 @@
     }
     }
     }
+
+    #define WG_RVALUESIMULATOR_DETAIL_CAPTURE_ISRVALUE(expr) \
+      boost::foreach_detail_::and_( \
+        boost::foreach_detail_::not_(boost::foreach_detail_::is_array_(expr)) , \
+        (true ? 0 : ::wg::rvaluesimulator::detail::is_rvalue_( \
+          (true ? ::wg::rvaluesimulator::detail::make_probe(expr) : (expr)), 0) ) )
+
   #endif
 
-  #define WG_RVALUESIMULATOR_CAPTURE_EVALUATE(expr) (expr)
+  #define WG_RVALUESIMULATOR_DETAIL_CAPTURE_EVALUATE(expr) (expr)
 
-  #define WG_RVALUESIMULATOR_CAPTURE_SHOULDCOPY(expr) \
-    (true ? 0 : WG_RVALUESIMULATOR_CAPTURE_ISRVALUE(expr) )
+  #define WG_RVALUESIMULATOR_DETAIL_CAPTURE_SHOULDCOPY(expr) \
+    (true ? 0 : WG_RVALUESIMULATOR_DETAIL_CAPTURE_ISRVALUE(expr) )
 
-  #define WG_RVALUESIMULATOR_CAPTURE_IMPL(expr, ignored) \
+  #define WG_RVALUESIMULATOR_DETAIL_CAPTURE_IMPL(expr, ignored) \
     ::wg::rvaluesimulator::detail::capture( \
-      WG_RVALUESIMULATOR_CAPTURE_EVALUATE(expr) , \
-      WG_RVALUESIMULATOR_CAPTURE_SHOULDCOPY(expr))
+      WG_RVALUESIMULATOR_DETAIL_CAPTURE_EVALUATE(expr) , \
+      WG_RVALUESIMULATOR_DETAIL_CAPTURE_SHOULDCOPY(expr))
 
-  #define WG_RVALUESIMULATOR_CAPTURE_CATEGORY_IMPL(expr) \
-    WG_RVALUESIMULATOR_CAPTURE_SHOULDCOPY(expr)
+  #define WG_RVALUESIMULATOR_DETAIL_CAPTURE_CATEGORY_IMPL(expr) \
+    WG_RVALUESIMULATOR_DETAIL_CAPTURE_SHOULDCOPY(expr)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Detect at run-time whether an expression yields an rvalue
 // or an lvalue. This is 100% standard C++, but not all compilers
 // accept it.
 ///////////////////////////////////////////////////////////////////////////////
-#elif WG_RVALUESIMULATOR_CONFIG_CONSTRVALUEDETECTION_RUNTIME
+#elif defined(WG_RVALUESIMULATOR_CONFIG_CONSTRVALUEDETECTION_RUNTIME)
 
   namespace wg
   {
@@ -190,6 +181,9 @@
   {
   namespace detail
   {
+
+  template<typename T>
+  struct rvalue_probe;
 
   //-------------
   // rvalue_probe
@@ -227,7 +221,7 @@
   #else
     typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::if_
     <
-      ::boost::mpl::or_<::boost::is_abstract<T>, ::boost::is_array<T> > ,
+      ::boost::mpl::or_< ::boost::is_abstract<T>, ::boost::is_array<T> > ,
       private_type_ ,
       T
     >::type value_type;
@@ -270,7 +264,7 @@
   }
 
   // Evaluate expr and detect if it's an lvalue or an rvalue.
-  #define WG_RVALUESIMULATOR_CAPTURE_EVALUATE_AND_SETRVALUEFLAG( \
+  #define WG_RVALUESIMULATOR_DETAIL_CAPTURE_EVALUATE_AND_SETRVALUEFLAG( \
     expr, is_rvalue_flag) \
       (true ? \
         ::wg::rvaluesimulator::detail::make_probe((expr), is_rvalue_flag ) \
@@ -279,23 +273,24 @@
   // The rvalue/lvalue-ness of the collection expression is determined
   // dynamically, unless the type is an array or is non-const,
   // in which case we know it's an lvalue.
-  #define WG_RVALUESIMULATOR_CAPTURE_SHOULDCOPY(expr, ptr_is_rvalue_flag) \
+  #define WG_RVALUESIMULATOR_DETAIL_CAPTURE_SHOULDCOPY(expr, ptr_is_rvalue_flag) \
     ( \
-    ::wg::rvaluesimulator::should_copy_impl( \
+    ::wg::rvaluesimulator::detail::should_copy_impl( \
       true ? 0 : ::wg::rvaluesimulator::detail::or_( \
         ::wg::rvaluesimulator::detail::is_array_(expr) , \
-        ::wg::rvaluesimulator::detail::not_(::wg::rvaluesimulator::detail::is_const_(expr))) , \
+        ::wg::rvaluesimulator::detail::not_( \
+          ::wg::rvaluesimulator::detail::is_const_(expr))) , \
       ptr_is_rvalue_flag) \
     )
 
-  #define WG_RVALUESIMULATOR_CAPTURE_IMPL(expr, is_rvalue_flag) \
+  #define WG_RVALUESIMULATOR_DETAIL_CAPTURE_IMPL(expr, is_rvalue_flag) \
     ::wg::rvaluesimulator::detail::capture( \
-      WG_RVALUESIMULATOR_CAPTURE_EVALUATE_AND_SETRVALUEFLAG(expr, is_rvalue_flag), \
-      WG_RVALUESIMULATOR_CAPTURE_SHOULDCOPY(expr, &is_rvalue_flag) )
+      WG_RVALUESIMULATOR_DETAIL_CAPTURE_EVALUATE_AND_SETRVALUEFLAG(expr, is_rvalue_flag), \
+      WG_RVALUESIMULATOR_DETAIL_CAPTURE_SHOULDCOPY(expr, &is_rvalue_flag) )
 
-  #define WG_RVALUESIMULATOR_CAPTURE_CATEGORY_IMPL(expr) \
-    WG_RVALUESIMULATOR_CAPTURE_SHOULDCOPY(expr, 0)
+  #define WG_RVALUESIMULATOR_DETAIL_CAPTURE_CATEGORY_IMPL(expr) \
+    WG_RVALUESIMULATOR_DETAIL_CAPTURE_SHOULDCOPY(expr, 0)
 
 #endif
 
-#endif /* WG_RVALUESIMULATOR_CAPTURE_HH_ */
+#endif /* WG_RVALUESIMULATOR_DETAIL_CAPTURE_HH_ */

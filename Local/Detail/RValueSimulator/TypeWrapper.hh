@@ -23,18 +23,47 @@
 #include <boost/mpl/bool_fwd.hpp>
 #include <boost/mpl/if.hpp>
 
+//###########
+//Public APIs
+//###########
+
 namespace wg
 {
 namespace rvaluesimulator
 {
 
-template<typename T, typename IsConst = ::boost::mpl::false_>
-struct type_wrapper : ::boost::mpl::if_<IsConst, T const, T>
+template<typename T, typename IsExprConst>
+struct type_wrapper;
+
+}
+}
+
+// Expands to "type_wrapper<T, IsExprConst> *" without evaluating expr, where
+// T is the equivalent of BOOST_TYPEOF(expr), and
+// IsExprConst is either ::boost::mpl::false_ or ::boost::mpl::true_
+// Note: if expr is an rvalue then IsExprConst will always be ::boost::mpl::true_.
+#define WG_RVALUESIMULATOR_ENCODEDTYPEOF(expr) \
+  (true \
+    ? 0 \
+    : ::wg::lclcontext::detail::encode_type( \
+        expr, ::wg::lclcontext::detail::is_const_(expr)))
+
+//####
+//Impl
+//####
+
+namespace wg
+{
+namespace rvaluesimulator
+{
+
+template<typename T, typename IsExprConst>
+struct type_wrapper : ::boost::mpl::if_<IsExprConst, T const, T>
 {
 };
 
 template<typename T>
-inline type_wrapper<T> *
+inline type_wrapper<T, ::boost::mpl::false_> *
   encode_type(T &, ::boost::mpl::false_ *)
 { return 0; }
 
