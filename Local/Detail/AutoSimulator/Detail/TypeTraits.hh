@@ -30,7 +30,7 @@
 
 namespace wg
 {
-namespace rvaluesimulator
+namespace autosimulator
 {
 namespace detail
 {

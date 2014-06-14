@@ -1,5 +1,5 @@
-#ifndef WG_RVALUESIMULATOR_DETAIL_AUTOANY_HH_
-#define WG_RVALUESIMULATOR_DETAIL_AUTOANY_HH_
+#ifndef WG_AUTOSIMULATOR_DETAIL_AUTOANY_HH_
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_HH_
 
 ///////////////////////////////////////////////////////////////////////////////
 // foreach.hpp header file
@@ -31,31 +31,31 @@
 #include <boost/type_traits/is_array.hpp>
 #include <boost/utility/addressof.hpp>
 #include <boost/utility/enable_if.hpp>
-#include <WG/Local/Detail/RValueSimulator/Detail/Config.hh>
-#include <WG/Local/Detail/RValueSimulator/Detail/TypeTraits.hh>
+#include <WG/Local/Detail/AutoSimulator/Detail/Config.hh>
+#include <WG/Local/Detail/AutoSimulator/Detail/TypeTraits.hh>
 
 //###########
 //Public APIs
 //###########
 
 // Usage:
-//   auto_any_t captured_obj = WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(...) ;
+//   auto_any_t captured_obj = WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(...) ;
 // is_rvalue_flag:
 //   a boolean variable. This will be ignored if
-//   WG_RVALUESIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME is defined.
-#define WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, is_rvalue_flag) \
-  WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, is_rvalue_flag)
+//   WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME is defined.
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, is_rvalue_flag) \
+  WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, is_rvalue_flag)
 
-// WG_RVALUESIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
+// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
 //   expands to:
 //     1) ::boost::mpl::true_ *, if expr is a rvalue, else
 //     2) ::boost::mpl::false_ * if expr is a lvalue.
-// WG_RVALUESIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
+// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
 //   expands to:
 //     1) ::boost::mpl::false_ *, if expr is an array or a non-const lvalue
 //     2) bool *, if expr is a const, non-array lvalue or it's an rvalue
-#define WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr) \
-  WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr)
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr) \
+  WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr)
 
 //####
 //Impl
@@ -63,7 +63,7 @@
 
 namespace wg
 {
-namespace rvaluesimulator
+namespace autosimulator
 {
 namespace detail
 {
@@ -120,9 +120,9 @@ struct util
 //  If it's an lvalue a copy of it is made, else a reference to it is held.
 //------------------------------------------------------------------------------
 
-// WG_RVALUESIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
+// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
 //   t is a rvalue
-// WG_RVALUESIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
+// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
 //   never called
 template<typename T>
 inline auto_any_impl<T> capture(T const & t, ::boost::mpl::true_ *)
@@ -130,9 +130,9 @@ inline auto_any_impl<T> capture(T const & t, ::boost::mpl::true_ *)
   return auto_any_impl<T>(t);
 }
 
-// WG_RVALUESIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
+// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
 //   t is a lvalue
-// WG_RVALUESIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
+// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
 //   t is an array (all arrays are lvalues) or a non-const lvalue
 template<typename T>
 inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
@@ -145,7 +145,7 @@ inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
 #endif
 }
 
-#ifdef WG_RVALUESIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
+#ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
   template<typename T>
   struct simple_variant;
 
@@ -244,7 +244,7 @@ inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
 ///////////////////////////////////////////////////////////////////////////////
 // R-values and const R-values supported here with zero runtime overhead
 ///////////////////////////////////////////////////////////////////////////////
-#ifdef WG_RVALUESIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME
+#ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME
   //////////////////////////////////////////////////////////////////////////////
   // Rvalue references makes it drop-dead simple to detect at compile time
   // whether an expression is an rvalue.
@@ -253,7 +253,7 @@ inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
 
     namespace wg
     {
-    namespace rvaluesimulator
+    namespace autosimulator
     {
     namespace detail
     {
@@ -264,8 +264,8 @@ inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
         return 0;
       }
 
-    #define WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_ISRVALUE(expr) \
-      ::wg::rvaluesimulator::detail::is_rvalue_((expr), 0)
+    #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_ISRVALUE(expr) \
+      ::wg::autosimulator::detail::is_rvalue_((expr), 0)
 
     }
     }
@@ -280,7 +280,7 @@ inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
 
     namespace wg
     {
-    namespace rvaluesimulator
+    namespace autosimulator
     {
     namespace detail
     {
@@ -329,37 +329,37 @@ inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
     }
     }
 
-    #define WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_ISRVALUE(expr) \
+    #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_ISRVALUE(expr) \
       boost::foreach_detail_::and_( \
         boost::foreach_detail_::not_(boost::foreach_detail_::is_array_(expr)) , \
-        (true ? 0 : ::wg::rvaluesimulator::detail::is_rvalue_( \
-          (true ? ::wg::rvaluesimulator::detail::make_probe(expr) : (expr)), 0) ) )
+        (true ? 0 : ::wg::autosimulator::detail::is_rvalue_( \
+          (true ? ::wg::autosimulator::detail::make_probe(expr) : (expr)), 0) ) )
 
   #endif
 
-  #define WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE(expr) (expr)
+  #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE(expr) (expr)
 
-  #define WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr) \
-    (true ? 0 : WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_ISRVALUE(expr) )
+  #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr) \
+    (true ? 0 : WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_ISRVALUE(expr) )
 
-  #define WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, ignored) \
-    ::wg::rvaluesimulator::detail::capture( \
-      WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE(expr) , \
-      WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr))
+  #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, ignored) \
+    ::wg::autosimulator::detail::capture( \
+      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE(expr) , \
+      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr))
 
-  #define WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr) \
-    WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr)
+  #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr) \
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Detect at run-time whether an expression yields an rvalue
 // or an lvalue. This is 100% standard C++, but not all compilers
 // accept it.
 ///////////////////////////////////////////////////////////////////////////////
-#elif defined(WG_RVALUESIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME)
+#elif defined(WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME)
 
   namespace wg
   {
-  namespace rvaluesimulator
+  namespace autosimulator
   {
   namespace detail
   {
@@ -446,34 +446,34 @@ inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
   }
 
   // Evaluate expr and detect if it's an lvalue or an rvalue.
-  #define WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE_AND_SETRVALUEFLAG( \
+  #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE_AND_SETRVALUEFLAG( \
     expr, is_rvalue_flag) \
       (true ? \
-        ::wg::rvaluesimulator::detail::make_probe((expr), is_rvalue_flag ) \
+        ::wg::autosimulator::detail::make_probe((expr), is_rvalue_flag ) \
         : (expr))
 
   // The rvalue/lvalue-ness of the collection expression is determined
   // dynamically, unless the type is an array or is non-const,
   // in which case we know it's an lvalue.
-  #define WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY( \
+  #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY( \
     expr, ptr_is_rvalue_flag) \
       ( \
-      ::wg::rvaluesimulator::detail::should_copy_impl( \
-        true ? 0 : ::wg::rvaluesimulator::detail::or_( \
-          ::wg::rvaluesimulator::detail::is_array_(expr) , \
-          ::wg::rvaluesimulator::detail::not_( \
-            ::wg::rvaluesimulator::detail::is_const_(expr))) , \
+      ::wg::autosimulator::detail::should_copy_impl( \
+        true ? 0 : ::wg::autosimulator::detail::or_( \
+          ::wg::autosimulator::detail::is_array_(expr) , \
+          ::wg::autosimulator::detail::not_( \
+            ::wg::autosimulator::detail::is_const_(expr))) , \
         ptr_is_rvalue_flag) \
       )
 
-  #define WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, is_rvalue_flag) \
-    ::wg::rvaluesimulator::detail::capture( \
-      WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE_AND_SETRVALUEFLAG(expr, is_rvalue_flag), \
-      WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr, &is_rvalue_flag) )
+  #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, is_rvalue_flag) \
+    ::wg::autosimulator::detail::capture( \
+      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE_AND_SETRVALUEFLAG(expr, is_rvalue_flag), \
+      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr, &is_rvalue_flag) )
 
-  #define WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr) \
-    WG_RVALUESIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr, 0)
+  #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr) \
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr, 0)
 
 #endif
 
-#endif /* WG_RVALUESIMULATOR_DETAIL_AUTOANY_HH_ */
+#endif /* WG_AUTOSIMULATOR_DETAIL_AUTOANY_HH_ */

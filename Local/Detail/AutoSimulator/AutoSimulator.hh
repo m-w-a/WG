@@ -1,8 +1,8 @@
-#ifndef WG_RVALUESIMULATOR_HH_
-#define WG_RVALUESIMULATOR_HH_
+#ifndef WG_AUTOSIMULATOR_HH_
+#define WG_AUTOSIMULATOR_HH_
 
-#include <WG/Local/Detail/RValueSimulator/Detail/AutoAny.hh>
-#include <WG/Local/Detail/RValueSimulator/Detail/Visit.hh>
+#include <WG/Local/Detail/AutoSimulator/Detail/AutoAny.hh>
+#include <WG/Local/Detail/AutoSimulator/Detail/Visit.hh>
 
 //###########
 //Public APIs
@@ -10,7 +10,7 @@
 
 namespace wg
 {
-namespace rvaluesimulator
+namespace autosimulator
 {
 
 namespace detail
@@ -46,21 +46,21 @@ struct visitor : private detail::visitor_base
 }
 
 // Usage:
-//   auto_any_t opaqued_captured_obj = WG_RVALUESIMULATOR_DETAIL_CAPTURE(...) ;
+//   auto_any_t opaqued_captured_obj = WG_AUTOSIMULATOR_DETAIL_CAPTURE(...) ;
 // expr:
 //   The expr whose result will be captured without using BOOST_TYPEOF.
 // is_rvalue_flag:
 //   A mutable boolean flag.
-#define WG_RVALUESIMULATOR_CAPTURE(expr, is_rvalue_flag) \
-  WG_RVALUESIMULATOR_DETAIL_CAPTURE(expr, is_rvalue_flag)
+#define WG_AUTOSIMULATOR_CAPTURE(expr, is_rvalue_flag) \
+  WG_AUTOSIMULATOR_DETAIL_CAPTURE(expr, is_rvalue_flag)
 
 // opaqued_captured_obj:
-//   An auto_any_t object that was initialized via WG_RVALUESIMULATOR_CAPTURE.
+//   An auto_any_t object that was initialized via WG_AUTOSIMULATOR_CAPTURE.
 // expr:
-//   The expr that was passed to WG_RVALUESIMULATOR_CAPTURE.
+//   The expr that was passed to WG_AUTOSIMULATOR_CAPTURE.
 // visitor:
 //   A ::wg::rvalue_simulator::visitor object.
-#define WG_RVALUESIMULATOR_VISIT(opaqued_captured_obj, expr, visitor) \
-  WG_RVALUESIMULATOR_DETAIL_VISIT(opaqued_captured_obj, expr, visitor)
+#define WG_AUTOSIMULATOR_VISIT(opaqued_captured_obj, expr, visitor) \
+  WG_AUTOSIMULATOR_DETAIL_VISIT(opaqued_captured_obj, expr, visitor)
 
-#endif /* WG_RVALUESIMULATOR_HH_ */
+#endif /* WG_AUTOSIMULATOR_HH_ */
