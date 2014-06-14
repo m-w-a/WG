@@ -1,7 +1,8 @@
 #ifndef WG_RVALUESIMULATOR_HH_
 #define WG_RVALUESIMULATOR_HH_
 
-#include <WG/Local/Detail/RValueSimulator/Capture.hh>
+#include <WG/Local/Detail/RValueSimulator/Detail/AutoAny.hh>
+#include <WG/Local/Detail/RValueSimulator/Detail/Visit.hh>
 
 //###########
 //Public APIs
@@ -12,8 +13,19 @@ namespace wg
 namespace rvaluesimulator
 {
 
+namespace detail
+{
+struct auto_any;
+}
+
+//------------------------------------------------------------------------------
+//auto_any_t
+//  General utility for putting an object of any type into automatic storage.
+//------------------------------------------------------------------------------
+typedef detail::auto_any const & auto_any_t;
+
 template <typename VisitorImpl, typename ReturnType = void>
-struct visitor
+struct visitor : private detail::visitor_base
 {
   typedef ReturnType return_type;
 

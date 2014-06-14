@@ -1,5 +1,5 @@
-#ifndef WG_LCLCONTEXT_DETAIL_TYPEWRAPPER_HH_
-#define WG_LCLCONTEXT_DETAIL_TYPEWRAPPER_HH_
+#ifndef WG_RVALUE_SIMULATOR_TYPEWRAPPER_HH_
+#define WG_RVALUE_SIMULATOR_TYPEWRAPPER_HH_
 
 ///////////////////////////////////////////////////////////////////////////////
 // foreach.hpp header file
@@ -42,7 +42,7 @@ struct type_wrapper;
 // T is the equivalent of BOOST_TYPEOF(expr), and
 // IsExprConst is either ::boost::mpl::false_ or ::boost::mpl::true_
 // Note: if expr is an rvalue then IsExprConst will always be ::boost::mpl::true_.
-#define WG_RVALUESIMULATOR_ENCODEDTYPEOF(expr) \
+#define WG_RVALUESIMULATOR_DETAIL_ENCODEDTYPEOF(expr) \
   (true \
     ? 0 \
     : ::wg::lclcontext::detail::encode_type( \
@@ -75,4 +75,4 @@ inline type_wrapper<T, ::boost::mpl::true_> *
 }
 }
 
-#endif /* WG_LCLCONTEXT_DETAIL_TYPEWRAPPER_HH_ */
+#endif /* WG_RVALUE_SIMULATOR_TYPEWRAPPER_HH_ */
