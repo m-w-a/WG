@@ -73,12 +73,25 @@ namespace detail
 //--------
 struct auto_any
 {
+  explicit auto_any(bool const is_rvalue)
+  : m_is_rvalue(is_rvalue)
+  {
+  }
+
+  bool is_rvalue() const
+  {
+    return this->m_is_rvalue;
+  }
+
   // auto_any must evaluate to false in boolean contexts so that
   // they can be declared in if() statements.
   operator bool() const
   {
     return false;
   }
+
+private:
+  bool const m_is_rvalue;
 };
 
 //-------------
@@ -87,8 +100,9 @@ struct auto_any
 template<typename T>
 struct auto_any_impl : auto_any
 {
-  explicit auto_any_impl(T const & t)
-  : item(t)
+  auto_any_impl(T const & t, bool const is_rvalue)
+  : auto_any(is_rvalue),
+    item(t)
   {}
 
 private:
@@ -127,7 +141,7 @@ struct util
 template<typename T>
 inline auto_any_impl<T> capture(T const & t, ::boost::mpl::true_ *)
 {
-  return auto_any_impl<T>(t);
+  return auto_any_impl<T>(t, true);
 }
 
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
@@ -139,9 +153,9 @@ inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
 {
   // Cannot seem to get sunpro to handle addressof() with array types.
 #if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))
-  return auto_any_impl<T *>(&t);
+  return auto_any_impl<T *>(&t, false);
 #else
-  return auto_any_impl<T *>(::boost::addressof(t));
+  return auto_any_impl<T *>(::boost::addressof(t), false);
 #endif
 }
 
@@ -156,7 +170,7 @@ inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
     // Have to use a variant because we don't know whether to capture by value
     // or by reference until runtime.
     return auto_any_impl<simple_variant<T> >(
-      *rvalue ? simple_variant<T>(t) : simple_variant<T>(&t));
+      *rvalue ? simple_variant<T>(t) : simple_variant<T>(&t), *rvalue);
   }
 
   //-------------------------------------

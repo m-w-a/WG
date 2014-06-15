@@ -68,6 +68,7 @@ TEST(wg_autosimulator_detail_autoany_03, MutableNonArrayLValue)
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
 
+  EXPECT_FALSE(obj.is_rvalue());
   EXPECT_EQ(
     ExpressionCategory::CompileTimeDeterminedAsLValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -81,6 +82,7 @@ TEST(wg_autosimulator_detail_autoany_03, ConstNonArrayLValue)
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
 
+  EXPECT_FALSE(obj.is_rvalue());
   EXPECT_EQ(
     ExpressionCategory::RunTimeDetermined,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -94,6 +96,7 @@ TEST(wg_autosimulator_detail_autoany_03, MutableArrayLValue)
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
 
+  EXPECT_FALSE(obj.is_rvalue());
   EXPECT_EQ(
     ExpressionCategory::CompileTimeDeterminedAsLValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -107,6 +110,7 @@ TEST(wg_autosimulator_detail_autoany_03, ConstArrayLValue)
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
 
+  EXPECT_FALSE(obj.is_rvalue());
   EXPECT_EQ(
     ExpressionCategory::CompileTimeDeterminedAsLValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -120,6 +124,7 @@ TEST(wg_autosimulator_detail_autoany_03, MutableRValue)
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
 
+  EXPECT_TRUE(obj.is_rvalue());
   EXPECT_EQ(
     ExpressionCategory::RunTimeDetermined,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -133,6 +138,7 @@ TEST(wg_autosimulator_detail_autoany_03, ConstRValue)
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
 
+  EXPECT_TRUE(obj.is_rvalue());
   EXPECT_EQ(
     ExpressionCategory::RunTimeDetermined,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
