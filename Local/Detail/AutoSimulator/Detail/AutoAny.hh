@@ -106,13 +106,13 @@ private:
 struct util
 {
   template<typename T, typename IsConst>
-  inline BOOST_DEDUCED_TYPENAME
+  BOOST_DEDUCED_TYPENAME
     ::boost::mpl::if_<IsConst, T const, T>::type &
-      auto_any_cast(auto_any_t a)
+      auto_any_cast(auto_any const & a)
   {
     return static_cast<auto_any_impl<T> const &>(a).item;
   }
-}
+};
 
 //------------------------------------------------------------------------------
 //capture
@@ -222,10 +222,15 @@ inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
   private:
     T * get_rvalue()
     {
+      return static_cast<T *>(this->m_data.address());
+    }
+
+    T const * get_rvalue() const
+    {
       return static_cast<T const *>(this->m_data.address());
     }
 
-    T const * get_lvalue()
+    T const * get_lvalue() const
     {
       return *static_cast<T const * const *>(this->m_data.address());
     }
@@ -345,7 +350,8 @@ inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, ignored) \
     ::wg::autosimulator::detail::capture( \
       WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE(expr) , \
-      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr))
+      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr)) ; \
+    (void)ignored
 
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr) \
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr)

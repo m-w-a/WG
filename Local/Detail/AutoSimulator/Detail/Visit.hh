@@ -47,13 +47,13 @@ template <typename Visitor, typename T, typename IsExprConst>
 inline BOOST_DEDUCED_TYPENAME Visitor::return_type
   visit(
     Visitor & visitor,
-    auto_any_t opaqued_obj,
+    auto_any const & opaqued_obj,
     type_wrapper<T, IsExprConst> *,
-    ::boost::mpl::false_ *)
+    ::boost::mpl::true_ *)
 {
-  BOOST_STATIC_ASSERT(::boost::is_base_of<visitor_base, Visitor>::value);
+  BOOST_STATIC_ASSERT((::boost::is_base_of<visitor_base, Visitor>::value));
   // Since the captured expression was an rvalue, the captured object is not const.
-  return visitor.visit(auto_any_cast<T, ::boost::mpl::false_>(opaqued_obj));
+  return visitor.visit(util::auto_any_cast<T, ::boost::mpl::false_>(opaqued_obj));
 }
 
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
@@ -64,14 +64,14 @@ template <typename Visitor, typename T, typename IsExprConst>
 inline BOOST_DEDUCED_TYPENAME Visitor::return_type
   visit(
     Visitor & visitor,
-    auto_any_t opaqued_obj,
+    auto_any const & opaqued_obj,
     type_wrapper<T, IsExprConst> *,
     ::boost::mpl::false_ *)
 {
-  BOOST_STATIC_ASSERT(::boost::is_base_of<visitor_base, Visitor>::value);
+  BOOST_STATIC_ASSERT((::boost::is_base_of<visitor_base, Visitor>::value));
   // Since the captured expression was an lvalue, the type of the captured object
   // will be determined by IsExprConst.
-  return visitor.visit(auto_any_cast<T, IsExprConst>(opaqued_obj));
+  return visitor.visit(util::auto_any_cast<T, IsExprConst>(opaqued_obj));
 }
 
 #ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
@@ -81,14 +81,14 @@ template <typename Visitor, typename T, typename IsExprConst>
 inline BOOST_DEDUCED_TYPENAME Visitor::return_type
   visit(
     Visitor & visitor,
-    auto_any_t opaqued_obj,
+    auto_any const & opaqued_obj,
     type_wrapper<T, IsExprConst> *,
     bool *)
 {
-  BOOST_STATIC_ASSERT(::boost::is_base_of<visitor_base, Visitor>::value);
+  BOOST_STATIC_ASSERT((::boost::is_base_of<visitor_base, Visitor>::value));
   // Remember, the variant is mutably captured.
   return
-    auto_any_cast
+    util::auto_any_cast
     <
       simple_variant<T>,
       ::boost::mpl::false_
