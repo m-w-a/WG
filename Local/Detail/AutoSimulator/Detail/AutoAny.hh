@@ -41,8 +41,8 @@
 // Usage:
 //   auto_any_t captured_obj = WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(...) ;
 // is_rvalue_flag:
-//   a boolean variable. This will be ignored if
-//   WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME is defined.
+//   a boolean variable that will be set to true if "expr" is an rvalue else it
+//   it will be set to false.
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, is_rvalue_flag) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, is_rvalue_flag)
 
@@ -73,25 +73,12 @@ namespace detail
 //--------
 struct auto_any
 {
-  explicit auto_any(bool const is_rvalue)
-  : m_is_rvalue(is_rvalue)
-  {
-  }
-
-  bool is_rvalue() const
-  {
-    return this->m_is_rvalue;
-  }
-
   // auto_any must evaluate to false in boolean contexts so that
   // they can be declared in if() statements.
   operator bool() const
   {
     return false;
   }
-
-private:
-  bool const m_is_rvalue;
 };
 
 //-------------
@@ -100,9 +87,8 @@ private:
 template<typename T>
 struct auto_any_impl : auto_any
 {
-  auto_any_impl(T const & t, bool const is_rvalue)
-  : auto_any(is_rvalue),
-    item(t)
+  explicit auto_any_impl(T const & t)
+  : item(t)
   {}
 
 private:
@@ -139,9 +125,11 @@ struct util
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
 //   never called
 template<typename T>
-inline auto_any_impl<T> capture(T const & t, ::boost::mpl::true_ *)
+inline auto_any_impl<T>
+  capture(T const & t, ::boost::mpl::true_ *, bool & is_rvalue_flag)
 {
-  return auto_any_impl<T>(t, true);
+  is_rvalue_flag = true;
+  return auto_any_impl<T>(t);
 }
 
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
@@ -149,13 +137,16 @@ inline auto_any_impl<T> capture(T const & t, ::boost::mpl::true_ *)
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
 //   t is an array (all arrays are lvalues) or a non-const lvalue
 template<typename T>
-inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
+inline auto_any_impl<T *>
+  capture(T & t, ::boost::mpl::false_ *, bool & is_rvalue_flag)
 {
+  is_rvalue_flag = false;
+
   // Cannot seem to get sunpro to handle addressof() with array types.
 #if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))
-  return auto_any_impl<T *>(&t, false);
+  return auto_any_impl<T *>(&t);
 #else
-  return auto_any_impl<T *>(::boost::addressof(t), false);
+  return auto_any_impl<T *>(::boost::addressof(t));
 #endif
 }
 
@@ -165,12 +156,14 @@ inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
 
   // t is a const, non-array lvalue or it's an rvalue
   template<typename T>
-  inline auto_any_impl<simple_variant<T> > capture(T const & t, bool * rvalue)
+  inline auto_any_impl<simple_variant<T> >
+    capture(T const & t, bool * rvalue, bool & is_rvalue_flag)
   {
+    is_rvalue_flag = *rvalue;
     // Have to use a variant because we don't know whether to capture by value
     // or by reference until runtime.
     return auto_any_impl<simple_variant<T> >(
-      *rvalue ? simple_variant<T>(t) : simple_variant<T>(&t), *rvalue);
+      *rvalue ? simple_variant<T>(t) : simple_variant<T>(&t));
   }
 
   //-------------------------------------
@@ -361,11 +354,11 @@ inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr) \
     (true ? 0 : WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_ISRVALUE(expr) )
 
-  #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, ignored) \
+  #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, is_rvalue_flag) \
     ::wg::autosimulator::detail::capture( \
       WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE(expr) , \
-      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr)) ; \
-    (void)ignored
+      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr), \
+      is_rvalue_flag) ;
 
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr) \
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr)
@@ -489,7 +482,8 @@ inline auto_any_impl<T *> capture(T & t, ::boost::mpl::false_ *)
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, is_rvalue_flag) \
     ::wg::autosimulator::detail::capture( \
       WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE_AND_SETRVALUEFLAG(expr, is_rvalue_flag), \
-      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr, &is_rvalue_flag) )
+      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr, &is_rvalue_flag), \
+      is_rvalue_flag)
 
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr) \
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr, 0)

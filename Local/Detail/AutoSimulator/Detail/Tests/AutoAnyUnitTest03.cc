@@ -67,8 +67,9 @@ TEST(wg_autosimulator_detail_autoany_cpp03, MutableNonArrayLValue)
   bool isRValue = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
+  (void)obj;
 
-  EXPECT_FALSE(obj.is_rvalue());
+  EXPECT_FALSE(isRValue);
   EXPECT_EQ(
     ExpressionCategory::CompileTimeDeterminedAsLValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -81,8 +82,9 @@ TEST(wg_autosimulator_detail_autoany_cpp03, ConstNonArrayLValue)
   bool isRValue = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
+  (void)obj;
 
-  EXPECT_FALSE(obj.is_rvalue());
+  EXPECT_FALSE(isRValue);
   EXPECT_EQ(
     ExpressionCategory::RunTimeDetermined,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -95,8 +97,9 @@ TEST(wg_autosimulator_detail_autoany_cpp03, MutableArrayLValue)
   bool isRValue = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
+  (void)obj;
 
-  EXPECT_FALSE(obj.is_rvalue());
+  EXPECT_FALSE(isRValue);
   EXPECT_EQ(
     ExpressionCategory::CompileTimeDeterminedAsLValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -109,8 +112,9 @@ TEST(wg_autosimulator_detail_autoany_cpp03, ConstArrayLValue)
   bool isRValue = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
+  (void)obj;
 
-  EXPECT_FALSE(obj.is_rvalue());
+  EXPECT_FALSE(isRValue);
   EXPECT_EQ(
     ExpressionCategory::CompileTimeDeterminedAsLValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -123,8 +127,9 @@ TEST(wg_autosimulator_detail_autoany_cpp03, MutableRValue)
   bool isRValue = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
+  (void)obj;
 
-  EXPECT_TRUE(obj.is_rvalue());
+  EXPECT_TRUE(isRValue);
   EXPECT_EQ(
     ExpressionCategory::RunTimeDetermined,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -137,8 +142,9 @@ TEST(wg_autosimulator_detail_autoany_cpp03, ConstRValue)
   bool isRValue = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
+  (void)obj;
 
-  EXPECT_TRUE(obj.is_rvalue());
+  EXPECT_TRUE(isRValue);
   EXPECT_EQ(
     ExpressionCategory::RunTimeDetermined,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
