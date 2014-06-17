@@ -2,7 +2,7 @@
 #define WG_AUTOSIMULATOR_HH_
 
 #include <WG/Local/Detail/AutoSimulator/Detail/AutoAny.hh>
-#include <WG/Local/Detail/AutoSimulator/Detail/Visit.hh>
+#include <WG/Local/Detail/AutoSimulator/Detail/Value.hh>
 
 //###########
 //Public APIs
@@ -24,43 +24,27 @@ struct auto_any;
 //------------------------------------------------------------------------------
 typedef detail::auto_any const & auto_any_t;
 
-template <typename VisitorImpl, typename ReturnType = void>
-struct visitor : private detail::visitor_base
-{
-  typedef ReturnType return_type;
-
-  template <typename T>
-  return_type visit(T & captured_obj)
-  {
-    return static_cast<VisitorImpl *>(this)->visit(captured_obj);
-  }
-
-  template <typename T>
-  return_type visit(T const & captured_obj)
-  {
-    return static_cast<VisitorImpl *>(this)->visit(captured_obj);
-  }
-};
-
 }
 }
 
+// This macro is used to emulate C++11 auto-deduced reference objects without
+// the use of any of Boost.Typeof utilities. In C++11 speak, this macro emulates
+// the following using cases:
+//   auto & v = expr; // For expressions that are lvalues or const rvalues, else
+//   auto const & v = expr; // For expressions that are mutable rvalues.
+//
+//   Note: "auto & v = expr;" for expressions that are mutable rvalues is
+//     ill-formed since it's attempting to bind a rvalue to a non-const reference.
 // Usage:
-//   auto_any_t opaqued_captured_obj = WG_AUTOSIMULATOR_DETAIL_CAPTURE(...) ;
+//   auto_any_t captured_obj = WG_AUTOSIMULATOR_DETAIL_CAPTURE(...) ;
 // expr:
-//   The expr whose result will be captured without using BOOST_TYPEOF.
+//   The expr whose result will be captured without using Boost.Typeof.
 // is_rvalue_flag:
 //   A mutable boolean flag.
 #define WG_AUTOSIMULATOR_CAPTURE(expr, is_rvalue_flag) \
   WG_AUTOSIMULATOR_DETAIL_CAPTURE(expr, is_rvalue_flag)
 
-// opaqued_captured_obj:
-//   An auto_any_t object that was initialized via WG_AUTOSIMULATOR_CAPTURE.
-// expr:
-//   The expr that was passed to WG_AUTOSIMULATOR_CAPTURE.
-// visitor:
-//   A ::wg::rvalue_simulator::visitor object.
-#define WG_AUTOSIMULATOR_VISIT(opaqued_captured_obj, expr, visitor) \
-  WG_AUTOSIMULATOR_DETAIL_VISIT(opaqued_captured_obj, expr, visitor)
+#define WG_AUTOSIMULATOR_AUTOANY_VALUE(captured_obj, expr) \
+  WG_AUTOSIMULATOR_DETAIL_VALUE(captured_obj, expr)
 
 #endif /* WG_AUTOSIMULATOR_HH_ */

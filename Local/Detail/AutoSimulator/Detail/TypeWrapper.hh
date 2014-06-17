@@ -22,6 +22,7 @@
 
 #include <boost/mpl/bool_fwd.hpp>
 #include <boost/mpl/if.hpp>
+#include <WG/Local/Detail/AutoSimulator/Detail/TypeTraits.hh>
 
 //###########
 //Public APIs
@@ -45,8 +46,8 @@ struct type_wrapper;
 #define WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr) \
   (true \
     ? 0 \
-    : ::wg::lclcontext::detail::encode_type( \
-        expr, ::wg::lclcontext::detail::is_const_(expr)))
+    : ::wg::autosimulator::encode_type( \
+        expr, ::wg::autosimulator::detail::is_const_(expr)))
 
 //####
 //Impl

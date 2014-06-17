@@ -179,13 +179,13 @@ inline auto_any_impl<T *>
     simple_variant(T const * t)
     : m_is_rvalue(false)
     {
-      *static_cast<T const **>(this->m_data.address()) = t;
+      this->init_lvalue(t);
     }
 
     simple_variant(T const & t)
     : m_is_rvalue(true)
     {
-      ::new(this->m_data.address()) T(t);
+      this->init_rvalue(t);
     }
 
     simple_variant(simple_variant const & that)
@@ -193,11 +193,11 @@ inline auto_any_impl<T *>
     {
       if(this->m_is_rvalue)
       {
-        ::new(this->m_data.address()) T(*that.get_rvalue());
+        this->init_rvalue(*that.get_rvalue());
       }
       else
       {
-        *static_cast<T const **>(this->m_data.address()) = that.get_lvalue();
+        this->init_lvalue(that.get_lvalue());
       }
     }
 
@@ -209,17 +209,15 @@ inline auto_any_impl<T *>
       }
     }
 
-    template <typename Visitor>
-    BOOST_DEDUCED_TYPENAME Visitor::return_type
-      accept_visitor(Visitor & visitor)
+    T const * get_value() const
     {
       if(this->m_is_rvalue)
       {
-        return visitor.visit(this->get_rvalue());
+        return this->get_rvalue();
       }
       else
       {
-        return visitor.visit(this->get_lvalue());
+        return this->get_lvalue();
       }
     }
 
@@ -227,11 +225,10 @@ inline auto_any_impl<T *>
     // Purposefully declared and not defined.
     simple_variant & operator=(simple_variant const &);
   private:
-    T * get_rvalue()
-    {
-      return static_cast<T *>(this->m_data.address());
-    }
-
+    // Because a purpose of auto_any_t is to mimic binding rvalues to
+    // their const reference so as to extend their lifetime for the duration of
+    // the scope of auto_any_t, any and all access to the value of the bound
+    // rvalue must be const.
     T const * get_rvalue() const
     {
       return static_cast<T const *>(this->m_data.address());
@@ -240,6 +237,16 @@ inline auto_any_impl<T *>
     T const * get_lvalue() const
     {
       return *static_cast<T const * const *>(this->m_data.address());
+    }
+
+    void init_rvalue(T const & t)
+    {
+      ::new(this->m_data.address()) T(t);
+    }
+
+    void init_lvalue(T const * t)
+    {
+      *static_cast<T const **>(this->m_data.address()) = t;
     }
   private:
     // TODO: don't understand this logic.
