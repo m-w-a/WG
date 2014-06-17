@@ -106,7 +106,7 @@ private:
 struct util
 {
   template<typename T, typename IsConst>
-  BOOST_DEDUCED_TYPENAME
+  static BOOST_DEDUCED_TYPENAME
     ::boost::mpl::if_<IsConst, T const, T>::type &
       auto_any_cast(auto_any const & a)
   {

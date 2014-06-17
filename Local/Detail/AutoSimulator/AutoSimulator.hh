@@ -42,7 +42,7 @@ typedef detail::auto_any const & auto_any_t;
 // is_rvalue_flag:
 //   A mutable boolean flag.
 #define WG_AUTOSIMULATOR_CAPTURE(expr, is_rvalue_flag) \
-  WG_AUTOSIMULATOR_DETAIL_CAPTURE(expr, is_rvalue_flag)
+  WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, is_rvalue_flag)
 
 #define WG_AUTOSIMULATOR_AUTOANY_VALUE(captured_obj, expr) \
   WG_AUTOSIMULATOR_DETAIL_VALUE(captured_obj, expr)

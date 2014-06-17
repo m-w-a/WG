@@ -429,10 +429,12 @@ test_lclfunction_codegenspec_cpp11_SOURCES = \
 
 test_autosimulator_cpp03_SOURCES = \
     ../../Detail/AutoSimulator/Tests/TestMain.cc \
-    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyUnitTest03.cc
+    ../../Detail/AutoSimulator/Tests/NonArrayExpr.cc \
+    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyUnitTest03.cc    
 
 test_autosimulator_cpp11_SOURCES = \
     ../../Detail/AutoSimulator/Tests/TestMain.cc \
+    ../../Detail/AutoSimulator/Tests/NonArrayExpr.cc \
     ../../Detail/AutoSimulator/Detail/Tests/AutoAnyUnitTest11.cc
 
 EXTRA_DIST = 

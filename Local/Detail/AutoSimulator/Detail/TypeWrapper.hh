@@ -32,10 +32,13 @@ namespace wg
 {
 namespace autosimulator
 {
+namespace detail
+{
 
 template<typename T, typename IsExprConst>
 struct type_wrapper;
 
+}
 }
 }
 
@@ -46,7 +49,7 @@ struct type_wrapper;
 #define WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr) \
   (true \
     ? 0 \
-    : ::wg::autosimulator::encode_type( \
+    : ::wg::autosimulator::detail::encode_type( \
         expr, ::wg::autosimulator::detail::is_const_(expr)))
 
 //####
@@ -56,6 +59,8 @@ struct type_wrapper;
 namespace wg
 {
 namespace autosimulator
+{
+namespace detail
 {
 
 template<typename T, typename IsExprConst>
@@ -73,6 +78,7 @@ inline type_wrapper<T, ::boost::mpl::true_> *
   encode_type(T const &, ::boost::mpl::true_ *)
 { return 0; }
 
+}
 }
 }
 
