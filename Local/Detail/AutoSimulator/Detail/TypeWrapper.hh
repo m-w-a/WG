@@ -39,7 +39,7 @@ template<typename T, typename IsExprConst>
 struct type_wrapper;
 
 template <typename NonConstNonRefExprType, typename IsExprConst>
-struct expr_type
+struct captured_type
 {
 private:
   typedef NonConstNonRefExprType ncnr_expr_type;

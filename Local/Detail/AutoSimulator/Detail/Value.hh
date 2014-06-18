@@ -36,7 +36,7 @@ namespace detail
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
 //   never called
 template <typename T, typename C>
-inline BOOST_DEDUCED_TYPENAME expr_type<T, C>::rvalue &
+inline BOOST_DEDUCED_TYPENAME captured_type<T, C>::rvalue &
   value(
     auto_any const & opaqued_obj,
     type_wrapper<T, C> *,
@@ -50,14 +50,14 @@ inline BOOST_DEDUCED_TYPENAME expr_type<T, C>::rvalue &
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
 //   t is an array (all arrays are lvalues) or a non-const lvalue
 template <typename T, typename C>
-inline BOOST_DEDUCED_TYPENAME expr_type<T, C>::lvalue &
+inline BOOST_DEDUCED_TYPENAME captured_type<T, C>::lvalue &
   value(
     auto_any const & opaqued_obj,
     type_wrapper<T, C> *,
     ::boost::mpl::false_ *)
 {
   typedef
-    BOOST_DEDUCED_TYPENAME expr_type<T, C>::lvalue
+    BOOST_DEDUCED_TYPENAME captured_type<T, C>::lvalue
       captured_type;
   return *util::auto_any_cast<captured_type *, C>(opaqued_obj);
 }
@@ -66,7 +66,7 @@ inline BOOST_DEDUCED_TYPENAME expr_type<T, C>::lvalue &
 
 // t is a const, non-array lvalue or it's an rvalue
 template <typename T, typename C>
-inline BOOST_DEDUCED_TYPENAME expr_type<T, C>::const_lvalue_or_rvalue &
+inline BOOST_DEDUCED_TYPENAME captured_type<T, C>::const_lvalue_or_rvalue &
   value(
     auto_any const & opaqued_obj,
     type_wrapper<T, C> *,
