@@ -125,11 +125,11 @@ struct util
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
 //   never called
 template<typename T>
-inline auto_any_impl<T>
+inline auto_any_impl<T const>
   capture(T const & t, ::boost::mpl::true_ *, bool & is_rvalue_flag)
 {
   is_rvalue_flag = true;
-  return auto_any_impl<T>(t);
+  return auto_any_impl<T const>(t);
 }
 
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
@@ -156,14 +156,15 @@ inline auto_any_impl<T *>
 
   // t is a const, non-array lvalue or it's an rvalue
   template<typename T>
-  inline auto_any_impl<simple_variant<T> >
+  inline auto_any_impl<simple_variant<T const> >
     capture(T const & t, bool * rvalue, bool & is_rvalue_flag)
   {
     is_rvalue_flag = *rvalue;
+    typedef simple_variant<T const> variant_t;
     // Have to use a variant because we don't know whether to capture by value
     // or by reference until runtime.
-    return auto_any_impl<simple_variant<T> >(
-      *rvalue ? simple_variant<T>(t) : simple_variant<T>(&t));
+    return auto_any_impl< simple_variant<T const> >(
+      *rvalue ? simple_variant<T const>(t) : simple_variant<T const>(&t));
   }
 
   //-------------------------------------

@@ -42,7 +42,7 @@ inline BOOST_DEDUCED_TYPENAME captured_type<T, C>::rvalue &
     type_wrapper<T, C> *,
     ::boost::mpl::true_ *)
 {
-  return util::auto_any_cast<T, ::boost::mpl::true_>(opaqued_obj);
+  return util::auto_any_cast<T const, ::boost::mpl::true_>(opaqued_obj);
 }
 
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
@@ -72,8 +72,8 @@ inline BOOST_DEDUCED_TYPENAME captured_type<T, C>::const_lvalue_or_rvalue &
     type_wrapper<T, C> *,
     bool *)
 {
-  simple_variant<T> const & variant =
-    util::auto_any_cast<simple_variant<T>, ::boost::mpl::true_>(opaqued_obj);
+  simple_variant<T const> const & variant =
+    util::auto_any_cast<simple_variant<T const>, ::boost::mpl::true_>(opaqued_obj);
 
   return *variant.get_value();
 }
