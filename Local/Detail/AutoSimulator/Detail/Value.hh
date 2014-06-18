@@ -35,29 +35,29 @@ namespace detail
 //   t is a rvalue
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
 //   never called
-template <typename T, typename C>
-inline BOOST_DEDUCED_TYPENAME captured_type<T, C>::rvalue &
+template <typename DT, typename C>
+inline BOOST_DEDUCED_TYPENAME captured_type<DT, C>::rvalue &
   value(
     auto_any const & opaqued_obj,
-    type_wrapper<T, C> *,
+    type_wrapper<DT, C> *,
     ::boost::mpl::true_ *)
 {
-  return util::auto_any_cast<T const, ::boost::mpl::true_>(opaqued_obj);
+  return util::auto_any_cast<DT const, ::boost::mpl::true_>(opaqued_obj);
 }
 
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
 //   t is a lvalue
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
 //   t is an array (all arrays are lvalues) or a non-const lvalue
-template <typename T, typename C>
-inline BOOST_DEDUCED_TYPENAME captured_type<T, C>::lvalue &
+template <typename DT, typename C>
+inline BOOST_DEDUCED_TYPENAME captured_type<DT, C>::lvalue &
   value(
     auto_any const & opaqued_obj,
-    type_wrapper<T, C> *,
+    type_wrapper<DT, C> *,
     ::boost::mpl::false_ *)
 {
   typedef
-    BOOST_DEDUCED_TYPENAME captured_type<T, C>::lvalue
+    BOOST_DEDUCED_TYPENAME captured_type<DT, C>::lvalue
       captured_type;
   return *util::auto_any_cast<captured_type *, C>(opaqued_obj);
 }
@@ -65,15 +65,15 @@ inline BOOST_DEDUCED_TYPENAME captured_type<T, C>::lvalue &
 #ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
 
 // t is a const, non-array lvalue or it's an rvalue
-template <typename T, typename C>
-inline BOOST_DEDUCED_TYPENAME captured_type<T, C>::const_lvalue_or_rvalue &
+template <typename DT, typename C>
+inline BOOST_DEDUCED_TYPENAME captured_type<DT, C>::const_lvalue_or_rvalue &
   value(
     auto_any const & opaqued_obj,
-    type_wrapper<T, C> *,
+    type_wrapper<DT, C> *,
     bool *)
 {
-  simple_variant<T const> const & variant =
-    util::auto_any_cast<simple_variant<T const>, ::boost::mpl::true_>(opaqued_obj);
+  simple_variant<DT const> const & variant =
+    util::auto_any_cast<simple_variant<DT const>, ::boost::mpl::true_>(opaqued_obj);
 
   return *variant.get_value();
 }
