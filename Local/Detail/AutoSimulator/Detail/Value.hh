@@ -35,11 +35,12 @@ namespace detail
 //   t is a rvalue
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
 //   never called
-template <typename T, typename IsExprConst>
-inline T const & value(
-  auto_any const & opaqued_obj,
-  type_wrapper<T, IsExprConst> *,
-  ::boost::mpl::true_ *)
+template <typename T, typename C>
+inline BOOST_DEDUCED_TYPENAME expr_type<T, C>::rvalue &
+  value(
+    auto_any const & opaqued_obj,
+    type_wrapper<T, C> *,
+    ::boost::mpl::true_ *)
 {
   return util::auto_any_cast<T, ::boost::mpl::true_>(opaqued_obj);
 }
@@ -48,27 +49,28 @@ inline T const & value(
 //   t is a lvalue
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
 //   t is an array (all arrays are lvalues) or a non-const lvalue
-template <typename T, typename IsExprConst>
-inline BOOST_DEDUCED_TYPENAME
-  ::boost::mpl::if_<IsExprConst, T const, T>::type & value(
+template <typename T, typename C>
+inline BOOST_DEDUCED_TYPENAME expr_type<T, C>::lvalue &
+  value(
     auto_any const & opaqued_obj,
-    type_wrapper<T, IsExprConst> *,
+    type_wrapper<T, C> *,
     ::boost::mpl::false_ *)
 {
   typedef
-    BOOST_DEDUCED_TYPENAME ::boost::mpl::if_<IsExprConst, T const, T>::type
+    BOOST_DEDUCED_TYPENAME expr_type<T, C>::lvalue
       captured_type;
-  return *util::auto_any_cast<captured_type *, IsExprConst>(opaqued_obj);
+  return *util::auto_any_cast<captured_type *, C>(opaqued_obj);
 }
 
 #ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
 
 // t is a const, non-array lvalue or it's an rvalue
-template <typename T, typename IsExprConst>
-inline T const & value(
-  auto_any const & opaqued_obj,
-  type_wrapper<T, IsExprConst> *,
-  bool *)
+template <typename T, typename C>
+inline BOOST_DEDUCED_TYPENAME expr_type<T, C>::const_lvalue_or_rvalue &
+  value(
+    auto_any const & opaqued_obj,
+    type_wrapper<T, C> *,
+    bool *)
 {
   simple_variant<T> const & variant =
     util::auto_any_cast<simple_variant<T>, ::boost::mpl::true_>(opaqued_obj);

@@ -38,13 +38,33 @@ namespace detail
 template<typename T, typename IsExprConst>
 struct type_wrapper;
 
+template <typename NonConstNonRefExprType, typename IsExprConst>
+struct expr_type
+{
+private:
+  typedef NonConstNonRefExprType ncnr_expr_type;
+  typedef IsExprConst is_expr_const;
+public:
+  typedef ncnr_expr_type const rvalue;
+  typedef BOOST_DEDUCED_TYPENAME
+    ::boost::mpl::if_
+      <
+        is_expr_const,
+        ncnr_expr_type const,
+        ncnr_expr_type
+      >::type
+        lvalue;
+  typedef ncnr_expr_type const const_lvalue_or_rvalue;
+};
+
 }
 }
 }
 
-// Expands to "type_wrapper<T, IsExprConst> *" without evaluating expr, where
-// T is the equivalent of BOOST_TYPEOF(expr), and
-// IsExprConst is either ::boost::mpl::false_ or ::boost::mpl::true_
+// Expands to "type_wrapper<NonConstNonRefExprType, IsExprConst> *" without
+// evaluating expr, where
+// 1) NonConstNonRefExprType is the equivalent of BOOST_TYPEOF(expr), and
+// 2) IsExprConst is either ::boost::mpl::false_ or ::boost::mpl::true_
 // Note: if expr is an rvalue then IsExprConst will always be ::boost::mpl::true_.
 #define WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr) \
   (true \
