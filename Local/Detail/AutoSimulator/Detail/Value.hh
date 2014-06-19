@@ -24,6 +24,9 @@
     WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr), \
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr) )
 
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(enclosed_type, opaqued_obj) \
+  static_cast<auto_any_impl<enclosed_type> const &>(opaqued_obj).item
+
 namespace wg
 {
 namespace autosimulator
@@ -42,7 +45,7 @@ inline BOOST_DEDUCED_TYPENAME captured_type<DT, C>::rvalue &
     type_wrapper<DT, C> *,
     ::boost::mpl::true_ *)
 {
-  return util::auto_any_cast<DT const, ::boost::mpl::true_>(opaqued_obj);
+  return WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(DT const, opaqued_obj);
 }
 
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
@@ -59,7 +62,8 @@ inline BOOST_DEDUCED_TYPENAME captured_type<DT, C>::lvalue &
   typedef
     BOOST_DEDUCED_TYPENAME captured_type<DT, C>::lvalue
       captured_type;
-  return *util::auto_any_cast<captured_type *, C>(opaqued_obj);
+
+  return * WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(captured_type *, opaqued_obj);
 }
 
 #ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
@@ -72,10 +76,12 @@ inline BOOST_DEDUCED_TYPENAME captured_type<DT, C>::const_lvalue_or_rvalue &
     type_wrapper<DT, C> *,
     bool *)
 {
-  simple_variant<DT const> const & variant =
-    util::auto_any_cast<simple_variant<DT const>, ::boost::mpl::true_>(opaqued_obj);
+  typedef simple_variant<DT const> variant_t;
 
-  return *variant.get_value();
+  return
+    * WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(
+        variant_t,
+        opaqued_obj).get_value();
 }
 
 #endif

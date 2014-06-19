@@ -91,27 +91,10 @@ struct auto_any_impl : auto_any
   : item(t)
   {}
 
-private:
-  friend struct util;
-private:
   // Temporaries of type auto_any_impl will be bound to const auto_any
   // references, but we may still want to be able to mutate the stored
   // data, so declare it as mutable.
-  mutable T item;
-};
-
-//-------------
-//auto_any_cast
-//-------------
-struct util
-{
-  template<typename T, typename IsConst>
-  static BOOST_DEDUCED_TYPENAME
-    ::boost::mpl::if_<IsConst, T const, T>::type &
-      auto_any_cast(auto_any const & a)
-  {
-    return static_cast<auto_any_impl<T> const &>(a).item;
-  }
+  T item;
 };
 
 //------------------------------------------------------------------------------
