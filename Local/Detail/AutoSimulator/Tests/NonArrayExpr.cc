@@ -44,8 +44,8 @@ using namespace ::wg::autosimulator;
 TEST(wg_autosimulator, MutableRValueExpr)
 {
 #define EXPR mutableRValue()
-  bool is_rvalue = false;
-  auto_any_t obj = WG_AUTOSIMULATOR_CAPTURE(EXPR, is_rvalue);
+  bool isRvalue = false;
+  auto_any_t obj = WG_AUTOSIMULATOR_CAPTURE(EXPR, isRvalue);
 
   EXPECT_TRUE(detail::test::isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
   EXPECT_EQ(11, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);
@@ -55,8 +55,8 @@ TEST(wg_autosimulator, MutableRValueExpr)
 TEST(wg_autosimulator, ConstRValueExpr)
 {
 #define EXPR constRValue()
-  bool is_rvalue = false;
-  auto_any_t obj = WG_AUTOSIMULATOR_CAPTURE(EXPR, is_rvalue);
+  bool isRvalue = false;
+  auto_any_t obj = WG_AUTOSIMULATOR_CAPTURE(EXPR, isRvalue);
 
   EXPECT_TRUE(detail::test::isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
   EXPECT_EQ(11, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);
@@ -66,8 +66,8 @@ TEST(wg_autosimulator, ConstRValueExpr)
 TEST(wg_autosimulator, MutableLValueExpr)
 {
 #define EXPR mutableLValue()
-  bool is_rvalue = false;
-  auto_any_t obj = WG_AUTOSIMULATOR_CAPTURE(EXPR, is_rvalue);
+  bool isRvalue = false;
+  auto_any_t obj = WG_AUTOSIMULATOR_CAPTURE(EXPR, isRvalue);
 
   EXPECT_FALSE(detail::test::isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
   EXPECT_EQ(11, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);
@@ -80,8 +80,8 @@ TEST(wg_autosimulator, MutableLValueExpr)
 TEST(wg_autosimulator, ConstLValueExpr)
 {
 #define EXPR constLValue()
-  bool is_rvalue = false;
-  auto_any_t obj = WG_AUTOSIMULATOR_CAPTURE(EXPR, is_rvalue);
+  bool isRvalue = false;
+  auto_any_t obj = WG_AUTOSIMULATOR_CAPTURE(EXPR, isRvalue);
 
   EXPECT_TRUE(detail::test::isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
   EXPECT_EQ(11, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);
