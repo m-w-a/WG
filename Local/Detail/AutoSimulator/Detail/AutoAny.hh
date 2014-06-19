@@ -97,6 +97,29 @@ struct auto_any_impl : auto_any
   T item;
 };
 
+template <typename T>
+static T & captured_obj(auto_any_impl<T> const & a)
+{
+  return a.item;
+}
+
+template <typename T>
+static T & captured_obj(auto_any_impl<T *> const & a)
+{
+  return *a.item;
+}
+
+#ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
+  template<typename T>
+  struct simple_variant;
+
+  template <typename T>
+  static T & captured_obj(auto_any_impl< simple_variant<T> > const & a)
+  {
+    return *a.item.get_value();
+  }
+#endif
+
 //------------------------------------------------------------------------------
 //capture
 //  Captures the result of an expression.

@@ -25,7 +25,7 @@
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr) )
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(enclosed_type, opaqued_obj) \
-  static_cast<auto_any_impl<enclosed_type> const &>(opaqued_obj).item
+  captured_obj( static_cast<auto_any_impl<enclosed_type> const &>(opaqued_obj) )
 
 namespace wg
 {
@@ -63,7 +63,7 @@ inline BOOST_DEDUCED_TYPENAME captured_type<DT, C>::lvalue &
     BOOST_DEDUCED_TYPENAME captured_type<DT, C>::lvalue
       captured_type;
 
-  return * WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(captured_type *, opaqued_obj);
+  return WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(captured_type *, opaqued_obj);
 }
 
 #ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
@@ -79,9 +79,9 @@ inline BOOST_DEDUCED_TYPENAME captured_type<DT, C>::const_lvalue_or_rvalue &
   typedef simple_variant<DT const> variant_t;
 
   return
-    * WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(
-        variant_t,
-        opaqued_obj).get_value();
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(
+      variant_t,
+      opaqued_obj);
 }
 
 #endif
