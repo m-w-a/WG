@@ -20,9 +20,9 @@
 
 #define WG_AUTOSIMULATOR_DETAIL_VALUE_IMPL(captured_obj, expr) \
   ::wg::autosimulator::detail::value( \
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
     captured_obj, \
-    WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr), \
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr) )
+    WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr))
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(enclosed_type, opaqued_obj) \
   captured_obj( static_cast<auto_any_impl<enclosed_type> const &>(opaqued_obj) )
@@ -41,9 +41,9 @@ namespace detail
 template <typename DT, typename C>
 inline BOOST_DEDUCED_TYPENAME captured_type<DT, C>::rvalue &
   value(
+    expr_category_rvalue,
     auto_any const & opaqued_obj,
-    type_wrapper<DT, C> *,
-    ::boost::mpl::true_ *)
+    type_wrapper<DT, C> *)
 {
   return WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(DT const, opaqued_obj);
 }
@@ -55,9 +55,9 @@ inline BOOST_DEDUCED_TYPENAME captured_type<DT, C>::rvalue &
 template <typename DT, typename C>
 inline BOOST_DEDUCED_TYPENAME captured_type<DT, C>::lvalue &
   value(
+    expr_category_lvalue,
     auto_any const & opaqued_obj,
-    type_wrapper<DT, C> *,
-    ::boost::mpl::false_ *)
+    type_wrapper<DT, C> *)
 {
   typedef
     BOOST_DEDUCED_TYPENAME captured_type<DT, C>::lvalue
@@ -72,9 +72,9 @@ inline BOOST_DEDUCED_TYPENAME captured_type<DT, C>::lvalue &
 template <typename DT, typename C>
 inline BOOST_DEDUCED_TYPENAME captured_type<DT, C>::const_lvalue_or_rvalue &
   value(
+    expr_category_const_nonarray_lvalue_or_rvalue,
     auto_any const & opaqued_obj,
-    type_wrapper<DT, C> *,
-    bool *)
+    type_wrapper<DT, C> *)
 {
   typedef simple_variant<DT const> variant_t;
 

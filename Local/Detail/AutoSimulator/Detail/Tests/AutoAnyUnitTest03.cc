@@ -14,12 +14,14 @@ struct ExpressionCategory
   };
 };
 
-ExpressionCategory::Type expressionCategory(::boost::mpl::false_ *)
+ExpressionCategory::Type expressionCategory(
+  ::wg::autosimulator::detail::expr_category_lvalue)
 {
   return ExpressionCategory::CompileTimeDeterminedAsLValue;
 }
 
-ExpressionCategory::Type expressionCategory(bool *)
+ExpressionCategory::Type expressionCategory(
+  ::wg::autosimulator::detail::expr_category_const_nonarray_lvalue_or_rvalue)
 {
   return ExpressionCategory::RunTimeDetermined;
 }

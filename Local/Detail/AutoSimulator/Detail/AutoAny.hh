@@ -46,14 +46,30 @@
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, is_rvalue_flag) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, is_rvalue_flag)
 
+namespace wg
+{
+namespace autosimulator
+{
+namespace detail
+{
+
+struct expr_category_rvalue {};
+struct expr_category_lvalue {};
+struct expr_category_const_nonarray_lvalue_or_rvalue {};
+
+}
+}
+}
+
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
 //   expands to:
-//     1) ::boost::mpl::true_ *, if expr is a rvalue, else
-//     2) ::boost::mpl::false_ * if expr is a lvalue.
+//     1) expr_category_rvalue, if expr is a rvalue, else
+//     2) expr_category_lvalue if expr is a lvalue.
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
 //   expands to:
-//     1) ::boost::mpl::false_ *, if expr is an array or a non-const lvalue
-//     2) bool *, if expr is a const, non-array lvalue or it's an rvalue
+//     1) expr_category_lvalue, if expr is an array or a non-const lvalue
+//     2) expr_category_const_nonarray_lvalue_or_rvalue, if expr is a const, non-array
+//       lvalue or it's an rvalue
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr)
 
@@ -120,6 +136,34 @@ static T & captured_obj(auto_any_impl<T *> const & a)
   }
 #endif
 
+//-------------
+//expr_category
+//-------------
+
+// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
+//   expr is a rvalue
+// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
+//   never called
+inline expr_category_rvalue expr_category(::boost::mpl::true_ *)
+{
+  return expr_category_rvalue();
+}
+
+// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
+//   expr is a lvalue
+// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
+//   expr is an array (all arrays are lvalues) or a non-const lvalue
+inline expr_category_lvalue expr_category(::boost::mpl::false_ *)
+{
+  return expr_category_lvalue();
+}
+
+// expr is a const, non-array lvalue or it's an rvalue
+inline expr_category_const_nonarray_lvalue_or_rvalue expr_category(bool *)
+{
+  return expr_category_const_nonarray_lvalue_or_rvalue();
+}
+
 //------------------------------------------------------------------------------
 //capture
 //  Captures the result of an expression.
@@ -132,7 +176,7 @@ static T & captured_obj(auto_any_impl<T *> const & a)
 //   never called
 template<typename T>
 inline auto_any_impl<T const>
-  capture(T const & t, ::boost::mpl::true_ *, bool & is_rvalue_flag)
+  capture(expr_category_rvalue, T const & t, bool & is_rvalue_flag)
 {
   is_rvalue_flag = true;
   return auto_any_impl<T const>(t);
@@ -144,7 +188,7 @@ inline auto_any_impl<T const>
 //   t is an array (all arrays are lvalues) or a non-const lvalue
 template<typename T>
 inline auto_any_impl<T *>
-  capture(T & t, ::boost::mpl::false_ *, bool & is_rvalue_flag)
+  capture(expr_category_lvalue, T & t, bool & is_rvalue_flag)
 {
   is_rvalue_flag = false;
 
@@ -163,14 +207,16 @@ inline auto_any_impl<T *>
   // t is a const, non-array lvalue or it's an rvalue
   template<typename T>
   inline auto_any_impl<simple_variant<T const> >
-    capture(T const & t, bool * rvalue, bool & is_rvalue_flag)
+    capture(
+      expr_category_const_nonarray_lvalue_or_rvalue,
+      T const & t,
+      bool const & is_rvalue_flag)
   {
-    is_rvalue_flag = *rvalue;
     typedef simple_variant<T const> variant_t;
     // Have to use a variant because we don't know whether to capture by value
     // or by reference until runtime.
     return auto_any_impl< simple_variant<T const> >(
-      *rvalue ? simple_variant<T const>(t) : simple_variant<T const>(&t));
+      is_rvalue_flag ? simple_variant<T const>(t) : simple_variant<T const>(&t));
   }
 
   //-------------------------------------
@@ -365,17 +411,15 @@ inline auto_any_impl<T *>
 
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE(expr) (expr)
 
-  #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr) \
-    (true ? 0 : WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_ISRVALUE(expr) )
+  #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr) \
+    ::wg::autosimulator::detail::expr_category( \
+      true ? 0 : WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_ISRVALUE(expr) )
 
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, is_rvalue_flag) \
     ::wg::autosimulator::detail::capture( \
+      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
       WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE(expr) , \
-      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr), \
       is_rvalue_flag) ;
-
-  #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr) \
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Detect at run-time whether an expression yields an rvalue
@@ -456,16 +500,16 @@ inline auto_any_impl<T *>
   template<typename LValue>
   inline BOOST_DEDUCED_TYPENAME
     ::boost::enable_if<LValue, ::boost::mpl::false_>::type *
-  should_copy_impl(LValue *, bool *)
+  expr_category_cpp03(LValue *, bool *)
   {
     return 0;
   }
 
   // Otherwise, we must determine at runtime whether it's an lvalue or rvalue
   inline bool *
-  should_copy_impl(::boost::mpl::false_ *, bool * is_rvalue)
+    expr_category_cpp03(::boost::mpl::false_ *, bool *)
   {
-    return is_rvalue;
+    return 0;
   }
 
   }
@@ -482,25 +526,21 @@ inline auto_any_impl<T *>
   // The rvalue/lvalue-ness of the collection expression is determined
   // dynamically, unless the type is an array or is non-const,
   // in which case we know it's an lvalue.
-  #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY( \
-    expr, ptr_is_rvalue_flag) \
-      ( \
-      ::wg::autosimulator::detail::should_copy_impl( \
+  #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr) \
+    ::wg::autosimulator::detail::expr_category( \
+      ::wg::autosimulator::detail::expr_category_cpp03( \
         true ? 0 : ::wg::autosimulator::detail::or_( \
           ::wg::autosimulator::detail::is_array_(expr) , \
           ::wg::autosimulator::detail::not_( \
             ::wg::autosimulator::detail::is_const_(expr))) , \
-        ptr_is_rvalue_flag) \
+        static_cast<bool *>(0) ) \
       )
 
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, is_rvalue_flag) \
     ::wg::autosimulator::detail::capture( \
+      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
       WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE_AND_SETRVALUEFLAG(expr, is_rvalue_flag), \
-      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr, &is_rvalue_flag), \
       is_rvalue_flag)
-
-  #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr) \
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_SHOULDCOPY(expr, 0)
 
 #endif
 
