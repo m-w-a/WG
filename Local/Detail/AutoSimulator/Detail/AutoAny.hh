@@ -544,4 +544,67 @@ inline auto_any_impl<T *>
 
 #endif
 
+namespace wg
+{
+namespace autosimulator
+{
+namespace detail
+{
+
+//------------------------------------
+//dfta_traits
+//  Deduced Template Function Argument
+//------------------------------------
+
+template
+<
+  typename ExprCategory,
+  typename NonConstNonRefExprType,
+  typename IsExprConst
+>
+struct dfta_traits;
+
+template <typename NonConstNonRefExprType, typename IsExprConst>
+struct dfta_traits<expr_category_rvalue, NonConstNonRefExprType, IsExprConst>
+{
+  typedef NonConstNonRefExprType const captured_expr_type;
+  typedef auto_any_impl<NonConstNonRefExprType const> auto_any_impl_type;
+
+};
+
+template <typename NonConstNonRefExprType, typename IsExprConst>
+struct dfta_traits<expr_category_lvalue, NonConstNonRefExprType, IsExprConst>
+{
+  typedef BOOST_DEDUCED_TYPENAME
+    ::boost::mpl::if_
+      <
+        IsExprConst,
+        NonConstNonRefExprType const,
+        NonConstNonRefExprType
+      >::type
+        captured_expr_type;
+  typedef auto_any_impl<captured_expr_type *> auto_any_impl_type;
+};
+
+#ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
+  template <typename NonConstNonRefExprType, typename IsExprConst>
+  struct dfta_traits
+  <
+    expr_category_const_nonarray_lvalue_or_rvalue,
+    NonConstNonRefExprType,
+    IsExprConst
+  >
+  {
+    typedef NonConstNonRefExprType const captured_expr_type;
+    typedef auto_any_impl
+    <
+      simple_variant<NonConstNonRefExprType const>
+    > auto_any_impl_type;
+  };
+#endif
+
+}
+}
+}
+
 #endif /* WG_AUTOSIMULATOR_DETAIL_AUTOANY_HH_ */

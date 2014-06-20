@@ -38,25 +38,6 @@ namespace detail
 template<typename T, typename IsExprConst>
 struct type_wrapper;
 
-template <typename NonConstNonRefExprType, typename IsExprConst>
-struct captured_type
-{
-private:
-  typedef NonConstNonRefExprType ncnr_expr_type;
-  typedef IsExprConst is_expr_const;
-public:
-  typedef ncnr_expr_type const rvalue;
-  typedef BOOST_DEDUCED_TYPENAME
-    ::boost::mpl::if_
-      <
-        is_expr_const,
-        ncnr_expr_type const,
-        ncnr_expr_type
-      >::type
-        lvalue;
-  typedef ncnr_expr_type const const_lvalue_or_rvalue;
-};
-
 }
 }
 }

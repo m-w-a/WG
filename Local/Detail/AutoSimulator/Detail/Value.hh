@@ -24,8 +24,8 @@
     captured_obj, \
     WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr))
 
-#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(enclosed_type, opaqued_obj) \
-  captured_obj( static_cast<auto_any_impl<enclosed_type> const &>(opaqued_obj) )
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(auto_any_impl_type, opaqued_obj) \
+  captured_obj( static_cast<auto_any_impl_type const &>(opaqued_obj) )
 
 namespace wg
 {
@@ -34,57 +34,37 @@ namespace autosimulator
 namespace detail
 {
 
-// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
-//   t is a rvalue
-// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
-//   never called
-template <typename DT, typename C>
-inline BOOST_DEDUCED_TYPENAME captured_type<DT, C>::rvalue &
-  value(
-    expr_category_rvalue,
-    auto_any const & opaqued_obj,
-    type_wrapper<DT, C> *)
+template
+<
+  typename ExprCategory,
+  typename NonConstNonRefExprType,
+  typename IsExprConst
+>
+inline BOOST_DEDUCED_TYPENAME
+  dfta_traits
+  <
+    ExprCategory,
+    NonConstNonRefExprType,
+    IsExprConst
+  >::captured_expr_type &
+    value(
+      ExprCategory,
+      auto_any const & opaqued_obj,
+      type_wrapper<NonConstNonRefExprType, IsExprConst> *)
 {
-  return WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(DT const, opaqued_obj);
+  typedef BOOST_DEDUCED_TYPENAME
+    dfta_traits
+    <
+      ExprCategory,
+      NonConstNonRefExprType,
+      IsExprConst
+    >::auto_any_impl_type
+      auto_any_impl_type;
+
+  return WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(
+    auto_any_impl_type,
+    opaqued_obj);
 }
-
-// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
-//   t is a lvalue
-// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
-//   t is an array (all arrays are lvalues) or a non-const lvalue
-template <typename DT, typename C>
-inline BOOST_DEDUCED_TYPENAME captured_type<DT, C>::lvalue &
-  value(
-    expr_category_lvalue,
-    auto_any const & opaqued_obj,
-    type_wrapper<DT, C> *)
-{
-  typedef
-    BOOST_DEDUCED_TYPENAME captured_type<DT, C>::lvalue
-      captured_type;
-
-  return WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(captured_type *, opaqued_obj);
-}
-
-#ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
-
-// t is a const, non-array lvalue or it's an rvalue
-template <typename DT, typename C>
-inline BOOST_DEDUCED_TYPENAME captured_type<DT, C>::const_lvalue_or_rvalue &
-  value(
-    expr_category_const_nonarray_lvalue_or_rvalue,
-    auto_any const & opaqued_obj,
-    type_wrapper<DT, C> *)
-{
-  typedef simple_variant<DT const> variant_t;
-
-  return
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(
-      variant_t,
-      opaqued_obj);
-}
-
-#endif
 
 }
 }
