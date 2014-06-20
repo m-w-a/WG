@@ -33,6 +33,7 @@
 #include <boost/utility/enable_if.hpp>
 #include <WG/Local/Detail/AutoSimulator/Detail/Config.hh>
 #include <WG/Local/Detail/AutoSimulator/Detail/TypeTraits.hh>
+#include <WG/Local/Detail/AutoSimulator/Detail/TypeWrapper.hh>
 
 //###########
 //Public APIs
@@ -73,6 +74,9 @@ struct expr_category_const_nonarray_lvalue_or_rvalue {};
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr)
 
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_VALUE(captured_obj, expr) \
+  WG_AUTOSIMULATOR_DETAIL_AUTOANY_VALUE_IMPL(captured_obj, expr)
+
 //####
 //Impl
 //####
@@ -112,29 +116,6 @@ struct auto_any_impl : auto_any
   // data, so declare it as mutable.
   T item;
 };
-
-template <typename T>
-static T & captured_obj(auto_any_impl<T> const & a)
-{
-  return a.item;
-}
-
-template <typename T>
-static T & captured_obj(auto_any_impl<T *> const & a)
-{
-  return *a.item;
-}
-
-#ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
-  template<typename T>
-  struct simple_variant;
-
-  template <typename T>
-  static T & captured_obj(auto_any_impl< simple_variant<T> > const & a)
-  {
-    return *a.item.get_value();
-  }
-#endif
 
 //-------------
 //expr_category
@@ -602,6 +583,70 @@ struct dfta_traits<expr_category_lvalue, NonConstNonRefExprType, IsExprConst>
     > auto_any_impl_type;
   };
 #endif
+
+//------------
+//captured_obj
+//------------
+
+template <typename T>
+static T & captured_obj(auto_any_impl<T> const & a)
+{
+  return a.item;
+}
+
+template <typename T>
+static T & captured_obj(auto_any_impl<T *> const & a)
+{
+  return *a.item;
+}
+
+#ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
+  template <typename T>
+  static T & captured_obj(auto_any_impl< simple_variant<T> > const & a)
+  {
+    return *a.item.get_value();
+  }
+#endif
+
+//-----
+//value
+//-----
+
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_VALUE_IMPL(captured_obj, expr) \
+  ::wg::autosimulator::detail::value( \
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
+    captured_obj, \
+    WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr))
+
+template
+<
+  typename ExprCategory,
+  typename NonConstNonRefExprType,
+  typename IsExprConst
+>
+inline BOOST_DEDUCED_TYPENAME
+  dfta_traits
+  <
+    ExprCategory,
+    NonConstNonRefExprType,
+    IsExprConst
+  >::captured_expr_type &
+    value(
+      ExprCategory,
+      auto_any const & opaqued_obj,
+      type_wrapper<NonConstNonRefExprType, IsExprConst> *)
+{
+  typedef BOOST_DEDUCED_TYPENAME
+    dfta_traits
+    <
+      ExprCategory,
+      NonConstNonRefExprType,
+      IsExprConst
+    >::auto_any_impl_type
+      auto_any_impl_type;
+
+  return captured_obj( static_cast<auto_any_impl_type const &>(opaqued_obj) );
+}
 
 }
 }

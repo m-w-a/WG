@@ -2,7 +2,6 @@
 #define WG_AUTOSIMULATOR_HH_
 
 #include <WG/Local/Detail/AutoSimulator/Detail/AutoAny.hh>
-#include <WG/Local/Detail/AutoSimulator/Detail/Value.hh>
 
 //###########
 //Public APIs
@@ -45,6 +44,6 @@ typedef detail::auto_any const & auto_any_t;
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, is_rvalue_flag)
 
 #define WG_AUTOSIMULATOR_AUTOANY_VALUE(captured_obj, expr) \
-  WG_AUTOSIMULATOR_DETAIL_VALUE(captured_obj, expr)
+  WG_AUTOSIMULATOR_DETAIL_AUTOANY_VALUE(captured_obj, expr)
 
 #endif /* WG_AUTOSIMULATOR_HH_ */
