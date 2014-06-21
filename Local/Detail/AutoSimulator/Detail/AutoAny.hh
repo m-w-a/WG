@@ -614,8 +614,8 @@ static T & captured_obj(auto_any_impl<T *> const & a)
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_VALUE_IMPL(captured_obj, expr) \
   ::wg::autosimulator::detail::value( \
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
     captured_obj, \
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
     WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr))
 
 template
@@ -632,8 +632,8 @@ inline BOOST_DEDUCED_TYPENAME
     IsExprConst
   >::captured_expr_type &
     value(
-      ExprCategory,
       auto_any const & opaqued_obj,
+      ExprCategory,
       type_wrapper<NonConstNonRefExprType, IsExprConst> *)
 {
   typedef BOOST_DEDUCED_TYPENAME
