@@ -5,7 +5,7 @@
 #define WG_PP_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY 5
 #include <WG/Local/LclFunction.hh>
 
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
   namespace detail = wg::lclfunction::detail::cpp11;
 #else
   namespace detail = wg::lclfunction::detail;
@@ -13,7 +13,7 @@
 
 TEST(wg_lclfunction_configparamsmaxaritycustom, OkIfLessThanDefault)
 {
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
   struct local_functor_type;
 #endif
 
@@ -21,7 +21,7 @@ TEST(wg_lclfunction_configparamsmaxaritycustom, OkIfLessThanDefault)
   typedef
     detail::global_functor_type
     <
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
       local_functor_type,
 #endif
       less_than_default_arity,
@@ -38,7 +38,7 @@ TEST(wg_lclfunction_configparamsmaxaritycustom, OkIfLessThanDefault)
 
 TEST(wg_lclfunction_configparamsmaxaritycustom, OkIfEqualToDefault)
 {
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
   struct local_functor_type;
 #endif
 
@@ -47,7 +47,7 @@ TEST(wg_lclfunction_configparamsmaxaritycustom, OkIfEqualToDefault)
   typedef
     detail::global_functor_type
     <
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
       local_functor_type,
 #endif
       equal_to_default_arity,
@@ -64,7 +64,7 @@ TEST(wg_lclfunction_configparamsmaxaritycustom, OkIfEqualToDefault)
 
 TEST(wg_lclfunction_configparamsmaxaritycustom, NotOkIfGreaterThanDefault)
 {
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
   struct local_functor_type;
 #endif
 
@@ -75,7 +75,7 @@ TEST(wg_lclfunction_configparamsmaxaritycustom, NotOkIfGreaterThanDefault)
   typedef
     detail::global_functor_type
     <
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
       local_functor_type,
 #endif
       greater_than_default_arity,
