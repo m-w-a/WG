@@ -36,13 +36,13 @@ namespace detail
 {
 
 template<typename T, typename IsExprConst>
-struct type_wrapper;
+struct encoded_type;
 
 }
 }
 }
 
-// Expands to "type_wrapper<NonConstNonRefExprType, IsExprConst> *" without
+// Expands to "encoded_type<NonConstNonRefExprType, IsExprConst> *" without
 // evaluating expr, where
 // 1) NonConstNonRefExprType is the equivalent of BOOST_TYPEOF(expr), and
 // 2) IsExprConst is either ::boost::mpl::false_ or ::boost::mpl::true_
@@ -50,7 +50,7 @@ struct type_wrapper;
 #define WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr) \
   (true \
     ? 0 \
-    : ::wg::autosimulator::detail::encode_type( \
+    : ::wg::autosimulator::detail::encode_typeof( \
         expr, ::wg::autosimulator::detail::is_const_(expr)))
 
 //####
@@ -65,18 +65,18 @@ namespace detail
 {
 
 template<typename T, typename IsExprConst>
-struct type_wrapper : ::boost::mpl::if_<IsExprConst, T const, T>
+struct encoded_type : ::boost::mpl::if_<IsExprConst, T const, T>
 {
 };
 
 template<typename T>
-inline type_wrapper<T, ::boost::mpl::false_> *
-  encode_type(T &, ::boost::mpl::false_ *)
+inline encoded_type<T, ::boost::mpl::false_> *
+  encode_typeof(T &, ::boost::mpl::false_ *)
 { return 0; }
 
 template<typename T>
-inline type_wrapper<T, ::boost::mpl::true_> *
-  encode_type(T const &, ::boost::mpl::true_ *)
+inline encoded_type<T, ::boost::mpl::true_> *
+  encode_typeof(T const &, ::boost::mpl::true_ *)
 { return 0; }
 
 }

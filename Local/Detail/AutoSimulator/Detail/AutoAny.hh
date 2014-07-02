@@ -40,7 +40,8 @@
 //###########
 
 // Usage:
-//   auto_any_t captured_obj = WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(...) ;
+//   auto_any_t captured_obj =
+//     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(...) ;
 // is_rvalue_flag:
 //   a boolean variable that will be set to true if "expr" is an rvalue else it
 //   it will be set to false.
@@ -76,6 +77,13 @@ struct expr_category_const_nonarray_lvalue_or_rvalue {};
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_VALUE(captured_obj, expr) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_VALUE_IMPL(captured_obj, expr)
+
+// This is runtime deduction, not compile-time deduction.
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_DEDUCEDPTRTYPE(expr) \
+  WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_DEDUCEDPTRTYPE_IMPL(expr)
+
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE(obj) \
+  WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE_IMPL(obj)
 
 //####
 //Impl
@@ -114,7 +122,7 @@ struct auto_any_impl : auto_any
   // Temporaries of type auto_any_impl will be bound to const auto_any
   // references, but we may still want to be able to mutate the stored
   // data, so declare it as mutable.
-  T item;
+  mutable T item;
 };
 
 //-------------
@@ -400,7 +408,7 @@ inline auto_any_impl<T *>
     ::wg::autosimulator::detail::capture( \
       WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
       WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE(expr) , \
-      is_rvalue_flag) ;
+      is_rvalue_flag)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Detect at run-time whether an expression yields an rvalue
@@ -525,6 +533,20 @@ inline auto_any_impl<T *>
 
 #endif
 
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_DEDUCEDPTRTYPE_IMPL(expr) \
+  ::wg::autosimulator::detail::dfta_auto_any_impl_type( \
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
+    WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr) )
+
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_VALUE_IMPL(captured_obj, expr) \
+  ::wg::autosimulator::detail::value( \
+    captured_obj, \
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
+    WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr))
+
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE_IMPL(obj) \
+  ::wg::autosimulator::detail::captured_obj(obj)
+
 namespace wg
 {
 namespace autosimulator
@@ -543,7 +565,14 @@ template
   typename NonConstNonRefExprType,
   typename IsExprConst
 >
-struct dfta_traits;
+struct dfta_traits
+{
+private:
+  struct some_type;
+public:
+  typedef some_type captured_expr_type;
+  typedef some_type auto_any_impl_type;
+};
 
 template <typename NonConstNonRefExprType, typename IsExprConst>
 struct dfta_traits<expr_category_rvalue, NonConstNonRefExprType, IsExprConst>
@@ -584,6 +613,30 @@ struct dfta_traits<expr_category_lvalue, NonConstNonRefExprType, IsExprConst>
   };
 #endif
 
+//-----------------------
+//dfta_auto_any_impl_type
+//-----------------------
+
+template
+<
+  typename ExprCategory,
+  typename NonConstNonRefExprType,
+  typename IsExprConst
+>
+inline BOOST_DEDUCED_TYPENAME
+dfta_traits
+<
+  ExprCategory,
+  NonConstNonRefExprType,
+  IsExprConst
+>::auto_any_impl_type *
+  dfta_auto_any_impl_type(
+    ExprCategory,
+    encoded_type<NonConstNonRefExprType, IsExprConst> *)
+{
+  return 0;
+}
+
 //------------
 //captured_obj
 //------------
@@ -612,12 +665,6 @@ static T & captured_obj(auto_any_impl<T *> const & a)
 //value
 //-----
 
-#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_VALUE_IMPL(captured_obj, expr) \
-  ::wg::autosimulator::detail::value( \
-    captured_obj, \
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
-    WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr))
-
 template
 <
   typename ExprCategory,
@@ -634,7 +681,7 @@ inline BOOST_DEDUCED_TYPENAME
     value(
       auto_any const & opaqued_obj,
       ExprCategory,
-      type_wrapper<NonConstNonRefExprType, IsExprConst> *)
+      encoded_type<NonConstNonRefExprType, IsExprConst> *)
 {
   typedef BOOST_DEDUCED_TYPENAME
     dfta_traits
