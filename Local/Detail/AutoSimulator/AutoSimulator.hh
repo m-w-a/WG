@@ -97,7 +97,7 @@ typedef detail::auto_any_group const & auto_any_group_t;
     WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP( \
       allocated_obj, is_rvalue_flag, exprseq)
 
-#define WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, exprseq) \
-  WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEMVALUE(grp, exprseq)
+#define WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, itemno, exprseq) \
+  WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_VALUE(grp, itemno, exprseq)
 
 #endif /* WG_AUTOSIMULATOR_HH_ */

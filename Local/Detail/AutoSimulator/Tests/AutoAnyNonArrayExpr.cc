@@ -41,33 +41,33 @@ Cntr const & constLValue()
 
 using namespace ::wg::autosimulator;
 
-TEST(wg_autosimulator, MutableRValueExpr)
+TEST(wg_autosimulator_autoany, MutableRValueExpr)
 {
 #define EXPR mutableRValue()
-  bool isRvalue = false;
-  auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, isRvalue);
+  bool isRValue = false;
+  auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, isRValue);
 
   EXPECT_TRUE(detail::test::isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
   EXPECT_EQ(11, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);
 #undef EXPR
 }
 
-TEST(wg_autosimulator, ConstRValueExpr)
+TEST(wg_autosimulator_autoany, ConstRValueExpr)
 {
 #define EXPR constRValue()
-  bool isRvalue = false;
-  auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, isRvalue);
+  bool isRValue = false;
+  auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, isRValue);
 
   EXPECT_TRUE(detail::test::isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
   EXPECT_EQ(11, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);
 #undef EXPR
 }
 
-TEST(wg_autosimulator, MutableLValueExpr)
+TEST(wg_autosimulator_autoany, MutableLValueExpr)
 {
 #define EXPR mutableLValue()
-  bool isRvalue = false;
-  auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, isRvalue);
+  bool isRValue = false;
+  auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, isRValue);
 
   EXPECT_FALSE(detail::test::isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
   EXPECT_EQ(11, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);
@@ -77,11 +77,11 @@ TEST(wg_autosimulator, MutableLValueExpr)
 #undef EXPR
 }
 
-TEST(wg_autosimulator, ConstLValueExpr)
+TEST(wg_autosimulator_autoany, ConstLValueExpr)
 {
 #define EXPR constLValue()
-  bool isRvalue = false;
-  auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, isRvalue);
+  bool isRValue = false;
+  auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, isRValue);
 
   EXPECT_TRUE(detail::test::isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
   EXPECT_EQ(11, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);

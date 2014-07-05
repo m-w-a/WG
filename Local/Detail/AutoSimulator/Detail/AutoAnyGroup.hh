@@ -16,7 +16,7 @@
 //###########
 
 #ifndef WG_AUTOSIMULATOR_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY
-  #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY 16
+  #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY 11
 #else
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY \
     BOOST_PP_INC(WG_AUTOSIMULATOR_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY)
@@ -35,89 +35,28 @@
     WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP_IMPL( \
       opaqued_group, is_rvalue_flag, exprseq)
 
-#define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEMVALUE(opaqued_group, exprseq) \
-  WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEMVALUE_IMPL( \
-    opaqued_group, itemno, exprseq)
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_VALUE( \
+  opaqued_group, itemno, exprseq) \
+    WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_VALUE_IMPL( \
+      opaqued_group, itemno, exprseq)
+
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE( \
+  opaqued_group, itemno, exprseq) \
+    WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE_IMPL( \
+      opaqued_group, itemno, exprseq)
 
 //####
 //Impl
 //####
-
-namespace wg
-{
-namespace autosimulator
-{
-namespace detail
-{
-
-//--------------
-//auto_any_group
-//--------------
-
-struct auto_any_group
-{
-  // auto_any must evaluate to false in boolean contexts so that
-  // they can be declared in if() statements.
-  operator bool() const
-  {
-    return false;
-  }
-
-protected:
-  template <typename T>
-  void finalize(T &)
-  {
-  }
-};
-
-//--------
-//destruct
-//--------
-
-template <typename T>
-void destruct(T & obj)
-{
-  obj.~T();
-}
-
-//-------------------
-//auto_any_group_impl
-//-------------------
-
-template
-<
-  std::size_t N,
-  typename Base,
-  typename AutoAnyImplTypeVec
->
-class auto_any_group_impl;
-
-// Partial Specializations.
-WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_PARTIALSPECIALIZATIONS( \
-  WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY)
-
-//----------
-//make_group
-//----------
-WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKEGROUP_DEFINITIONS( \
-  WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY)
-
-//---------
-//get_group
-//---------
-WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS( \
-  WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY)
-
-}
-}
-}
 
 //----------------------------------------------
 //WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKEGROUP
 //----------------------------------------------
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKEGROUP_IMPL(exprseq) \
-  WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKECUSTOMGROUP(auto_any_group, exprseq)
+  WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKECUSTOMGROUP( \
+    ::wg::autosimulator::detail::auto_any_group, \
+     exprseq)
 
 //----------------------------------------------------
 //WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKECUSTOMGROUP
@@ -150,6 +89,18 @@ WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS( \
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_PARTIALSPECIALIZATIONS( \
   argn) \
+    BOOST_PP_REPEAT( \
+      argn, \
+      WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_PARTIALSPECIALIZATIONS_DEF, \
+      ~)
+
+// TODO: make this a non-PPMP class.
+//   Just have to figure out how to make a tuple of aligned_storage<auto_any_impl>
+//   from AutoAnyImplTypeVec.
+//   Additionally, would finalize have to be public, or can we friend the
+//   recursive metafunction?
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_PARTIALSPECIALIZATIONS_DEF( \
+  z, argn, data) \
     template \
     < \
       typename Base, \
@@ -171,33 +122,41 @@ WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS( \
       } \
       \
       template <std::size_t I> \
-      this_type const & capture( BOOST_DEDUCED_TYPENAME \
+      this_type const & capture( \
         /* Purposefully capture by value so as to enable copy elision. */ \
-        boost::mpl::at<AutoAnyImplTypeVec, I>::type wrapped_obj) const \
+        BOOST_DEDUCED_TYPENAME boost::mpl::at \
+        < \
+          AutoAnyImplTypeVec, \
+          boost::mpl::int_<I> \
+        >::type wrapped_obj) const \
       { \
         typedef BOOST_DEDUCED_TYPENAME \
-          boost::mpl::at<AutoAnyImplTypeVec, I>::type \
+          boost::mpl::at<AutoAnyImplTypeVec, boost::mpl::int_<I> >::type \
             item_type; \
-        ::new(this->m_items<I>.get().address()) item_type(wrapped_obj); \
+        ::new(this->m_items.template get<I>().address()) item_type(wrapped_obj); \
         \
         return *this; \
       } \
       \
       template <std::size_t I> \
-      BOOST_DEDUCED_TYPENAME boost::mpl::at<AutoAnyImplTypeVec, I>::type & \
+      BOOST_DEDUCED_TYPENAME boost::mpl::at \
+      < \
+        AutoAnyImplTypeVec, \
+        boost::mpl::int_<I> \
+      >::type & \
         captured_obj() const \
       { \
         typedef BOOST_DEDUCED_TYPENAME \
-          boost::mpl::at<AutoAnyImplTypeVec, I>::type \
+          boost::mpl::at<AutoAnyImplTypeVec, boost::mpl::int_<I> >::type \
             item_type; \
-        return *static_cast<item_type *>(this->m_items<I>.get().address()); \
+        return *static_cast<item_type *>( \
+          this->m_items.template get<I>().address()); \
       } \
       \
     private: \
       typedef ::boost::tuple \
       < \
-        WG_PP_SEQ_ENUM( \
-          WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_ALIGNEDSTORAGESEQ(argn) ) \
+        WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_ALIGNEDSTORAGELIST(argn) \
       > AlignedStorageTuple; \
     private: \
       mutable AlignedStorageTuple m_items; \
@@ -220,7 +179,11 @@ WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS( \
 // BOOST_PP_REPEAT functor.
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_ITEMTYPENAME_DCLN( \
   z, argno, typevector) \
-    typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::at<typevector, argno>::type \
+    typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::at \
+    < \
+      typevector, \
+      ::boost::mpl::int_<argno> \
+    >::type \
       WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_ITEMTYPENAME(argno) ;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -230,25 +193,20 @@ WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS( \
 // typenamemacro:
 //   A 1-arg function macro that when invoked with an unsigned integer expands
 //   to a type for which an aligned_storage class should be instantiated.
-#define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_ALIGNEDSTORAGESEQ(argn) \
-  BOOST_PP_EXPR_IIF( \
-    BOOST_PP_NOT(argn), \
-    ( BOOST_PP_NIL ) ) \
-  BOOST_PP_REPEAT( \
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_ALIGNEDSTORAGELIST(argn) \
+  BOOST_PP_ENUM( \
     argn, \
-    WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_ALIGNEDSTORAGESEQ_ENTRY, \
+    WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_ALIGNEDSTORAGELIST_ENTRY, \
     WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_ITEMTYPENAME)
 
-// BOOST_PP_REPEAT functor.
-#define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_ALIGNEDSTORAGESEQ_ENTRY( \
+// BOOST_PP_ENUM functor.
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_ALIGNEDSTORAGELIST_ENTRY( \
   z, argno, typenamemacro) \
-    ( \
-      ::boost::aligned_storage \
-      < \
-        sizeof( typenamemacro(argno) ), \
-        ::boost::alignment_of< typenamemacro(argno) >::value \
-      > \
-    )
+    BOOST_DEDUCED_TYPENAME ::boost::aligned_storage \
+    < \
+      sizeof( typenamemacro(argno) ), \
+      ::boost::alignment_of< typenamemacro(argno) >::value \
+    >::type
 
 //~~~~~~~~~~~~~~
 // Finalization.
@@ -257,11 +215,11 @@ WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS( \
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_FINALIZE_DCLNS(argn) \
   WG_PP_SEQ_FLATTEN( \
     WG_PP_SEQ_REVERSE( \
-      (BOOST_PP_EMPTY) \
+      (()) (BOOST_PP_EMPTY) \
       BOOST_PP_REPEAT(\
         argn, \
         WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_FINALIZE_DCLN, \
-        ~) )) ()
+        ~) ))
 
 // BOOST_PP_REPEAT functor.
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_FINALIZE_DCLN( \
@@ -277,11 +235,11 @@ WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS( \
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_DESTRUCT_DCLNS(argn) \
   WG_PP_SEQ_FLATTEN( \
     WG_PP_SEQ_REVERSE( \
-      (BOOST_PP_EMPTY) \
+      (()) (BOOST_PP_EMPTY) \
       BOOST_PP_REPEAT(\
         argn, \
         WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_DESTRUCT_DCLN, \
-        ~) )) ()
+        ~) ))
 
 // BOOST_PP_REPEAT functor.
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_DESTRUCT_DCLN( \
@@ -369,6 +327,13 @@ WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS( \
 //----------------------------------------------------------
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKEGROUP_DEFINITIONS(argn) \
+  BOOST_PP_REPEAT( \
+    argn, \
+    WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKEGROUP_DEFINITIONS_DEF, \
+    ~)
+
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKEGROUP_DEFINITIONS_DEF( \
+  z, argn, data) \
   template \
   < \
     typename Base \
@@ -376,6 +341,7 @@ WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS( \
   > \
   inline auto_any_group_impl \
   < \
+    argn, \
     Base, \
     ::boost::mpl::vector \
     < \
@@ -389,7 +355,7 @@ WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS( \
         WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AUTOANYIMPLTPL_PARAMNAMELIST(argn) \
       > auto_any_impl_typevec; \
       \
-      return auto_any_impl_typevec<argn, Base, auto_any_impl_typevec>(argn); \
+      return auto_any_group_impl<argn, Base, auto_any_impl_typevec>(); \
     }
 
 //---------------------------------------------------------
@@ -397,6 +363,13 @@ WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS( \
 //---------------------------------------------------------
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS(argn) \
+  BOOST_PP_REPEAT( \
+    argn, \
+    WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS_DEF, \
+    ~)
+
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS_DEF( \
+  z, argn, data) \
   template \
   < \
     typename Base \
@@ -404,6 +377,7 @@ WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS( \
   > \
   inline auto_any_group_impl \
   < \
+    argn, \
     Base, \
     ::boost::mpl::vector \
     < \
@@ -440,21 +414,21 @@ WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS( \
         WG_PP_SEQ_ISNIL(exprseq)), \
         WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP(opaqued_group, exprseq) ) \
     WG_PP_SEQ_NOTHING_FOR_EACH_I( \
-      WG_PP_AUTOANYGROUP_INITGROUP_ENTRY, \
+      WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP_ENTRY, \
       is_rvalue_flag, \
       exprseq) ;
 
 // WG_PP_SEQ_FOR_EACH functor.
-#define WG_PP_AUTOANYGROUP_INITGROUP_ENTRY( \
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP_ENTRY( \
   r, is_rvalue_flag, indx, expr) \
     . capture<indx>( \
       WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, is_rvalue_flag) )
 
 //----------------------------------------------
-//WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEMVALUE
+//WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_VALUE
 //----------------------------------------------
 
-#define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEMVALUE_IMPL( \
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_VALUE_IMPL( \
   opaqued_group, itemno, exprseq) \
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE \
     ( \
@@ -462,5 +436,85 @@ WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS( \
         opaqued_group, exprseq) . captured_obj<itemno>() \
     )
 
+//--------------------------------------------------
+//WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE
+//--------------------------------------------------
+
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE_IMPL( \
+  opaqued_group, itemno, exprseq) \
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_ISRVALUE \
+    ( \
+      WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP( \
+        opaqued_group, exprseq) . captured_obj<itemno>() \
+    )
+
+namespace wg
+{
+namespace autosimulator
+{
+namespace detail
+{
+
+//--------------
+//auto_any_group
+//--------------
+
+struct auto_any_group
+{
+  // auto_any must evaluate to false in boolean contexts so that
+  // they can be declared in if() statements.
+  operator bool() const
+  {
+    return false;
+  }
+
+protected:
+  template <typename T>
+  void finalize(T &)
+  {
+  }
+};
+
+//--------
+//destruct
+//--------
+
+template <typename T>
+void destruct(T & obj)
+{
+  obj.~T();
+}
+
+//-------------------
+//auto_any_group_impl
+//-------------------
+
+template
+<
+  std::size_t N,
+  typename Base,
+  typename AutoAnyImplTypeVec
+>
+class auto_any_group_impl;
+
+// Partial Specializations.
+WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_PARTIALSPECIALIZATIONS( \
+  WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY)
+
+//----------
+//make_group
+//----------
+WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKEGROUP_DEFINITIONS( \
+  WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY)
+
+//---------
+//get_group
+//---------
+WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP_DEFINITIONS( \
+  WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY)
+
+}
+}
+}
 
 #endif /* WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_HH_ */

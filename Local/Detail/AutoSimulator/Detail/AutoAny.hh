@@ -85,6 +85,9 @@ struct expr_category_const_nonarray_lvalue_or_rvalue {};
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE(obj) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE_IMPL(obj)
 
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_ISRVALUE(obj) \
+  WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_ISRVALUE_IMPL(obj)
+
 //####
 //Impl
 //####
@@ -261,6 +264,11 @@ inline auto_any_impl<T *>
       {
         return this->get_lvalue();
       }
+    }
+
+    bool is_rvalue() const
+    {
+      return this->m_is_rvalue;
     }
 
   private:
@@ -547,6 +555,9 @@ inline auto_any_impl<T *>
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE_IMPL(obj) \
   ::wg::autosimulator::detail::captured_obj(obj)
 
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_ISRVALUE_IMPL(obj) \
+  ::wg::autosimulator::detail::is_rvalue(obj)
+
 namespace wg
 {
 namespace autosimulator
@@ -636,6 +647,30 @@ dfta_traits
 {
   return 0;
 }
+
+//---------
+//is_rvalue
+//---------
+
+template <typename T>
+bool is_rvalue(auto_any_impl<T> const &)
+{
+  return true;
+}
+
+template <typename T>
+bool is_rvalue(auto_any_impl<T *> const &)
+{
+  return false;
+}
+
+#ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
+  template <typename T>
+  bool is_rvalue(auto_any_impl< simple_variant<T> > const & impl)
+  {
+    return impl.item.is_rvalue();
+  }
+#endif
 
 //------------
 //captured_obj

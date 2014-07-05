@@ -429,15 +429,21 @@ test_lclfunction_codegenspec_cpp11_SOURCES = \
 
 test_autosimulator_cpp03_SOURCES = \
     ../../Detail/AutoSimulator/Tests/TestMain.cc \
-    ../../Detail/AutoSimulator/Tests/NonArrayExpr.cc \
-    ../../Detail/AutoSimulator/Tests/ArrayExpr.cc \
-    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyUnitTest03.cc    
+    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyUnitTest03.cc \
+    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyGroupUnitTest.cc \
+    ../../Detail/AutoSimulator/Tests/AutoAnyNonArrayExpr.cc \
+    ../../Detail/AutoSimulator/Tests/AutoAnyArrayExpr.cc \
+    ../../Detail/AutoSimulator/Tests/AutoAnyGroup.cc \
+    ../../Detail/AutoSimulator/Tests/AutoAnyGroupCustomBaseClass.cc
 
 test_autosimulator_cpp11_SOURCES = \
     ../../Detail/AutoSimulator/Tests/TestMain.cc \
-    ../../Detail/AutoSimulator/Tests/NonArrayExpr.cc \
-    ../../Detail/AutoSimulator/Tests/ArrayExpr.cc \
-    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyUnitTest11.cc
+    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyUnitTest11.cc \
+    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyGroupUnitTest.cc \
+    ../../Detail/AutoSimulator/Tests/AutoAnyNonArrayExpr.cc \
+    ../../Detail/AutoSimulator/Tests/AutoAnyArrayExpr.cc \
+    ../../Detail/AutoSimulator/Tests/AutoAnyGroup.cc \
+    ../../Detail/AutoSimulator/Tests/AutoAnyGroupCustomBaseClass.cc
 
 EXTRA_DIST = 
 

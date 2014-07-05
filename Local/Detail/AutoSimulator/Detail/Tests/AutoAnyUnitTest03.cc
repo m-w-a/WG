@@ -26,16 +26,16 @@ ExpressionCategory::Type expressionCategory(
   return ExpressionCategory::RunTimeDetermined;
 }
 
-struct EmptyStruct {};
-typedef EmptyStruct ArrayType[5];
+struct Cntnr {};
+typedef Cntnr ArrayType[5];
 
-EmptyStruct & mutableNonArrayLValue()
+Cntnr & mutableNonArrayLValue()
 {
-  static EmptyStruct toRet;
+  static Cntnr toRet;
   return toRet;
 }
 
-EmptyStruct const & constNonArrayLValue()
+Cntnr const & constNonArrayLValue()
 {
   return mutableNonArrayLValue();
 }
@@ -51,14 +51,14 @@ ArrayType const & constArrayLValue()
   return mutableArrayLValue();
 }
 
-EmptyStruct mutableRValue()
+Cntnr mutableRValue()
 {
-  return EmptyStruct();
+  return Cntnr();
 }
 
-EmptyStruct const constRValue()
+Cntnr const constRValue()
 {
-  return EmptyStruct();
+  return Cntnr();
 }
 
 }
