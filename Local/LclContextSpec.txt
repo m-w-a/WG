@@ -6,6 +6,7 @@ Note: All terms not defined here should be referenced in AutoFunctorSpec.txt
 
 adhoc-scope-handlers:
   1) At least one handler must be specified.
+
 scope-manager-expr:
   Is limited to an lvalue expression because if rvalues are allowed, then the 
   question of captured by const vs non-const arises which complicates the macro 
@@ -66,10 +67,7 @@ with-dcln :=
   with( scope-manager-expr ) [ entered_as( type-var-dcln ) ]
 
 with-adhoc-decln :=
-    with_adhoc [ varbind bound-tuple-seq ] adhoc-scope-handlers
-  | with_adhoc( simple-declaration ) 
-    [ varbind bound-tuple-seq ]
-    adhoc-scope-handlers
+  with_adhoc [ varbind bound-tuple-seq ] adhoc-scope-handlers
 
 adhoc-scope-handlers :=
   [on_enter( compound-statement )] [on_exit( compound-statement )]
