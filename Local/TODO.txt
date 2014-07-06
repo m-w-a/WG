@@ -6,6 +6,10 @@ Misc.
 -----
 LocalOperandsSyntaxCheck tests.
 
+Seq.hh:
+  WG_PP_ISNEXTTOKEN_A_TUPLE -> WG_PP_SEQ_ISNIL
+  Simplify WG_PP_SEQ_NOTHING_FOR_EACH_I_IMPL
+
 ExpandN:
   test
   AUTOFUNCTOR -> ...

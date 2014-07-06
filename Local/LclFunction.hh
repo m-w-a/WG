@@ -6,14 +6,8 @@
   #define WG_PP_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY 15
 #endif
 
-#define WG_LCLFUNCTION_TYPENAME(lclfunction) \
-  WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME(lclfunction)
-
-#define WG_LCLFUNCTION_VAR_TYPEOF(funcvarname) \
-  WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_FUNCTIONVARIABLETYPENAME(funcvarname)
-
 #include <boost/config.hpp>
-#ifdef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#ifdef  BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
   #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/CodeGenCPP03.hh>
 #else
   #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/CodeGenCPP11.hh>
@@ -36,6 +30,12 @@
 
 #define WG_LCLFUNCTION_END \
   WG_PP_LCLFUNCTION_END_IMPL()
+
+#define WG_LCLFUNCTION_TYPENAME(lclfunction) \
+  WG_PP_LCLFUNCTION_CGUTILS_GLOBALFUNCTORTYPE_NAME(lclfunction)
+
+#define WG_LCLFUNCTION_VAR_TYPEOF(funcvarname) \
+  WG_PP_LCLFUNCTION_CGUTILS_LOCALFUNCTORTYPE_FUNCTIONVARIABLETYPENAME(funcvarname)
 
 //###########
 //Impl Macros

@@ -31,6 +31,10 @@
 #define WG_PP_SEQ_FLATTEN(seq) \
   WG_PP_SEQ_FLATTEN_IMPL(seq)
 
+// Maps to BOOST_PP_NIL if seq is nil.
+#define WG_PP_SEQ_REVERSE(seq) \
+  WG_PP_SEQ_REVERSE_IMPL(seq)
+
 // Handles empty sequences.
 // NOTE: maps empty sequences to NOTHING!
 //   Rationale:
@@ -46,6 +50,10 @@
 //     impossible to use with non-variadic macros.
 #define WG_PP_SEQ_ENUM_TRAILING(seq) \
   WG_PP_SEQ_ENUM_TRAILING_IMPL(seq)
+
+// Maps to nothing if seq is nil.
+#define WG_PP_SEQ_NOTHING_FOR_EACH(macro, data, seq) \
+  WG_PP_SEQ_NOTHING_FOR_EACH_IMPL(macro, data, seq)
 
 // Maps to BOOST_PP_NIL if seq is nil
 #define WG_PP_SEQ_FOR_EACH(macro, data, seq) \
@@ -106,6 +114,12 @@
   BOOST_PP_CAT( \
     WG_PP_SEQ_CAT_IMPL_, \
     BOOST_PP_COMPL(WG_PP_SEQ_ISNIL(seq))) (seq)
+
+#define WG_PP_SEQ_NOTHING_FOR_EACH_IMPL(macro, data, seq) \
+  BOOST_PP_IIF( \
+    WG_PP_SEQ_ISNIL(seq), \
+    WG_PP_MAPTO_NOTHING_ARG3, \
+    WG_PP_SEQ_FOR_EACH) (macro, data, seq)
 
 #define WG_PP_SEQ_FOR_EACH_IMPL_0(macro, data, seq) BOOST_PP_NIL
 #define WG_PP_SEQ_FOR_EACH_IMPL_1(macro, data, seq) \
@@ -181,6 +195,13 @@
 #define WG_PP_SEQ_FLATTEN_FUNC2(elem) elem WG_PP_SEQ_FLATTEN_FUNC1
 #define WG_PP_SEQ_FLATTEN_FUNC1_ERASED
 #define WG_PP_SEQ_FLATTEN_FUNC2_ERASED
+
+#define WG_PP_SEQ_REVERSE_IMPL_0(seq) BOOST_PP_NIL
+#define WG_PP_SEQ_REVERSE_IMPL_1(seq) BOOST_PP_SEQ_REVERSE(seq)
+#define WG_PP_SEQ_REVERSE_IMPL(seq) \
+  BOOST_PP_CAT( \
+    WG_PP_SEQ_REVERSE_IMPL_, \
+    WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq) ) (seq)
 
 #define WG_PP_SEQ_ELEM_IMPL_00(indx, seq) BOOST_PP_NIL
 #define WG_PP_SEQ_ELEM_IMPL_01(indx, seq) BOOST_PP_NIL

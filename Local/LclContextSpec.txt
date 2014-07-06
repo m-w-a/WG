@@ -74,4 +74,3 @@ adhoc-scope-handlers :=
 
 scope-manager-expr := An lvalue C++ expression that evaluates to a scope manager.
 compound-statement := See C++ standard.
-simple-declaration := See C++ standard. 
