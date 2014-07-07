@@ -50,6 +50,7 @@ lclclass-spec :=
   [derives derives-seq]
   [memext memext-tuple-seq]
   [memint memint-tuple-seq]
+  [baseinit baseinit-tuple-seq]
 
 derives-seq := derives-tuple-seq
 
@@ -70,5 +71,12 @@ memext-tuple :=
 
 memint-tuple-seq := set-tuple-seq
 
-member-specification := See C++ standard.
+baseinit-tuple-seq :=
+    baseinit-tuple
+  | baseinit-tuple-seq baseinit-tuple
+
+baseinit-tuple := ( mem-initializer )
+
 base-specifier := See C++ standard.
+member-specification := See C++ standard.
+mem-initializer := See C++ standard.

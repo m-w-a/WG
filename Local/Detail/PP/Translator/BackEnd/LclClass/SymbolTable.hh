@@ -20,6 +20,10 @@
 #define WG_PP_LCLCLASS_SYMBOLTABLE_DERIVESSEQ(symbtbl) \
   WG_PP_LCLCLASS_ST_GET(symbtbl, DERIVESSEQ)
 
+// Returns: { BOOST_PP_NIL | baseinit-tuple-seq }
+#define WG_PP_LCLCLASS_SYMBOLTABLE_BASEINITSEQ(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, BASEINITSEQ)
+
 //------
 //MemExt
 //------
@@ -109,6 +113,7 @@
 //INPUT:
 //------
 //derives_nrmlzd_tuple: { BOOST_PP_NIL | derives-tuple-seq }
+//baseinit_nrmlzd_tupleseq: { BOOST_PP_NIL | baseinit-tuple-seq }
 //memext_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-bound-tuple}+ }
 //memint_nrmlzd_tupleseq: { BOOST_PP_NIL | {normalized-set-tuple}+ }
 //
@@ -136,12 +141,14 @@
   istpl, \
   derives_nrmlzd_tuple, \
   memext_nrmlzd_tupleseq, \
-  memint_nrmlzd_tupleseq) \
+  memint_nrmlzd_tupleseq, \
+  baseinit_nrmlzd_tupleseq) \
     WG_PP_LCLCLASS_SYMBOLTABLE_CREATE_IMPL1( \
       istpl, \
       derives_nrmlzd_tuple, \
       memext_nrmlzd_tupleseq, \
-      memint_nrmlzd_tupleseq)
+      memint_nrmlzd_tupleseq, \
+      baseinit_nrmlzd_tupleseq)
 
 //###########
 //Impl Macros
@@ -157,14 +164,16 @@
 
 #define WG_PP_LCLCLASS_ST_INDX_DERIVESSEQ 2
 
-#define WG_PP_LCLCLASS_ST_INDX_DCLNS_MEMEXT 3
-#define WG_PP_LCLCLASS_ST_INDX_DCLNS_THISU_MARKER_MEMEXT 4
-#define WG_PP_LCLCLASS_ST_INDX_DCLNS_SIZE_MEMEXT 5
+#define WG_PP_LCLCLASS_ST_INDX_BASEINITSEQ 3
 
-#define WG_PP_LCLCLASS_ST_INDX_DCLNS_MEMINT 6
-#define WG_PP_LCLCLASS_ST_INDX_DCLNS_SIZE_MEMINT 7
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_MEMEXT 4
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_THISU_MARKER_MEMEXT 5
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_SIZE_MEMEXT 6
 
-#define WG_PP_LCLCLASS_ST_INDX_DCLNS_TOTALSIZE 8
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_MEMINT 7
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_SIZE_MEMINT 8
+
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_TOTALSIZE 9
 
 // suffix: must match one of the following: WG_PP_LCLCLASS_ST_INDX_<suffix>
 #define WG_PP_LCLCLASS_ST_GET(symbtbl, suffix) \
@@ -180,23 +189,27 @@
   istpl, \
   derives_nrmlzd_tuple, \
   memext_nrmlzd_tupleseq, \
-  memint_nrmlzd_tupleseq) \
+  memint_nrmlzd_tupleseq, \
+  baseinit_nrmlzd_tupleseq) \
     WG_PP_LCLCLASS_SYMBOLTABLE_CREATE_IMPL2( \
       istpl, \
       derives_nrmlzd_tuple, \
       WG_PP_STUTIL_NRMLZDBOUNDTUPLESEQ_TO_BOUNDDCLNSEQ(memext_nrmlzd_tupleseq), \
-      WG_PP_STUTIL_NRMLZDSETTUPLESEQ_TO_SETDCLNSEQ(memint_nrmlzd_tupleseq) )
+      WG_PP_STUTIL_NRMLZDSETTUPLESEQ_TO_SETDCLNSEQ(memint_nrmlzd_tupleseq), \
+      baseinit_nrmlzd_tupleseq )
 
 #define WG_PP_LCLCLASS_SYMBOLTABLE_CREATE_IMPL2( \
   istpl, \
   derives_nrmlzd_tuple, \
   memext_dcln_seq, \
-  memint_dcln_seq) \
+  memint_dcln_seq, \
+  baseinit_nrmlzd_tupleseq) \
     WG_PP_LCLCLASS_SYMBOLTABLE_CREATE_IMPL3( \
-      (8, \
+      (9, \
         (WG_PP_LCLCLASS_SYMBOLTABLE, \
         istpl, \
         derives_nrmlzd_tuple, \
+        baseinit_nrmlzd_tupleseq, \
         memext_dcln_seq, \
         WG_PP_STUTIL_THISU_INDX( \
           memext_dcln_seq, WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_OBJ_MEMEXT), \
@@ -209,7 +222,10 @@
   BOOST_PP_ARRAY_PUSH_BACK( \
     wiparray, \
     BOOST_PP_ADD( \
-      WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_SIZE_MEMEXT(wiparray), \
-      WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_SIZE_MEMINT(wiparray) ))
+      BOOST_PP_ADD( \
+        WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_SIZE_MEMEXT(wiparray), \
+        WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_SIZE_MEMINT(wiparray) ), \
+      WG_PP_SEQ_SIZE( \
+        WG_PP_LCLCLASS_SYMBOLTABLE_BASEINITSEQ(wiparray)) ) )
 
 #endif /* WG_PP_LCLCLASS_SYMBOLTABLE_HH_ */

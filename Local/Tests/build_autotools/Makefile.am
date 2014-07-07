@@ -329,6 +329,8 @@ LCLCLASS_SRC = \
     ../LclClass/ErrorReportingTpl.cc \
     ../LclClass/Derives.cc \
     ../LclClass/DerivesTpl.cc \
+    ../LclClass/BaseInit.cc \
+    ../LclClass/BaseInitTpl.cc \
     ../LclClass/MacroParamNamesAsVarNames.cc \
     ../LclClass/MemExtExplicit.cc \
     ../LclClass/MemExtExplicitTpl.cc \
