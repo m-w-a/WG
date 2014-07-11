@@ -7,7 +7,6 @@
 #include <WG/Local/Detail/PP/Translator/FrontEnd/LclContext/Keywords.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/BoundVarDclnNormalize.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/SplitHeadFromTokens.hh>
-#include <WG/Local/Detail/PP/Translator/LclContext/Names.hh>
 
 // Expands to the following:
 //   (istplmarker) (0 | 1)
@@ -217,11 +216,11 @@
       BOOST_PP_RPAREN() )
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT2( \
-  state, scopemngrtuple, spec) \
+  state, scopemngrseq, spec) \
     WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL \
     ( \
       state, \
-      (scopemngrtuple) \
+      ( scopemngrseq ) \
       BOOST_PP_IIF( \
         WG_PP_LCLCONTEXT_KEYWORDS_STARTSWITH_ENTEREDAS(spec), \
         WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_ENTEREDASDCLN, \
