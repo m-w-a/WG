@@ -67,7 +67,7 @@ with-dcln :=
   with( scope-manager-expr ) [ entered_as( type-var-dcln ) ]
 
 with-adhoc-decln :=
-  with_adhoc [ varbind bound-tuple-seq ] adhoc-scope-handlers
+  with_adhoc[ ( bound-tuple-seq ) ] adhoc-scope-handlers
 
 adhoc-scope-handlers :=
   [on_enter( compound-statement )] [on_exit( compound-statement )]

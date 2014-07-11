@@ -22,5 +22,6 @@ LclFunction:
   Implementation outline.
   Boost.LocalFunction array bugs.
   
-  
+
+Get rid of WG_PP_STARTSWITH_BOOST_PP_NIL via WG_PP_SEQs?
 BOOST_NO_CXX11_* -> WG_*
