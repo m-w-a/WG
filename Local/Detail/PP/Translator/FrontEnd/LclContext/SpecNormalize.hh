@@ -195,7 +195,9 @@
       WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_ADD_PARSEERROR( \
         state, \
         WG_PP_MARKER_ERROR \
-        BOOST_PP_CAT(WG_LCLCONTEXT_Error_unrecognized_tokenXXX,spec) )
+        BOOST_PP_CAT( \
+          WG_LCLCONTEXT_Error_unrecognized_tokenXXX, \
+          WG_PP_EATTAILTOKEN_BOOST_PP_NIL(spec) ) )
 
 //~~~~~~~~~~~~~~~~~~~
 // Parser::Op::WithAs
@@ -203,7 +205,7 @@
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT( \
   state, spec) \
-    WG_PP_LCLCONTEXT_SPECPARSER_EXPAND2( \
+    WG_PP_LCLCONTEXT_SPECPARSER_EXPAND1( \
       WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT2 \
       BOOST_PP_LPAREN() \
         state BOOST_PP_COMMA() \
@@ -228,7 +230,7 @@
     )
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_ENTEREDASDCLN(spec) \
-  WG_PP_LCLCONTEXT_SPECPARSER_EXPAND3( \
+  WG_PP_LCLCONTEXT_SPECPARSER_EXPAND2( \
     WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_ENTEREDASDCLN2 \
     BOOST_PP_LPAREN() \
       WG_PP_SPLITHEADTUPLEFROMTOKENS( \
@@ -255,17 +257,27 @@
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_MAKESYMBOL( \
   specoptions, categoryno, withseqtuple_asseqtuple_restspectuple) \
+    WG_PP_LCLCONTEXT_SPECPARSER_EXPAND6( \
+      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_MAKESYMBOL2 \
+      BOOST_PP_LPAREN() \
+        specoptions BOOST_PP_COMMA() \
+        categoryno BOOST_PP_COMMA() \
+        BOOST_PP_SEQ_ENUM(withseqtuple_asseqtuple_restspectuple) \
+      BOOST_PP_RPAREN() )
+
+#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_MAKESYMBOL2( \
+  specoptions, categoryno, withseq, asseq, restspec) \
     WG_PP_MARKER_NOOP \
     ( WG_PP_LCLCONTEXT_SCOPEMNGR_CATEGORY_WITHDCLN ) \
     ( categoryno ) \
-    ( BOOST_PP_SEQ_ELEM(0, withseqtuple_asseqtuple_restspectuple) ) \
+    ( withseq ) \
     ( \
       BOOST_PP_IIF( \
-        WG_PP_SEQ_ISNIL(BOOST_PP_SEQ_ELEM(1, withseqtuple_asseqtuple_restspectuple)), \
+        WG_PP_SEQ_ISNIL(asseq), \
         WG_PP_IDENTITY_ARG1, \
         WG_PP_LCLCONTEXT_SPECPARSER_CHOOSE_TPL( \
           WG_PP_BOUNDVARDCLN_NORMALIZE, specoptions)) \
-      ( BOOST_PP_SEQ_ELEM(1, withseqtuple_asseqtuple_restspectuple) ) \
+      ( BOOST_PP_SEQ_ELEM(0, asseq) ) \
     )
 
 //~~~~~~~~~~~~~~~~~~~~~
@@ -280,17 +292,17 @@
         1, WG_PP_LCLCONTEXT_KEYWORDS_EAT_HEADKEYWORD(spec) ), \
       WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ADHOC_BOUNDVARDCLNS, \
       (BOOST_PP_NIL) WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ADHOC2) \
-    (state, spec) )
+    (state, WG_PP_LCLCONTEXT_KEYWORDS_EAT_HEADKEYWORD(spec)) )
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ADHOC_BOUNDVARDCLNS( \
   state, spec) \
-    WG_PP_LCLCONTEXT_SPECPARSER_EXPAND4( \
-      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ADHOC_BOUNDVARDCLNS2( \
+    WG_PP_LCLCONTEXT_SPECPARSER_EXPAND3( \
+      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ADHOC_BOUNDVARDCLNS2 \
       BOOST_PP_LPAREN() \
         state BOOST_PP_COMMA() \
         WG_PP_SPLITHEADTUPLEFROMTOKENS( \
           1, \
-          WG_PP_LCLCONTEXT_KEYWORDS_EAT_HEADKEYWORD(spec), \
+          spec, \
           WG_PP_TUPLIZE_ARG1, \
           WG_PP_ADDCOMMA_AFTERTUPLE_ARITY1, \
           WG_PP_IDENTITY_ARG1) \
@@ -309,7 +321,7 @@
   (state, spec)
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ADHOC_ONENTERDCLN(state, spec) \
-  WG_PP_LCLCONTEXT_SPECPARSER_EXPAND5( \
+  WG_PP_LCLCONTEXT_SPECPARSER_EXPAND4( \
     WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ADHOC_ONENTERDCLN2 \
     BOOST_PP_LPAREN() \
       state BOOST_PP_COMMA() \
@@ -346,11 +358,12 @@
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ADHOC5( \
   state, varbindseqtuple_onenterseqtuple_onexitseqtuple_spectuple) \
-    WG_PP_LCLCONTEXT_SPECPARSER_EXPAND6 ( \
+    WG_PP_LCLCONTEXT_SPECPARSER_EXPAND5 ( \
       WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ADHOC6 \
       BOOST_PP_LPAREN() \
         state BOOST_PP_COMMA() \
-        BOOST_PP_ENUM(varbindseqtuple_onenterseqtuple_onexitseqtuple_spectuple) \
+        BOOST_PP_SEQ_ENUM( \
+          varbindseqtuple_onenterseqtuple_onexitseqtuple_spectuple) \
       BOOST_PP_RPAREN() )
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ADHOC6( \
@@ -380,9 +393,9 @@
   state, varbindseq, onenterseq, onexitseq) \
     WG_PP_MARKER_NOOP \
     ( WG_PP_LCLCONTEXT_SCOPEMNGR_CATEGORY_WITHADHOCDCLN ) \
-    ( WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_ADHOCCOUNT(state) \
+    ( WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_ADHOCCOUNT(state) ) \
     ( varbindseq ) \
     ( onenterseq ) \
-    ( onexitseq ) )
+    ( onexitseq )
 
 #endif /* WG_PP_LCLCONTEXT_SPECNORMALIZE_HH_ */
