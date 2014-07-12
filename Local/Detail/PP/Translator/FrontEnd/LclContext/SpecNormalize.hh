@@ -274,9 +274,16 @@
     ( \
       BOOST_PP_IIF( \
         WG_PP_SEQ_ISNIL(asseq), \
-        WG_PP_IDENTITY_ARG1, \
-        WG_PP_LCLCONTEXT_SPECPARSER_CHOOSE_TPL( \
-          WG_PP_BOUNDVARDCLN_NORMALIZE, specoptions)) \
+        BOOST_PP_NIL WG_PP_MAPTO_NOTHING_ARG2, \
+        WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_MAKESYMBOL_ASSEQENTRY) \
+      (specoptions, asseq) \
+    )
+
+#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_MAKESYMBOL_ASSEQENTRY( \
+  specoptions, asseq) \
+    ( \
+      WG_PP_LCLCONTEXT_SPECPARSER_CHOOSE_TPL( \
+        WG_PP_BOUNDVARDCLN_NORMALIZE, specoptions) \
       ( BOOST_PP_SEQ_ELEM(0, asseq) ) \
     )
 
