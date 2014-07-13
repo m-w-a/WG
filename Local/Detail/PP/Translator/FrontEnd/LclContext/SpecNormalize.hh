@@ -283,7 +283,7 @@
   specoptions, asseq) \
     ( \
       WG_PP_LCLCONTEXT_SPECPARSER_CHOOSE_TPL( \
-        WG_PP_BOUNDVARDCLN_NORMALIZE, specoptions) \
+        WG_PP_BOUNDVARDCLN_NLT_NORMALIZE, specoptions) \
       ( BOOST_PP_SEQ_ELEM(0, asseq) ) \
     )
 
