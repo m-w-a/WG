@@ -11,30 +11,19 @@
 // Expands to the following:
 //   (istplmarker) (0 | 1)
 //   (isnoex) (0 | 1)
-//   (symblsmarker) (symbolseq)
+//   (symblsmarker) (marked-symbol-seq)
 //
 // symbolseq :=
-//     symboltuple
-//   | symbolseq symboltuple
+//     marked-symbol-tuple
+//   | marked-symbol-seq marked-symbol-tuple
 //
-// symboltuple :=
-//    ( extantsymbol )
-//  | ( adhocsymbol )
+// symbol-tuple :=
+//     ( marker symbol )
+//   | ( marker error-token )
 //
-// extantsymbol :=
-//   WG_PP_MARKER_NOOP
-//   ( WG_PP_LCLCONTEXT_SCOPEMNGR_CATEGORY_WITHDCLN )
-//   ( categoryno )
-//   ( scopemngrseq )
-//   ( nrmlzdenteredasseq )
+// marker := WG_PP_MARKER_NOOP | WG_PP_MARKER_ERROR
 //
-// adhocsymbol :=
-//   WG_PP_MARKER_NOOP
-//   ( WG_PP_LCLCONTEXT_SCOPEMNGR_CATEGORY_WITHADHOCDCLN )
-//   ( categoryno )
-//   ( varbindseq )
-//   ( onenterseq )
-//   ( onexitseq )
+// error-token := Some token(s).
 //
 // What ever terms not defined here are defined in SymbolTable.hh
 #define WG_PP_LCLCONTEXT_SPECPARSER_PARSE(spec, istpl, isnoex) \
@@ -256,20 +245,21 @@
       BOOST_PP_SEQ_ELEM(2, withseqtuple_asseqtuple_restspectuple) )
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_MAKESYMBOL( \
-  specoptions, categoryno, withseqtuple_asseqtuple_restspectuple) \
+  specoptions, symbolid, withseqtuple_asseqtuple_restspectuple) \
     WG_PP_LCLCONTEXT_SPECPARSER_EXPAND6( \
       WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_MAKESYMBOL2 \
       BOOST_PP_LPAREN() \
         specoptions BOOST_PP_COMMA() \
-        categoryno BOOST_PP_COMMA() \
+        symbolid BOOST_PP_COMMA() \
         BOOST_PP_SEQ_ENUM(withseqtuple_asseqtuple_restspectuple) \
       BOOST_PP_RPAREN() )
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_MAKESYMBOL2( \
-  specoptions, categoryno, withseq, asseq, restspec) \
+  specoptions, symbolid, withseq, asseq, restspec) \
     WG_PP_MARKER_NOOP \
-    ( WG_PP_LCLCONTEXT_SCOPEMNGR_CATEGORY_WITHDCLN ) \
-    ( categoryno ) \
+    ( WG_PP_LCLCONTEXT_SYMBOL_CATEGORY_EXTANT ) \
+    ( 0 ) \
+    ( symbolid ) \
     ( withseq ) \
     ( \
       BOOST_PP_IIF( \
@@ -399,7 +389,8 @@
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ADHOC_MAKESYMBOL( \
   state, varbindseq, onenterseq, onexitseq) \
     WG_PP_MARKER_NOOP \
-    ( WG_PP_LCLCONTEXT_SCOPEMNGR_CATEGORY_WITHADHOCDCLN ) \
+    ( WG_PP_LCLCONTEXT_SYMBOL_CATEGORY_ADHOC ) \
+    ( 1 ) \
     ( WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_ADHOCCOUNT(state) ) \
     ( varbindseq ) \
     ( onenterseq ) \
