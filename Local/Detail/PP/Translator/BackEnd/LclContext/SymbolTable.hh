@@ -2,6 +2,7 @@
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_HH_
 
 #include <boost/preprocessor.hpp>
+#include <WG/Local/Detail/PP/SEQ.hh>
 
 //###########
 //Public APIs
@@ -15,6 +16,12 @@
 
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_ISNOEX(symbtbl) \
   WG_PP_LCLCONTEXT_ST_GET(symbtbl, NOEX)
+
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOLCOUNT_EXTANT(symbtbl) \
+  WG_PP_LCLCONTEXT_ST_GET(symbtbl, SYMBOLCOUNT_EXTANT)
+
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOLCOUNT_ADHOC(symbtbl) \
+  WG_PP_LCLCONTEXT_ST_GET(symbtbl, SYMBOLCOUNT_ADHOC)
 
 // Returns: { symblseq }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOLS(symbtbl) \
@@ -52,9 +59,18 @@
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_SCOPEMNGRSEQ(symbol) \
   BOOST_PP_SEQ_ELEM(3, symbol)
 
-// Returns: { nrmlzdenteredasseq }
-#define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_NRMLZDENTEREDASSEQ(symbol) \
-  BOOST_PP_SEQ_ELEM(4, symbol)
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_ISENTRYCAPTURED(symbol) \
+  WG_PP_SEQ_ISNIL( BOOST_PP_SEQ_ELEM(4, symbol) )
+
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRYTYPE(symbol) \
+  BOOST_PP_SEQ_ELEM( \
+    0, \
+    BOOST_PP_SEQ_ELEM(4, symbol) )
+
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRYOBJ(symbol) \
+  BOOST_PP_SEQ_ELEM( \
+    1, \
+    BOOST_PP_SEQ_ELEM(4, symbol) )
 
 //-----------
 //AdhocSymbol
@@ -86,6 +102,10 @@
 //   { (0|1) }
 // noex:
 //   { (0|1) }
+// extantsymblcount:
+//   { (unsigned-integer) }
+// adhocsymblcount:
+//   { (unsigned-integer) }
 // symblseq:
 //   { BOOST_PP_NIL | { ( symbol ) }+ }
 //
@@ -129,8 +149,10 @@
 //OUTPUT:
 //-------
 // A SymbolTable whose values are accessible using the public API.
-#define WG_PP_LCLCONTEXT_SYMBOLTABLE_CREATE(istpl, noex, symblseq) \
-  WG_PP_LCLCONTEXT_SYMBOLTABLE_CREATE_IMPL(istpl, noex, symblseq)
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_CREATE( \
+  istpl, noex, extantsymblcount, adhocsymblcount, symblseq) \
+    WG_PP_LCLCONTEXT_SYMBOLTABLE_CREATE_IMPL( \
+      istpl, noex, extantsymblcount, adhocsymblcount, symblseq)
 
 //###########
 //Impl Macros
@@ -146,9 +168,12 @@
 
 #define WG_PP_LCLCONTEXT_ST_INDX_ISNOEX 2
 
-#define WG_PP_LCLCONTEXT_ST_INDX_SYMBOLS 3
+#define WG_PP_LCLCONTEXT_ST_INDX_SYMBOLCOUNT_EXTANT 3
+#define WG_PP_LCLCONTEXT_ST_INDX_SYMBOLCOUNT_ADHOC 4
 
-#define WG_PP_LCLCONTEXT_ST_INDX_SYMBOLS_TOTALCOUNT 4
+#define WG_PP_LCLCONTEXT_ST_INDX_SYMBOLS 5
+
+#define WG_PP_LCLCONTEXT_ST_INDX_SYMBOLS_TOTALCOUNT 6
 
 // suffix: must match one of the following: WG_PP_LCLCONTEXT_ST_INDX_<suffix>
 #define WG_PP_LCLCONTEXT_ST_GET(symbtbl, suffix) \
@@ -156,15 +181,18 @@
     BOOST_PP_CAT(WG_PP_LCLCONTEXT_ST_INDX_, suffix), \
     symbtbl)
 
-#define WG_PP_LCLCONTEXT_SYMBOLTABLE_CREATE_IMPL(istpl, noex, symblseq) \
-  ( \
-    5, \
-    (WG_PP_LCLCONTEXT_SYMBOLTABLE, \
-    istpl, \
-    noex, \
-    symblseq, \
-    BOOST_PP_SEQ_SIZE(symblseq)), \
-  )
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_CREATE_IMPL( \
+  istpl, noex, extantsymblcount, adhocsymblcount, symblseq) \
+    ( \
+      7, \
+      (WG_PP_LCLCONTEXT_SYMBOLTABLE, \
+      istpl, \
+      noex, \
+      extantsymblcount, \
+      adhocsymblcount, \
+      symblseq, \
+      BOOST_PP_SEQ_SIZE(symblseq)), \
+    )
 
 
 #endif /* WG_PP_LCLCONTEXT_SYMBOLTABLE_HH_ */

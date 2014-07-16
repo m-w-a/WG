@@ -31,6 +31,11 @@
 #define WG_PP_SEQ_FLATTEN(seq) \
   WG_PP_SEQ_FLATTEN_IMPL(seq)
 
+// Maps nil sequences to nothing.
+// Lists each element of the seq as they appeared in the seq.
+#define WG_PP_SEQ_NOTHING_FLATTEN(seq) \
+  WG_PP_SEQ_NOTHING_FLATTEN_IMPL(seq)
+
 // Maps to BOOST_PP_NIL if seq is nil.
 #define WG_PP_SEQ_REVERSE(seq) \
   WG_PP_SEQ_REVERSE_IMPL(seq)
@@ -195,6 +200,13 @@
 #define WG_PP_SEQ_FLATTEN_FUNC2(elem) elem WG_PP_SEQ_FLATTEN_FUNC1
 #define WG_PP_SEQ_FLATTEN_FUNC1_ERASED
 #define WG_PP_SEQ_FLATTEN_FUNC2_ERASED
+
+#define WG_PP_SEQ_NOTHING_FLATTEN_IMPL(seq) \
+  BOOST_PP_IIF( \
+    WG_PP_SEQ_ISNIL(seq), \
+    WG_PP_MAPTO_NOTHING_ARG1, \
+    WG_PP_SEQ_FLATTEN) \
+  (seq)
 
 #define WG_PP_SEQ_REVERSE_IMPL_0(seq) BOOST_PP_NIL
 #define WG_PP_SEQ_REVERSE_IMPL_1(seq) BOOST_PP_SEQ_REVERSE(seq)

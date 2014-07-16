@@ -11,6 +11,8 @@
 // Expands to the following:
 //   (istplmarker) (0 | 1)
 //   (isnoex) (0 | 1)
+//   (extantsymblcount) (unsigned-integer)
+//   (adhocsymblcount) (unsigned-integer)
 //   (symblsmarker) (marked-symbol-seq)
 //
 // symbolseq :=
@@ -77,6 +79,10 @@
       WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_INITSTATE(spec, specoptions) ) )
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_PARSE_INTO_INTERNALFORMAT2(whilestate) \
+  (extantsymblcount) \
+  ( WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_EXTANTCOUNT(whilestate) ) \
+  (adhocsymblcount) \
+  ( WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_ADHOCCOUNT(whilestate) ) \
   (symblsmarker) \
   ( \
     WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_PARSEDSEQ(whilestate) \
