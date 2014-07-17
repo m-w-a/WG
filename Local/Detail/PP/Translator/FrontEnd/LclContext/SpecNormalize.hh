@@ -266,7 +266,7 @@
     ( WG_PP_LCLCONTEXT_SYMBOL_CATEGORY_EXTANT ) \
     ( 0 ) \
     ( symbolid ) \
-    ( withseq ) \
+    withseq \
     ( \
       BOOST_PP_IIF( \
         WG_PP_SEQ_ISNIL(asseq), \

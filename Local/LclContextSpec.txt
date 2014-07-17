@@ -51,13 +51,17 @@ terminals: with with_adhoc entered_as on_enter on_exit
 lclcontext-usage :=
   lclcontext-start-macro ( lclcontext-spec )
   compound-statement
-  WG_LCLCONTEXT_END [;]
+  lclcontext-end-macro [;]
 
 lclcontext-start-macro :=
     WG_LCLCONTEXT
   | WG_LCLCONTEXT_TPL
   | WG_LCLCONTEXT_NOEX
   | WG_LCLCONTEXT_NOEX_TPL
+
+lclcontext-end-macro :=
+    WG_LCLCONTEXT_END
+  | WG_LCLCONTEXT_NOEX_END
 
 lclcontext-spec :=
     with-dcln [ lclcontext-spec ]

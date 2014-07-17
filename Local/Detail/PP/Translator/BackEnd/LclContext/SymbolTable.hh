@@ -55,8 +55,8 @@
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_ID(symbol) \
   BOOST_PP_SEQ_ELEM(2, symbol)
 
-// Returns: { scopemngrseq }
-#define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_SCOPEMNGRSEQ(symbol) \
+// Returns: { scopemngrtuple }
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_SCOPEMNGREXPR(symbol) \
   BOOST_PP_SEQ_ELEM(3, symbol)
 
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_ISENTRYCAPTURED(symbol) \
@@ -117,7 +117,7 @@
 //   ( WG_PP_LCLCONTEXT_SYMBOL_CATEGORY_EXTANT )
 //   ( categoryid )
 //   ( symbolid )
-//   ( scopemngrseq )
+//   ( scopemngrtuple )
 //   ( nrmlzdenteredasseq )
 //
 // adhocsymbol :=
@@ -129,7 +129,7 @@
 //   ( onexitseq )
 //
 // symbolid := int
-// scopemngrseq := { BOOST_PP_NIL | ( scope-manager-expr ) }
+// scopemngrtuple := { ( scope-manager-expr ) }
 // nrmlzdenteredasseq := { BOOST_PP_NIL |  ( normalized-bound-nlt-tuple ) }
 // varbindseq = bound-tuple-seq
 // onenterseq := { BOOST_PP_NIL | ( compound-statement ) }
