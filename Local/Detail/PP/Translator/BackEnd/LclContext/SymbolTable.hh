@@ -14,9 +14,6 @@
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_ISTPL(symbtbl) \
   WG_PP_LCLCONTEXT_ST_GET(symbtbl, ISPTL)
 
-#define WG_PP_LCLCONTEXT_SYMBOLTABLE_ISNOEX(symbtbl) \
-  WG_PP_LCLCONTEXT_ST_GET(symbtbl, NOEX)
-
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOLCOUNT_EXTANT(symbtbl) \
   WG_PP_LCLCONTEXT_ST_GET(symbtbl, SYMBOLCOUNT_EXTANT)
 
@@ -100,8 +97,6 @@
 //
 // istpl:
 //   { (0|1) }
-// noex:
-//   { (0|1) }
 // extantsymblcount:
 //   { (unsigned-integer) }
 // adhocsymblcount:
@@ -150,9 +145,9 @@
 //-------
 // A SymbolTable whose values are accessible using the public API.
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_CREATE( \
-  istpl, noex, extantsymblcount, adhocsymblcount, symblseq) \
+  istpl, extantsymblcount, adhocsymblcount, symblseq) \
     WG_PP_LCLCONTEXT_SYMBOLTABLE_CREATE_IMPL( \
-      istpl, noex, extantsymblcount, adhocsymblcount, symblseq)
+      istpl, extantsymblcount, adhocsymblcount, symblseq)
 
 //###########
 //Impl Macros
@@ -166,14 +161,12 @@
 
 #define WG_PP_LCLCONTEXT_ST_INDX_ISTPL 1
 
-#define WG_PP_LCLCONTEXT_ST_INDX_ISNOEX 2
+#define WG_PP_LCLCONTEXT_ST_INDX_SYMBOLCOUNT_EXTANT 2
+#define WG_PP_LCLCONTEXT_ST_INDX_SYMBOLCOUNT_ADHOC 3
 
-#define WG_PP_LCLCONTEXT_ST_INDX_SYMBOLCOUNT_EXTANT 3
-#define WG_PP_LCLCONTEXT_ST_INDX_SYMBOLCOUNT_ADHOC 4
+#define WG_PP_LCLCONTEXT_ST_INDX_SYMBOLS 4
 
-#define WG_PP_LCLCONTEXT_ST_INDX_SYMBOLS 5
-
-#define WG_PP_LCLCONTEXT_ST_INDX_SYMBOLS_TOTALCOUNT 6
+#define WG_PP_LCLCONTEXT_ST_INDX_SYMBOLS_TOTALCOUNT 5
 
 // suffix: must match one of the following: WG_PP_LCLCONTEXT_ST_INDX_<suffix>
 #define WG_PP_LCLCONTEXT_ST_GET(symbtbl, suffix) \
@@ -182,12 +175,11 @@
     symbtbl)
 
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_CREATE_IMPL( \
-  istpl, noex, extantsymblcount, adhocsymblcount, symblseq) \
+  istpl, extantsymblcount, adhocsymblcount, symblseq) \
     ( \
-      7, \
+      6, \
       (WG_PP_LCLCONTEXT_SYMBOLTABLE, \
       istpl, \
-      noex, \
       extantsymblcount, \
       adhocsymblcount, \
       symblseq, \

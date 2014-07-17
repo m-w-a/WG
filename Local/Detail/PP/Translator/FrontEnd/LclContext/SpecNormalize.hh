@@ -10,7 +10,6 @@
 
 // Expands to the following:
 //   (istplmarker) (0 | 1)
-//   (isnoex) (0 | 1)
 //   (extantsymblcount) (unsigned-integer)
 //   (adhocsymblcount) (unsigned-integer)
 //   (symblsmarker) (marked-symbol-seq)
@@ -28,19 +27,18 @@
 // error-token := Some token(s).
 //
 // What ever terms not defined here are defined in SymbolTable.hh
-#define WG_PP_LCLCONTEXT_SPECPARSER_PARSE(spec, istpl, isnoex) \
-  WG_PP_LCLCONTEXT_SPECPARSER_PARSE_IMPL(spec, istpl, isnoex)
+#define WG_PP_LCLCONTEXT_SPECPARSER_PARSE(spec, istpl) \
+  WG_PP_LCLCONTEXT_SPECPARSER_PARSE_IMPL(spec, istpl)
 
 //###########
 //Impl Macros
 //###########
 
-#define WG_PP_LCLCONTEXT_SPECPARSER_PARSE_IMPL(spec, istpl, isnoex) \
+#define WG_PP_LCLCONTEXT_SPECPARSER_PARSE_IMPL(spec, istpl) \
   (istplmrkr) (istpl) \
-  (isnoexmrkr) (isnoex) \
   WG_PP_LCLCONTEXT_SPECPARSER_PARSE_INTO_INTERNALFORMAT( \
     spec BOOST_PP_NIL, \
-    WG_PP_LCLCONTEXT_SPECPARSER_SPECOPTIONS_MAKE(istpl, isnoex) )
+    WG_PP_LCLCONTEXT_SPECPARSER_SPECOPTIONS_MAKE(istpl) )
 
 //------
 // Utils
@@ -53,8 +51,8 @@
 #define WG_PP_LCLCONTEXT_SPECPARSER_EXPAND5(x) x
 #define WG_PP_LCLCONTEXT_SPECPARSER_EXPAND6(x) x
 
-#define WG_PP_LCLCONTEXT_SPECPARSER_SPECOPTIONS_MAKE(istpl, isnoex) \
-  (istpl)(isnoex)
+#define WG_PP_LCLCONTEXT_SPECPARSER_SPECOPTIONS_MAKE(istpl) \
+  (istpl)
 #define WG_PP_LCLCONTEXT_SPECPARSER_SPECOPTIONS_ISTPL(specoptions) \
   BOOST_PP_SEQ_ELEM(0, specoptions)
 #define WG_PP_LCLCONTEXT_SPECPARSER_SPECOPTIONS_ISNOEX(specoptions) \
