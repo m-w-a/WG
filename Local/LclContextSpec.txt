@@ -1,8 +1,12 @@
+    enter_as(optional-type-qualifier variable-name)
+
 //----------
 //Semantics:
 //----------
 
 Note: All terms not defined here should be referenced in AutoFunctorSpec.txt
+
+BOOST_NO_EXCEPTIONS controls whether exception support is generated.
 
 adhoc-scope-handlers:
   1) At least one handler must be specified.
@@ -16,7 +20,7 @@ on_enter:
   Upon entering the lclcontext's scope, the on_enter method of each declared 
   scope manager object is called in the order in which they appeared in the 
   opening macro, starting from first to last. Any return value is ignored unless 
-  otherwise specified in the lclcontext's opening macro.
+  otherwise specified in an associated "entered_as" macro parameter.
   
 on_exit:
   Upen exit of the lclcontext's scope for any reason (thrown exception, return 
@@ -38,7 +42,7 @@ by the library. This means that in C++03 the on_exit call to them will have to
 go through a function pointer, but in C++11 this indirection is not necessary.
 Note: it is necessary to allow the calls to the on_exit method of explicit and
   adhoc scope managers to be intermixed since the user may intermix them in the
-  opening macro.
+  declaring macro.
 
 //---
 //BNF
