@@ -46,6 +46,8 @@ struct encoded_type;
 // evaluating expr, where
 // 1) NonConstNonRefExprType is the equivalent of BOOST_TYPEOF(expr), and
 // 2) IsExprConst is either ::boost::mpl::false_ or ::boost::mpl::true_
+// 3) encoded_type's nested typename "non_ref_type" gives the type of "expr"
+//    minus any top-most reference qualifiers.
 #define WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr) \
   (true \
     ? 0 \
@@ -64,8 +66,11 @@ namespace detail
 {
 
 template<typename T, typename IsExprConst>
-struct encoded_type : ::boost::mpl::if_<IsExprConst, T const, T>
+struct encoded_type
 {
+  typedef BOOST_DEDUCED_TYPENAME
+    ::boost::mpl::if_<IsExprConst, T const, T>::type
+      non_ref_type;
 };
 
 template<typename T>

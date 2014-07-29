@@ -30,18 +30,17 @@ typedef detail::auto_any_group const & auto_any_group_t;
 }
 }
 
-// This macro is used to emulate C++11 auto-deduced reference objects without
+// This macro is used to emulate C++11 auto-deduced universal references without
 // the use of any of Boost.Typeof utilities. In C++11 speak, this macro emulates
-// the following using cases:
-//   auto & v = expr; // For expressions that are lvalues or const rvalues, else
-//   auto const & v = expr; // For expressions that are mutable rvalues.
+// the following using case:
+//   auto && v = expr;
 //
-//   Note: "auto & v = expr;" for expressions that are mutable rvalues is
-//     ill-formed since it's attempting to bind a rvalue to a non-const reference.
 // Usage:
 //   auto_any_t captured_obj = WG_AUTOSIMULATOR_DETAIL_CAPTURE(...) ;
+//
 // expr:
 //   The expr whose result will be captured without using Boost.Typeof.
+//
 // is_rvalue_flag:
 //   A mutable boolean flag.
 #define WG_AUTOSIMULATOR_AUTOANY_CAPTURE(expr, is_rvalue_flag) \
@@ -54,12 +53,13 @@ typedef detail::auto_any_group const & auto_any_group_t;
 //
 // Usage:
 //   auto_any_group_t objs = WG_AUTOSIMULATOR_AUTOANYGROUP_ALLOC(...);
+//
 // exprseq:
 //   A Boost.Preprocessor sequence of C++ expressions.
 //
 // WG_AUTOSIMULATOR_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY:
 //   This object-like macro defines the max number of expressions that may
-//   makeup exprseq. If not defined by the user it defaults to 15.
+//   makeup exprseq. If not defined by the user it defaults to 10.
 #define WG_AUTOSIMULATOR_AUTOANYGROUP_ALLOC(exprseq) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKEGROUP(exprseq)
 

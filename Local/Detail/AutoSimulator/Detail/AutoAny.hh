@@ -29,6 +29,7 @@
 #include <boost/type_traits/is_rvalue_reference.hpp>
 #include <boost/type_traits/is_abstract.hpp>
 #include <boost/type_traits/is_array.hpp>
+#include <boost/type_traits/is_base_of.hpp>
 #include <boost/utility/addressof.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <WG/Local/Detail/AutoSimulator/Detail/Config.hh>
@@ -57,7 +58,9 @@ namespace detail
 
 struct expr_category_rvalue {};
 struct expr_category_lvalue {};
-struct expr_category_const_nonarray_lvalue_or_rvalue {};
+struct expr_category_mutable_rvalue : public expr_category_rvalue {};
+struct expr_category_array_or_mutable_lvalue : public expr_category_lvalue {};
+struct expr_category_const_nonarray_lvalue_or_const_rvalue {};
 
 }
 }
@@ -69,9 +72,9 @@ struct expr_category_const_nonarray_lvalue_or_rvalue {};
 //     2) expr_category_lvalue if expr is a lvalue.
 // WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
 //   expands to:
-//     1) expr_category_lvalue, if expr is an array or a non-const lvalue
-//     2) expr_category_const_nonarray_lvalue_or_rvalue, if expr is a const, non-array
-//       lvalue or it's an rvalue
+//     1) expr_category_mutable_rvalue, or
+//     2) expr_category_array_or_mutable_lvalue, or
+//     3) expr_category_const_nonarray_lvalue_or_const_rvalue.
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr)
 
@@ -128,59 +131,30 @@ struct auto_any_impl : auto_any
   mutable T item;
 };
 
-//-------------
-//expr_category
-//-------------
-
-// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
-//   expr is a rvalue
-// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
-//   never called
-inline expr_category_rvalue expr_category(::boost::mpl::true_ *)
-{
-  return expr_category_rvalue();
-}
-
-// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
-//   expr is a lvalue
-// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
-//   expr is an array (all arrays are lvalues) or a non-const lvalue
-inline expr_category_lvalue expr_category(::boost::mpl::false_ *)
-{
-  return expr_category_lvalue();
-}
-
-// expr is a const, non-array lvalue or it's an rvalue
-inline expr_category_const_nonarray_lvalue_or_rvalue expr_category(bool *)
-{
-  return expr_category_const_nonarray_lvalue_or_rvalue();
-}
-
 //------------------------------------------------------------------------------
 //capture
 //  Captures the result of an expression.
 //  If it's an lvalue a copy of it is made, else a reference to it is held.
 //------------------------------------------------------------------------------
 
-// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
-//   t is a rvalue
-// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
-//   never called
-template<typename T>
-inline auto_any_impl<T const>
-  capture(expr_category_rvalue, T const & t, bool & is_rvalue_flag)
+template<typename T, typename IsExprConst>
+inline auto_any_impl
+<BOOST_DEDUCED_TYPENAME encoded_type<T, IsExprConst>::non_ref_type>
+  capture(
+    expr_category_rvalue,
+    T const & t,
+    bool & is_rvalue_flag,
+    encoded_type<T, IsExprConst> *)
 {
   is_rvalue_flag = true;
-  return auto_any_impl<T const>(t);
+  return
+    auto_any_impl
+    <BOOST_DEDUCED_TYPENAME encoded_type<T, IsExprConst>::non_ref_type>(t);
 }
 
-// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME:
-//   t is a lvalue
-// WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME:
-//   t is an array (all arrays are lvalues) or a non-const lvalue
 template<typename T>
 inline auto_any_impl<T *>
-  capture(expr_category_lvalue, T & t, bool & is_rvalue_flag)
+  capture(expr_category_lvalue, T & t, bool & is_rvalue_flag, void *)
 {
   is_rvalue_flag = false;
 
@@ -196,25 +170,27 @@ inline auto_any_impl<T *>
   template<typename T>
   struct simple_variant;
 
-  // t is a const, non-array lvalue or it's an rvalue
   template<typename T>
   inline auto_any_impl<simple_variant<T const> >
     capture(
-      expr_category_const_nonarray_lvalue_or_rvalue,
+      expr_category_const_nonarray_lvalue_or_const_rvalue,
       T const & t,
-      bool const & is_rvalue_flag)
+      bool const & is_rvalue_flag,
+      void *)
   {
     typedef simple_variant<T const> variant_t;
     // Have to use a variant because we don't know whether to capture by value
     // or by reference until runtime.
     return auto_any_impl< simple_variant<T const> >(
-      is_rvalue_flag ? simple_variant<T const>(t) : simple_variant<T const>(&t));
+      is_rvalue_flag
+        ? simple_variant<T const>(t)
+        : simple_variant<T const>(::boost::addressof(t)) );
   }
 
   //-------------------------------------
   //simple_variant<T>
-  //  Holds either a T or a "T const *".
-  //  T means the expression was an rvalue.
+  //  Holds either a "T const" or a "T const *".
+  //  "T const" means the expression was an rvalue.
   //  "T const *" means the expression was an lvalue.
   //-------------------------------------
 
@@ -275,10 +251,6 @@ inline auto_any_impl<T *>
     // Purposefully declared and not defined.
     simple_variant & operator=(simple_variant const &);
   private:
-    // Because a purpose of auto_any_t is to mimic binding rvalues to
-    // their const reference so as to extend their lifetime for the duration of
-    // the scope of auto_any_t, any and all access to the value of the bound
-    // rvalue must be const.
     T const * get_rvalue() const
     {
       return static_cast<T const *>(this->m_data.address());
@@ -328,13 +300,13 @@ inline auto_any_impl<T *>
     {
 
     template<typename T>
-      inline ::boost::is_rvalue_reference<T &&> * is_rvalue_(T &&, int)
+      inline ::boost::is_rvalue_reference<T &&> * is_rvalue_(T &&)
       {
         return 0;
       }
 
     #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_ISRVALUE(expr) \
-      ::wg::autosimulator::detail::is_rvalue_((expr), 0)
+      ::wg::autosimulator::detail::is_rvalue_(expr)
 
     }
     }
@@ -406,6 +378,27 @@ inline auto_any_impl<T *>
 
   #endif
 
+  namespace wg
+  {
+  namespace autosimulator
+  {
+  namespace detail
+  {
+
+  inline expr_category_rvalue expr_category(::boost::mpl::true_ *)
+  {
+    return expr_category_rvalue();
+  }
+
+  inline expr_category_lvalue expr_category(::boost::mpl::false_ *)
+  {
+    return expr_category_lvalue();
+  }
+
+  }
+  }
+  }
+
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE(expr) (expr)
 
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr) \
@@ -416,7 +409,8 @@ inline auto_any_impl<T *>
     ::wg::autosimulator::detail::capture( \
       WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
       WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE(expr) , \
-      is_rvalue_flag)
+      is_rvalue_flag, \
+      WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr) )
 
 ///////////////////////////////////////////////////////////////////////////////
 // Detect at run-time whether an expression yields an rvalue
@@ -493,20 +487,27 @@ inline auto_any_impl<T *>
     bool & m_is_rvalue;
   };
 
-  // If the collection is an array or is nonconst, it must be an lvalue.
-  template<typename LValue>
-  inline BOOST_DEDUCED_TYPENAME
-    ::boost::enable_if<LValue, ::boost::mpl::false_>::type *
-  expr_category_cpp03(LValue *, bool *)
+
+  //-------------
+  //expr_category
+  //-------------
+
+  inline expr_category_mutable_rvalue expr_category(
+    ::boost::mpl::true_ *, ::boost::mpl::false_ *)
   {
-    return 0;
+    return expr_category_mutable_rvalue();
   }
 
-  // Otherwise, we must determine at runtime whether it's an lvalue or rvalue
-  inline bool *
-    expr_category_cpp03(::boost::mpl::false_ *, bool *)
+  inline expr_category_array_or_mutable_lvalue expr_category(
+    ::boost::mpl::false_ *, ::boost::mpl::true_ *)
   {
-    return 0;
+    return expr_category_array_or_mutable_lvalue();
+  }
+
+  inline expr_category_const_nonarray_lvalue_or_const_rvalue expr_category(
+    ::boost::mpl::false_ *, ::boost::mpl::false_ *)
+  {
+    return expr_category_const_nonarray_lvalue_or_const_rvalue();
   }
 
   }
@@ -521,23 +522,24 @@ inline auto_any_impl<T *>
         : (expr))
 
   // The rvalue/lvalue-ness of the collection expression is determined
-  // dynamically, unless the type is an array or is non-const,
-  // in which case we know it's an lvalue.
+  // dynamically, unless the type is an array or mutable lvalue, or is a
+  // mutable rvalue.
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr) \
-    ::wg::autosimulator::detail::expr_category( \
-      ::wg::autosimulator::detail::expr_category_cpp03( \
-        true ? 0 : ::wg::autosimulator::detail::or_( \
-          ::wg::autosimulator::detail::is_array_(expr) , \
-          ::wg::autosimulator::detail::not_( \
-            ::wg::autosimulator::detail::is_const_(expr))) , \
-        static_cast<bool *>(0) ) \
-      )
+    ::wg::autosimulator::detail::expr_category \
+    ( \
+      WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLERVALUE(expr), \
+      ::wg::autosimulator::detail::or_( \
+        WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(expr), \
+        WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLELVALUE(expr) ) \
+    )
 
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, is_rvalue_flag) \
     ::wg::autosimulator::detail::capture( \
       WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
-      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE_AND_SETRVALUEFLAG(expr, is_rvalue_flag), \
-      is_rvalue_flag)
+      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE_AND_SETRVALUEFLAG( \
+        expr, is_rvalue_flag), \
+      is_rvalue_flag, \
+      WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr) )
 
 #endif
 
@@ -574,36 +576,50 @@ template
 <
   typename ExprCategory,
   typename NonConstNonRefExprType,
-  typename IsExprConst
+  typename IsExprConst,
+  typename EnableIfDummyArg = void
 >
+struct dfta_traits;
+//public:
+//  typedef some_type captured_expr_type;
+//  typedef some_type auto_any_impl_type;
+
+template
+<typename ExprCategory, typename NonConstNonRefExprType, typename IsExprConst>
 struct dfta_traits
-{
-private:
-  struct some_type;
-public:
-  typedef some_type captured_expr_type;
-  typedef some_type auto_any_impl_type;
-};
-
-template <typename NonConstNonRefExprType, typename IsExprConst>
-struct dfta_traits<expr_category_rvalue, NonConstNonRefExprType, IsExprConst>
-{
-  typedef NonConstNonRefExprType const captured_expr_type;
-  typedef auto_any_impl<NonConstNonRefExprType const> auto_any_impl_type;
-
-};
-
-template <typename NonConstNonRefExprType, typename IsExprConst>
-struct dfta_traits<expr_category_lvalue, NonConstNonRefExprType, IsExprConst>
+<
+  ExprCategory,
+  NonConstNonRefExprType,
+  IsExprConst,
+  typename ::boost::enable_if
+  <
+    ::boost::is_base_of<expr_category_rvalue, ExprCategory>
+  >::type
+>
 {
   typedef BOOST_DEDUCED_TYPENAME
-    ::boost::mpl::if_
-      <
-        IsExprConst,
-        NonConstNonRefExprType const,
-        NonConstNonRefExprType
-      >::type
-        captured_expr_type;
+    encoded_type<NonConstNonRefExprType, IsExprConst>::non_ref_type
+      captured_expr_type;
+  typedef auto_any_impl<captured_expr_type> auto_any_impl_type;
+
+};
+
+template
+<typename ExprCategory, typename NonConstNonRefExprType, typename IsExprConst>
+struct dfta_traits
+<
+  ExprCategory,
+  NonConstNonRefExprType,
+  IsExprConst,
+  typename ::boost::enable_if
+  <
+    ::boost::is_base_of<expr_category_lvalue, ExprCategory>
+  >::type
+>
+{
+  typedef BOOST_DEDUCED_TYPENAME
+    encoded_type<NonConstNonRefExprType, IsExprConst>::non_ref_type
+      captured_expr_type;
   typedef auto_any_impl<captured_expr_type *> auto_any_impl_type;
 };
 
@@ -611,15 +627,18 @@ struct dfta_traits<expr_category_lvalue, NonConstNonRefExprType, IsExprConst>
   template <typename NonConstNonRefExprType, typename IsExprConst>
   struct dfta_traits
   <
-    expr_category_const_nonarray_lvalue_or_rvalue,
+    expr_category_const_nonarray_lvalue_or_const_rvalue,
     NonConstNonRefExprType,
-    IsExprConst
+    IsExprConst,
+    void
   >
   {
-    typedef NonConstNonRefExprType const captured_expr_type;
+    typedef BOOST_DEDUCED_TYPENAME
+      encoded_type<NonConstNonRefExprType, IsExprConst>::non_ref_type
+        captured_expr_type;
     typedef auto_any_impl
     <
-      simple_variant<NonConstNonRefExprType const>
+      simple_variant<captured_expr_type>
     > auto_any_impl_type;
   };
 #endif

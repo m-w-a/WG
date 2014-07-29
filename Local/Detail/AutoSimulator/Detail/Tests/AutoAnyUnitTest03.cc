@@ -9,21 +9,28 @@ struct ExpressionCategory
 {
   enum Type
   {
-    CompileTimeDeterminedAsLValue,
-    RunTimeDetermined
+    MutableRValue,
+    ArrayOrMutableLValue,
+    ConstNonArrayLValueOrConstRValue
   };
 };
 
 ExpressionCategory::Type expressionCategory(
-  ::wg::autosimulator::detail::expr_category_lvalue)
+  ::wg::autosimulator::detail::expr_category_mutable_rvalue)
 {
-  return ExpressionCategory::CompileTimeDeterminedAsLValue;
+  return ExpressionCategory::MutableRValue;
 }
 
 ExpressionCategory::Type expressionCategory(
-  ::wg::autosimulator::detail::expr_category_const_nonarray_lvalue_or_rvalue)
+  ::wg::autosimulator::detail::expr_category_array_or_mutable_lvalue)
 {
-  return ExpressionCategory::RunTimeDetermined;
+  return ExpressionCategory::ArrayOrMutableLValue;
+}
+
+ExpressionCategory::Type expressionCategory(
+  ::wg::autosimulator::detail::expr_category_const_nonarray_lvalue_or_const_rvalue)
+{
+  return ExpressionCategory::ConstNonArrayLValueOrConstRValue;
 }
 
 struct Cntnr {};
@@ -73,7 +80,7 @@ TEST(wg_autosimulator_detail_autoany_cpp03, MutableNonArrayLValue)
 
   EXPECT_FALSE(isRValue);
   EXPECT_EQ(
-    ExpressionCategory::CompileTimeDeterminedAsLValue,
+    ExpressionCategory::ArrayOrMutableLValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
 #undef EXPR
 }
@@ -88,7 +95,7 @@ TEST(wg_autosimulator_detail_autoany_cpp03, ConstNonArrayLValue)
 
   EXPECT_FALSE(isRValue);
   EXPECT_EQ(
-    ExpressionCategory::RunTimeDetermined,
+    ExpressionCategory::ConstNonArrayLValueOrConstRValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
 #undef EXPR
 }
@@ -103,7 +110,7 @@ TEST(wg_autosimulator_detail_autoany_cpp03, MutableArrayLValue)
 
   EXPECT_FALSE(isRValue);
   EXPECT_EQ(
-    ExpressionCategory::CompileTimeDeterminedAsLValue,
+    ExpressionCategory::ArrayOrMutableLValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
 #undef EXPR
 }
@@ -118,7 +125,7 @@ TEST(wg_autosimulator_detail_autoany_cpp03, ConstArrayLValue)
 
   EXPECT_FALSE(isRValue);
   EXPECT_EQ(
-    ExpressionCategory::CompileTimeDeterminedAsLValue,
+    ExpressionCategory::ArrayOrMutableLValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
 #undef EXPR
 }
@@ -133,7 +140,7 @@ TEST(wg_autosimulator_detail_autoany_cpp03, MutableRValue)
 
   EXPECT_TRUE(isRValue);
   EXPECT_EQ(
-    ExpressionCategory::RunTimeDetermined,
+    ExpressionCategory::MutableRValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
 #undef EXPR
 }
@@ -148,7 +155,7 @@ TEST(wg_autosimulator_detail_autoany_cpp03, ConstRValue)
 
   EXPECT_TRUE(isRValue);
   EXPECT_EQ(
-    ExpressionCategory::RunTimeDetermined,
+    ExpressionCategory::ConstNonArrayLValueOrConstRValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
 #undef EXPR
 }

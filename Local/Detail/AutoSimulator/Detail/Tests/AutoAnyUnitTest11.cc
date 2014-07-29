@@ -10,21 +10,21 @@ struct ExpressionCategory
 {
   enum Type
   {
-    CompileTimeDeterminedAsLValue,
-    CompileTimeDeterminedAsRValue
+    LValue,
+    RValue
   };
 };
 
 ExpressionCategory::Type expressionCategory(
   ::wg::autosimulator::detail::expr_category_lvalue)
 {
-  return ExpressionCategory::CompileTimeDeterminedAsLValue;
+  return ExpressionCategory::LValue;
 }
 
 ExpressionCategory::Type expressionCategory(
   ::wg::autosimulator::detail::expr_category_rvalue)
 {
-  return ExpressionCategory::CompileTimeDeterminedAsRValue;
+  return ExpressionCategory::RValue;
 }
 
 struct EmptyStruct {};
@@ -62,7 +62,7 @@ TEST(wg_autosimulator_detail_autoany_cpp11, MutableLValue)
 
   EXPECT_FALSE(isRValue);
   EXPECT_EQ(
-    ExpressionCategory::CompileTimeDeterminedAsLValue,
+    ExpressionCategory::LValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
 #undef EXPR
 }
@@ -77,7 +77,7 @@ TEST(wg_autosimulator_detail_autoany_cpp11, ConstLValue)
 
   EXPECT_FALSE(isRValue);
   EXPECT_EQ(
-    ExpressionCategory::CompileTimeDeterminedAsLValue,
+    ExpressionCategory::LValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
 #undef EXPR
 }
@@ -92,7 +92,7 @@ TEST(wg_autosimulator_detail_autoany_cpp11, MutableRValue)
 
   EXPECT_TRUE(isRValue);
   EXPECT_EQ(
-    ExpressionCategory::CompileTimeDeterminedAsRValue,
+    ExpressionCategory::RValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
 #undef EXPR
 }
@@ -107,7 +107,7 @@ TEST(wg_autosimulator_detail_autoany_cpp11, ConstRValue)
 
   EXPECT_TRUE(isRValue);
   EXPECT_EQ(
-    ExpressionCategory::CompileTimeDeterminedAsRValue,
+    ExpressionCategory::RValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
 #undef EXPR
 }

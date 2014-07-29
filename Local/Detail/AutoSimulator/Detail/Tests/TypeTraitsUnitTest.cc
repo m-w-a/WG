@@ -67,6 +67,20 @@ TEST(wg_autosimulator_detail_typetraits, IsMutableLValue)
   EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLELVALUE(const_rvalue())));
 }
 
+TEST(wg_autosimulator_detail_typetraits, IsArray)
+{
+  typedef int Arr[5];
+  typedef Arr const CArr;
+
+  Arr arr;
+  CArr carr;
+  Empty nonarray;
+
+  EXPECT_TRUE( WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(arr) );
+  EXPECT_TRUE( WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(carr) );
+  EXPECT_FALSE( WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(nonarray) );
+}
+
 TEST(wg_autosimulator_detail_typetraits, IsExprConst)
 {
   EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST(mutable_lvalue())));

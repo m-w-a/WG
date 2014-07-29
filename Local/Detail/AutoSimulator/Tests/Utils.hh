@@ -11,13 +11,13 @@ namespace test
 {
 
 template <typename T>
-bool isConst(T &)
+bool isConstLValue(T &)
 {
   return false;
 }
 
 template <typename T>
-bool isConst(T const &)
+bool isConstLValue(T const &)
 {
   return true;
 }

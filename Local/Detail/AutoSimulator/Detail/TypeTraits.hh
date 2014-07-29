@@ -44,6 +44,11 @@
 
 // Expands to either "::boost::mpl::true_ *" or "::boost::mpl::false_ *"
 // without evaluating expr.
+#define WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(expr) \
+  WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY_IMPL(expr)
+
+// Expands to either "::boost::mpl::true_ *" or "::boost::mpl::false_ *"
+// without evaluating expr.
 #define WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST(expr) \
   WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST_IMPL(expr)
 
@@ -84,24 +89,6 @@ inline ::boost::mpl::not_<Bool1> * not_(Bool1 *)
   return 0;
 }
 
-template<typename T>
-inline ::boost::is_array<T> * is_array_(T const &)
-{
-  return 0;
-}
-
-template<typename T>
-inline ::boost::is_const<T> * is_const_(T &)
-{
-  return 0;
-}
-
-template<typename T>
-inline ::boost::mpl::true_ * is_const_(T const &)
-{
-  return 0;
-}
-
 }
 }
 }
@@ -115,6 +102,9 @@ inline ::boost::mpl::true_ * is_const_(T const &)
 
 #define WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLELVALUE_IMPL(expr) \
   (true ? 0 : ::wg::autosimulator::detail::is_mutable_lvalue(expr) )
+
+#define WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY_IMPL(expr) \
+  (true ? 0 : ::wg::autosimulator::detail::is_array_(expr) )
 
 #define WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST_IMPL(expr) \
   (true \
@@ -130,6 +120,9 @@ namespace autosimulator
 namespace detail
 {
 
+//------------------------------------------------------------------------------
+//is_mutable_rvalue
+//
 // 13.3.3.2/2
 // When comparing the basic forms of implicit conversion sequences (as
 // defined in 13.3.3.1)
@@ -146,6 +139,7 @@ namespace detail
 // both overloads, but the first one will be preferred because of the
 // above.
 // mutable-rvalues can only be matched by the second overload.
+//------------------------------------------------------------------------------
 
 template <typename T>
 inline ::boost::mpl::false_ * is_mutable_rvalue(T &, int)
@@ -178,6 +172,12 @@ inline ::boost::mpl::true_ *
 }
 
 inline ::boost::mpl::false_ * is_expr_const(void *, void *)
+{
+  return 0;
+}
+
+template<typename T>
+inline ::boost::is_array<T> * is_array_(T const &)
 {
   return 0;
 }
