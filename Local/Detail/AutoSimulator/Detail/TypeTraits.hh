@@ -44,11 +44,13 @@
 
 // Expands to either "::boost::mpl::true_ *" or "::boost::mpl::false_ *"
 // without evaluating expr.
+// NOTE: any top level reference is ignored when evaluating this query.
 #define WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(expr) \
   WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY_IMPL(expr)
 
 // Expands to either "::boost::mpl::true_ *" or "::boost::mpl::false_ *"
 // without evaluating expr.
+// NOTE: any top level reference is ignored when evaluating this query.
 #define WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST(expr) \
   WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST_IMPL(expr)
 

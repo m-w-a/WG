@@ -24,3 +24,8 @@ LclFunction:
 
 Get rid of WG_PP_STARTSWITH_BOOST_PP_NIL via WG_PP_SEQs?
 BOOST_NO_CXX11_* -> WG_*
+
+AutoSimulator:
+  Move CTors
+  expr w/side-effects test
+  dfta_traits->capture_obj

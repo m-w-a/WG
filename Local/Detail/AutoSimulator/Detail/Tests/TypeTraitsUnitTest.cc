@@ -21,29 +21,23 @@ struct Empty
 
 Empty & mutable_lvalue()
 {
-  std::cout << "mutable_lvalue";
-
   static Empty e;
   return e;
 }
 
 Empty const & const_lvalue()
 {
-  std::cout << "const_lvalue";
-
   static Empty const e;
   return e;
 }
 
 Empty mutable_rvalue()
 {
-  std::cout << "mutable_rvalue";
   return Empty();
 }
 
 Empty const const_rvalue()
 {
-  std::cout << "const_rvalue";
   return Empty();
 }
 
@@ -67,18 +61,37 @@ TEST(wg_autosimulator_detail_typetraits, IsMutableLValue)
   EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLELVALUE(const_rvalue())));
 }
 
+namespace
+{
+
+typedef int Arr[5];
+typedef Arr const ConstArr;
+
+Arr & array()
+{
+  static Arr arr;
+  return arr;
+}
+
+ConstArr & const_array()
+{
+  static ConstArr carr = {10, 11, 12, 13, 14};
+  return carr;
+}
+
+}
+
 TEST(wg_autosimulator_detail_typetraits, IsArray)
 {
-  typedef int Arr[5];
-  typedef Arr const CArr;
-
   Arr arr;
-  CArr carr;
+  ConstArr carr = {10, 11, 12, 13, 14};
   Empty nonarray;
 
-  EXPECT_TRUE( WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(arr) );
-  EXPECT_TRUE( WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(carr) );
-  EXPECT_FALSE( WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(nonarray) );
+  EXPECT_TRUE( boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(array())) );
+  EXPECT_TRUE( boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(const_array())) );
+  EXPECT_TRUE( boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(arr)) );
+  EXPECT_TRUE( boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(carr)) );
+  EXPECT_FALSE( boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(nonarray)) );
 }
 
 TEST(wg_autosimulator_detail_typetraits, IsExprConst)
