@@ -40,6 +40,8 @@ typedef detail::auto_any_group const & auto_any_group_t;
 //
 // expr:
 //   The expr whose result will be captured without using Boost.Typeof.
+//   Note: if said expr resolves to an rvalue then its type must be movable or
+//     copyable.
 //
 // is_rvalue_flag:
 //   A mutable boolean flag.

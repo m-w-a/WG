@@ -2,48 +2,12 @@
 #include <WG/Local/Detail/AutoSimulator/AutoSimulator.hh>
 #include <WG/Local/Detail/AutoSimulator/Tests/Utils.hh>
 
-namespace
-{
-
-struct Cntr
-{
-  Cntr()
-  : value(11)
-  {
-  }
-
-  int value;
-};
-
-Cntr mutableRValue()
-{
-  return Cntr();
-}
-
-Cntr const constRValue()
-{
-  return Cntr();
-}
-
-Cntr & mutableLValue()
-{
-  static Cntr toRet;
-  return toRet;
-}
-
-Cntr const & constLValue()
-{
-  static Cntr toRet;
-  return toRet;
-}
-
-}
-
 using namespace ::wg::autosimulator;
 
 TEST(wg_autosimulator_autoany, MutableRValueExpr)
 {
-#define EXPR mutableRValue()
+  detail::test::ExprGenerator expr;
+#define EXPR expr.mutableRValue()
   bool isRValue = false;
   auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, isRValue);
 
@@ -57,7 +21,8 @@ TEST(wg_autosimulator_autoany, MutableRValueExpr)
 
 TEST(wg_autosimulator_autoany, ConstRValueExpr)
 {
-#define EXPR constRValue()
+  detail::test::ExprGenerator expr;
+#define EXPR expr.constRValue()
   bool isRValue = false;
   auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, isRValue);
 
@@ -68,7 +33,8 @@ TEST(wg_autosimulator_autoany, ConstRValueExpr)
 
 TEST(wg_autosimulator_autoany, MutableLValueExpr)
 {
-#define EXPR mutableLValue()
+  detail::test::ExprGenerator expr;
+#define EXPR expr.mutableLValue()
   bool isRValue = false;
   auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, isRValue);
 
@@ -82,7 +48,8 @@ TEST(wg_autosimulator_autoany, MutableLValueExpr)
 
 TEST(wg_autosimulator_autoany, ConstLValueExpr)
 {
-#define EXPR constLValue()
+  detail::test::ExprGenerator expr;
+#define EXPR expr.constLValue()
   bool isRValue = false;
   auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, isRValue);
 
