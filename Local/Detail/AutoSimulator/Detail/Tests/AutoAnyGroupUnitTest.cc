@@ -1,45 +1,12 @@
 #include <gtest/gtest.h>
 #include <WG/Local/Detail/AutoSimulator/Detail/AutoAnyGroup.hh>
+#include <WG/Local/Detail/AutoSimulator/Tests/Utils.hh>
 
 namespace
 {
 
 typedef ::wg::autosimulator::detail::auto_any_group const & auto_any_group_t;
-
-typedef int A5[5];
-typedef A5 const ConstA5;
-
-struct Cntr
-{
-  Cntr()
-  : value(11)
-  {
-  }
-
-  int value;
-};
-
-Cntr mutableRValue()
-{
-  return Cntr();
-}
-
-Cntr const constRValue()
-{
-  return Cntr();
-}
-
-Cntr & mutableLValue()
-{
-  static Cntr toRet;
-  return toRet;
-}
-
-Cntr const & constLValue()
-{
-  static Cntr toRet;
-  return toRet;
-}
+using ::wg::autosimulator::detail::test::ExprGenerator;
 
 }
 
@@ -47,14 +14,13 @@ using namespace ::wg::autosimulator;
 
 TEST(wg_autosimulator_detail_autoanygroup, IsRValue)
 {
-  A5 arr = {1, 2, 3, 4, 5};
-  ConstA5 carr = {11, 12, 13, 14, 15};;
+  ExprGenerator expr;
 
   bool isRValue = false;
 
 #define EXPR \
-  (arr)             (carr)              ( mutableRValue() ) \
-  ( constRValue() ) ( mutableLValue() ) ( constLValue() )
+  (expr.array())        (expr.constArray())     (expr.mutableRValue()) \
+  (expr.constRValue())  (expr.mutableLValue())  (expr.constLValue())
 
   auto_any_group_t grp = WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKEGROUP(EXPR);
   WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP(grp, isRValue, EXPR);
@@ -84,14 +50,13 @@ struct CustomBase
 
 TEST(wg_autosimulator_detail_autoanygroup_custom, IsRValue)
 {
-  A5 arr = {1, 2, 3, 4, 5};
-  ConstA5 carr = {11, 12, 13, 14, 15};;
+  ExprGenerator expr;
 
   bool isRValue = false;
 
 #define EXPR \
-  (arr)             (carr)              ( mutableRValue() ) \
-  ( constRValue() ) ( mutableLValue() ) ( constLValue() )
+  (expr.array())        (expr.constArray())     (expr.mutableRValue()) \
+  (expr.constRValue())  (expr.mutableLValue())  (expr.constLValue())
 
   CustomBase const & grp =
     WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKECUSTOMGROUP(CustomBase, EXPR);

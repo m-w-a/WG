@@ -1,6 +1,7 @@
 #include <boost/mpl/bool_fwd.hpp>
 #include <gtest/gtest.h>
 #include <WG/Local/Detail/AutoSimulator/Detail/TypeTraits.hh>
+#include <WG/Local/Detail/AutoSimulator/Tests/Utils.hh>
 
 namespace
 {
@@ -15,50 +16,28 @@ bool boolean(::boost::mpl::false_ *)
   return false;
 }
 
-struct Empty
-{
-};
-
-Empty & mutable_lvalue()
-{
-  static Empty e;
-  return e;
 }
 
-Empty const & const_lvalue()
-{
-  static Empty const e;
-  return e;
-}
-
-Empty mutable_rvalue()
-{
-  return Empty();
-}
-
-Empty const const_rvalue()
-{
-  return Empty();
-}
-
-}
-
-using namespace ::wg::autosimulator::detail;
+using ::wg::autosimulator::detail::test::ExprGenerator;
 
 TEST(wg_autosimulator_detail_typetraits, IsMutableRValue)
 {
-  EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLERVALUE(mutable_lvalue())));
-  EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLERVALUE(const_lvalue())));
-  EXPECT_TRUE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLERVALUE(mutable_rvalue())));
-  EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLERVALUE(const_rvalue())));
+  ExprGenerator expr;
+
+  EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLERVALUE(expr.mutableLValue())));
+  EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLERVALUE(expr.constLValue())));
+  EXPECT_TRUE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLERVALUE(expr.mutableRValue())));
+  EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLERVALUE(expr.constRValue())));
 }
 
 TEST(wg_autosimulator_detail_typetraits, IsMutableLValue)
 {
-  EXPECT_TRUE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLELVALUE(mutable_lvalue())));
-  EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLELVALUE(const_lvalue())));
-  EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLELVALUE(mutable_rvalue())));
-  EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLELVALUE(const_rvalue())));
+  ExprGenerator expr;
+
+  EXPECT_TRUE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLELVALUE(expr.mutableLValue())));
+  EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLELVALUE(expr.constLValue())));
+  EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLELVALUE(expr.mutableRValue())));
+  EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLELVALUE(expr.constRValue())));
 }
 
 namespace
@@ -67,17 +46,19 @@ namespace
 typedef int Arr[5];
 typedef Arr const ConstArr;
 
-Arr & array()
+Arr & arrayRef()
 {
   static Arr arr;
   return arr;
 }
 
-ConstArr & const_array()
+ConstArr & constArrayRef()
 {
   static ConstArr carr = {10, 11, 12, 13, 14};
   return carr;
 }
+
+struct Empty {};
 
 }
 
@@ -87,8 +68,8 @@ TEST(wg_autosimulator_detail_typetraits, IsArray)
   ConstArr carr = {10, 11, 12, 13, 14};
   Empty nonarray;
 
-  EXPECT_TRUE( boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(array())) );
-  EXPECT_TRUE( boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(const_array())) );
+  EXPECT_TRUE( boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(arrayRef())) );
+  EXPECT_TRUE( boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(constArrayRef())) );
   EXPECT_TRUE( boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(arr)) );
   EXPECT_TRUE( boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(carr)) );
   EXPECT_FALSE( boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(nonarray)) );
@@ -96,8 +77,10 @@ TEST(wg_autosimulator_detail_typetraits, IsArray)
 
 TEST(wg_autosimulator_detail_typetraits, IsExprConst)
 {
-  EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST(mutable_lvalue())));
-  EXPECT_TRUE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST(const_lvalue())));
-  EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST(mutable_rvalue())));
-  EXPECT_TRUE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST(const_rvalue())));
+  ExprGenerator expr;
+
+  EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST(expr.mutableLValue())));
+  EXPECT_TRUE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST(expr.constLValue())));
+  EXPECT_FALSE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST(expr.mutableRValue())));
+  EXPECT_TRUE(boolean(WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST(expr.constRValue())));
 }

@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/Local/Detail/AutoSimulator/Detail/AutoAny.hh>
+#include <WG/Local/Detail/AutoSimulator/Tests/Utils.hh>
 
 namespace
 {
@@ -27,34 +28,15 @@ ExpressionCategory::Type expressionCategory(
   return ExpressionCategory::RValue;
 }
 
-struct EmptyStruct {};
-
-EmptyStruct & mutableLValue()
-{
-  static EmptyStruct toRet;
-  return toRet;
 }
 
-EmptyStruct const & constLValue()
-{
-  return mutableLValue();
-}
-
-EmptyStruct mutableRValue()
-{
-  return EmptyStruct();
-}
-
-EmptyStruct constRValue()
-{
-  return EmptyStruct();
-}
-
-}
+using ::wg::autosimulator::detail::test::ExprGenerator;
 
 TEST(wg_autosimulator_detail_autoany_cpp11, MutableLValue)
 {
-#define EXPR mutableLValue()
+  ExprGenerator expr;
+
+#define EXPR expr.mutableLValue()
   bool isRValue = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
@@ -69,7 +51,9 @@ TEST(wg_autosimulator_detail_autoany_cpp11, MutableLValue)
 
 TEST(wg_autosimulator_detail_autoany_cpp11, ConstLValue)
 {
-#define EXPR constLValue()
+  ExprGenerator expr;
+
+#define EXPR expr.constLValue()
   bool isRValue = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
@@ -84,7 +68,9 @@ TEST(wg_autosimulator_detail_autoany_cpp11, ConstLValue)
 
 TEST(wg_autosimulator_detail_autoany_cpp11, MutableRValue)
 {
-#define EXPR mutableRValue()
+  ExprGenerator expr;
+
+#define EXPR expr.mutableRValue()
   bool isRValue = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
@@ -99,7 +85,9 @@ TEST(wg_autosimulator_detail_autoany_cpp11, MutableRValue)
 
 TEST(wg_autosimulator_detail_autoany_cpp11, ConstRValue)
 {
-#define EXPR constRValue()
+  ExprGenerator expr;
+
+#define EXPR expr.constRValue()
   bool isRValue = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
