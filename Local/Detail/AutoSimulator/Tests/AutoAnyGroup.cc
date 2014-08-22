@@ -10,10 +10,10 @@ TEST(wg_autosimulator_autoanygroup, OneExpr)
 {
   detail::test::ExprGenerator expr;
 
-  bool isRValue = false;
+  bool autosimFlag = false;
 #define EXPR (expr.array())
   auto_any_group_t grp = WG_AUTOSIMULATOR_AUTOANYGROUP_ALLOC(EXPR);
-  WG_AUTOSIMULATOR_AUTOANYGROUP_INIT(grp, isRValue, EXPR);
+  WG_AUTOSIMULATOR_AUTOANYGROUP_INIT(grp, autosimFlag, EXPR);
 
   EXPECT_FALSE(
     detail::test::isConstLValue(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 0, EXPR)));
@@ -28,13 +28,13 @@ TEST(wg_autosimulator_autoanygroup, MultiExpr)
 {
   detail::test::ExprGenerator expr;
 
-  bool isRValue = false;
+  bool autosimFlag = false;
 #define EXPR \
   (expr.array())        (expr.constArray())     (expr.mutableRValue()) \
   (expr.constRValue())  (expr.mutableLValue())  (expr.constLValue())
 
   auto_any_group_t grp = WG_AUTOSIMULATOR_AUTOANYGROUP_ALLOC(EXPR);
-  WG_AUTOSIMULATOR_AUTOANYGROUP_INIT(grp, isRValue, EXPR);
+  WG_AUTOSIMULATOR_AUTOANYGROUP_INIT(grp, autosimFlag, EXPR);
 
   {
     EXPECT_FALSE(

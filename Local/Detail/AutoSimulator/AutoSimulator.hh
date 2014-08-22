@@ -42,11 +42,8 @@ typedef detail::auto_any_group const & auto_any_group_t;
 //   The expr whose result will be captured without using Boost.Typeof.
 //   Note: if said expr resolves to an rvalue then its type must be movable or
 //     copyable.
-//
-// is_rvalue_flag:
-//   A mutable boolean flag.
-#define WG_AUTOSIMULATOR_AUTOANY_CAPTURE(expr, is_rvalue_flag) \
-  WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, is_rvalue_flag)
+#define WG_AUTOSIMULATOR_AUTOANY_CAPTURE(expr, mutable_boolean_flag) \
+  WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, mutable_boolean_flag)
 
 #define WG_AUTOSIMULATOR_AUTOANY_VALUE(captured_obj, expr) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_VALUE(captured_obj, expr)
@@ -95,9 +92,9 @@ typedef detail::auto_any_group const & auto_any_group_t;
 //     is_rvalue,
 //     (expr1) (expr2) ...);
 #define WG_AUTOSIMULATOR_AUTOANYGROUP_INIT( \
-  allocated_obj, is_rvalue_flag, exprseq) \
+  allocated_obj, mutable_boolean_flag, exprseq) \
     WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP( \
-      allocated_obj, is_rvalue_flag, exprseq)
+      allocated_obj, mutable_boolean_flag, exprseq)
 
 #define WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, itemno, exprseq) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_VALUE(grp, itemno, exprseq)

@@ -37,12 +37,11 @@ TEST(wg_autosimulator_detail_autoany_cpp11, MutableLValue)
   ExprGenerator expr;
 
 #define EXPR expr.mutableLValue()
-  bool isRValue = false;
+  bool autosimFlag = false;
   auto_any_t obj =
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
-  (void)obj;
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
 
-  EXPECT_FALSE(isRValue);
+  EXPECT_FALSE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
   EXPECT_EQ(
     ExpressionCategory::LValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -54,12 +53,11 @@ TEST(wg_autosimulator_detail_autoany_cpp11, ConstLValue)
   ExprGenerator expr;
 
 #define EXPR expr.constLValue()
-  bool isRValue = false;
+  bool autosimFlag = false;
   auto_any_t obj =
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
-  (void)obj;
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
 
-  EXPECT_FALSE(isRValue);
+  EXPECT_FALSE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
   EXPECT_EQ(
     ExpressionCategory::LValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -71,12 +69,11 @@ TEST(wg_autosimulator_detail_autoany_cpp11, MutableRValue)
   ExprGenerator expr;
 
 #define EXPR expr.mutableRValue()
-  bool isRValue = false;
+  bool autosimFlag = false;
   auto_any_t obj =
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
-  (void)obj;
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
 
-  EXPECT_TRUE(isRValue);
+  EXPECT_TRUE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
   EXPECT_EQ(
     ExpressionCategory::RValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -88,12 +85,11 @@ TEST(wg_autosimulator_detail_autoany_cpp11, ConstRValue)
   ExprGenerator expr;
 
 #define EXPR expr.constRValue()
-  bool isRValue = false;
+  bool autosimFlag = false;
   auto_any_t obj =
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
-  (void)obj;
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
 
-  EXPECT_TRUE(isRValue);
+  EXPECT_TRUE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
   EXPECT_EQ(
     ExpressionCategory::RValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );

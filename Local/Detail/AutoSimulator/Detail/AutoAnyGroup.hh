@@ -31,9 +31,9 @@
       baseclass, exprseq)
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP( \
-  opaqued_group, is_rvalue_flag, exprseq) \
+  opaqued_group, mutable_boolean_flag, exprseq) \
     WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP_IMPL( \
-      opaqued_group, is_rvalue_flag, exprseq)
+      opaqued_group, mutable_boolean_flag, exprseq)
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_VALUE( \
   opaqued_group, itemno, exprseq) \
@@ -408,21 +408,21 @@
 //----------------------------------------------
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP_IMPL( \
-  opaqued_group, is_rvalue_flag, exprseq) \
+  opaqued_group, mutable_boolean_flag, exprseq) \
     BOOST_PP_EXPR_IIF( \
       BOOST_PP_COMPL( \
         WG_PP_SEQ_ISNIL(exprseq)), \
         WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP(opaqued_group, exprseq) ) \
     WG_PP_SEQ_NOTHING_FOR_EACH_I( \
       WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP_ENTRY, \
-      is_rvalue_flag, \
+      mutable_boolean_flag, \
       exprseq) ;
 
 // WG_PP_SEQ_FOR_EACH functor.
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP_ENTRY( \
-  r, is_rvalue_flag, indx, expr) \
+  r, mutable_boolean_flag, indx, expr) \
     . capture<indx>( \
-      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, is_rvalue_flag) )
+      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, mutable_boolean_flag) )
 
 //----------------------------------------------
 //WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_VALUE

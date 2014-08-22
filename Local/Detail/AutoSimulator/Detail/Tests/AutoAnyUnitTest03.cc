@@ -73,12 +73,11 @@ Cntnr const constRValue()
 TEST(wg_autosimulator_detail_autoany_cpp03, MutableNonArrayLValue)
 {
 #define EXPR mutableNonArrayLValue()
-  bool isRValue = false;
+  bool autosimFlag = false;
   auto_any_t obj =
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
-  (void)obj;
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
 
-  EXPECT_FALSE(isRValue);
+  EXPECT_FALSE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
   EXPECT_EQ(
     ExpressionCategory::ArrayOrMutableLValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -88,12 +87,11 @@ TEST(wg_autosimulator_detail_autoany_cpp03, MutableNonArrayLValue)
 TEST(wg_autosimulator_detail_autoany_cpp03, ConstNonArrayLValue)
 {
 #define EXPR constNonArrayLValue()
-  bool isRValue = false;
+  bool autosimFlag = false;
   auto_any_t obj =
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
-  (void)obj;
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
 
-  EXPECT_FALSE(isRValue);
+  EXPECT_FALSE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
   EXPECT_EQ(
     ExpressionCategory::ConstNonArrayLValueOrConstRValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -103,12 +101,11 @@ TEST(wg_autosimulator_detail_autoany_cpp03, ConstNonArrayLValue)
 TEST(wg_autosimulator_detail_autoany_cpp03, MutableArrayLValue)
 {
 #define EXPR mutableArrayLValue()
-  bool isRValue = false;
+  bool autosimFlag = false;
   auto_any_t obj =
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
-  (void)obj;
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
 
-  EXPECT_FALSE(isRValue);
+  EXPECT_FALSE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
   EXPECT_EQ(
     ExpressionCategory::ArrayOrMutableLValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -118,12 +115,11 @@ TEST(wg_autosimulator_detail_autoany_cpp03, MutableArrayLValue)
 TEST(wg_autosimulator_detail_autoany_cpp03, ConstArrayLValue)
 {
 #define EXPR constArrayLValue()
-  bool isRValue = false;
+  bool autosimFlag = false;
   auto_any_t obj =
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
-  (void)obj;
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
 
-  EXPECT_FALSE(isRValue);
+  EXPECT_FALSE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
   EXPECT_EQ(
     ExpressionCategory::ArrayOrMutableLValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -133,12 +129,11 @@ TEST(wg_autosimulator_detail_autoany_cpp03, ConstArrayLValue)
 TEST(wg_autosimulator_detail_autoany_cpp03, MutableRValue)
 {
 #define EXPR mutableRValue()
-  bool isRValue = false;
+  bool autosimFlag = false;
   auto_any_t obj =
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
-  (void)obj;
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
 
-  EXPECT_TRUE(isRValue);
+  EXPECT_TRUE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
   EXPECT_EQ(
     ExpressionCategory::MutableRValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
@@ -148,12 +143,11 @@ TEST(wg_autosimulator_detail_autoany_cpp03, MutableRValue)
 TEST(wg_autosimulator_detail_autoany_cpp03, ConstRValue)
 {
 #define EXPR constRValue()
-  bool isRValue = false;
+  bool autosimFlag = false;
   auto_any_t obj =
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, isRValue);
-  (void)obj;
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
 
-  EXPECT_TRUE(isRValue);
+  EXPECT_TRUE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
   EXPECT_EQ(
     ExpressionCategory::ConstNonArrayLValueOrConstRValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );

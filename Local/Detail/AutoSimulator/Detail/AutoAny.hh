@@ -43,11 +43,8 @@
 // Usage:
 //   auto_any_t captured_obj =
 //     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(...) ;
-// is_rvalue_flag:
-//   a boolean variable that will be set to true if "expr" is an rvalue else it
-//   it will be set to false.
-#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, is_rvalue_flag) \
-  WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, is_rvalue_flag)
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, mutable_boolean_flag) \
+  WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, mutable_boolean_flag)
 
 namespace wg
 {
@@ -80,6 +77,9 @@ struct expr_category_const_nonarray_lvalue_or_const_rvalue {};
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_VALUE(captured_obj, expr) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_VALUE_IMPL(captured_obj, expr)
+
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(captured_obj, expr) \
+  WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE_IMPL(captured_obj, expr)
 
 // This is runtime deduction, not compile-time deduction.
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_DEDUCEDPTRTYPE(expr) \
@@ -118,18 +118,184 @@ struct auto_any
 //-------------
 //auto_any_impl
 //-------------
-template<typename T>
-struct auto_any_impl : auto_any
+
+//TODO: to remove.
+//template<typename T>
+//struct auto_any_impl : auto_any
+//{
+//  explicit auto_any_impl(T const & t)
+//  : item(t)
+//  {}
+//
+//  // Temporaries of type auto_any_impl will be bound to const auto_any
+//  // references, but we may still want to be able to mutate the stored
+//  // data, so declare it as mutable.
+//  mutable T item;
+//};
+
+template
+<
+  typename ExprCategory,
+  typename CapturedType,
+  typename EnableIfDummyArg = void
+>
+struct auto_any_impl;
+
+//expr_category_rvalue
+
+template
+<
+  typename ExprCategory,
+  typename CapturedType
+>
+struct auto_any_impl
+<
+  ExprCategory,
+  CapturedType,
+  BOOST_DEDUCED_TYPENAME ::boost::enable_if
+  <
+    ::boost::is_base_of<expr_category_rvalue, ExprCategory>
+  >::type
+>
+: public auto_any
 {
-  explicit auto_any_impl(T const & t)
-  : item(t)
+  auto_any_impl(bool, CapturedType const & obj)
+  : item(obj)
   {}
 
+  bool is_rvalue() const
+  { return true; }
+
+  CapturedType & value() const
+  { return this->item; }
+
+private:
   // Temporaries of type auto_any_impl will be bound to const auto_any
   // references, but we may still want to be able to mutate the stored
   // data, so declare it as mutable.
-  mutable T item;
+  mutable CapturedType item;
 };
+
+//expr_category_lvalue
+
+template
+<
+  typename ExprCategory,
+  typename CapturedType
+>
+struct auto_any_impl
+<
+  ExprCategory,
+  CapturedType,
+  BOOST_DEDUCED_TYPENAME ::boost::enable_if
+  <
+    ::boost::is_base_of<expr_category_lvalue, ExprCategory>
+  >::type
+>
+: public auto_any
+{
+  auto_any_impl(bool, CapturedType & obj)
+  :
+#if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))
+    item(&obj)
+#else
+    item(::boost::addressof(obj))
+#endif
+  {}
+
+  bool is_rvalue() const
+  { return false; }
+
+  CapturedType & value() const
+  { return *this->item; }
+
+private:
+  CapturedType * item;
+};
+
+//expr_category_const_nonarray_lvalue_or_const_rvalue
+
+#ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
+  template<typename T>
+  struct simple_variant;
+
+  template <typename CapturedType>
+  struct auto_any_impl
+  <
+    expr_category_const_nonarray_lvalue_or_const_rvalue,
+    CapturedType,
+    void
+  >
+  : public auto_any
+  {
+    auto_any_impl(bool const is_rvalue, CapturedType & obj)
+    : item(is_rvalue
+        ? simple_variant<CapturedType>(obj)
+        : simple_variant<CapturedType>(::boost::addressof(obj)))
+    {}
+
+    bool is_rvalue() const
+    { return this->item.is_rvalue(); }
+
+    CapturedType & value() const
+    { return *this->item.get_value(); }
+
+  private:
+    // Have to use a variant because we don't know whether to capture by value
+    // or by reference until runtime.
+    simple_variant<CapturedType> item;
+  };
+#endif
+
+//TODO: to remove.
+//template
+//<
+//  typename ExprCategory,
+//  typename CapturedType,
+//  typename EnableIfDummyArg = void
+//>
+//struct aai_traits;
+//
+//template <typename ExprCategory, typename CapturedType>
+//struct aai_traits
+//<
+//  ExprCategory,
+//  CapturedType,
+//  typename ::boost::enable_if
+//  <
+//    ::boost::is_base_of<expr_category_rvalue, ExprCategory>
+//  >::type
+//>
+//{
+//  typedef auto_any_impl<CapturedType> auto_any_impl_type;
+//};
+//
+//template <typename ExprCategory, typename CapturedType>
+//struct aai_traits
+//<
+//  ExprCategory,
+//  CapturedType,
+//  typename ::boost::enable_if
+//  <
+//    ::boost::is_base_of<expr_category_lvalue, ExprCategory>
+//  >::type
+//>
+//{
+//  typedef auto_any_impl<CapturedType *> auto_any_impl_type;
+//};
+//
+//#ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
+//  template <typename CapturedType>
+//  struct aai_traits
+//  <
+//    expr_category_const_nonarray_lvalue_or_const_rvalue,
+//    CapturedType,
+//    void
+//  >
+//  {
+//    typedef auto_any_impl< simple_variant<CapturedType> > auto_any_impl_type;
+//  };
+//#endif
 
 //------------------------------------------------------------------------------
 //capture
@@ -137,55 +303,97 @@ struct auto_any_impl : auto_any
 //  If it's an lvalue a copy of it is made, else a reference to it is held.
 //------------------------------------------------------------------------------
 
-template<typename T, typename IsExprConst>
+// is_rvalue_flag:
+//   must be const reference type. This is because this value may have to
+//   be determined during the evaluation of obj parameter; and in C++ the order
+//   of function argument evaluation is implementation defined.
+template <typename ExprCategory, typename S, typename T, typename IsExprConst>
 inline auto_any_impl
-<BOOST_DEDUCED_TYPENAME encoded_type<T, IsExprConst>::non_ref_type>
+<ExprCategory, BOOST_DEDUCED_TYPENAME encoded_type<T, IsExprConst>::non_ref_type>
   capture(
-    expr_category_rvalue,
-    T const & t,
-    bool & is_rvalue_flag,
+    ExprCategory,
+    S & obj,
+    bool const & is_rvalue_flag,
     encoded_type<T, IsExprConst> *)
 {
-  is_rvalue_flag = true;
   return
     auto_any_impl
-    <BOOST_DEDUCED_TYPENAME encoded_type<T, IsExprConst>::non_ref_type>(t);
+    <
+      ExprCategory,
+      BOOST_DEDUCED_TYPENAME encoded_type<T, IsExprConst>::non_ref_type
+    >(is_rvalue_flag, obj);
 }
 
-template<typename T>
-inline auto_any_impl<T *>
-  capture(expr_category_lvalue, T & t, bool & is_rvalue_flag, void *)
+// is_rvalue_flag:
+//   must be const reference type. This is because this value may have to
+//   be determined during the evaluation of obj parameter; and in C++ the order
+//   of function argument evaluation is implementation defined.
+template <typename ExprCategory, typename S, typename T, typename IsExprConst>
+inline auto_any_impl
+<ExprCategory, BOOST_DEDUCED_TYPENAME encoded_type<T, IsExprConst>::non_ref_type>
+  capture(
+    ExprCategory,
+    S const & obj,
+    bool const & is_rvalue_flag,
+    encoded_type<T, IsExprConst> *)
 {
-  is_rvalue_flag = false;
-
-  // Cannot seem to get sunpro to handle addressof() with array types.
-#if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))
-  return auto_any_impl<T *>(&t);
-#else
-  return auto_any_impl<T *>(::boost::addressof(t));
-#endif
+  return
+    auto_any_impl
+    <
+      ExprCategory,
+      BOOST_DEDUCED_TYPENAME encoded_type<T, IsExprConst>::non_ref_type
+    >(is_rvalue_flag, obj);
 }
+
+//TODO: to remove.
+//template<typename T, typename IsExprConst>
+//inline auto_any_impl
+//<BOOST_DEDUCED_TYPENAME encoded_type<T, IsExprConst>::non_ref_type>
+//  capture(
+//    expr_category_rvalue,
+//    T const & t,
+//    bool & is_rvalue_flag,
+//    encoded_type<T, IsExprConst> *)
+//{
+//  is_rvalue_flag = true;
+//  return
+//    auto_any_impl
+//    <BOOST_DEDUCED_TYPENAME encoded_type<T, IsExprConst>::non_ref_type>(t);
+//}
+//
+//template<typename T>
+//inline auto_any_impl<T *>
+//  capture(expr_category_lvalue, T & t, bool & is_rvalue_flag, void *)
+//{
+//  is_rvalue_flag = false;
+//
+//  // Cannot seem to get sunpro to handle addressof() with array types.
+//#if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))
+//  return auto_any_impl<T *>(&t);
+//#else
+//  return auto_any_impl<T *>(::boost::addressof(t));
+//#endif
+//}
 
 #ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
-  template<typename T>
-  struct simple_variant;
 
-  template<typename T>
-  inline auto_any_impl<simple_variant<T const> >
-    capture(
-      expr_category_const_nonarray_lvalue_or_const_rvalue,
-      T const & t,
-      bool const & is_rvalue_flag,
-      void *)
-  {
-    typedef simple_variant<T const> variant_t;
-    // Have to use a variant because we don't know whether to capture by value
-    // or by reference until runtime.
-    return auto_any_impl< simple_variant<T const> >(
-      is_rvalue_flag
-        ? simple_variant<T const>(t)
-        : simple_variant<T const>(::boost::addressof(t)) );
-  }
+//TODO: to remove.
+//  template<typename T>
+//  inline auto_any_impl<simple_variant<T const> >
+//    capture(
+//      expr_category_const_nonarray_lvalue_or_const_rvalue,
+//      T const & t,
+//      bool const & is_rvalue_flag,
+//      void *)
+//  {
+//    typedef simple_variant<T const> variant_t;
+//    // Have to use a variant because we don't know whether to capture by value
+//    // or by reference until runtime.
+//    return auto_any_impl< simple_variant<T const> >(
+//      is_rvalue_flag
+//        ? simple_variant<T const>(t)
+//        : simple_variant<T const>(::boost::addressof(t)) );
+//  }
 
   //-------------------------------------
   //simple_variant<T>
@@ -549,16 +757,22 @@ inline auto_any_impl<T *>
     WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr) )
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_VALUE_IMPL(captured_obj, expr) \
-  ::wg::autosimulator::detail::value( \
+  ::wg::autosimulator::detail::auto_any_impl_cast( \
     captured_obj, \
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
-    WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr))
+    WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr)).value()
+
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE_IMPL(captured_obj, expr) \
+  ::wg::autosimulator::detail::auto_any_impl_cast( \
+    captured_obj, \
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
+    WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr)).is_rvalue()
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE_IMPL(obj) \
-  ::wg::autosimulator::detail::captured_obj(obj)
+  obj.value()
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_ISRVALUE_IMPL(obj) \
-  ::wg::autosimulator::detail::is_rvalue(obj)
+  obj.is_rvalue()
 
 namespace wg
 {
@@ -575,73 +789,76 @@ namespace detail
 template
 <
   typename ExprCategory,
-  typename NonConstNonRefExprType,
-  typename IsExprConst,
-  typename EnableIfDummyArg = void
+  typename NonRefExprType,
+  typename IsExprConst
 >
-struct dfta_traits;
-//public:
-//  typedef some_type captured_expr_type;
-//  typedef some_type auto_any_impl_type;
-
-template
-<typename ExprCategory, typename NonConstNonRefExprType, typename IsExprConst>
 struct dfta_traits
-<
-  ExprCategory,
-  NonConstNonRefExprType,
-  IsExprConst,
-  typename ::boost::enable_if
-  <
-    ::boost::is_base_of<expr_category_rvalue, ExprCategory>
-  >::type
->
 {
   typedef BOOST_DEDUCED_TYPENAME
-    encoded_type<NonConstNonRefExprType, IsExprConst>::non_ref_type
+    encoded_type<NonRefExprType, IsExprConst>::non_ref_type
       captured_expr_type;
-  typedef auto_any_impl<captured_expr_type> auto_any_impl_type;
-
+  typedef auto_any_impl<ExprCategory, captured_expr_type> auto_any_impl_type;
 };
 
-template
-<typename ExprCategory, typename NonConstNonRefExprType, typename IsExprConst>
-struct dfta_traits
-<
-  ExprCategory,
-  NonConstNonRefExprType,
-  IsExprConst,
-  typename ::boost::enable_if
-  <
-    ::boost::is_base_of<expr_category_lvalue, ExprCategory>
-  >::type
->
-{
-  typedef BOOST_DEDUCED_TYPENAME
-    encoded_type<NonConstNonRefExprType, IsExprConst>::non_ref_type
-      captured_expr_type;
-  typedef auto_any_impl<captured_expr_type *> auto_any_impl_type;
-};
-
-#ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
-  template <typename NonConstNonRefExprType, typename IsExprConst>
-  struct dfta_traits
-  <
-    expr_category_const_nonarray_lvalue_or_const_rvalue,
-    NonConstNonRefExprType,
-    IsExprConst,
-    void
-  >
-  {
-    typedef BOOST_DEDUCED_TYPENAME
-      encoded_type<NonConstNonRefExprType, IsExprConst>::non_ref_type
-        captured_expr_type;
-    typedef auto_any_impl
-    <
-      simple_variant<captured_expr_type>
-    > auto_any_impl_type;
-  };
-#endif
+//TODO: to remove.
+//template
+//<typename ExprCategory, typename NonConstNonRefExprType, typename IsExprConst>
+//struct dfta_traits
+//<
+//  ExprCategory,
+//  NonConstNonRefExprType,
+//  IsExprConst,
+//  typename ::boost::enable_if
+//  <
+//    ::boost::is_base_of<expr_category_rvalue, ExprCategory>
+//  >::type
+//>
+//{
+//  typedef BOOST_DEDUCED_TYPENAME
+//    encoded_type<NonConstNonRefExprType, IsExprConst>::non_ref_type
+//      captured_expr_type;
+//  typedef auto_any_impl<ExprCategory, captured_expr_type> auto_any_impl_type;
+//};
+//
+//template
+//<typename ExprCategory, typename NonConstNonRefExprType, typename IsExprConst>
+//struct dfta_traits
+//<
+//  ExprCategory,
+//  NonConstNonRefExprType,
+//  IsExprConst,
+//  typename ::boost::enable_if
+//  <
+//    ::boost::is_base_of<expr_category_lvalue, ExprCategory>
+//  >::type
+//>
+//{
+//  typedef BOOST_DEDUCED_TYPENAME
+//    encoded_type<NonConstNonRefExprType, IsExprConst>::non_ref_type
+//      captured_expr_type;
+//  typedef auto_any_impl<ExprCategory, captured_expr_type *> auto_any_impl_type;
+//};
+//
+//#ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
+//  template <typename NonConstNonRefExprType, typename IsExprConst>
+//  struct dfta_traits
+//  <
+//    expr_category_const_nonarray_lvalue_or_const_rvalue,
+//    NonConstNonRefExprType,
+//    IsExprConst,
+//    void
+//  >
+//  {
+//    typedef BOOST_DEDUCED_TYPENAME
+//      encoded_type<NonConstNonRefExprType, IsExprConst>::non_ref_type
+//        captured_expr_type;
+//    typedef auto_any_impl
+//    <
+//      expr_category_const_nonarray_lvalue_or_const_rvalue,
+//      simple_variant<captured_expr_type>
+//    > auto_any_impl_type;
+//  };
+//#endif
 
 //-----------------------
 //dfta_auto_any_impl_type
@@ -667,57 +884,59 @@ dfta_traits
   return 0;
 }
 
-//---------
-//is_rvalue
-//---------
+//TODO: to remove.
+////---------
+////is_rvalue
+////---------
+//
+//template <typename T>
+//bool is_rvalue(auto_any_impl<T> const &)
+//{
+//  return true;
+//}
+//
+//template <typename T>
+//bool is_rvalue(auto_any_impl<T *> const &)
+//{
+//  return false;
+//}
+//
+//#ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
+//  template <typename T>
+//  bool is_rvalue(auto_any_impl< simple_variant<T> > const & impl)
+//  {
+//    return impl.item.is_rvalue();
+//  }
+//#endif
 
-template <typename T>
-bool is_rvalue(auto_any_impl<T> const &)
-{
-  return true;
-}
+//TODO: to remove.
+////------------
+////captured_obj
+////------------
+//
+//template <typename T>
+//static T & captured_obj(auto_any_impl<T> const & a)
+//{
+//  return a.item;
+//}
+//
+//template <typename T>
+//static T & captured_obj(auto_any_impl<T *> const & a)
+//{
+//  return *a.item;
+//}
+//
+//#ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
+//  template <typename T>
+//  static T & captured_obj(auto_any_impl< simple_variant<T> > const & a)
+//  {
+//    return *a.item.get_value();
+//  }
+//#endif
 
-template <typename T>
-bool is_rvalue(auto_any_impl<T *> const &)
-{
-  return false;
-}
-
-#ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
-  template <typename T>
-  bool is_rvalue(auto_any_impl< simple_variant<T> > const & impl)
-  {
-    return impl.item.is_rvalue();
-  }
-#endif
-
-//------------
-//captured_obj
-//------------
-
-template <typename T>
-static T & captured_obj(auto_any_impl<T> const & a)
-{
-  return a.item;
-}
-
-template <typename T>
-static T & captured_obj(auto_any_impl<T *> const & a)
-{
-  return *a.item;
-}
-
-#ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
-  template <typename T>
-  static T & captured_obj(auto_any_impl< simple_variant<T> > const & a)
-  {
-    return *a.item.get_value();
-  }
-#endif
-
-//-----
-//value
-//-----
+//------------------
+//auto_any_impl_cast
+//------------------
 
 template
 <
@@ -731,8 +950,8 @@ inline BOOST_DEDUCED_TYPENAME
     ExprCategory,
     NonConstNonRefExprType,
     IsExprConst
-  >::captured_expr_type &
-    value(
+  >::auto_any_impl_type const &
+    auto_any_impl_cast(
       auto_any const & opaqued_obj,
       ExprCategory,
       encoded_type<NonConstNonRefExprType, IsExprConst> *)
@@ -746,7 +965,7 @@ inline BOOST_DEDUCED_TYPENAME
     >::auto_any_impl_type
       auto_any_impl_type;
 
-  return captured_obj( static_cast<auto_any_impl_type const &>(opaqued_obj) );
+  return static_cast<auto_any_impl_type const &>(opaqued_obj);
 }
 
 }

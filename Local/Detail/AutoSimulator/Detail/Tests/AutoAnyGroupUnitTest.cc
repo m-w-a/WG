@@ -16,14 +16,14 @@ TEST(wg_autosimulator_detail_autoanygroup, IsRValue)
 {
   ExprGenerator expr;
 
-  bool isRValue = false;
+  bool autosimFlag = false;
 
 #define EXPR \
   (expr.array())        (expr.constArray())     (expr.mutableRValue()) \
   (expr.constRValue())  (expr.mutableLValue())  (expr.constLValue())
 
   auto_any_group_t grp = WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKEGROUP(EXPR);
-  WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP(grp, isRValue, EXPR);
+  WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP(grp, autosimFlag, EXPR);
 
   EXPECT_FALSE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 0, EXPR) );
   EXPECT_FALSE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 1, EXPR) );
@@ -52,7 +52,7 @@ TEST(wg_autosimulator_detail_autoanygroup_custom, IsRValue)
 {
   ExprGenerator expr;
 
-  bool isRValue = false;
+  bool autosimFlag = false;
 
 #define EXPR \
   (expr.array())        (expr.constArray())     (expr.mutableRValue()) \
@@ -60,7 +60,7 @@ TEST(wg_autosimulator_detail_autoanygroup_custom, IsRValue)
 
   CustomBase const & grp =
     WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKECUSTOMGROUP(CustomBase, EXPR);
-  WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP(grp, isRValue, EXPR);
+  WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP(grp, autosimFlag, EXPR);
 
   EXPECT_FALSE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 0, EXPR) );
   EXPECT_FALSE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 1, EXPR) );

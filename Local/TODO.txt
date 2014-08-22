@@ -27,5 +27,5 @@ BOOST_NO_CXX11_* -> WG_*
 
 AutoSimulator:
   Move CTors
-  expr w/side-effects test
+  x) expr w/side-effects test
   dfta_traits->capture_obj
