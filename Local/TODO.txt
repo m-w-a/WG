@@ -28,4 +28,5 @@ BOOST_NO_CXX11_* -> WG_*
 AutoSimulator:
   Move CTors
   x) expr w/side-effects test
-  dfta_traits->capture_obj
+  x) dfta_traits->capture_obj
+  How to test move ctors?

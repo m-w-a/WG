@@ -21,6 +21,8 @@
 //  mimomorin@...     - For a patch to use rvalue refs on supporting compilers
 
 #include <new>
+#include <boost/move/core.hpp>
+#include <boost/move/utility.hpp>
 #include <boost/config.hpp>
 #include <boost/aligned_storage.hpp>
 #include <boost/mpl/bool_fwd.hpp>
@@ -113,6 +115,16 @@ struct auto_any
   {
     return false;
   }
+
+protected:
+  auto_any() {}
+  auto_any(BOOST_RV_REF(auto_any) rhs) {}
+
+private:
+  //Declared and purposefully not defined.
+  auto_any & operator=(auto_any);
+private:
+  BOOST_COPYABLE_AND_MOVABLE(auto_any)
 };
 
 //-------------
@@ -149,12 +161,26 @@ struct auto_any_impl
   : item(obj)
   {}
 
+  auto_any_impl(auto_any_impl const & rhs)
+  : item(rhs.item)
+  {}
+
+  auto_any_impl(BOOST_RV_REF(auto_any_impl) rhs)
+  : auto_any(::boost::move(static_cast<auto_any &>(rhs))),
+    item(::boost::move(rhs.item))
+  {}
+
   bool is_rvalue() const
   { return true; }
 
   CapturedType & value() const
   { return this->item; }
 
+private:
+  //Purposefully declared and not defined.
+  auto_any_impl & operator=(auto_any_impl);
+private:
+  BOOST_COPYABLE_AND_MOVABLE(auto_any_impl)
 private:
   // Temporaries of type auto_any_impl will be bound to const auto_any
   // references, but we may still want to be able to mutate the stored
@@ -189,12 +215,28 @@ struct auto_any_impl
 #endif
   {}
 
+  auto_any_impl(auto_any_impl const & rhs)
+  : item(rhs.item)
+  {}
+
+  auto_any_impl(BOOST_RV_REF(auto_any_impl) rhs)
+  : auto_any(::boost::move(static_cast<auto_any &>(rhs))),
+    item(rhs.item)
+  {
+    rhs.item = 0;
+  }
+
   bool is_rvalue() const
   { return false; }
 
   CapturedType & value() const
   { return *this->item; }
 
+private:
+  //Purposefully declared and not defined.
+  auto_any_impl & operator=(auto_any_impl);
+private:
+  BOOST_COPYABLE_AND_MOVABLE(auto_any_impl)
 private:
   CapturedType * item;
 };
@@ -216,16 +258,30 @@ private:
   {
     auto_any_impl(bool const is_rvalue, CapturedType & obj)
     : item(is_rvalue
-        ? simple_variant<CapturedType>(obj)
-        : simple_variant<CapturedType>(::boost::addressof(obj)))
+        ? simple_variant<CapturedType>(expr_category_rvalue(), obj)
+        : simple_variant<CapturedType>(expr_category_lvalue(), obj) )
+    {}
+
+    auto_any_impl(auto_any_impl const & rhs)
+    : item(rhs.item)
+    {}
+
+    auto_any_impl(BOOST_RV_REF(auto_any_impl) rhs)
+    : auto_any(::boost::move(static_cast<auto_any &>(rhs))),
+      item(::boost::move(rhs.item))
     {}
 
     bool is_rvalue() const
     { return this->item.is_rvalue(); }
 
     CapturedType & value() const
-    { return *this->item.get_value(); }
+    { return this->item.get_value(); }
 
+  private:
+    //Purposefully declared and not defined.
+    auto_any_impl & operator=(auto_any_impl);
+  private:
+    BOOST_COPYABLE_AND_MOVABLE(auto_any_impl)
   private:
     // Have to use a variant because we don't know whether to capture by value
     // or by reference until runtime.
@@ -293,13 +349,13 @@ inline auto_any_impl
   template<typename T>
   struct simple_variant
   {
-    simple_variant(T const * t)
+    simple_variant(expr_category_lvalue, T const & t)
     : m_is_rvalue(false)
     {
       this->init_lvalue(t);
     }
 
-    simple_variant(T const & t)
+    simple_variant(expr_category_rvalue, T const & t)
     : m_is_rvalue(true)
     {
       this->init_rvalue(t);
@@ -310,7 +366,7 @@ inline auto_any_impl
     {
       if(this->m_is_rvalue)
       {
-        this->init_rvalue(*that.get_rvalue());
+        this->init_rvalue(that.get_rvalue());
       }
       else
       {
@@ -318,15 +374,28 @@ inline auto_any_impl
       }
     }
 
+    simple_variant(BOOST_RV_REF(simple_variant) rhs)
+    : m_is_rvalue(rhs.m_is_rvalue)
+    {
+      if(this->m_is_rvalue)
+      {
+        ::new(this->m_data.address()) T(::boost::move(rhs.get_rvalue()));
+      }
+      else
+      {
+        this->init_lvalue(rhs.get_lvalue());
+      }
+    }
+
     ~simple_variant()
     {
       if(this->m_is_rvalue)
       {
-        this->get_rvalue()->~T();
+        this->get_rvalue().~T();
       }
     }
 
-    T const * get_value() const
+    T const & get_value() const
     {
       if(this->m_is_rvalue)
       {
@@ -344,17 +413,19 @@ inline auto_any_impl
     }
 
   private:
-    // Purposefully declared and not defined.
-    simple_variant & operator=(simple_variant const &);
+    BOOST_COPYABLE_AND_MOVABLE(simple_variant)
   private:
-    T const * get_rvalue() const
+    // Purposefully declared and not defined.
+    simple_variant & operator=(simple_variant);
+  private:
+    T const & get_rvalue() const
     {
-      return static_cast<T const *>(this->m_data.address());
+      return *static_cast<T const *>(this->m_data.address());
     }
 
-    T const * get_lvalue() const
+    T const & get_lvalue() const
     {
-      return *static_cast<T const * const *>(this->m_data.address());
+      return **static_cast<T const * const *>(this->m_data.address());
     }
 
     void init_rvalue(T const & t)
@@ -362,9 +433,9 @@ inline auto_any_impl
       ::new(this->m_data.address()) T(t);
     }
 
-    void init_lvalue(T const * t)
+    void init_lvalue(T const & t)
     {
-      *static_cast<T const **>(this->m_data.address()) = t;
+      *static_cast<T const **>(this->m_data.address()) = ::boost::addressof(t);
     }
   private:
     // TODO: don't understand this logic.
