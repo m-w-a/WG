@@ -363,28 +363,6 @@ inline auto_any_impl
     >(is_rvalue_flag, obj);
 }
 
-//TODO:
-//// is_rvalue_flag:
-////   must be const reference type. This is because this value may have to
-////   be determined during the evaluation of obj parameter; and in C++ the order
-////   of function argument evaluation is implementation defined.
-//template <typename ExprCategory, typename S, typename T, typename IsExprConst>
-//inline auto_any_impl
-//<ExprCategory, BOOST_DEDUCED_TYPENAME encoded_type<T, IsExprConst>::non_ref_type>
-//  capture(
-//    ExprCategory,
-//    S const & obj,
-//    bool const & is_rvalue_flag,
-//    encoded_type<T, IsExprConst> *)
-//{
-//  return
-//    auto_any_impl
-//    <
-//      ExprCategory,
-//      BOOST_DEDUCED_TYPENAME encoded_type<T, IsExprConst>::non_ref_type
-//    >(is_rvalue_flag, obj);
-//}
-
 #ifdef WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_RUNTIME
 
   //-------------------------------------
@@ -521,7 +499,7 @@ inline auto_any_impl
     }
 
     #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_ISRVALUE(expr) \
-      ::wg::autosimulator::detail::is_rvalue_(expr)
+      (true ? 0 : ::wg::autosimulator::detail::is_rvalue_(expr) )
 
     }
     }
@@ -585,12 +563,13 @@ inline auto_any_impl
     }
     }
 
-    //TODO:
     #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_ISRVALUE(expr) \
-      boost::foreach_detail_::and_( \
-        boost::foreach_detail_::not_(boost::foreach_detail_::is_array_(expr)) , \
-        (true ? 0 : ::wg::autosimulator::detail::is_rvalue_( \
-          (true ? ::wg::autosimulator::detail::make_probe(expr) : (expr)), 0) ) )
+      (true ? 0 : \
+        ::wg::autosimulator::detail::and_( \
+          ::wg::autosimulator::detail::not_( \
+            boost::foreach_detail_::is_array_(expr)) , \
+          (true ? 0 : ::wg::autosimulator::detail::is_rvalue_( \
+            (true ? ::wg::autosimulator::detail::make_probe(expr) : (expr)), 0) ) ) )
 
   #endif
 
@@ -625,11 +604,10 @@ inline auto_any_impl
 
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_EVALUATE(expr) (expr)
 
-  //TODO: have WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_ISRVALUE not evaluate expr.
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr) \
     ::wg::autosimulator::detail::expr_category( \
       WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLERVALUE(expr), \
-      true ? 0 : WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_ISRVALUE(expr) )
+      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_ISRVALUE(expr) )
 
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE_IMPL(expr, is_rvalue_flag) \
     ::wg::autosimulator::detail::capture( \
