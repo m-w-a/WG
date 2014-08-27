@@ -7,6 +7,7 @@
 #include <boost/mpl/at.hpp>
 #include <boost/aligned_storage.hpp>
 #include <boost/type_traits/alignment_of.hpp>
+#include <boost/move/utility.hpp>
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/AutoSimulator/Detail/AutoAny.hh>
@@ -133,7 +134,8 @@
         typedef BOOST_DEDUCED_TYPENAME \
           boost::mpl::at<AutoAnyImplTypeVec, boost::mpl::int_<I> >::type \
             item_type; \
-        ::new(this->m_items.template get<I>().address()) item_type(wrapped_obj); \
+        ::new(this->m_items.template get<I>().address()) \
+          item_type( ::boost::move(wrapped_obj) ); \
         \
         return *this; \
       } \

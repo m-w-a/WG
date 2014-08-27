@@ -12,7 +12,7 @@ TEST(wg_autosimulator_autoany, MutableArrayExpr)
   auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, autosimFlag);
 
   EXPECT_FALSE(
-    detail::test::isConstLValue(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
+    detail::test::isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
   EXPECT_EQ(4, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)[4]);
 
   WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)[4] = 15;
@@ -27,7 +27,7 @@ TEST(wg_autosimulator_autoany, ConstArrayExpr)
   bool autosimFlag = false;
   auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, autosimFlag);
 
-  EXPECT_TRUE(detail::test::isConstLValue(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
+  EXPECT_TRUE(detail::test::isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
   EXPECT_EQ(14, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)[4]);
 #undef EXPR
 }

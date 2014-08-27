@@ -1,6 +1,14 @@
 #ifndef WG_LOCAL_DETAIL_AUTOSIMULATOR_TESTS_UTILS_HH_
 #define WG_LOCAL_DETAIL_AUTOSIMULATOR_TESTS_UTILS_HH_
 
+#include <gtest/gtest.h>
+#include <boost/move/core.hpp>
+#include <boost/move/utility.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_object.hpp>
+#include <boost/type_traits/remove_const.hpp>
+#include <boost/type_traits/remove_reference.hpp>
+
 namespace wg
 {
 namespace autosimulator
@@ -11,13 +19,13 @@ namespace test
 {
 
 template <typename T>
-bool isConstLValue(T &)
+bool isConst(T &)
 {
   return false;
 }
 
 template <typename T>
-bool isConstLValue(T const &)
+bool isConst(T const &)
 {
   return true;
 }
@@ -44,6 +52,15 @@ public:
     int value;
   };
 
+  struct MoveOnlyCntr
+  {
+    MoveOnlyCntr() : value(121) {}
+    MoveOnlyCntr(BOOST_RV_REF(MoveOnlyCntr) rhs) : value(rhs.value) {}
+    int value;
+  private:
+    BOOST_MOVABLE_BUT_NOT_COPYABLE(MoveOnlyCntr)
+  };
+
   template <typename ExprType>
   struct ArrayExpr : private CallCountVerifier
   {
@@ -54,12 +71,37 @@ public:
     A5 m_Value;
   };
 
-  template <typename ExprType>
+  struct CopyableTag {};
+  struct MoveOnlyTag {};
+
+  template
+  <
+    typename ExprType,
+    typename Cloneability = CopyableTag,
+    typename EnableIfDummyArg = void
+  >
   struct NonArrayExpr : private CallCountVerifier
   {
     ExprType operator()() { this->verifyEvalCount(); return m_Value; }
   private:
-    Cntr m_Value;
+    typedef
+      typename ::boost::remove_const
+       <
+         typename ::boost::remove_reference<ExprType>::type
+       >::type  ValueType;
+  private:
+    ValueType m_Value;
+  };
+
+  template <typename ExprType>
+  struct NonArrayExpr
+  <
+    ExprType,
+    MoveOnlyTag,
+    typename  ::boost::enable_if< ::boost::is_object<ExprType> >::type
+  > : private CallCountVerifier
+  {
+    ExprType operator()() { this->verifyEvalCount(); return MoveOnlyCntr(); }
   };
 
   ExprGenerator()
@@ -72,10 +114,16 @@ public:
 
   ArrayExpr<A5>             array;
   ArrayExpr<ConstA5>        constArray;
+
   NonArrayExpr<Cntr>        mutableRValue;
   NonArrayExpr<Cntr const>  constRValue;
   NonArrayExpr<Cntr &>      mutableLValue;
   NonArrayExpr<Cntr const &> constLValue;
+
+  NonArrayExpr<MoveOnlyCntr, MoveOnlyTag>        moveonlyMutableRValue;
+  NonArrayExpr<MoveOnlyCntr const, MoveOnlyTag>  moveonlyConstRValue;
+  NonArrayExpr<MoveOnlyCntr &, MoveOnlyTag>      moveonlyMutableLValue;
+  NonArrayExpr<MoveOnlyCntr const &, MoveOnlyTag> moveonlyConstLValue;
 };
 
 

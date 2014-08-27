@@ -12,7 +12,8 @@ struct ExpressionCategory
   enum Type
   {
     LValue,
-    RValue
+    MutableRValue,
+    ConstRValue
   };
 };
 
@@ -23,9 +24,15 @@ ExpressionCategory::Type expressionCategory(
 }
 
 ExpressionCategory::Type expressionCategory(
-  ::wg::autosimulator::detail::expr_category_rvalue)
+  ::wg::autosimulator::detail::expr_category_mutable_rvalue)
 {
-  return ExpressionCategory::RValue;
+  return ExpressionCategory::MutableRValue;
+}
+
+ExpressionCategory::Type expressionCategory(
+  ::wg::autosimulator::detail::expr_category_const_rvalue)
+{
+  return ExpressionCategory::ConstRValue;
 }
 
 }
@@ -75,7 +82,7 @@ TEST(wg_autosimulator_detail_autoany_cpp11, MutableRValue)
 
   EXPECT_TRUE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
   EXPECT_EQ(
-    ExpressionCategory::RValue,
+    ExpressionCategory::MutableRValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
 #undef EXPR
 }
@@ -91,7 +98,7 @@ TEST(wg_autosimulator_detail_autoany_cpp11, ConstRValue)
 
   EXPECT_TRUE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
   EXPECT_EQ(
-    ExpressionCategory::RValue,
+    ExpressionCategory::ConstRValue,
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
 #undef EXPR
 }
