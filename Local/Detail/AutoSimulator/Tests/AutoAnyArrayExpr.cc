@@ -3,16 +3,17 @@
 #include <WG/Local/Detail/AutoSimulator/Tests/Utils.hh>
 
 using namespace ::wg::autosimulator;
+using namespace ::wg::autosimulator::detail::test;
 
 TEST(wg_autosimulator_autoany, MutableArrayExpr)
 {
-  detail::test::ExprGenerator expr;
+  ExprGenerator expr;
 #define EXPR expr.array()
   bool autosimFlag = false;
   auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, autosimFlag);
 
   EXPECT_FALSE(
-    detail::test::isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
+    isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
   EXPECT_EQ(4, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)[4]);
 
   WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)[4] = 15;
@@ -22,12 +23,12 @@ TEST(wg_autosimulator_autoany, MutableArrayExpr)
 
 TEST(wg_autosimulator_autoany, ConstArrayExpr)
 {
-  detail::test::ExprGenerator expr;
+  ExprGenerator expr;
 #define EXPR expr.constArray()
   bool autosimFlag = false;
   auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, autosimFlag);
 
-  EXPECT_TRUE(detail::test::isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
+  EXPECT_TRUE(isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
   EXPECT_EQ(14, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)[4]);
 #undef EXPR
 }
