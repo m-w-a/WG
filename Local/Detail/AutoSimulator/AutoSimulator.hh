@@ -35,13 +35,24 @@ typedef detail::auto_any_group const & auto_any_group_t;
 // the following using case:
 //   auto && v = expr;
 //
+// Limitations:
+//   1) This macro cannot work for noncopyable const rvalues. This is because such
+//    values cannot be copied nor moved, therefore their lifetime cannot be
+//    portably extended to the end of scope.
+//   2) This macro cannot work for noncopyable, nonmovable mutable rvalues.
+//   3) To be used with this macro, noncopyable lvalues have to satisfy one
+//     of the following critieron:
+//     a) their type must derive from ::boost::noncopyable, or
+//     b) their copy constructor must be marked "= delete", or
+//     c) they must be marked with BOOST_MOVABLE_BUT_NOT_COPYABLE, or
+//     d) a specialization of ::boost::copy_constructible must be made for their
+//       type. (See .../libs/type_traits/doc/html/boost_typetraits/user_defined.html)
+//
 // Usage:
 //   auto_any_t captured_obj = WG_AUTOSIMULATOR_DETAIL_CAPTURE(...) ;
 //
 // expr:
 //   The expr whose result will be captured without using Boost.Typeof.
-//   Note: if said expr resolves to an rvalue then its type must be movable or
-//     copyable.
 #define WG_AUTOSIMULATOR_AUTOANY_CAPTURE(expr, mutable_boolean_flag) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, mutable_boolean_flag)
 

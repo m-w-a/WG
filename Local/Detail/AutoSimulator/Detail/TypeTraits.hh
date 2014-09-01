@@ -27,6 +27,7 @@
 #include <boost/mpl/not.hpp>
 #include <boost/type_traits/is_array.hpp>
 #include <boost/type_traits/is_const.hpp>
+#include <boost/type_traits/is_copy_constructible.hpp>
 
 //###########
 //Public APIs
@@ -91,6 +92,12 @@ inline ::boost::mpl::not_<Bool1> * not_(Bool1 *)
   return 0;
 }
 
+template <typename T>
+inline ::boost::is_copy_constructible<T> * is_copy_constructible_()
+{
+  return 0;
+}
+
 }
 }
 }
@@ -128,7 +135,7 @@ namespace detail
 // 13.3.3.2/2
 // When comparing the basic forms of implicit conversion sequences (as
 // defined in 13.3.3.1)
-// — a standard conversion sequence (13.3.3.1.1) is a better conversion
+// - a standard conversion sequence (13.3.3.1.1) is a better conversion
 //   sequence than a user-defined conversion sequence or an
 //   ellipsis conversion sequence
 
@@ -138,7 +145,7 @@ namespace detail
 // function called.
 
 // mutable-lvalues, const-lvalues, const-rvalues expressions will match
-// both overloads, but the first one will be preferred because of the
+// both overloads below, but the first one will be preferred because of the
 // above.
 // mutable-rvalues can only be matched by the second overload.
 //------------------------------------------------------------------------------
@@ -178,7 +185,7 @@ inline ::boost::mpl::false_ * is_expr_const(void *, void *)
   return 0;
 }
 
-template<typename T>
+template <typename T>
 inline ::boost::is_array<T> * is_array_(T const &)
 {
   return 0;

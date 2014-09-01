@@ -21,7 +21,10 @@
 //  mimomorin@...     - For a patch to use rvalue refs on supporting compilers
 
 #include <new>
+#include <cassert>
 #include <boost/move/core.hpp>
+#include <boost/concept/assert.hpp>
+#include <boost/concept_check.hpp>
 #include <boost/move/utility.hpp>
 #include <boost/config.hpp>
 #include <boost/aligned_storage.hpp>
@@ -33,6 +36,7 @@
 #include <boost/type_traits/is_array.hpp>
 #include <boost/type_traits/is_base_of.hpp>
 #include <boost/type_traits/is_const.hpp>
+#include <boost/type_traits/remove_const.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/utility/addressof.hpp>
 #include <boost/utility/enable_if.hpp>
@@ -239,7 +243,7 @@ struct auto_any_impl
 
   auto_any_impl(BOOST_RV_REF(auto_any_impl) rhs)
   : auto_any(::boost::move(static_cast<auto_any &>(rhs))),
-    item(rhs.item)
+    item(::boost::move(rhs.item))
   {
     rhs.item = 0;
   }
@@ -384,7 +388,7 @@ inline auto_any_impl
     simple_variant(expr_category_rvalue, T const & t)
     : m_is_rvalue(true)
     {
-      this->init_rvalue(t);
+      this->init_rvalue(is_copy_constructible_<T>(), t);
     }
 
     simple_variant(simple_variant const & that)
@@ -392,7 +396,7 @@ inline auto_any_impl
     {
       if(this->m_is_rvalue)
       {
-        this->init_rvalue(that.get_rvalue());
+        this->init_rvalue(is_copy_constructible_<T>(), that.get_rvalue());
       }
       else
       {
@@ -405,6 +409,8 @@ inline auto_any_impl
     {
       if(this->m_is_rvalue)
       {
+        // Ok to move since rhs contains a mutable copy of whichever rvalue
+        // expression that was captured.
         ::new(this->m_data.address()) T(::boost::move(rhs.get_rvalue()));
       }
       else
@@ -454,9 +460,30 @@ inline auto_any_impl
       return **static_cast<T const * const *>(this->m_data.address());
     }
 
-    void init_rvalue(T const & t)
+    void init_rvalue(::boost::mpl::true_ *, T const & t)
     {
+      typedef typename ::boost::remove_const<T>::type noconst;
+      // If this line triggered a compiler error then you are most likely using
+      // this library with a non-copyable lvalue whose type T fails to meet
+      // one of the following critieron:
+      // 1) T must derive from ::boost::noncopyable, or
+      // 2) T's copy constructor must be marked "= delete", or
+      // 3) T is marked as BOOST_MOVABLE_BUT_NOT_COPYABLE(T), or
+      // 4) is specialized ::boost::copy_constructible for T.
+      //    (See .../libs/type_traits/doc/html/boost_typetraits/user_defined.html)
       ::new(this->m_data.address()) T(t);
+    }
+
+    void init_rvalue(::boost::mpl::false_ *, T const &)
+    {
+      // This function should never execute at runtime. It is only defined because
+      // it will be instantiated regardless of whether this obj holds an rvalue
+      // or an lvalue. Because we still want to use this class to hold non-copyable
+      // lvalues we have to prevent at compile time the copy instantiation associated
+      // with its rvalue counterpart.
+      // Note: "rvalue_probe::operator value_type ()" should produce the compiler
+      //   error which prevents this function from ever executing.
+      assert(0);
     }
 
     void init_lvalue(T const & t)
@@ -700,10 +727,25 @@ inline auto_any_impl
     operator value_type ()
     {
       this->m_is_rvalue = true;
+
       // rvalue_probe should only be used for const rvalues.
+      BOOST_STATIC_ASSERT(( ::boost::is_const<T>::value ));
+
+      // If const rvalues are used with this library they need to be
+      // copy constructible. (See below.)
+      BOOST_CONCEPT_ASSERT(( ::boost::CopyConstructible<T> ));
+
+      // If this line triggers a compiler error then you are trying to use this
+      // library with a non-copyable const rvalue.
+      // NOTE: this library cannot be used with non-copyable const rvalues because
+      //   such values are neither copyable nor movable therefore there is no way
+      //   to temporary store them.
+      // NOTE: this compiler error is necessary because we must prevent at
+      //   compile time move-only const rvalues from being used in simple_variant,
+      //  because there is no way to do that at compile time in
+      //  simple_variant itself.
       // Because const rvalues can't be moved a non-moved return is performed
       // here.
-      BOOST_STATIC_ASSERT(( ::boost::is_const<T>::value ));
       return this->m_value;
     }
 

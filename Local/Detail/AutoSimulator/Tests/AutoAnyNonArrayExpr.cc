@@ -88,3 +88,15 @@ TEST(wg_autosimulator_autoany, MoveOnlyMutableLValueExpr)
   EXPECT_EQ(122, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);
 #undef EXPR
 }
+
+TEST(wg_autosimulator_autoany, MoveOnlyConstLValueExpr)
+{
+  ExprGenerator expr;
+#define EXPR expr.moveonlyConstLValue()
+  bool autosimFlag = false;
+  auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, autosimFlag);
+
+  EXPECT_TRUE(isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
+  EXPECT_EQ(121, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);
+#undef EXPR
+}
