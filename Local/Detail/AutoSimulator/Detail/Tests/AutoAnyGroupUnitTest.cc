@@ -19,8 +19,10 @@ TEST(wg_autosimulator_detail_autoanygroup, IsRValue)
   bool autosimFlag = false;
 
 #define EXPR \
-  (expr.array())        (expr.constArray())     (expr.mutableRValue()) \
-  (expr.constRValue())  (expr.mutableLValue())  (expr.constLValue())
+  (expr.array())                (expr.constArray())     \
+  (expr.copyonlyMutableRValue()) (expr.copyonlyConstRValue())  \
+  (expr.copyonlyMutableLValue())  (expr.copyonlyConstLValue()) \
+  (expr.moveonlyMutableRValue()) (expr.moveonlyMutableLValue())
 
   auto_any_group_t grp = WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKEGROUP(EXPR);
   WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP(grp, autosimFlag, EXPR);
@@ -31,6 +33,8 @@ TEST(wg_autosimulator_detail_autoanygroup, IsRValue)
   EXPECT_TRUE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 3, EXPR) );
   EXPECT_FALSE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 4, EXPR) );
   EXPECT_FALSE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 5, EXPR) );
+  EXPECT_TRUE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 6, EXPR) );
+  EXPECT_FALSE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 7, EXPR) );
 
 #undef EXPR
 }
@@ -55,8 +59,10 @@ TEST(wg_autosimulator_detail_autoanygroup_custom, IsRValue)
   bool autosimFlag = false;
 
 #define EXPR \
-  (expr.array())        (expr.constArray())     (expr.mutableRValue()) \
-  (expr.constRValue())  (expr.mutableLValue())  (expr.constLValue())
+  (expr.array())                (expr.constArray())     \
+  (expr.copyonlyMutableRValue()) (expr.copyonlyConstRValue())  \
+  (expr.copyonlyMutableLValue())  (expr.copyonlyConstLValue()) \
+  (expr.moveonlyMutableRValue()) (expr.moveonlyMutableLValue())
 
   CustomBase const & grp =
     WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKECUSTOMGROUP(CustomBase, EXPR);
@@ -68,6 +74,8 @@ TEST(wg_autosimulator_detail_autoanygroup_custom, IsRValue)
   EXPECT_TRUE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 3, EXPR) );
   EXPECT_FALSE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 4, EXPR) );
   EXPECT_FALSE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 5, EXPR) );
+  EXPECT_TRUE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 6, EXPR) );
+  EXPECT_FALSE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 7, EXPR) );
 
 #undef EXPR
 }

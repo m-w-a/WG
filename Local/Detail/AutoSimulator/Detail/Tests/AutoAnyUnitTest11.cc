@@ -39,11 +39,11 @@ ExpressionCategory::Type expressionCategory(
 
 using ::wg::autosimulator::detail::test::ExprGenerator;
 
-TEST(wg_autosimulator_detail_autoany_cpp11, MutableLValue)
+TEST(wg_autosimulator_detail_autoany_cpp11, CopyOnlyMutableLValue)
 {
   ExprGenerator expr;
 
-#define EXPR expr.mutableLValue()
+#define EXPR expr.copyonlyMutableLValue()
   bool autosimFlag = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
@@ -55,11 +55,11 @@ TEST(wg_autosimulator_detail_autoany_cpp11, MutableLValue)
 #undef EXPR
 }
 
-TEST(wg_autosimulator_detail_autoany_cpp11, ConstLValue)
+TEST(wg_autosimulator_detail_autoany_cpp11, CopyOnlyConstLValue)
 {
   ExprGenerator expr;
 
-#define EXPR expr.constLValue()
+#define EXPR expr.copyonlyConstLValue()
   bool autosimFlag = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
@@ -71,11 +71,11 @@ TEST(wg_autosimulator_detail_autoany_cpp11, ConstLValue)
 #undef EXPR
 }
 
-TEST(wg_autosimulator_detail_autoany_cpp11, MutableRValue)
+TEST(wg_autosimulator_detail_autoany_cpp11, CopyOnlyMutableRValue)
 {
   ExprGenerator expr;
 
-#define EXPR expr.mutableRValue()
+#define EXPR expr.copyonlyMutableRValue()
   bool autosimFlag = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
@@ -87,11 +87,11 @@ TEST(wg_autosimulator_detail_autoany_cpp11, MutableRValue)
 #undef EXPR
 }
 
-TEST(wg_autosimulator_detail_autoany_cpp11, ConstRValue)
+TEST(wg_autosimulator_detail_autoany_cpp11, CopyOnlyConstRValue)
 {
   ExprGenerator expr;
 
-#define EXPR expr.constRValue()
+#define EXPR expr.copyonlyConstRValue()
   bool autosimFlag = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);

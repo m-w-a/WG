@@ -5,10 +5,10 @@
 using namespace ::wg::autosimulator;
 using namespace ::wg::autosimulator::detail::test;
 
-TEST(wg_autosimulator_autoany, MutableRValueExpr)
+TEST(wg_autosimulator_autoany, CopyOnlyMutableRValueExpr)
 {
   ExprGenerator expr;
-#define EXPR expr.mutableRValue()
+#define EXPR expr.copyonlyMutableRValue()
   bool autosimFlag = false;
   auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, autosimFlag);
 
@@ -20,10 +20,10 @@ TEST(wg_autosimulator_autoany, MutableRValueExpr)
 #undef EXPR
 }
 
-TEST(wg_autosimulator_autoany, ConstRValueExpr)
+TEST(wg_autosimulator_autoany, CopyOnlyConstRValueExpr)
 {
   ExprGenerator expr;
-#define EXPR expr.constRValue()
+#define EXPR expr.copyonlyConstRValue()
   bool autosimFlag = false;
   auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, autosimFlag);
 
@@ -32,10 +32,10 @@ TEST(wg_autosimulator_autoany, ConstRValueExpr)
 #undef EXPR
 }
 
-TEST(wg_autosimulator_autoany, MutableLValueExpr)
+TEST(wg_autosimulator_autoany, CopyOnlyMutableLValueExpr)
 {
   ExprGenerator expr;
-#define EXPR expr.mutableLValue()
+#define EXPR expr.copyonlyMutableLValue()
   bool autosimFlag = false;
   auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, autosimFlag);
 
@@ -47,10 +47,10 @@ TEST(wg_autosimulator_autoany, MutableLValueExpr)
 #undef EXPR
 }
 
-TEST(wg_autosimulator_autoany, ConstLValueExpr)
+TEST(wg_autosimulator_autoany, CopyOnlyConstLValueExpr)
 {
   ExprGenerator expr;
-#define EXPR expr.constLValue()
+#define EXPR expr.copyonlyConstLValue()
   bool autosimFlag = false;
   auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, autosimFlag);
 

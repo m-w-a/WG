@@ -31,8 +31,9 @@ TEST(wg_autosimulator_autoanygroup, MultiExpr)
 
   bool autosimFlag = false;
 #define EXPR \
-  (expr.array())        (expr.constArray())     (expr.mutableRValue()) \
-  (expr.constRValue())  (expr.mutableLValue())  (expr.constLValue()) \
+  (expr.array())                (expr.constArray())     \
+  (expr.copyonlyMutableRValue()) (expr.copyonlyConstRValue())  \
+  (expr.copyonlyMutableLValue())  (expr.copyonlyConstLValue()) \
   (expr.moveonlyMutableRValue()) (expr.moveonlyMutableLValue())
 
   auto_any_group_t grp = WG_AUTOSIMULATOR_AUTOANYGROUP_ALLOC(EXPR);

@@ -46,9 +46,10 @@ public:
   typedef int A5[ArrayCount];
   typedef A5 const ConstA5;
 
-  struct Cntr
+  struct CopyOnlyCntr
   {
-    Cntr() : value(11) {}
+    CopyOnlyCntr() : value(11) {}
+    CopyOnlyCntr(CopyOnlyCntr const & rhs) : value(rhs.value) {}
     int value;
   };
 
@@ -71,15 +72,7 @@ public:
     A5 m_Value;
   };
 
-  struct CopyableTag {};
-  struct MoveOnlyTag {};
-
-  template
-  <
-    typename ExprType,
-    typename Cloneability = CopyableTag,
-    typename EnableIfDummyArg = void
-  >
+  template <typename ExprType, typename DummyArg = void>
   struct NonArrayExpr : private CallCountVerifier
   {
     ExprType operator()() { this->verifyEvalCount(); return m_Value; }
@@ -93,15 +86,18 @@ public:
     ValueType m_Value;
   };
 
-  template <typename ExprType>
-  struct NonArrayExpr
-  <
-    ExprType,
-    MoveOnlyTag,
-    typename  ::boost::enable_if< ::boost::is_object<ExprType> >::type
-  > : private CallCountVerifier
+  template <typename DummyArg>
+  struct NonArrayExpr<MoveOnlyCntr, DummyArg> : private CallCountVerifier
   {
-    ExprType operator()() { this->verifyEvalCount(); return MoveOnlyCntr(); }
+    MoveOnlyCntr operator()()
+    { this->verifyEvalCount(); return MoveOnlyCntr(); }
+  };
+
+  template <typename DummyArg>
+  struct NonArrayExpr<MoveOnlyCntr const, DummyArg> : private CallCountVerifier
+  {
+    MoveOnlyCntr const operator()()
+    { this->verifyEvalCount(); return MoveOnlyCntr(); }
   };
 
   ExprGenerator()
@@ -115,15 +111,16 @@ public:
   ArrayExpr<A5>             array;
   ArrayExpr<ConstA5>        constArray;
 
-  NonArrayExpr<Cntr>        mutableRValue;
-  NonArrayExpr<Cntr const>  constRValue;
-  NonArrayExpr<Cntr &>      mutableLValue;
-  NonArrayExpr<Cntr const &> constLValue;
+  NonArrayExpr<CopyOnlyCntr>        copyonlyMutableRValue;
+  NonArrayExpr<CopyOnlyCntr const>  copyonlyConstRValue;
+  NonArrayExpr<CopyOnlyCntr &>      copyonlyMutableLValue;
+  NonArrayExpr<CopyOnlyCntr const &> copyonlyConstLValue;
 
-  NonArrayExpr<MoveOnlyCntr, MoveOnlyTag>        moveonlyMutableRValue;
-  NonArrayExpr<MoveOnlyCntr const, MoveOnlyTag>  moveonlyConstRValue;
-  NonArrayExpr<MoveOnlyCntr &, MoveOnlyTag>      moveonlyMutableLValue;
-  NonArrayExpr<MoveOnlyCntr const &, MoveOnlyTag> moveonlyConstLValue;
+  NonArrayExpr<MoveOnlyCntr>        moveonlyMutableRValue;
+  // Commented out because noncopyable const rvalues can't be used with this lib.
+  //NonArrayExpr<MoveOnlyCntr const>  moveonlyConstRValue;
+  NonArrayExpr<MoveOnlyCntr &>      moveonlyMutableLValue;
+  NonArrayExpr<MoveOnlyCntr const &> moveonlyConstLValue;
 };
 
 

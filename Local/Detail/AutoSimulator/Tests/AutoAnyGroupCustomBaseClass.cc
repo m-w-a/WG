@@ -43,8 +43,9 @@ TEST(wg_autosimulator_autoanygroup_custom, MultiExpr)
 
   bool autosimFlag = false;
 #define EXPR \
-  (expr.array())        (expr.constArray())     (expr.mutableRValue()) \
-  (expr.constRValue())  (expr.mutableLValue())  (expr.constLValue()) \
+  (expr.array())                (expr.constArray())     \
+  (expr.copyonlyMutableRValue()) (expr.copyonlyConstRValue())  \
+  (expr.copyonlyMutableLValue())  (expr.copyonlyConstLValue()) \
   (expr.moveonlyMutableRValue()) (expr.moveonlyMutableLValue())
 
   CustomBase const & grp =

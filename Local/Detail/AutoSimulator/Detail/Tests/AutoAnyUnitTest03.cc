@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/Local/Detail/AutoSimulator/Detail/AutoAny.hh>
+#include <WG/Local/Detail/AutoSimulator/Tests/Utils.hh>
 
 namespace
 {
@@ -33,74 +34,14 @@ ExpressionCategory::Type expressionCategory(
   return ExpressionCategory::ConstNonArrayLValueOrConstRValue;
 }
 
-struct Cntnr {};
-typedef Cntnr ArrayType[5];
-
-Cntnr & mutableNonArrayLValue()
-{
-  static Cntnr toRet;
-  return toRet;
 }
 
-Cntnr const & constNonArrayLValue()
-{
-  return mutableNonArrayLValue();
-}
-
-ArrayType & mutableArrayLValue()
-{
-  static ArrayType toRet;
-  return toRet;
-}
-
-ArrayType const & constArrayLValue()
-{
-  return mutableArrayLValue();
-}
-
-Cntnr mutableRValue()
-{
-  return Cntnr();
-}
-
-Cntnr const constRValue()
-{
-  return Cntnr();
-}
-
-}
-
-TEST(wg_autosimulator_detail_autoany_cpp03, MutableNonArrayLValue)
-{
-#define EXPR mutableNonArrayLValue()
-  bool autosimFlag = false;
-  auto_any_t obj =
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
-
-  EXPECT_FALSE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
-  EXPECT_EQ(
-    ExpressionCategory::ArrayOrMutableLValue,
-    expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
-#undef EXPR
-}
-
-TEST(wg_autosimulator_detail_autoany_cpp03, ConstNonArrayLValue)
-{
-#define EXPR constNonArrayLValue()
-  bool autosimFlag = false;
-  auto_any_t obj =
-    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
-
-  EXPECT_FALSE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
-  EXPECT_EQ(
-    ExpressionCategory::ConstNonArrayLValueOrConstRValue,
-    expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
-#undef EXPR
-}
+using namespace ::wg::autosimulator::detail::test;
 
 TEST(wg_autosimulator_detail_autoany_cpp03, MutableArrayLValue)
 {
-#define EXPR mutableArrayLValue()
+  ExprGenerator expr;
+#define EXPR expr.array()
   bool autosimFlag = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
@@ -114,7 +55,8 @@ TEST(wg_autosimulator_detail_autoany_cpp03, MutableArrayLValue)
 
 TEST(wg_autosimulator_detail_autoany_cpp03, ConstArrayLValue)
 {
-#define EXPR constArrayLValue()
+  ExprGenerator expr;
+#define EXPR expr.constArray()
   bool autosimFlag = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
@@ -126,9 +68,40 @@ TEST(wg_autosimulator_detail_autoany_cpp03, ConstArrayLValue)
 #undef EXPR
 }
 
-TEST(wg_autosimulator_detail_autoany_cpp03, MutableRValue)
+TEST(wg_autosimulator_detail_autoany_cpp03, CopyOnlyMutableNonArrayLValue)
 {
-#define EXPR mutableRValue()
+  ExprGenerator expr;
+#define EXPR expr.copyonlyMutableLValue()
+  bool autosimFlag = false;
+  auto_any_t obj =
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
+
+  EXPECT_FALSE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
+  EXPECT_EQ(
+    ExpressionCategory::ArrayOrMutableLValue,
+    expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
+#undef EXPR
+}
+
+TEST(wg_autosimulator_detail_autoany_cpp03, CopyOnlyConstNonArrayLValue)
+{
+  ExprGenerator expr;
+#define EXPR expr.copyonlyConstLValue()
+  bool autosimFlag = false;
+  auto_any_t obj =
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
+
+  EXPECT_FALSE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
+  EXPECT_EQ(
+    ExpressionCategory::ConstNonArrayLValueOrConstRValue,
+    expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
+#undef EXPR
+}
+
+TEST(wg_autosimulator_detail_autoany_cpp03, CopyOnlyMutableRValue)
+{
+  ExprGenerator expr;
+#define EXPR expr.copyonlyMutableRValue()
   bool autosimFlag = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
@@ -140,9 +113,10 @@ TEST(wg_autosimulator_detail_autoany_cpp03, MutableRValue)
 #undef EXPR
 }
 
-TEST(wg_autosimulator_detail_autoany_cpp03, ConstRValue)
+TEST(wg_autosimulator_detail_autoany_cpp03, CopyOnlyConstRValue)
 {
-#define EXPR constRValue()
+  ExprGenerator expr;
+#define EXPR expr.copyonlyConstRValue()
   bool autosimFlag = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
