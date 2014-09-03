@@ -34,7 +34,8 @@ TEST(wg_autosimulator_autoanygroup, MultiExpr)
   (expr.array())                (expr.constArray())     \
   (expr.copyonlyMutableRValue()) (expr.copyonlyConstRValue())  \
   (expr.copyonlyMutableLValue())  (expr.copyonlyConstLValue()) \
-  (expr.moveonlyMutableRValue()) (expr.moveonlyMutableLValue())
+  (expr.moveonlyMutableRValue()) (expr.moveonlyMutableLValue()) \
+  (expr.moveonlyConstLValue())
 
   auto_any_group_t grp = WG_AUTOSIMULATOR_AUTOANYGROUP_ALLOC(EXPR);
   WG_AUTOSIMULATOR_AUTOANYGROUP_INIT(grp, autosimFlag, EXPR);
@@ -100,6 +101,12 @@ TEST(wg_autosimulator_autoanygroup, MultiExpr)
 
     WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 7, EXPR).value = 122;
     EXPECT_EQ(122, WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 7, EXPR).value);
+  }
+
+  {
+    EXPECT_TRUE(
+      isConst(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 8, EXPR)) );
+    EXPECT_EQ(121, WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 8, EXPR).value);
   }
 #undef EXPR
 }

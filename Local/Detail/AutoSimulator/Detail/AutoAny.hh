@@ -409,9 +409,12 @@ inline auto_any_impl
     {
       if(this->m_is_rvalue)
       {
+        typedef BOOST_DEDUCED_TYPENAME ::boost::remove_const<T>::type noconst_T;
         // Ok to move since rhs contains a mutable copy of whichever rvalue
         // expression that was captured.
-        ::new(this->m_data.address()) T(::boost::move(rhs.get_rvalue()));
+        // Ok to const_cast since m_data is mutable.
+        ::new(this->m_data.address())
+          T(::boost::move( const_cast<noconst_T &>(rhs.get_rvalue()) ));
       }
       else
       {
@@ -462,7 +465,6 @@ inline auto_any_impl
 
     void init_rvalue(::boost::mpl::true_ *, T const & t)
     {
-      typedef typename ::boost::remove_const<T>::type noconst;
       // If this line triggered a compiler error then you are most likely using
       // this library with a non-copyable lvalue whose type T fails to meet
       // one of the following critieron:

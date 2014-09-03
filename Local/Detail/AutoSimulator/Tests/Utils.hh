@@ -108,6 +108,7 @@ public:
     constArray = carr;
   }
 
+  //TODO: change array -> mutableArray
   ArrayExpr<A5>             array;
   ArrayExpr<ConstA5>        constArray;
 

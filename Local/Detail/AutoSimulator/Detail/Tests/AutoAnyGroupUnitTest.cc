@@ -22,7 +22,8 @@ TEST(wg_autosimulator_detail_autoanygroup, IsRValue)
   (expr.array())                (expr.constArray())     \
   (expr.copyonlyMutableRValue()) (expr.copyonlyConstRValue())  \
   (expr.copyonlyMutableLValue())  (expr.copyonlyConstLValue()) \
-  (expr.moveonlyMutableRValue()) (expr.moveonlyMutableLValue())
+  (expr.moveonlyMutableRValue()) (expr.moveonlyMutableLValue()) \
+  (expr.moveonlyConstLValue())
 
   auto_any_group_t grp = WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKEGROUP(EXPR);
   WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP(grp, autosimFlag, EXPR);
@@ -35,6 +36,7 @@ TEST(wg_autosimulator_detail_autoanygroup, IsRValue)
   EXPECT_FALSE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 5, EXPR) );
   EXPECT_TRUE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 6, EXPR) );
   EXPECT_FALSE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 7, EXPR) );
+  EXPECT_FALSE( WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_ISRVALUE(grp, 8, EXPR) );
 
 #undef EXPR
 }
