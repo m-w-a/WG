@@ -8,7 +8,7 @@ using namespace ::wg::autosimulator::detail::test;
 TEST(wg_autosimulator_autoany, MutableArrayExpr)
 {
   ExprGenerator expr;
-#define EXPR expr.array()
+#define EXPR expr.mutableArray()
   bool autosimFlag = false;
   auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, autosimFlag);
 

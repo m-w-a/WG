@@ -28,7 +28,7 @@ TEST(wg_autosimulator_detail_typetraits, IsMutableRValue)
 {
   ExprGenerator expr;
 
-  EXPECT_FALSE( ISMUTABLERVALUE( expr.array()                  ));
+  EXPECT_FALSE( ISMUTABLERVALUE( expr.mutableArray()                  ));
   EXPECT_FALSE( ISMUTABLERVALUE( expr.constArray()             ));
 
   EXPECT_FALSE( ISMUTABLERVALUE( expr.copyonlyMutableLValue()  ));
@@ -49,7 +49,7 @@ TEST(wg_autosimulator_detail_typetraits, IsMutableLValue)
 {
   ExprGenerator expr;
 
-  EXPECT_TRUE(  ISMUTABLELVALUE(  expr.array()                  ));
+  EXPECT_TRUE(  ISMUTABLELVALUE(  expr.mutableArray()                  ));
   EXPECT_FALSE( ISMUTABLELVALUE( expr.constArray()             ));
 
   EXPECT_TRUE(  ISMUTABLELVALUE(  expr.copyonlyMutableLValue()  ));
@@ -105,7 +105,7 @@ TEST(wg_autosimulator_detail_typetraits, IsExprConst)
 {
   ExprGenerator expr;
 
-  EXPECT_FALSE( ISEXPRCONST( expr.array()                     ));
+  EXPECT_FALSE( ISEXPRCONST( expr.mutableArray()                     ));
   EXPECT_TRUE( ISEXPRCONST( expr.constArray()                 ));
 
   EXPECT_FALSE( ISEXPRCONST( expr.copyonlyMutableLValue()     ));

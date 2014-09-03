@@ -19,7 +19,7 @@ TEST(wg_autosimulator_detail_autoanygroup, IsRValue)
   bool autosimFlag = false;
 
 #define EXPR \
-  (expr.array())                (expr.constArray())     \
+  (expr.mutableArray())                (expr.constArray())     \
   (expr.copyonlyMutableRValue()) (expr.copyonlyConstRValue())  \
   (expr.copyonlyMutableLValue())  (expr.copyonlyConstLValue()) \
   (expr.moveonlyMutableRValue()) (expr.moveonlyMutableLValue()) \
@@ -61,7 +61,7 @@ TEST(wg_autosimulator_detail_autoanygroup_custom, IsRValue)
   bool autosimFlag = false;
 
 #define EXPR \
-  (expr.array())                (expr.constArray())     \
+  (expr.mutableArray())                (expr.constArray())     \
   (expr.copyonlyMutableRValue()) (expr.copyonlyConstRValue())  \
   (expr.copyonlyMutableLValue())  (expr.copyonlyConstLValue()) \
   (expr.moveonlyMutableRValue()) (expr.moveonlyMutableLValue())

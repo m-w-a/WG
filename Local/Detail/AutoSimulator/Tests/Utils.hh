@@ -104,12 +104,11 @@ public:
   {
     A5 arr = {0, 1, 2, 3, 4};
     ConstA5 carr = {10, 11, 12, 13, 14};
-    array = arr;
+    mutableArray = arr;
     constArray = carr;
   }
 
-  //TODO: change array -> mutableArray
-  ArrayExpr<A5>             array;
+  ArrayExpr<A5>             mutableArray;
   ArrayExpr<ConstA5>        constArray;
 
   NonArrayExpr<CopyOnlyCntr>        copyonlyMutableRValue;

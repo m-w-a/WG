@@ -41,7 +41,7 @@ using namespace ::wg::autosimulator::detail::test;
 TEST(wg_autosimulator_detail_autoany_cpp03, MutableArrayLValue)
 {
   ExprGenerator expr;
-#define EXPR expr.array()
+#define EXPR expr.mutableArray()
   bool autosimFlag = false;
   auto_any_t obj =
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
