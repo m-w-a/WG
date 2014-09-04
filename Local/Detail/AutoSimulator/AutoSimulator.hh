@@ -72,6 +72,8 @@ typedef detail::auto_any_group const & auto_any_group_t;
 //   makeup exprseq. If not defined by the user it defaults to 5. The maximum
 //   is determined by the number of elements that boost::tuple handle, which
 //   currently stands at 10.
+//   To use this macro, define before the first inclusion of this header in the
+//   required translation unit.
 #define WG_AUTOSIMULATOR_AUTOANYGROUP_ALLOC(exprseq) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKEGROUP(exprseq)
 

@@ -26,12 +26,12 @@ Get rid of WG_PP_STARTSWITH_BOOST_PP_NIL via WG_PP_SEQs?
 BOOST_NO_CXX11_* -> WG_*
 
 AutoSimulator:
-  doc limitiations of movable and not copyable const values.
+  x) doc limitiations of movable and not copyable const values.
   TODOs
-  Move CTors
+  x) Move CTors
   x) expr w/side-effects test
   x) dfta_traits->capture_obj
-  How to test move ctors?
+  x) How to test move ctors?
   
   How to test:
     defined(WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME) &&
