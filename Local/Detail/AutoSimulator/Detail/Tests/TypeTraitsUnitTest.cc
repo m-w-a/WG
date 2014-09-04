@@ -28,17 +28,22 @@ TEST(wg_autosimulator_detail_typetraits, IsMutableRValue)
 {
   ExprGenerator expr;
 
-  EXPECT_FALSE( ISMUTABLERVALUE( expr.mutableArray()                  ));
-  EXPECT_FALSE( ISMUTABLERVALUE( expr.constArray()             ));
+  EXPECT_FALSE( ISMUTABLERVALUE( expr.mutableArray()            ));
+  EXPECT_FALSE( ISMUTABLERVALUE( expr.constArray()              ));
 
-  EXPECT_FALSE( ISMUTABLERVALUE( expr.copyonlyMutableLValue()  ));
-  EXPECT_FALSE( ISMUTABLERVALUE( expr.copyonlyConstLValue()    ));
+  EXPECT_FALSE( ISMUTABLERVALUE( expr.copyonlyMutableLValue()   ));
+  EXPECT_FALSE( ISMUTABLERVALUE( expr.copyonlyConstLValue()     ));
   EXPECT_TRUE(  ISMUTABLERVALUE(  expr.copyonlyMutableRValue()  ));
-  EXPECT_FALSE( ISMUTABLERVALUE( expr.copyonlyConstRValue()    ));
+  EXPECT_FALSE( ISMUTABLERVALUE( expr.copyonlyConstRValue()     ));
 
   EXPECT_TRUE(  ISMUTABLERVALUE( expr.moveonlyMutableRValue()   ));
-  EXPECT_FALSE( ISMUTABLERVALUE( expr.moveonlyMutableLValue()  ));
-  EXPECT_FALSE( ISMUTABLERVALUE( expr.moveonlyConstLValue()    ));
+  EXPECT_FALSE( ISMUTABLERVALUE( expr.moveonlyMutableLValue()   ));
+  EXPECT_FALSE( ISMUTABLERVALUE( expr.moveonlyConstLValue()     ));
+
+  EXPECT_TRUE(  ISMUTABLERVALUE( expr.copymoveMutableRValue()   ));
+  EXPECT_FALSE( ISMUTABLERVALUE( expr.copymoveConstRValue()     ));
+  EXPECT_FALSE( ISMUTABLERVALUE( expr.copymoveMutableLValue()   ));
+  EXPECT_FALSE( ISMUTABLERVALUE( expr.copymoveConstLValue()     ));
 }
 
 #define ISMUTABLELVALUE(x) \
@@ -49,17 +54,22 @@ TEST(wg_autosimulator_detail_typetraits, IsMutableLValue)
 {
   ExprGenerator expr;
 
-  EXPECT_TRUE(  ISMUTABLELVALUE(  expr.mutableArray()                  ));
-  EXPECT_FALSE( ISMUTABLELVALUE( expr.constArray()             ));
+  EXPECT_TRUE(  ISMUTABLELVALUE( expr.mutableArray()            ));
+  EXPECT_FALSE( ISMUTABLELVALUE( expr.constArray()              ));
 
-  EXPECT_TRUE(  ISMUTABLELVALUE(  expr.copyonlyMutableLValue()  ));
-  EXPECT_FALSE( ISMUTABLELVALUE( expr.copyonlyConstLValue()    ));
-  EXPECT_FALSE( ISMUTABLELVALUE( expr.copyonlyMutableRValue()  ));
-  EXPECT_FALSE( ISMUTABLELVALUE( expr.copyonlyConstRValue()    ));
+  EXPECT_TRUE(  ISMUTABLELVALUE( expr.copyonlyMutableLValue()   ));
+  EXPECT_FALSE( ISMUTABLELVALUE( expr.copyonlyConstLValue()     ));
+  EXPECT_FALSE( ISMUTABLELVALUE( expr.copyonlyMutableRValue()   ));
+  EXPECT_FALSE( ISMUTABLELVALUE( expr.copyonlyConstRValue()     ));
 
-  EXPECT_FALSE( ISMUTABLELVALUE( expr.moveonlyMutableRValue()  ));
-  EXPECT_TRUE( ISMUTABLELVALUE( expr.moveonlyMutableLValue()  ));
-  EXPECT_FALSE( ISMUTABLELVALUE( expr.moveonlyConstLValue()    ));
+  EXPECT_FALSE( ISMUTABLELVALUE( expr.moveonlyMutableRValue()   ));
+  EXPECT_TRUE(  ISMUTABLELVALUE( expr.moveonlyMutableLValue()   ));
+  EXPECT_FALSE( ISMUTABLELVALUE( expr.moveonlyConstLValue()     ));
+
+  EXPECT_FALSE( ISMUTABLELVALUE( expr.copymoveMutableRValue()   ));
+  EXPECT_FALSE( ISMUTABLELVALUE( expr.copymoveConstRValue()     ));
+  EXPECT_TRUE(  ISMUTABLELVALUE( expr.copymoveMutableLValue()   ));
+  EXPECT_FALSE( ISMUTABLELVALUE( expr.copymoveConstLValue()     ));
 }
 
 namespace
@@ -105,8 +115,8 @@ TEST(wg_autosimulator_detail_typetraits, IsExprConst)
 {
   ExprGenerator expr;
 
-  EXPECT_FALSE( ISEXPRCONST( expr.mutableArray()                     ));
-  EXPECT_TRUE( ISEXPRCONST( expr.constArray()                 ));
+  EXPECT_FALSE( ISEXPRCONST( expr.mutableArray()              ));
+  EXPECT_TRUE(  ISEXPRCONST( expr.constArray()                ));
 
   EXPECT_FALSE( ISEXPRCONST( expr.copyonlyMutableLValue()     ));
   EXPECT_TRUE(  ISEXPRCONST( expr.copyonlyConstLValue()       ));
@@ -116,4 +126,9 @@ TEST(wg_autosimulator_detail_typetraits, IsExprConst)
   EXPECT_FALSE( ISEXPRCONST( expr.moveonlyMutableRValue()     ));
   EXPECT_FALSE( ISEXPRCONST( expr.moveonlyMutableLValue()     ));
   EXPECT_TRUE(  ISEXPRCONST( expr.moveonlyConstLValue()       ));
+
+  EXPECT_FALSE( ISEXPRCONST( expr.copymoveMutableRValue()     ));
+  EXPECT_TRUE(  ISEXPRCONST( expr.copymoveConstRValue()       ));
+  EXPECT_FALSE( ISEXPRCONST( expr.copymoveMutableLValue()     ));
+  EXPECT_TRUE(  ISEXPRCONST( expr.copymoveConstLValue()       ));
 }

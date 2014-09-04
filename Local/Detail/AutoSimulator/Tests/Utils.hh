@@ -1,6 +1,7 @@
 #ifndef WG_LOCAL_DETAIL_AUTOSIMULATOR_TESTS_UTILS_HH_
 #define WG_LOCAL_DETAIL_AUTOSIMULATOR_TESTS_UTILS_HH_
 
+#include <algorithm>
 #include <gtest/gtest.h>
 #include <boost/move/core.hpp>
 #include <boost/move/utility.hpp>
@@ -62,6 +63,20 @@ public:
     BOOST_MOVABLE_BUT_NOT_COPYABLE(MoveOnlyCntr)
   };
 
+  struct CopyMoveCntr
+  {
+    friend void swap(CopyMoveCntr & lhs, CopyMoveCntr & rhs)
+    { using std::swap; swap(lhs.value, rhs.value); }
+
+    CopyMoveCntr() : value(345) {}
+    CopyMoveCntr(CopyMoveCntr const & rhs) : value(rhs.value) {}
+    CopyMoveCntr(BOOST_RV_REF(CopyMoveCntr) rhs) : value(rhs.value) {}
+    CopyMoveCntr & operator=(CopyMoveCntr rhs) { swap(*this, rhs); return *this; }
+    int value;
+  private:
+    BOOST_COPYABLE_AND_MOVABLE(CopyMoveCntr)
+  };
+
   template <typename ExprType>
   struct ArrayExpr : private CallCountVerifier
   {
@@ -121,6 +136,11 @@ public:
   //NonArrayExpr<MoveOnlyCntr const>  moveonlyConstRValue;
   NonArrayExpr<MoveOnlyCntr &>      moveonlyMutableLValue;
   NonArrayExpr<MoveOnlyCntr const &> moveonlyConstLValue;
+
+  NonArrayExpr<CopyMoveCntr>        copymoveMutableRValue;
+  NonArrayExpr<CopyMoveCntr const>  copymoveConstRValue;
+  NonArrayExpr<CopyMoveCntr &>      copymoveMutableLValue;
+  NonArrayExpr<CopyMoveCntr const &> copymoveConstLValue;
 };
 
 

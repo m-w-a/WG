@@ -1,4 +1,7 @@
 #include <gtest/gtest.h>
+
+#define WG_AUTOSIMULATOR_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY 10
+
 #include <WG/Local/Detail/AutoSimulator/AutoSimulator.hh>
 #include <WG/Local/Detail/AutoSimulator/Tests/Utils.hh>
 
@@ -37,15 +40,15 @@ TEST(wg_autosimulator_autoanygroup_custom, OneExpr)
 #undef EXPR
 }
 
-TEST(wg_autosimulator_autoanygroup_custom, MultiExpr)
+TEST(wg_autosimulator_autoanygroup_custom, MultiExpr1)
 {
   ExprGenerator expr;
 
   bool autosimFlag = false;
 #define EXPR \
-  (expr.mutableArray())                (expr.constArray())     \
+  (expr.mutableArray())          (expr.constArray())     \
   (expr.copyonlyMutableRValue()) (expr.copyonlyConstRValue())  \
-  (expr.copyonlyMutableLValue())  (expr.copyonlyConstLValue()) \
+  (expr.copyonlyMutableLValue()) (expr.copyonlyConstLValue()) \
   (expr.moveonlyMutableRValue()) (expr.moveonlyMutableLValue()) \
   (expr.moveonlyConstLValue())
 
@@ -120,6 +123,51 @@ TEST(wg_autosimulator_autoanygroup_custom, MultiExpr)
     EXPECT_TRUE(
       isConst(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 8, EXPR)) );
     EXPECT_EQ(121, WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 8, EXPR).value);
+  }
+#undef EXPR
+}
+
+TEST(wg_autosimulator_autoanygroup_custom, MultiExpr2)
+{
+  ExprGenerator expr;
+
+  bool autosimFlag = false;
+#define EXPR \
+  (expr.copymoveMutableRValue()) (expr.copymoveConstRValue()) \
+  (expr.copymoveMutableLValue()) (expr.copymoveConstLValue())
+
+  CustomBase const & grp =
+    WG_AUTOSIMULATOR_AUTOANYGROUP_ALLOC_CUSTOM(CustomBase, EXPR);
+  WG_AUTOSIMULATOR_AUTOANYGROUP_INIT(grp, autosimFlag, EXPR);
+
+  {
+    EXPECT_FALSE(
+      isConst(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 0, EXPR)) );
+    EXPECT_EQ(345, WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 0, EXPR).value);
+
+    WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 0, EXPR).value = 346;
+    EXPECT_EQ(346, WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 0, EXPR).value);
+  }
+
+  {
+    EXPECT_TRUE(
+      isConst(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 1, EXPR)) );
+    EXPECT_EQ(345, WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 1, EXPR).value);
+  }
+
+  {
+    EXPECT_FALSE(
+      isConst(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 2, EXPR)) );
+    EXPECT_EQ(345, WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 2, EXPR).value);
+
+    WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 2, EXPR).value = 346;
+    EXPECT_EQ(346, WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 2, EXPR).value);
+  }
+
+  {
+    EXPECT_TRUE(
+      isConst(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 3, EXPR)) );
+    EXPECT_EQ(345, WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 3, EXPR).value);
   }
 #undef EXPR
 }

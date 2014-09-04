@@ -69,7 +69,9 @@ typedef detail::auto_any_group const & auto_any_group_t;
 //
 // WG_AUTOSIMULATOR_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY:
 //   This object-like macro defines the max number of expressions that may
-//   makeup exprseq. If not defined by the user it defaults to 10.
+//   makeup exprseq. If not defined by the user it defaults to 5. The maximum
+//   is determined by the number of elements that boost::tuple handle, which
+//   currently stands at 10.
 #define WG_AUTOSIMULATOR_AUTOANYGROUP_ALLOC(exprseq) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKEGROUP(exprseq)
 

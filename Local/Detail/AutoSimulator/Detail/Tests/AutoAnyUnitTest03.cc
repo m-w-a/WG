@@ -172,3 +172,63 @@ TEST(wg_autosimulator_detail_autoany_cpp03, MoveOnlyConstLValue)
     expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
 #undef EXPR
 }
+
+TEST(wg_autosimulator_detail_autoany_cpp03, CopyMoveMutableRValue)
+{
+  ExprGenerator expr;
+#define EXPR expr.copymoveMutableRValue()
+  bool autosimFlag = false;
+  auto_any_t obj =
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
+
+  EXPECT_TRUE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
+  EXPECT_EQ(
+    ExpressionCategory::MutableRValue,
+    expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
+#undef EXPR
+}
+
+TEST(wg_autosimulator_detail_autoany_cpp03, CopyMoveConstRValue)
+{
+  ExprGenerator expr;
+#define EXPR expr.copymoveConstRValue()
+  bool autosimFlag = false;
+  auto_any_t obj =
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
+
+  EXPECT_TRUE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
+  EXPECT_EQ(
+    ExpressionCategory::ConstNonArrayLValueOrConstRValue,
+    expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
+#undef EXPR
+}
+
+TEST(wg_autosimulator_detail_autoany_cpp03, CopyMoveMutableLValue)
+{
+  ExprGenerator expr;
+#define EXPR expr.copymoveMutableLValue()
+  bool autosimFlag = false;
+  auto_any_t obj =
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
+
+  EXPECT_FALSE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
+  EXPECT_EQ(
+    ExpressionCategory::ArrayOrMutableLValue,
+    expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
+#undef EXPR
+}
+
+TEST(wg_autosimulator_detail_autoany_cpp03, CopyMoveConstLValue)
+{
+  ExprGenerator expr;
+#define EXPR expr.copymoveConstLValue()
+  bool autosimFlag = false;
+  auto_any_t obj =
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(EXPR, autosimFlag);
+
+  EXPECT_FALSE(WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(obj, EXPR));
+  EXPECT_EQ(
+    ExpressionCategory::ConstNonArrayLValueOrConstRValue,
+    expressionCategory(WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(EXPR)) );
+#undef EXPR
+}

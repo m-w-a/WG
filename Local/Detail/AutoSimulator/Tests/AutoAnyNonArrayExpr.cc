@@ -100,3 +100,57 @@ TEST(wg_autosimulator_autoany, MoveOnlyConstLValueExpr)
   EXPECT_EQ(121, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);
 #undef EXPR
 }
+
+TEST(wg_autosimulator_autoany, CopyMoveMutableRValue)
+{
+  ExprGenerator expr;
+#define EXPR expr.copymoveMutableRValue()
+  bool autosimFlag = false;
+  auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, autosimFlag);
+
+  EXPECT_FALSE(isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
+  EXPECT_EQ(345, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);
+
+  WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value = 346;
+  EXPECT_EQ(346, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);
+#undef EXPR
+}
+
+TEST(wg_autosimulator_autoany, CopyMoveConstRValue)
+{
+  ExprGenerator expr;
+#define EXPR expr.copymoveConstRValue()
+  bool autosimFlag = false;
+  auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, autosimFlag);
+
+  EXPECT_TRUE(isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
+  EXPECT_EQ(345, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);
+#undef EXPR
+}
+
+TEST(wg_autosimulator_autoany, CopyMoveMutableLValue)
+{
+  ExprGenerator expr;
+#define EXPR expr.copymoveMutableLValue()
+  bool autosimFlag = false;
+  auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, autosimFlag);
+
+  EXPECT_FALSE(isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
+  EXPECT_EQ(345, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);
+
+  WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value = 346;
+  EXPECT_EQ(346, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);
+#undef EXPR
+}
+
+TEST(wg_autosimulator_autoany, CopyMoveConstLValue)
+{
+  ExprGenerator expr;
+#define EXPR expr.copymoveConstLValue()
+  bool autosimFlag = false;
+  auto_any_t obj = WG_AUTOSIMULATOR_AUTOANY_CAPTURE(EXPR, autosimFlag);
+
+  EXPECT_TRUE(isConst(WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR)));
+  EXPECT_EQ(345, WG_AUTOSIMULATOR_AUTOANY_VALUE(obj, EXPR).value);
+#undef EXPR
+}
