@@ -27,6 +27,33 @@
 #include <boost/mpl/not.hpp>
 #include <boost/type_traits/is_array.hpp>
 #include <boost/type_traits/is_const.hpp>
+#include <boost/type_traits/is_copy_constructible.hpp>
+
+//###########
+//Public APIs
+//###########
+
+// Expands to either "::boost::mpl::true_ *" or "::boost::mpl::false_ *"
+// without evaluating expr.
+#define WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLERVALUE(expr) \
+  WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLERVALUE_IMPL(expr)
+
+// Expands to either "::boost::mpl::true_ *" or "::boost::mpl::false_ *"
+// without evaluating expr.
+#define WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLELVALUE(expr) \
+  WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLELVALUE_IMPL(expr)
+
+// Expands to either "::boost::mpl::true_ *" or "::boost::mpl::false_ *"
+// without evaluating expr.
+// NOTE: any top level reference is ignored when evaluating this query.
+#define WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY(expr) \
+  WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY_IMPL(expr)
+
+// Expands to either "::boost::mpl::true_ *" or "::boost::mpl::false_ *"
+// without evaluating expr.
+// NOTE: any top level reference is ignored when evaluating this query.
+#define WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST(expr) \
+  WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST_IMPL(expr)
 
 namespace wg
 {
@@ -65,20 +92,101 @@ inline ::boost::mpl::not_<Bool1> * not_(Bool1 *)
   return 0;
 }
 
-template<typename T>
+template <typename T>
+inline ::boost::is_copy_constructible<T> * is_copy_constructible_()
+{
+  return 0;
+}
+
+}
+}
+}
+
+//####
+//Impl
+//####
+
+#define WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLERVALUE_IMPL(expr) \
+  (true ? 0 : ::wg::autosimulator::detail::is_mutable_rvalue(expr, 0) )
+
+#define WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLELVALUE_IMPL(expr) \
+  (true ? 0 : ::wg::autosimulator::detail::is_mutable_lvalue(expr) )
+
+#define WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISARRAY_IMPL(expr) \
+  (true ? 0 : ::wg::autosimulator::detail::is_array_(expr) )
+
+#define WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISEXPRCONST_IMPL(expr) \
+  (true \
+    ? 0 \
+    : ::wg::autosimulator::detail::is_expr_const( \
+        WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLERVALUE(expr), \
+        WG_AUTOSIMULATOR_DETAIL_TYPETRAITS_ISMUTABLELVALUE(expr) ) )
+
+namespace wg
+{
+namespace autosimulator
+{
+namespace detail
+{
+
+//------------------------------------------------------------------------------
+//is_mutable_rvalue
+//
+// 13.3.3.2/2
+// When comparing the basic forms of implicit conversion sequences (as
+// defined in 13.3.3.1)
+// - a standard conversion sequence (13.3.3.1.1) is a better conversion
+//   sequence than a user-defined conversion sequence or an
+//   ellipsis conversion sequence
+
+// 13.3.3.1.3
+// An ellipsis conversion sequence occurs when an argument in a function
+// call is matched with the ellipsis parameter specification of the
+// function called.
+
+// mutable-lvalues, const-lvalues, const-rvalues expressions will match
+// both overloads below, but the first one will be preferred because of the
+// above.
+// mutable-rvalues can only be matched by the second overload.
+//------------------------------------------------------------------------------
+
+template <typename T>
+inline ::boost::mpl::false_ * is_mutable_rvalue(T &, int)
+{
+  return 0;
+}
+
+template <typename T>
+inline ::boost::mpl::true_ * is_mutable_rvalue(T const &, ...)
+{
+  return 0;
+}
+
+template <typename T>
+inline ::boost::mpl::false_ * is_mutable_lvalue(T const &)
+{
+  return 0;
+}
+
+template <typename T>
+inline ::boost::mpl::true_ * is_mutable_lvalue(T &)
+{
+  return 0;
+}
+
+inline ::boost::mpl::true_ *
+  is_expr_const(::boost::mpl::false_ *, ::boost::mpl::false_ *)
+{
+  return 0;
+}
+
+inline ::boost::mpl::false_ * is_expr_const(void *, void *)
+{
+  return 0;
+}
+
+template <typename T>
 inline ::boost::is_array<T> * is_array_(T const &)
-{
-  return 0;
-}
-
-template<typename T>
-inline ::boost::is_const<T> * is_const_(T &)
-{
-  return 0;
-}
-
-template<typename T>
-inline ::boost::mpl::true_ * is_const_(T const &)
 {
   return 0;
 }

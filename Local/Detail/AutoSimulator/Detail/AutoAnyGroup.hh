@@ -7,6 +7,7 @@
 #include <boost/mpl/at.hpp>
 #include <boost/aligned_storage.hpp>
 #include <boost/type_traits/alignment_of.hpp>
+#include <boost/move/utility.hpp>
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/Seq.hh>
 #include <WG/Local/Detail/AutoSimulator/Detail/AutoAny.hh>
@@ -16,7 +17,7 @@
 //###########
 
 #ifndef WG_AUTOSIMULATOR_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY
-  #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY 11
+  #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY 6
 #else
   #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY \
     BOOST_PP_INC(WG_AUTOSIMULATOR_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY)
@@ -31,9 +32,9 @@
       baseclass, exprseq)
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP( \
-  opaqued_group, is_rvalue_flag, exprseq) \
+  opaqued_group, mutable_boolean_flag, exprseq) \
     WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP_IMPL( \
-      opaqued_group, is_rvalue_flag, exprseq)
+      opaqued_group, mutable_boolean_flag, exprseq)
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_VALUE( \
   opaqued_group, itemno, exprseq) \
@@ -133,7 +134,8 @@
         typedef BOOST_DEDUCED_TYPENAME \
           boost::mpl::at<AutoAnyImplTypeVec, boost::mpl::int_<I> >::type \
             item_type; \
-        ::new(this->m_items.template get<I>().address()) item_type(wrapped_obj); \
+        ::new(this->m_items.template get<I>().address()) \
+          item_type( ::boost::move(wrapped_obj) ); \
         \
         return *this; \
       } \
@@ -408,21 +410,21 @@
 //----------------------------------------------
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP_IMPL( \
-  opaqued_group, is_rvalue_flag, exprseq) \
+  opaqued_group, mutable_boolean_flag, exprseq) \
     BOOST_PP_EXPR_IIF( \
       BOOST_PP_COMPL( \
         WG_PP_SEQ_ISNIL(exprseq)), \
         WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP(opaqued_group, exprseq) ) \
     WG_PP_SEQ_NOTHING_FOR_EACH_I( \
       WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP_ENTRY, \
-      is_rvalue_flag, \
+      mutable_boolean_flag, \
       exprseq) ;
 
 // WG_PP_SEQ_FOR_EACH functor.
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP_ENTRY( \
-  r, is_rvalue_flag, indx, expr) \
+  r, mutable_boolean_flag, indx, expr) \
     . capture<indx>( \
-      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, is_rvalue_flag) )
+      WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, mutable_boolean_flag) )
 
 //----------------------------------------------
 //WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_VALUE

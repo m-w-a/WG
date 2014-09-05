@@ -30,22 +30,31 @@ typedef detail::auto_any_group const & auto_any_group_t;
 }
 }
 
-// This macro is used to emulate C++11 auto-deduced reference objects without
+// This macro is used to emulate C++11 auto-deduced universal references without
 // the use of any of Boost.Typeof utilities. In C++11 speak, this macro emulates
-// the following using cases:
-//   auto & v = expr; // For expressions that are lvalues or const rvalues, else
-//   auto const & v = expr; // For expressions that are mutable rvalues.
+// the following using case:
+//   auto && v = expr;
 //
-//   Note: "auto & v = expr;" for expressions that are mutable rvalues is
-//     ill-formed since it's attempting to bind a rvalue to a non-const reference.
+// Limitations:
+//   1) This macro cannot work for noncopyable const rvalues. This is because such
+//    values cannot be copied nor moved, therefore their lifetime cannot be
+//    portably extended to the end of scope.
+//   2) This macro cannot work for noncopyable, nonmovable mutable rvalues.
+//   3) To be used with this macro, noncopyable lvalues have to satisfy one
+//     of the following critieron:
+//     a) their type must derive from ::boost::noncopyable, or
+//     b) their copy constructor must be marked "= delete", or
+//     c) they must be marked with BOOST_MOVABLE_BUT_NOT_COPYABLE, or
+//     d) a specialization of ::boost::copy_constructible must be made for their
+//       type. (See .../libs/type_traits/doc/html/boost_typetraits/user_defined.html)
+//
 // Usage:
 //   auto_any_t captured_obj = WG_AUTOSIMULATOR_DETAIL_CAPTURE(...) ;
+//
 // expr:
 //   The expr whose result will be captured without using Boost.Typeof.
-// is_rvalue_flag:
-//   A mutable boolean flag.
-#define WG_AUTOSIMULATOR_AUTOANY_CAPTURE(expr, is_rvalue_flag) \
-  WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, is_rvalue_flag)
+#define WG_AUTOSIMULATOR_AUTOANY_CAPTURE(expr, mutable_boolean_flag) \
+  WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, mutable_boolean_flag)
 
 #define WG_AUTOSIMULATOR_AUTOANY_VALUE(captured_obj, expr) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_VALUE(captured_obj, expr)
@@ -54,12 +63,17 @@ typedef detail::auto_any_group const & auto_any_group_t;
 //
 // Usage:
 //   auto_any_group_t objs = WG_AUTOSIMULATOR_AUTOANYGROUP_ALLOC(...);
+//
 // exprseq:
 //   A Boost.Preprocessor sequence of C++ expressions.
 //
 // WG_AUTOSIMULATOR_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY:
 //   This object-like macro defines the max number of expressions that may
-//   makeup exprseq. If not defined by the user it defaults to 15.
+//   makeup exprseq. If not defined by the user it defaults to 5. The maximum
+//   is determined by the number of elements that boost::tuple handle, which
+//   currently stands at 10.
+//   To use this macro, define before the first inclusion of this header in the
+//   required translation unit.
 #define WG_AUTOSIMULATOR_AUTOANYGROUP_ALLOC(exprseq) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_MAKEGROUP(exprseq)
 
@@ -93,9 +107,9 @@ typedef detail::auto_any_group const & auto_any_group_t;
 //     is_rvalue,
 //     (expr1) (expr2) ...);
 #define WG_AUTOSIMULATOR_AUTOANYGROUP_INIT( \
-  allocated_obj, is_rvalue_flag, exprseq) \
+  allocated_obj, mutable_boolean_flag, exprseq) \
     WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP( \
-      allocated_obj, is_rvalue_flag, exprseq)
+      allocated_obj, mutable_boolean_flag, exprseq)
 
 #define WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, itemno, exprseq) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_ITEM_VALUE(grp, itemno, exprseq)
