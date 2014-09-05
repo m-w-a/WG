@@ -11,7 +11,7 @@
 // Nil sequences are defined to be BOOST_PP_NIL.
 
 // If it can be determined that seq is not a WG-seq then will expand to
-// WG_PP_ERROR_INVALID_ARGUMENT, else it's UB.
+// WG_PP_ERROR_INVALID_ARGUMENT, else it will expand to 0, or 1, or UB.
 #define WG_PP_SEQ_ISNIL(seq) \
   WG_PP_SEQ_ISNIL_IMPL1(seq)
 
@@ -126,29 +126,29 @@
     WG_PP_MAPTO_NOTHING_ARG3, \
     WG_PP_SEQ_FOR_EACH) (macro, data, seq)
 
-#define WG_PP_SEQ_FOR_EACH_IMPL_0(macro, data, seq) BOOST_PP_NIL
-#define WG_PP_SEQ_FOR_EACH_IMPL_1(macro, data, seq) \
+#define WG_PP_SEQ_FOR_EACH_IMPL_1(macro, data, seq) BOOST_PP_NIL
+#define WG_PP_SEQ_FOR_EACH_IMPL_0(macro, data, seq) \
   BOOST_PP_SEQ_FOR_EACH(macro, data, seq)
 #define WG_PP_SEQ_FOR_EACH_IMPL(macro, data, seq) \
   BOOST_PP_CAT( \
     WG_PP_SEQ_FOR_EACH_IMPL_, \
-    WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) (macro, data, seq)
+    WG_PP_SEQ_ISNIL(seq)) (macro, data, seq)
 
-#define WG_PP_SEQ_NOTHING_FOR_EACH_I_IMPL_0(macro, data, seq)
-#define WG_PP_SEQ_NOTHING_FOR_EACH_I_IMPL_1(macro, data, seq) \
+#define WG_PP_SEQ_NOTHING_FOR_EACH_I_IMPL_1(macro, data, seq)
+#define WG_PP_SEQ_NOTHING_FOR_EACH_I_IMPL_0(macro, data, seq) \
   BOOST_PP_SEQ_FOR_EACH_I(macro, data, seq)
 #define WG_PP_SEQ_NOTHING_FOR_EACH_I_IMPL(macro, data, seq) \
   BOOST_PP_CAT( \
     WG_PP_SEQ_NOTHING_FOR_EACH_I_IMPL_, \
-    WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) (macro, data, seq)
+    WG_PP_SEQ_ISNIL(seq)) (macro, data, seq)
 
-#define WG_PP_SEQ_FOR_EACH_I_IMPL_0(macro, data, seq) BOOST_PP_NIL
-#define WG_PP_SEQ_FOR_EACH_I_IMPL_1(macro, data, seq) \
+#define WG_PP_SEQ_FOR_EACH_I_IMPL_1(macro, data, seq) BOOST_PP_NIL
+#define WG_PP_SEQ_FOR_EACH_I_IMPL_0(macro, data, seq) \
   BOOST_PP_SEQ_FOR_EACH_I(macro, data, seq)
 #define WG_PP_SEQ_FOR_EACH_I_IMPL(macro, data, seq) \
   BOOST_PP_CAT( \
     WG_PP_SEQ_FOR_EACH_I_IMPL_, \
-    WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) (macro, data, seq)
+    WG_PP_SEQ_ISNIL(seq)) (macro, data, seq)
 
 #define WG_PP_SEQ_APPLY_TRANSFORM_IMPL(transform, seq) \
   WG_PP_SEQ_FOR_EACH( \
@@ -158,38 +158,38 @@
 #define WG_PP_SEQ_APPLY_TRANSFORM_IMPL_ENTRY(r, transform, elem) \
   ( transform(elem) )
 
-#define WG_PP_SEQ_SIZE_IMPL_0(seq) 0
-#define WG_PP_SEQ_SIZE_IMPL_1(seq) BOOST_PP_SEQ_SIZE(seq)
+#define WG_PP_SEQ_SIZE_IMPL_1(seq) 0
+#define WG_PP_SEQ_SIZE_IMPL_0(seq) BOOST_PP_SEQ_SIZE(seq)
 #define WG_PP_SEQ_SIZE_IMPL(seq) \
   BOOST_PP_CAT( \
     WG_PP_SEQ_SIZE_IMPL_, \
-    WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) (seq)
+    WG_PP_SEQ_ISNIL(seq)) (seq)
 
-#define WG_PP_SEQ_ENUM_IMPL_0(seq)
-#define WG_PP_SEQ_ENUM_IMPL_1(seq) BOOST_PP_SEQ_ENUM(seq)
+#define WG_PP_SEQ_ENUM_IMPL_1(seq)
+#define WG_PP_SEQ_ENUM_IMPL_0(seq) BOOST_PP_SEQ_ENUM(seq)
 #define WG_PP_SEQ_ENUM_IMPL(seq) \
   BOOST_PP_CAT( \
     WG_PP_SEQ_ENUM_IMPL_, \
-    WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) (seq)
+    WG_PP_SEQ_ISNIL(seq)) (seq)
 
-#define WG_PP_SEQ_ENUM_TRAILING_IMPL_0(seq)
-#define WG_PP_SEQ_ENUM_TRAILING_IMPL_1(seq) , BOOST_PP_SEQ_ENUM(seq)
+#define WG_PP_SEQ_ENUM_TRAILING_IMPL_1(seq)
+#define WG_PP_SEQ_ENUM_TRAILING_IMPL_0(seq) , BOOST_PP_SEQ_ENUM(seq)
 #define WG_PP_SEQ_ENUM_TRAILING_IMPL(seq) \
   BOOST_PP_CAT( \
     WG_PP_SEQ_ENUM_TRAILING_IMPL_, \
-    WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) (seq)
+    WG_PP_SEQ_ISNIL(seq)) (seq)
 
-#define WG_PP_SEQ_REPLACE_IMPL_00(seq, indx, elem) BOOST_PP_NIL
-#define WG_PP_SEQ_REPLACE_IMPL_01(seq, indx, elem) BOOST_PP_NIL
-#define WG_PP_SEQ_REPLACE_IMPL_10(seq, indx, elem) seq
-#define WG_PP_SEQ_REPLACE_IMPL_11(seq, indx, elem) \
+#define WG_PP_SEQ_REPLACE_IMPL_11(seq, indx, elem) BOOST_PP_NIL
+#define WG_PP_SEQ_REPLACE_IMPL_10(seq, indx, elem) BOOST_PP_NIL
+#define WG_PP_SEQ_REPLACE_IMPL_01(seq, indx, elem) seq
+#define WG_PP_SEQ_REPLACE_IMPL_00(seq, indx, elem) \
   BOOST_PP_SEQ_REPLACE(seq, indx, elem)
 #define WG_PP_SEQ_REPLACE_IMPL(seq, indx, elem) \
   BOOST_PP_CAT( \
     BOOST_PP_CAT( \
       WG_PP_SEQ_REPLACE_IMPL_, \
-      WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)), \
-    BOOST_PP_COMPL(WG_PP_STARTSWITH_BOOST_PP_NIL(indx))) \
+      WG_PP_SEQ_ISNIL(seq)), \
+    WG_PP_STARTSWITH_BOOST_PP_NIL(indx) ) \
   (seq, indx, elem)
 
 #define WG_PP_SEQ_FLATTEN_IMPL(seq) \
@@ -208,34 +208,34 @@
     WG_PP_SEQ_FLATTEN) \
   (seq)
 
-#define WG_PP_SEQ_REVERSE_IMPL_0(seq) BOOST_PP_NIL
-#define WG_PP_SEQ_REVERSE_IMPL_1(seq) BOOST_PP_SEQ_REVERSE(seq)
+#define WG_PP_SEQ_REVERSE_IMPL_1(seq) BOOST_PP_NIL
+#define WG_PP_SEQ_REVERSE_IMPL_0(seq) BOOST_PP_SEQ_REVERSE(seq)
 #define WG_PP_SEQ_REVERSE_IMPL(seq) \
   BOOST_PP_CAT( \
     WG_PP_SEQ_REVERSE_IMPL_, \
-    WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq) ) (seq)
+    WG_PP_SEQ_ISNIL(seq) ) (seq)
 
-#define WG_PP_SEQ_ELEM_IMPL_00(indx, seq) BOOST_PP_NIL
-#define WG_PP_SEQ_ELEM_IMPL_01(indx, seq) BOOST_PP_NIL
+#define WG_PP_SEQ_ELEM_IMPL_11(indx, seq) BOOST_PP_NIL
 #define WG_PP_SEQ_ELEM_IMPL_10(indx, seq) BOOST_PP_NIL
-#define WG_PP_SEQ_ELEM_IMPL_11(indx, seq) BOOST_PP_SEQ_ELEM(indx, seq)
+#define WG_PP_SEQ_ELEM_IMPL_01(indx, seq) BOOST_PP_NIL
+#define WG_PP_SEQ_ELEM_IMPL_00(indx, seq) BOOST_PP_SEQ_ELEM(indx, seq)
 #define WG_PP_SEQ_ELEM_IMPL(indx, seq) \
   BOOST_PP_CAT( \
     BOOST_PP_CAT( \
       WG_PP_SEQ_ELEM_IMPL_, \
-      BOOST_PP_COMPL(WG_PP_STARTSWITH_BOOST_PP_NIL(indx))), \
-    WG_PP_ISNEXTTOKEN_A_TUPLE(1, seq)) \
+      WG_PP_STARTSWITH_BOOST_PP_NIL(indx)), \
+    WG_PP_SEQ_ISNIL(seq) ) \
   (indx, seq)
 
-#define WG_PP_SEQ_JOIN_IMPL_00(x, y) BOOST_PP_NIL
-#define WG_PP_SEQ_JOIN_IMPL_01(x, y) y
-#define WG_PP_SEQ_JOIN_IMPL_10(x, y) x
-#define WG_PP_SEQ_JOIN_IMPL_11(x, y) x y
+#define WG_PP_SEQ_JOIN_IMPL_11(x, y) BOOST_PP_NIL
+#define WG_PP_SEQ_JOIN_IMPL_10(x, y) y
+#define WG_PP_SEQ_JOIN_IMPL_01(x, y) x
+#define WG_PP_SEQ_JOIN_IMPL_00(x, y) x y
 #define WG_PP_SEQ_JOIN_IMPL(x, y) \
   BOOST_PP_CAT( \
     WG_PP_SEQ_JOIN_IMPL_, \
     BOOST_PP_CAT( \
-      WG_PP_ISNEXTTOKEN_A_TUPLE(1, x), \
-      WG_PP_ISNEXTTOKEN_A_TUPLE(1, y))) (x, y)
+      WG_PP_SEQ_ISNIL(x), \
+      WG_PP_SEQ_ISNIL(y)) ) (x, y)
 
 #endif /* WG_PP_SEQ_HH_ */
