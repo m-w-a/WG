@@ -177,7 +177,16 @@ struct auto_any_impl
   : item(::boost::move(obj))
   {}
 
-//TODO:
+// [1]:
+// In C++03 if this were defined then the compiler must instantiate this and
+// the move ctor before attempting function overload resolution. Because "item"
+// maybe move-only this will result in an unwanted compiler error. To get around
+// this only explicitly define the copy ctor in C++11.
+// Note: In C++03, if "item" is move-only then it would have been marked
+//   BOOST_MOVABLE_BUT_NOT_COPYABLE, which would have declared it's copy ctor
+//   "T(T &);" Because of C++03 12.8/5, the synthesized copy ctor for
+//   auto_any_impl would then be of the form "auto_any_impl(auto_any_impl &)",
+//   and the latter doesn't match rvalues and hence won't be instantiated.
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
   auto_any_impl(auto_any_impl const & rhs)
   : item(rhs.item)
@@ -234,7 +243,7 @@ struct auto_any_impl
 #endif
   {}
 
-//TODO:
+// See [1].
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
   auto_any_impl(auto_any_impl const & rhs)
   : item(rhs.item)
@@ -284,7 +293,7 @@ private:
         : simple_variant<CapturedType>(expr_category_lvalue(), obj) )
     {}
 
-  //TODO:
+  // See [1].
   #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     auto_any_impl(auto_any_impl const & rhs)
     : item(rhs.item)

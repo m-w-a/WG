@@ -27,7 +27,7 @@ BOOST_NO_CXX11_* -> WG_*
 
 AutoSimulator:
   x) doc limitiations of movable and not copyable const values.
-  TODOs
+  x) TODOs
   x) Move CTors
   x) expr w/side-effects test
   x) dfta_traits->capture_obj
