@@ -14,28 +14,28 @@ typedef scope_mngr_group const & scope_mngr_group_t;
 struct scope_mngr_group
 {
   scope_mngr_group()
-  : m_is_exception_active(false)
+  : m_did_throw(false)
   {}
 
   void mark_exception()
   {
-    m_is_exception_active = true;
+    m_did_throw = true;
   }
 
-  bool is_exception_active() const
+  bool did_throw() const
   {
-    return m_is_exception_active;
+    return m_did_throw;
   }
 
 protected:
   template <typename T>
   void finalize(T & member)
   {
-    member.on_exit(m_is_exception_active);
+    member.on_exit(m_did_throw);
   }
 
 private:
-  bool m_is_exception_active;
+  bool m_did_throw;
 };
 
 }

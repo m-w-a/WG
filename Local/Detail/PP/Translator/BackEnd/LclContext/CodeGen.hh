@@ -219,9 +219,9 @@
         WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_ONENTERSEQ(symbol) ) ; \
     } \
     \
-    void on_exit(bool const is_exception_active) \
+    void on_exit(bool const did_throw) \
     { \
-      (void)is_exception_active; \
+      (void)did_throw; \
       WG_PP_SEQ_NOTHING_FLATTEN( \
         WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_ONEXITSEQ(symbol) ) ; \
     } \
@@ -285,9 +285,9 @@
 #define WG_PP_LCLCONTEXT_CG_ADHOCSCOPEMNGR_ONEXITPROXY_CPP03(classname, symbol) \
   static void on_exit_proxy( \
     ::wg::lclcontext::detail::cpp03::adhoc_scope_manager_proxy * const base, \
-    bool const is_exception_active) \
+    bool const did_throw) \
   { \
-    static_cast<classname *>(base)->on_exit(is_exception_active); \
+    static_cast<classname *>(base)->on_exit(did_throw); \
   }
 
 //-----------------------------
