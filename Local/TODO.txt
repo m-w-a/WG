@@ -6,10 +6,6 @@ Misc.
 -----
 LocalOperandsSyntaxCheck tests.
 
-Seq.hh:
-  WG_PP_ISNEXTTOKEN_A_TUPLE -> WG_PP_SEQ_ISNIL
-  Simplify WG_PP_SEQ_NOTHING_FOR_EACH_I_IMPL
-
 ExpandN:
   test
   AUTOFUNCTOR -> ...
@@ -22,7 +18,6 @@ LclFunction:
   Implementation outline.
   Boost.LocalFunction array bugs.
 
-Get rid of WG_PP_STARTSWITH_BOOST_PP_NIL via WG_PP_SEQs?
 BOOST_NO_CXX11_* -> WG_*
 
 AutoSimulator:  

@@ -52,6 +52,11 @@
     WG_PP_TYPEALIASER_DCLN_IMPL( \
       typealiasername, replacementpolicy, symbtbl, specseq)
 
+#define WG_PP_TYPEALIASER_QUALIFIEDTYPENAME( \
+  istpl, typealiasername, aliasrootname, indx) \
+    WG_PP_TYPEALIASER_QUALIFIEDTYPENAME_IMPL( \
+      istpl, typealiasername, aliasrootname, indx)
+
 // WG_PP_STUTIL_REPLACESEQ callback.
 // seq:
 //   A WG_PP_SEQ.
@@ -88,6 +93,11 @@
 //   The order in which types were aliased in the symbol table.
 #define WG_PP_TYPEALIASER_ALIASNAME(aliasrootname, indx) \
   BOOST_PP_CAT(aliasrootname, indx)
+
+#define WG_PP_TYPEALIASER_QUALIFIEDTYPENAME_IMPL( \
+  istpl, typealiasername, aliasrootname, indx) \
+    WG_PP_TRNSLTR_UTILS_ADDTYPENAME(istpl) \
+      typealiasername :: WG_PP_TYPEALIASER_ALIASNAME(aliasrootname, indx)
 
 //----------------------
 //WG_PP_TYPEALIASER_DCLN
