@@ -10,75 +10,108 @@ WG_LCLCONTEXT(
     assign_potatoe_peeling_duty(employee);
   }
 }
-WG_LCLCONTEXT_END2
+WG_LCLCONTEXT_END
 */
 
 {
-  bool autosimflag = false;
+#define EXTANTSCOPEMNGR_EXPR0 employee.timecard()
 
-#define EXPR employee.timecard()
-  ::wg::lclcontext::detail::scopemngr_proxy_t wgXXXlclcontextXXXscopemngr =
-    WG_AUTOSIMULATOR_AUTOANY_CUSTOM_CAPTURE(
-      ::wg::lclcontext::detail::scopemngr_proxy,
-      EXPR,
-      autosimflag);
+  struct wg_lclcontext_enteredas_typealiases
+  {
+    typedef
+      add_const<BOOST_TYPEOF( (EXTANTSCOPEMNGR_EXPR0).enter() )>::type
+        type0;
+  };
+
+  #ifdef CPP03
+  typedef
+    ::wg::lclcontext::detail::cpp03::adhoc_scope_manager_proxy
+      wgXXXlclcontextXXXadhoc_scopemngr0_base_t;
+  #else
+  typedef
+    ::wg::lclcontext::detail::cpp11::adhoc_scope_manager_proxy
+    <wgXXXlclcontextXXXadhoc_scopemngr0_t>
+      wgXXXlclcontextXXXadhoc_scopemngr0_base_t;
+  #endif
+
+  WG_LCLCLASS(
+    wgXXXlclcontextXXXadhoc_scopemngr0_t,
+    derives (public wgXXXlclcontextXXXadhoc_scopemngr0_base_t)
+    memext (employee)
+    #ifdef CPP03
+    baseinit
+    (
+      ::wg::lclcontext::detail::cpp11::adhoc_scope_manager_proxy(
+        & wgXXXlclcontextXXXadhoc_scopemngr0_t ::on_exit_proxy)
+    )
+    #endif
+  )
+    #ifdef CPP03
+    static void on_exit_proxy(
+      ::wg::lclcontext::detail::cpp03::adhoc_scope_manager_proxy * const base,
+      bool const did_throw)
+    {
+      static_cast<classname *>(base)->on_exit(did_throw);
+    }
+    #endif
+
+    void enter()
+    {
+      employee.zone_out();
+    }
+
+    void exit(bool const did_throw)
+    {
+      (void)did_throw;
+      employee.zone_in();
+    }
+
+    ~wgXXXlclcontextXXXadhoc_scopemngr0_t()
+    {
+    }
+  WG_LCLCLASS_END;
+
+  wgXXXlclcontextXXXadhoc_scopemngr0_t
+    wgXXXlclcontextXXXadhoc_scopemngr0(employee);
+
+#define EXPRSEQ \
+  ( EXTANTSCOPEMNGR_EXPR0 ) \
+  ( \
+    static_cast<wgXXXlclcontextXXXadhoc_scopemngr0_base_t &> \
+    (wgXXXlclcontextXXXadhoc_scopemngr0) \
+  )
+
+  ::wg::lclcontext::detail::scope_mngr_group_t
+    wgXXXlclcontextXXXscope_mngr_grp =
+      WG_AUTOSIMULATOR_AUTOANYGROUP_ALLOC_CUSTOM( \
+        ::wg::lclcontext::detail::scope_mngr_group,
+        EXPRSEQ);
+
+  bool wgXXXlclcontextXXXautosimflag = false;
+  WG_AUTOSIMULATOR_AUTOANYGROUP_INIT(
+    wgXXXlclcontextXXXscope_mngr_grp,
+    wgXXXlclcontextXXXautosimflag,
+    EXPRSEQ);
 
 #ifndef NOEX
   try
 #endif
   {
     wg_lclcontext_enteredas_typealiases::type0 starttime =
-      WG_AUTOSIMULATOR_AUTOANY_VALUE(
-        wgXXXlclcontextXXXscpmngrproxy,
-        EXPR).enter();
+      WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(
+        wgXXXlclcontextXXXscope_mngr_grp, 0, EXPRSEQ) . enter() ;
 
-    WG_LCLCLASS(
-      wgXXXlclcontextXXXadhoc_scopemngr1_t,
-      memext (employee) memint (type(bool) did_call_exit, false)
-    )
-      void enter()
-      {
-        employee.zone_out();
-      }
+    (void) wgXXXlclcontextXXXadhoc_scopemngr0 . enter();
 
-      void exit(bool const did_throw)
-      {
-        did_call_exit = true;
-        (void)did_throw;
-        employee.zone_in();
-      }
-
-      ~wgXXXlclcontextXXXadhoc_scopemngr1_t()
-      {
-        if( ! did_call_exit )
-        {
-          this->exit(false);
-        }
-      }
-    WG_LCLCLASS_END;
-
-    wgXXXlclcontextXXXadhoc_scopemngr1_t
-      wgXXXlclcontextXXXscopemngr(employee);
-
-    #ifndef NOEX
-    try
-    #endif
     {
       // User code goes here.
     }
-    #ifndef NOEX
-    catch(...)
-    {
-      wgXXXlclcontextXXXscopemngr.exit(true);
-      throw;
-    }
-    #endif
   }
-  #ifndef NOEX
+#ifndef NOEX
   catch(...)
   {
-    wgXXXlclcontextXXXscopemngr.exit(true);
+    wgXXXlclcontextXXXscope_mngr_grp.mark_exception();
     throw;
   }
-  #endif
+#endif
 }
