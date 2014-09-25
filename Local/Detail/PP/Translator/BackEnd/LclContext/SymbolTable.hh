@@ -11,19 +11,23 @@
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_MODULEID(symbtbl) \
   WG_PP_LCLCONTEXT_ST_GET(symbtbl, MODULEID)
 
+// Returns: { 0 | 1 }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_ISTPL(symbtbl) \
   WG_PP_LCLCONTEXT_ST_GET(symbtbl, ISPTL)
 
+// Returns: { unsigned integer }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOLCOUNT_EXTANT(symbtbl) \
   WG_PP_LCLCONTEXT_ST_GET(symbtbl, SYMBOLCOUNT_EXTANT)
 
+// Returns: { unsigned integer }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOLCOUNT_ADHOC(symbtbl) \
   WG_PP_LCLCONTEXT_ST_GET(symbtbl, SYMBOLCOUNT_ADHOC)
 
-// Returns: { symblseq }
+// Returns: { symbol-seq }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOLS(symbtbl) \
   WG_PP_LCLCONTEXT_ST_GET(symbtbl, SYMBOLS)
 
+// Returns: { unsigned integer }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOLS_TOTALCOUNT(symbtbl) \
   WG_PP_LCLCONTEXT_ST_GET(symbtbl, SYMBOLS_TOTALCOUNT)
 
@@ -31,14 +35,19 @@
 //Symbol
 //------
 
+// Returns:
+//   { WG_PP_LCLCONTEXT_SYMBOL_CATEGORY_EXTANT |
+//     WG_PP_LCLCONTEXT_SYMBOL_CATEGORY_ADHOC }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOL_CATEGORY(symbol) \
   BOOST_PP_SEQ_ELEM(0, symbol)
 
+// Returns: { 0 | 1 }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOL_CATEGORY_ISEXTANT(symbol) \
   BOOST_PP_EQUAL( \
     0, \
     BOOST_PP_SEQ_ELEM(1,symbol) )
 
+// Returns: { 0 | 1 }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOL_CATEGORY_ISADHOC(symbol) \
   BOOST_PP_EQUAL( \
     1, \
@@ -52,19 +61,26 @@
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_ID(symbol) \
   BOOST_PP_SEQ_ELEM(2, symbol)
 
-// Returns: { scopemngrtuple }
+// Returns: { scope-manager-expr }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_SCOPEMNGREXPR(symbol) \
   BOOST_PP_SEQ_ELEM(3, symbol)
 
+// Returns: { 0 | 1 }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_ISENTRYCAPTURED(symbol) \
   WG_PP_SEQ_ISNIL( BOOST_PP_SEQ_ELEM(4, symbol) )
 
-#define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRYTYPE(symbol) \
+// Returns: { normalized-bound-nlt-tuple sequence }
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY(symbol) \
+  BOOST_PP_SEQ_ELEM(4, symbol)
+
+// Returns: { parsed-explicit-non-local-type-or-deduced-type }
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY_TYPE(symbol) \
   BOOST_PP_SEQ_ELEM( \
     0, \
     BOOST_PP_SEQ_ELEM(4, symbol) )
 
-#define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRYOBJ(symbol) \
+// Returns: { var-name }
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY_OBJ(symbol) \
   BOOST_PP_SEQ_ELEM( \
     1, \
     BOOST_PP_SEQ_ELEM(4, symbol) )
@@ -77,12 +93,15 @@
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_ID(symbol) \
   BOOST_PP_SEQ_ELEM(2, symbol)
 
+// Returns: { bound-tuple-seq }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_VARBINDSEQ(symbol) \
   BOOST_PP_SEQ_ELEM(3, symbol)
 
+// Returns: { compound-statement }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_ONENTERSEQ(symbol) \
   BOOST_PP_SEQ_ELEM(4, symbol)
 
+// Returns: { compound-statement }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_ONEXITSEQ(symbol) \
   BOOST_PP_SEQ_ELEM(5, symbol)
 
@@ -102,6 +121,9 @@
 // adhocsymblcount:
 //   { (unsigned-integer) }
 // symblseq:
+//   symbol-seq
+//
+// symbol-seq :=
 //   { BOOST_PP_NIL | { ( symbol ) }+ }
 //
 // symbol :=
@@ -112,7 +134,7 @@
 //   ( WG_PP_LCLCONTEXT_SYMBOL_CATEGORY_EXTANT )
 //   ( categoryid )
 //   ( symbolid )
-//   ( scopemngrtuple )
+//   ( scopemngr )
 //   ( nrmlzdenteredasseq )
 //
 // adhocsymbol :=
@@ -124,7 +146,7 @@
 //   ( onexitseq )
 //
 // symbolid := int
-// scopemngrtuple := { ( scope-manager-expr ) }
+// scopemngr := { ( scope-manager-expr ) }
 // nrmlzdenteredasseq := { BOOST_PP_NIL |  ( normalized-bound-nlt-tuple ) }
 // varbindseq = bound-tuple-seq
 // onenterseq := { BOOST_PP_NIL | ( compound-statement ) }
