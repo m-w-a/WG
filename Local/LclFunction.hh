@@ -17,6 +17,7 @@
 #include <WG/Local/Detail/PP/Translator/FrontEnd/ErrorReporter.hh>
 #include <WG/Local/Detail/PP/Translator/FrontEnd/LclFunction/SpecNormalize.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclFunction/SymbolTable.hh>
+#include <WG/Local/Detail/PP/Utils.hh>
 
 //###########
 //Public APIs
@@ -63,39 +64,43 @@
   istpl, \
   m1, return_type, \
   m2, params_seq, \
-  m3, varbind_seq, \
-  m4, varset_seq, \
+  m3, parsed_varbind_seq, \
+  m4, parsed_varset_seq, \
   errors, error_seq) \
     WG_PP_LCLFUNCTION_REPORTERROR_OR_CONTINUE( \
-      name, istpl, return_type, params_seq, varbind_seq, varset_seq, \
-      WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ(varbind_seq) \
-      WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ(varset_seq) \
-      WG_PP_ERRORREPORTER_REPORT_ERRORSEQ(error_seq) BOOST_PP_NIL )
+      name, istpl, return_type, params_seq, parsed_varbind_seq, parsed_varset_seq, \
+      WG_PP_ERRORREPORTER_REPORT_PARSEDSEQ(parsed_varbind_seq) \
+      WG_PP_ERRORREPORTER_REPORT_PARSEDSEQ(parsed_varset_seq) \
+      WG_PP_ERRORREPORTER_REPORT_ERRORTOKENS(error_seq) BOOST_PP_NIL )
 
 #define WG_PP_LCLFUNCTION_REPORTERROR_OR_CONTINUE( \
-  name, istpl, return_type, params_seq, varbind_seq, varset_seq, \
+  name, istpl, return_type, params_seq, parsed_varbind_seq, parsed_varset_seq, \
   psbl_error_tokens) \
     BOOST_PP_IIF( \
       WG_PP_STARTSWITH_BOOST_PP_NIL(psbl_error_tokens), \
       WG_PP_LCLFUNCTION_STARTCODEGEN, \
       WG_PP_LCLFUNCTION_REPORTERRORS) \
     ( \
-      name, istpl, return_type, params_seq, varbind_seq, varset_seq, \
+      name, istpl, return_type, params_seq, parsed_varbind_seq, parsed_varset_seq, \
       psbl_error_tokens \
     )
 
 #define WG_PP_LCLFUNCTION_REPORTERRORS( \
-  name, istpl, return_type, params_seq, varbind_seq, varset_seq, \
+  name, istpl, return_type, params_seq, parsed_varbind_seq, parsed_varset_seq, \
   psbl_error_tokens) \
     WG_PP_EATTAILTOKEN_BOOST_PP_NIL(psbl_error_tokens)
 
 #define WG_PP_LCLFUNCTION_STARTCODEGEN( \
-  name, istpl, return_type, params_seq, varbind_seq, varset_seq, \
+  name, istpl, return_type, params_seq, parsed_varbind_seq, parsed_varset_seq, \
   psbl_error_tokens) \
     WG_PP_LCLFUNCTION_CODEGEN_START( \
       name, \
       WG_PP_LCLFUNCTION_SYMBOLTABLE_CREATE( \
-        istpl, return_type, params_seq, varbind_seq, varset_seq) )
+        istpl, \
+        return_type, \
+        params_seq, \
+        WG_PP_UTILS_SEQ_REMOVEHEADMARKERS(parsed_varbind_seq), \
+        WG_PP_UTILS_SEQ_REMOVEHEADMARKERS(parsed_varset_seq) ))
 
 #define WG_PP_LCLFUNCTION_END_IMPL() \
   WG_PP_LCLFUNCTION_CODEGEN_END()

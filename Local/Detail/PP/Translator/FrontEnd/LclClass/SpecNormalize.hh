@@ -15,12 +15,15 @@
 
 // Expands to the following:
 //   (derives) { (BOOST_PP_NIL) | ( derives-tuple-seq ) }
-//   (memext) { (BOOST_PP_NIL) | ( {normalized-bound-tuple}+ ) }
-//   (memint) { (BOOST_PP_NIL) | ( {normalized-set-tuple}+ ) }
+//   (memext) { (BOOST_PP_NIL) | ( {marked-parsed-bound-var-dcln}+ ) }
+//   (memint) { (BOOST_PP_NIL) | ( {marked-parsed-set-var-dcln}+ ) }
 //   (baseinit) { (BOOST_PP_NIL) | ( baseinit-tuple-seq ) }
 //   (errors) { (BOOST_PP_NIL) | (WG_PP_MARKER_ERROR ...) }
 //
-// (For definition of terms see SymbolTable documentation.)
+// For definition of terms not defined here see:
+//   1) SymbolTable documentation
+//   2) BoundVarDclnNormalize.hh
+//   3) SetVarDclnNormalize.hh
 #define WG_PP_LCLCLASS_SPEC_NORMALIZE(spec, istpl) \
   WG_PP_LCLCLASS_SPEC_NORMALIZE_IMPL( \
     spec BOOST_PP_NIL, \

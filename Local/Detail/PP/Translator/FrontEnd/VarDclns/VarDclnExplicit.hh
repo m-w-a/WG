@@ -13,7 +13,8 @@
 // explicitvardcln:
 //   explicit-type-var-dcln
 // Expands to the following:
-//   (WG_PP_MARKER_NOOP parsed-explicit-type) (var-name)
+//   { ( WG_PP_MARKER_ERROR ... | WG_PP_MARKER_NOOP parsed-explicit-type )
+//     ( WG_PP_MARKER_ERROR ... | var-name ) }
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE(explicitvardcln, istpl) \
@@ -22,7 +23,9 @@
 // explicitvardcln:
 //   explicit-type-var-dcln
 // Expands to the following:
-//   (WG_PP_MARKER_NOOP parsed-explicit-non-local-type) (var-name)
+//   { ( WG_PP_MARKER_ERROR ... |
+//       WG_PP_MARKER_NOOP parsed-explicit-non-local-type )
+//     ( WG_PP_MARKER_ERROR ... | var-name ) }
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_VARDCLN_EXPLICIT_NLT_TUPLIZE(explicitvardcln, istpl) \
@@ -39,7 +42,8 @@
   BOOST_PP_IIF( \
     WG_PP_KEYWORDS_STARTSWITH_TYPE(explicitvardcln), \
     WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONLOCAL, \
-    WG_PP_VARDCLN_EXPLICIT_TUPLIZE_LOCAL_OR_SPITERROR) (explicitvardcln)
+    WG_PP_VARDCLN_EXPLICIT_TUPLIZE_LOCAL_OR_SPITERROR) \
+  (explicitvardcln)
 
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_LOCAL_OR_SPITERROR(explicitvardcln) \
   BOOST_PP_IIF( \
@@ -51,7 +55,8 @@
   ( \
     WG_PP_MARKER_ERROR \
     WG_LCL_Error_missing_type_in_explicit_type_var_dcln \
-  )
+  ) \
+  ( BOOST_PP_NIL )
 
 //-----------------------
 // Non-Local Type Macros.
@@ -66,19 +71,13 @@
     BOOST_PP_RPAREN() )
 
 #define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONLOCAL2(typetuple, var) \
-  BOOST_PP_IIF( \
-    WG_PP_STARTSWITH_BOOST_PP_NIL(var), \
-    WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONLOCAL_SPITERROR, \
-    WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONLOCAL3) (typetuple, var)
-
-#define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONLOCAL_SPITERROR(typetuple, var) \
+  (WG_PP_MARKER_NOOP typetuple) \
   ( \
-    WG_PP_MARKER_ERROR \
-    WG_LCL_Error_missing_variable_name \
+    BOOST_PP_IIF( \
+      WG_PP_STARTSWITH_BOOST_PP_NIL(var), \
+      WG_PP_MARKER_ERROR WG_LCL_Error_missing_variable_name BOOST_PP_EMPTY, \
+      WG_PP_EATTAILTOKEN_BOOST_PP_NIL(var) BOOST_PP_EMPTY) () \
   )
-
-#define WG_PP_VARDCLN_EXPLICIT_TUPLIZE_NONLOCAL3(typetuple, var) \
-  (WG_PP_MARKER_NOOP typetuple) ( WG_PP_EATTAILTOKEN_BOOST_PP_NIL(var) )
 
 //-------------------
 // Local Type Macros.

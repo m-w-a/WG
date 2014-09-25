@@ -12,13 +12,26 @@
 //###########
 
 // psble_error:
-//   BOOST_PP_NIL | WG_PP_MARKER_ERROR ...
+//   alphanumtoken ... | WG_PP_MARKER_ERROR ...
 // expands to:
-//   1) nothing if BOOST_PP_NIL, or
-//   2) the tokens following WG_PP_MARKER_ERROR
-#define WG_PP_ERRORREPORTER_REPORT_ERRORSEQ(psble_error) \
-  WG_PP_ERRORREPORTER_REPORT_ERRORSEQ_IMPL(psble_error)
+//   1) the tokens following WG_PP_MARKER_ERROR if psble_error starts with
+//     WG_PP_MARKER_ERROR, else
+//   2) nothing.
+#define WG_PP_ERRORREPORTER_REPORT_ERRORTOKENS(psble_error) \
+  WG_PP_ERRORREPORTER_REPORT_ERRORTOKENS_IMPL(psble_error)
 
+// parseddataseq:
+//   { (WG_PP_MARKER_ERROR ...) | (alphanumtoken ...) }+
+//
+// expands to:
+//   1) nothing if parseddataseq does not have any elements starting with
+//     WG_PP_MARKER_ERROR, else
+//   2) the tokens following any WG_PP_MARKER_ERROR found at the
+//     beginning of any element in the sequence.
+#define WG_PP_ERRORREPORTER_REPORT_PARSEDSEQ(parseddataseq) \
+  WG_PP_ERRORREPORTER_REPORT_PARSEDSEQ_IMPL(parseddataseq)
+
+//TODO: to remove.
 // psble_nrmlzd_bnd_tuple_seq:
 //   (BOOST_PP_NIL) | ( {normalized-bound-tuple}+ )
 // expands to:
@@ -33,6 +46,7 @@
 #define WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ(psble_nrmlzd_bnd_tuple_seq) \
   WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ_IMPL(psble_nrmlzd_bnd_tuple_seq)
 
+//TODO: to remove.
 // psble_nrmlzd_set_tuple_seq:
 //   (BOOST_PP_NIL) | ( {normalized-set-tuple}+ )
 // expands to:
@@ -51,10 +65,25 @@
 //Impl Macros
 //###########
 
-#define WG_PP_ERRORREPORTER_REPORT_ERRORSEQ_IMPL(psble_error) \
+#define WG_PP_ERRORREPORTER_REPORT_ERRORTOKENS_IMPL(psble_error) \
   BOOST_PP_EXPR_IIF( \
     WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_MARKER_ERROR(psble_error), \
     WG_PP_TRNSLTR_MARKERS_EATHEADMARKER(psble_error))
+
+//----------------
+//REPORT_PARSEDSEQ
+//----------------
+
+#define WG_PP_ERRORREPORTER_REPORT_PARSEDSEQ_IMPL(parseddataseq) \
+  WG_PP_SEQ_NOTHING_FOR_EACH( \
+    WG_PP_ERRORREPORTER_REPORT_PARSEDSEQ_ENTRY, \
+    ~, \
+    parseddataseq)
+
+#define WG_PP_ERRORREPORTER_REPORT_PARSEDSEQ_ENTRY(r, data, parseddata) \
+  BOOST_PP_EXPR_IIF( \
+    WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_MARKER_ERROR(parseddata), \
+    WG_PP_TRNSLTR_MARKERS_EATHEADMARKER(parseddata) )
 
 //-------------------------------------------------
 //WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ_IMPL
@@ -75,7 +104,7 @@
     WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLE_EVEN) (elem)
 
 #define WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLE_ODD(elem) \
-  WG_PP_ERRORREPORTER_REPORT_ERRORSEQ(elem)
+  WG_PP_ERRORREPORTER_REPORT_ERRORTOKENS(elem)
 
 #define WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLE_EVEN(elem) \
   BOOST_PP_IIF( \
@@ -85,7 +114,7 @@
 
 #define WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLE_EVEN_TUPLE(elem)
 #define WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLE_EVEN_NONTUPLE(elem) \
-  WG_PP_ERRORREPORTER_REPORT_ERRORSEQ(elem)
+  WG_PP_ERRORREPORTER_REPORT_ERRORTOKENS(elem)
 
 //-------------------------------------------------
 //WG_PP_ERRORREPORTER_REPORT_NRMLZDSETTUPLESEQ_IMPL
