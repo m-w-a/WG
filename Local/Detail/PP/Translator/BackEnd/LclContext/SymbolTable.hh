@@ -70,7 +70,7 @@
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_ISENTRYCAPTURED(symbol) \
   WG_PP_SEQ_ISNIL( BOOST_PP_SEQ_ELEM(4, symbol) )
 
-// Returns: { normalized-bound-nlt-tuple sequence }
+// Returns: { parsed-nlt-set-var-dcln }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY(symbol) \
   BOOST_PP_SEQ_ELEM(4, symbol)
 
@@ -149,17 +149,16 @@
 //
 // symbolid := int
 // scopemngr := { ( scope-manager-expr ) }
-// parsedasseq := { BOOST_PP_NIL |  ( parsed-nlt-bound-var-dcln ) }
-// varbindseq = { BOOST_PP_NIL | parsed-bound-var-seq }
+// parsedasseq := { BOOST_PP_NIL |  parsed-nlt-set-var-dcln }
+// varbindseq = { BOOST_PP_NIL | boost-pp-seq }
 // onenterseq := { BOOST_PP_NIL | ( compound-statement ) }
 // onexitseq := { BOOST_PP_NIL | ( compound-statement ) }
 //
-// parsed-bound-var-seq:
-//   { ( parsed-bound-var-dcln ) }+
-// parsed-nlt-bound-var-dcln:
+// parsed-nlt-set-var-dcln:
 //   {
 //     ( WG_PP_MARKER_<NOOP | DEDUCED> parsed-explicit-non-local-type-or-deduced-type )
 //     ( var-name )
+//     ( value-expr )
 //   }
 // parsed-explicit-non-local-type-or-deduced-type :=
 //    WG_PP_MARKER_NOOP parsed-explicit-non-local-type
@@ -207,12 +206,14 @@
   istpl, extantsymblcount, adhocsymblcount, symblseq) \
     ( \
       6, \
-      (WG_PP_LCLCONTEXT_SYMBOLTABLE, \
-      istpl, \
-      extantsymblcount, \
-      adhocsymblcount, \
-      symblseq, \
-      BOOST_PP_SEQ_SIZE(symblseq)), \
+      ( \
+        WG_PP_LCLCONTEXT_SYMBOLTABLE, \
+        istpl, \
+        extantsymblcount, \
+        adhocsymblcount, \
+        symblseq, \
+        BOOST_PP_SEQ_SIZE(symblseq) \
+      ) \
     )
 
 

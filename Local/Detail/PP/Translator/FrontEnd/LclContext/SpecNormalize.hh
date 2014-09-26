@@ -48,6 +48,7 @@
 #define WG_PP_LCLCONTEXT_SPECPARSER_EXPAND4(x) x
 #define WG_PP_LCLCONTEXT_SPECPARSER_EXPAND5(x) x
 #define WG_PP_LCLCONTEXT_SPECPARSER_EXPAND6(x) x
+#define WG_PP_LCLCONTEXT_SPECPARSER_EXPAND7(x) x
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_SPECOPTIONS_MAKE(istpl) \
   (istpl)
@@ -213,9 +214,10 @@
       state, \
       ( scopemngrtuple ) \
       BOOST_PP_IIF( \
-        WG_PP_LCLCONTEXT_KEYWORDS_STARTSWITH_ENTEREDAS(spec), \
+        WG_PP_LCLCONTEXT_KEYWORDS_STARTSWITH_ENTERAS(spec), \
         WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_ENTEREDASDCLN, \
-        (BOOST_PP_NIL) WG_PP_TUPLIZE_ARG1) (spec) \
+        (BOOST_PP_NIL) WG_PP_TUPLIZE_ARG1) \
+      (spec) \
     )
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_ENTEREDASDCLN(spec) \
@@ -232,77 +234,75 @@
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_ENTEREDASDCLN2( \
   as_tuple, restspec) \
-    (as_tuple)(restspec)
+    as_tuple (restspec)
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL( \
-  state, scopemngrtuple_optionalastuple_restspec) \
-    WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL2( \
-      state, \
-      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_MAKESYMBOL( \
-        WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_SPECOPTIONS(state), \
-        WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_EXTANTCOUNT(state), \
-        scopemngrtuple_optionalastuple_restspec ), \
-      BOOST_PP_SEQ_ELEM(1, scopemngrtuple_optionalastuple_restspec), \
-      BOOST_PP_SEQ_ELEM(2, scopemngrtuple_optionalastuple_restspec) )
-
-#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL2( \
-  state, extantsymbol, optionalasdcln, restspec) \
-    BOOST_PP_IIF( \
-      WG_PP_STARTSWITH_BOOST_PP_NIL(optionalasdcln), \
-      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL5, \
-      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL3) \
-    (state, extantsymbol, optionalasdcln, restspec)
-
-#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL3( \
-  state, extantsymbol, asdcln, restspec) \
-    BOOST_PP_IIF( \
-      WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_MARKER_ERROR(asdcln), \
-      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL4, \
-      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL5) \
-    (state, extantsymbol, asdcln, restspec)
-
-#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL4( \
-  state, ignore, errortokens, ignore) \
-    WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_ADD_PARSEERROR( \
-      state, errortokens)
-
-#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL5( \
-  state, extantsymbol, ignore, restspec) \
-    WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_ADD_EXTANTSYMBOL( \
-      state, extantsymbol, restspec)
-
-#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_MAKESYMBOL( \
-  specoptions, symbolid, scopemngrtuple_optionalastuple_restspec) \
-    WG_PP_LCLCONTEXT_SPECPARSER_EXPAND6( \
-      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_MAKESYMBOL2 \
+  state, scopemngrtuple_optionalasdcln_restspec) \
+    WG_PP_LCLCONTEXT_SPECPARSER_EXPAND7( \
+      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL2 \
       BOOST_PP_LPAREN() \
-        specoptions BOOST_PP_COMMA() \
-        symbolid BOOST_PP_COMMA() \
-        BOOST_PP_SEQ_ENUM(scopemngrtuple_optionalastuple_restspec) \
+        state BOOST_PP_COMMA() \
+        BOOST_PP_SEQ_ENUM(scopemngrtuple_optionalasdcln_restspec) \
       BOOST_PP_RPAREN() )
 
-#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_MAKESYMBOL2( \
-  specoptions, symbolid, scopemngrtuple, optionalastuple, restspec) \
+#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL2( \
+  state, scopemngrtuple, optionalasdcln, restspec) \
+    BOOST_PP_IIF( \
+      WG_PP_STARTSWITH_BOOST_PP_NIL(optionalasdcln), \
+      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL_FINAL, \
+      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL3) \
+    (state, scopemngrtuple, optionalasdcln, restspec)
+
+#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL3( \
+  state, scopemngrtuple, asdcln, restspec) \
+    WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL4( \
+      state, \
+      scopemngrtuple, \
+      BOOST_PP_IIF( \
+        WG_PP_LCLCONTEXT_SPECPARSER_SPECOPTIONS_ISTPL( \
+          WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_SPECOPTIONS(state) ), \
+        WG_PP_SETVARDCLN_NLT_NORMALIZE_TPL, \
+        WG_PP_SETVARDCLN_NLT_NORMALIZE) \
+      (asdcln, scopemngrtuple . enter() ), \
+      restspec )
+
+#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL4( \
+  state, scopemngrtuple, markedparsedastuple, restspec) \
+    BOOST_PP_IIF( \
+      WG_PP_TRNSLTR_MARKERS_STARTSWITH_WG_PP_MARKER_ERROR( \
+        BOOST_PP_SEQ_ELEM(0, markedparsedastuple)), \
+      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_ADDERROR, \
+      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL_FINAL) \
+    ( \
+      state, \
+      scopemngrtuple, \
+      WG_PP_TRNSLTR_MARKERS_EATHEADMARKER( \
+        BOOST_PP_SEQ_ELEM(0, markedparsedastuple)), \
+      restspec \
+    )
+
+#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_ADDERROR( \
+  state, scopemngrtuple, errortuple, restspec) \
+    WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_ADD_PARSEERROR( \
+      state, \
+      BOOST_PP_SEQ_ELEM(0, errortuple) )
+
+#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_SAVESYMBOL_FINAL( \
+  state, scopemngrtuple, optionalparsedsetvardcln, restspec) \
+    WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_ADD_EXTANTSYMBOL( \
+      state, \
+      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_MAKESYMBOL( \
+        state, scopemngrtuple, optionalparsedsetvardcln), \
+      restspec)
+
+#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_MAKESYMBOL( \
+  state, scopemngrtuple, optionalparsedsetvardcln) \
     WG_PP_MARKER_NOOP \
     ( WG_PP_LCLCONTEXT_SYMBOL_CATEGORY_EXTANT ) \
     ( 0 ) \
-    ( symbolid ) \
+    ( WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_EXTANTCOUNT(state) ) \
     scopemngrtuple \
-    ( \
-      BOOST_PP_IIF( \
-        WG_PP_SEQ_ISNIL(optionalastuple), \
-        BOOST_PP_NIL WG_PP_MAPTO_NOTHING_ARG2, \
-        WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_MAKESYMBOL_ASSEQENTRY) \
-      (specoptions, optionalastuple) \
-    )
-
-#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_EXTANT_MAKESYMBOL_ASSEQENTRY( \
-  specoptions, astuple) \
-    ( \
-      WG_PP_LCLCONTEXT_SPECPARSER_CHOOSE_TPL( \
-        WG_PP_BOUNDVARDCLN_NLT_NORMALIZE, specoptions) \
-      ( BOOST_PP_SEQ_ELEM(0, astuple) ) \
-    )
+    ( optionalparsedsetvardcln )
 
 //~~~~~~~~~~~~~~~~~~~~~
 //Parser::Op::WithAdhoc

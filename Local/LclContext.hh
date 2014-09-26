@@ -65,8 +65,8 @@
       WG_PP_UTILS_SEQ_REMOVEHEADMARKERS(symbolseq) )
 
 #define WG_PP_LCLCONTEXT_STARTCODEGEN2( \
-  istpl, extantsymbolcount, adhocsymbolcount, symbolseq, psbl_error_tokens) \
-    WG_PP_LCLCONTEXT_CODEGEN_START( \
+  istpl, extantsymbolcount, adhocsymbolcount, symbolseq) \
+    WG_PP_LCLCONTEXT_CODEGEN_START_ZZZ( \
       WG_PP_LCLCONTEXT_SYMBOLTABLE_CREATE( \
         istpl, extantsymbolcount, adhocsymbolcount, symbolseq))
 
