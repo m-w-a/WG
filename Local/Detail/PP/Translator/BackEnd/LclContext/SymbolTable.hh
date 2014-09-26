@@ -3,6 +3,7 @@
 
 #include <boost/preprocessor.hpp>
 #include <WG/Local/Detail/PP/SEQ.hh>
+#include <WG/Local/Detail/PP/Translator/Markers.hh>
 
 //###########
 //Public APIs
@@ -75,9 +76,10 @@
 
 // Returns: { parsed-explicit-non-local-type-or-deduced-type }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY_TYPE(symbol) \
-  BOOST_PP_SEQ_ELEM( \
-    0, \
-    BOOST_PP_SEQ_ELEM(4, symbol) )
+  WG_PP_TRNSLTR_MARKERS_EATHEADMARKER( \
+    BOOST_PP_SEQ_ELEM( \
+      0, \
+      BOOST_PP_SEQ_ELEM(4, symbol) ) )
 
 // Returns: { var-name }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY_OBJ(symbol) \
@@ -135,7 +137,7 @@
 //   ( categoryid )
 //   ( symbolid )
 //   ( scopemngr )
-//   ( nrmlzdenteredasseq )
+//   ( parsedasseq )
 //
 // adhocsymbol :=
 //   ( WG_PP_LCLCONTEXT_SYMBOL_CATEGORY_ADHOC )
@@ -147,13 +149,18 @@
 //
 // symbolid := int
 // scopemngr := { ( scope-manager-expr ) }
-// nrmlzdenteredasseq := { BOOST_PP_NIL |  ( normalized-bound-nlt-tuple ) }
-// varbindseq = bound-tuple-seq
+// parsedasseq := { BOOST_PP_NIL |  ( parsed-nlt-bound-var-dcln ) }
+// varbindseq = { BOOST_PP_NIL | parsed-bound-var-seq }
 // onenterseq := { BOOST_PP_NIL | ( compound-statement ) }
 // onexitseq := { BOOST_PP_NIL | ( compound-statement ) }
 //
-// normalized-bound-nlt-tuple :=
-//   (parsed-explicit-non-local-type-or-deduced-type)(var-name)
+// parsed-bound-var-seq:
+//   { ( parsed-bound-var-dcln ) }+
+// parsed-nlt-bound-var-dcln:
+//   {
+//     ( WG_PP_MARKER_<NOOP | DEDUCED> parsed-explicit-non-local-type-or-deduced-type )
+//     ( var-name )
+//   }
 // parsed-explicit-non-local-type-or-deduced-type :=
 //    WG_PP_MARKER_NOOP parsed-explicit-non-local-type
 //  | WG_PP_MARKER_DEDUCEDTYPE parsed-deduced-type
