@@ -14,16 +14,28 @@
 // [1]
 //
 // marked-parsed-set-var-dcln:
-//   { ( WG_PP_MARKER_ERROR ... ) | ( (explicit-type) (var-name) (value-expr) ) }
+//   {
+//       (
+//         WG_PP_MARKER_ERROR ...
+//       )
+//     |
+//       (
+//         WG_PP_MARKER_NOOP
+//         (parsed-explicit-or-deduced-type)
+//         (var-name)
+//         (value-expr)
+//       )
+//    }
 //
 // marked-parsed-nlt-set-var-dcln:
 //   {
 //       ( WG_PP_MARKER_ERROR ... )
 //     |
 //       (
-//         (WG_PP_MARKER_<NOOP | DEDUCED> explicit-non-local-type)
-//         (var-name)
-//         (value-expr)
+//         WG_PP_MARKER_NOOP
+//         ( parsed-explicit-non-local-type-or-deduced-type )
+//         ( var-name )
+//         ( value-expr )
 //       )
 //   }
 //------------------------------------------------------------------------------
