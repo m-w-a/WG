@@ -1,4 +1,6 @@
+#include <vector>
 #include <gtest/gtest.h>
+#include <boost/utility/addressof.hpp>
 
 #define WG_AUTOSIMULATOR_AUTOANYGROUP_CONFIG_PARAMS_MAX_ARITY 10
 
@@ -11,9 +13,20 @@ namespace
 struct CustomBase
 {
   template <typename T>
-  void finalize(T &)
+  void finalize(T & captured_obj)
   {
+    if( captured_objs.empty() )
+    {
+      EXPECT_FALSE( captured_objs.empty() );
+      return;
+    }
+
+    EXPECT_EQ( captured_objs.back(), ::boost::addressof(captured_obj) );
+    captured_objs.pop_back();
   }
+
+  typedef std::vector<void const *> opaqued_objptr_vec;
+  mutable opaqued_objptr_vec captured_objs;
 };
 
 }
@@ -30,6 +43,9 @@ TEST(wg_autosimulator_autoanygroup_custom, OneExpr)
   CustomBase const & grp =
     WG_AUTOSIMULATOR_AUTOANYGROUP_ALLOC_CUSTOM(CustomBase, EXPR);
   WG_AUTOSIMULATOR_AUTOANYGROUP_INIT(grp, autosimFlag, EXPR);
+
+  grp.captured_objs.push_back(
+    ::boost::addressof(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 0, EXPR)));
 
   EXPECT_FALSE(
     isConst(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 0, EXPR)));
@@ -55,6 +71,25 @@ TEST(wg_autosimulator_autoanygroup_custom, MultiExpr1)
   CustomBase const & grp =
     WG_AUTOSIMULATOR_AUTOANYGROUP_ALLOC_CUSTOM(CustomBase, EXPR);
   WG_AUTOSIMULATOR_AUTOANYGROUP_INIT(grp, autosimFlag, EXPR);
+
+  grp.captured_objs.push_back(
+    ::boost::addressof(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 0, EXPR)));
+  grp.captured_objs.push_back(
+    ::boost::addressof(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 1, EXPR)));
+  grp.captured_objs.push_back(
+    ::boost::addressof(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 2, EXPR)));
+  grp.captured_objs.push_back(
+    ::boost::addressof(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 3, EXPR)));
+  grp.captured_objs.push_back(
+    ::boost::addressof(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 4, EXPR)));
+  grp.captured_objs.push_back(
+    ::boost::addressof(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 5, EXPR)));
+  grp.captured_objs.push_back(
+    ::boost::addressof(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 6, EXPR)));
+  grp.captured_objs.push_back(
+    ::boost::addressof(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 7, EXPR)));
+  grp.captured_objs.push_back(
+    ::boost::addressof(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 8, EXPR)));
 
   {
     EXPECT_FALSE(
@@ -139,6 +174,15 @@ TEST(wg_autosimulator_autoanygroup_custom, MultiExpr2)
   CustomBase const & grp =
     WG_AUTOSIMULATOR_AUTOANYGROUP_ALLOC_CUSTOM(CustomBase, EXPR);
   WG_AUTOSIMULATOR_AUTOANYGROUP_INIT(grp, autosimFlag, EXPR);
+
+  grp.captured_objs.push_back(
+    ::boost::addressof(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 0, EXPR)));
+  grp.captured_objs.push_back(
+    ::boost::addressof(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 1, EXPR)));
+  grp.captured_objs.push_back(
+    ::boost::addressof(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 2, EXPR)));
+  grp.captured_objs.push_back(
+    ::boost::addressof(WG_AUTOSIMULATOR_AUTOANYGROUP_ITEMVALUE(grp, 3, EXPR)));
 
   {
     EXPECT_FALSE(

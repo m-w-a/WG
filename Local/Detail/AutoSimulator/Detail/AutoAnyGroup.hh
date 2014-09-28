@@ -123,7 +123,7 @@
       } \
       \
       template <std::size_t I> \
-      this_type const & capture( \
+      this_type const & capture_wrapped_obj( \
         /* Purposefully capture by value so as to enable copy elision. */ \
         BOOST_DEDUCED_TYPENAME boost::mpl::at \
         < \
@@ -146,7 +146,7 @@
         AutoAnyImplTypeVec, \
         boost::mpl::int_<I> \
       >::type & \
-        captured_obj() const \
+        captured_wrapped_obj() const \
       { \
         typedef BOOST_DEDUCED_TYPENAME \
           boost::mpl::at<AutoAnyImplTypeVec, boost::mpl::int_<I> >::type \
@@ -227,7 +227,9 @@
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_FINALIZE_DCLN( \
   z, argno, data) \
     ( \
-      this->finalize( this->captured_obj<argno>() ); \
+      this->finalize( \
+        WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE( \
+          this->captured_wrapped_obj<argno>() ) ); \
     )
 
 //~~~~~~~~~~~~~
@@ -247,7 +249,7 @@
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_AAGIMPL_DESTRUCT_DCLN( \
   z, argno, data) \
     ( \
-      destruct( this->captured_obj<argno>() ); \
+      destruct( this->captured_wrapped_obj<argno>() ); \
     )
 
 //-------------------
@@ -423,7 +425,7 @@
 // WG_PP_SEQ_FOR_EACH functor.
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_INITGROUP_ENTRY( \
   r, mutable_boolean_flag, indx, expr) \
-    . capture<indx>( \
+    . capture_wrapped_obj<indx>( \
       WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, mutable_boolean_flag) )
 
 //----------------------------------------------
@@ -435,7 +437,7 @@
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE \
     ( \
       WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP( \
-        opaqued_group, exprseq) . captured_obj<itemno>() \
+        opaqued_group, exprseq) . captured_wrapped_obj<itemno>() \
     )
 
 //--------------------------------------------------
@@ -447,7 +449,7 @@
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_ISRVALUE \
     ( \
       WG_AUTOSIMULATOR_DETAIL_AUTOANYGROUP_GETGROUP( \
-        opaqued_group, exprseq) . captured_obj<itemno>() \
+        opaqued_group, exprseq) . captured_wrapped_obj<itemno>() \
     )
 
 namespace wg
