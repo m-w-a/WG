@@ -11,6 +11,7 @@
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclContext/Names.hh>
 #include <WG/Local/LclClass.hh>
 #include <WG/Local/Detail/LclContext/ScopeManagerGroup.hh>
+#include <WG/Local/Detail/AutoSimulator/AutoSimulator.hh>
 
 #ifdef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
   #include <WG/Local/Detail/LclContext/AdhocScopeManagerProxyCpp03.hh>
@@ -168,15 +169,15 @@
 #define WG_PP_LCLCONTEXT_CG_ENTEREDAS_TYPEALIASORDCLN_SPECSEQ() \
   ( \
     ( WG_PP_LCLCONTEXT_NAMES_ENTEREDASDCLNS_TYPEALIASOR_ALIASROOTNAME() ) \
-    ( WG_PP_LCLCONTEXT_CG_EXTANTSYMBOLS ) \
-    ( WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY_TYPE ) \
+    ( WG_PP_IDENTITY_ARG1 ) \
+    ( WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY_MARKEDTYPE ) \
   )
 
 #define WG_PP_LCLCONTEXT_CG_ENTEREDAS_TYPEALIASORDCLN(symbtbl) \
   WG_PP_TYPEALIASER_DCLN( \
     WG_PP_LCLCONTEXT_NAMES_ENTEREDASDCLNS_TYPEALIASOR_CLASSNAME(), \
     ALLTYPES, \
-    symbtbl, \
+    WG_PP_LCLCONTEXT_CG_EXTANTSYMBOLS(symbtbl), \
     WG_PP_LCLCONTEXT_CG_ENTEREDAS_TYPEALIASORDCLN_SPECSEQ() )
 
 //---------------
@@ -366,9 +367,9 @@
   ( \
     indx, \
     symbol, \
-    BOOST_PP_SEQ_ELEM(0, symbol), \
-    BOOST_PP_SEQ_ELEM(1, symbol), \
-    BOOST_PP_SEQ_ELEM(2, symbol) \
+    BOOST_PP_SEQ_ELEM(0, data), \
+    BOOST_PP_SEQ_ELEM(1, data), \
+    BOOST_PP_SEQ_ELEM(2, data) \
   )
 
 #define WG_PP_LCLCONTEXT_CG_EXTANT_ENTERDCLN( \

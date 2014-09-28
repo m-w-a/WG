@@ -66,7 +66,7 @@
 
 #define WG_PP_LCLCONTEXT_STARTCODEGEN2( \
   istpl, extantsymbolcount, adhocsymbolcount, symbolseq) \
-    WG_PP_LCLCONTEXT_CODEGEN_START_ZZZ( \
+    WG_PP_LCLCONTEXT_CODEGEN_START( \
       WG_PP_LCLCONTEXT_SYMBOLTABLE_CREATE( \
         istpl, extantsymbolcount, adhocsymbolcount, symbolseq))
 

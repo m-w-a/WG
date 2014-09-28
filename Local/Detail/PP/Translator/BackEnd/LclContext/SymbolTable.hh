@@ -74,12 +74,11 @@
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY(symbol) \
   BOOST_PP_SEQ_ELEM(4, symbol)
 
-// Returns: { parsed-explicit-non-local-type-or-deduced-type }
-#define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY_TYPE(symbol) \
-  WG_PP_TRNSLTR_MARKERS_EATHEADMARKER( \
-    BOOST_PP_SEQ_ELEM( \
-      0, \
-      BOOST_PP_SEQ_ELEM(4, symbol) ) )
+// Returns: { marked-parsed-explicit-non-local-type-or-deduced-type }
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY_MARKEDTYPE(symbol) \
+  BOOST_PP_SEQ_ELEM( \
+    0, \
+    BOOST_PP_SEQ_ELEM(4, symbol) )
 
 // Returns: { var-name }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY_OBJ(symbol) \
@@ -160,6 +159,8 @@
 //     ( var-name )
 //     ( value-expr )
 //   }
+// marked-parsed-explicit-non-local-type-or-deduced-type :=
+//   WG_PP_MARKER_<NOOP | DEDUCED> parsed-explicit-non-local-type-or-deduced-type )
 // parsed-explicit-non-local-type-or-deduced-type :=
 //    WG_PP_MARKER_NOOP parsed-explicit-non-local-type
 //  | WG_PP_MARKER_DEDUCEDTYPE parsed-deduced-type

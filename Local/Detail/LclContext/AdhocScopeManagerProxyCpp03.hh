@@ -13,7 +13,7 @@ namespace cpp03
 class adhoc_scope_manager_proxy
 {
 public:
-  typedef void (callback_type)(adhoc_scope_manager_proxy *, bool);
+  typedef void (*callback_type)(adhoc_scope_manager_proxy *, bool);
 
 public:
   explicit adhoc_scope_manager_proxy(callback_type callback)
