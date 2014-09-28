@@ -25,6 +25,11 @@ struct CustomBase
     captured_objs.pop_back();
   }
 
+  ~CustomBase()
+  {
+    EXPECT_TRUE( captured_objs.empty() );
+  }
+
   typedef std::vector<void const *> opaqued_objptr_vec;
   mutable opaqued_objptr_vec captured_objs;
 };
