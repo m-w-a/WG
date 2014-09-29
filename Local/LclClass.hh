@@ -7,6 +7,7 @@
 #include <WG/Local/Detail/PP/Translator/FrontEnd/ErrorReporter.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclClass/SymbolTable.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclClass/CodeGen.hh>
+#include <WG/Local/Detail/PP/Utils.hh>
 
 //###########
 //Public APIs
@@ -48,6 +49,7 @@
   m1, derives_seq, \
   m2, memext_seq, \
   m3, memint_seq, \
+  m4, baseinit_seq, \
   errors, error_seq) \
     WG_PP_LCLCLASS_CMNIMPL_REPORTERROR_OR_CONTINUE( \
       name, \
@@ -55,9 +57,10 @@
       derives_seq, \
       memext_seq, \
       memint_seq, \
-      WG_PP_ERRORREPORTER_REPORT_NRMLZDBNDTUPLESEQ(memext_seq) \
-      WG_PP_ERRORREPORTER_REPORT_NRMLZDSETTUPLESEQ(memint_seq) \
-      WG_PP_ERRORREPORTER_REPORT_ERRORSEQ(error_seq) BOOST_PP_NIL)
+      baseinit_seq, \
+      WG_PP_ERRORREPORTER_REPORT_PARSEDSEQ(memext_seq) \
+      WG_PP_ERRORREPORTER_REPORT_PARSEDSEQ(memint_seq) \
+      WG_PP_ERRORREPORTER_REPORT_ERRORTOKENS(error_seq) BOOST_PP_NIL)
 
 #define WG_PP_LCLCLASS_CMNIMPL_REPORTERROR_OR_CONTINUE(\
   name, \
@@ -65,6 +68,7 @@
   derives_seq, \
   memext_seq, \
   memint_seq, \
+  baseinit_seq, \
   psbl_error_tokens) \
     BOOST_PP_IIF( \
       WG_PP_STARTSWITH_BOOST_PP_NIL(psbl_error_tokens), \
@@ -76,6 +80,7 @@
       derives_seq, \
       memext_seq, \
       memint_seq, \
+      baseinit_seq, \
       psbl_error_tokens \
     )
 
@@ -85,6 +90,7 @@
   derives_seq, \
   memext_seq, \
   memint_seq, \
+  baseinit_seq, \
   psbl_error_tokens) \
     WG_PP_EATTAILTOKEN_BOOST_PP_NIL(psbl_error_tokens)
 
@@ -94,14 +100,16 @@
   derives_seq, \
   memext_seq, \
   memint_seq, \
+  baseinit_seq, \
   psbl_error_tokens) \
     WG_PP_LCLCLASS_CODEGEN_START( \
       name, \
       WG_PP_LCLCLASS_SYMBOLTABLE_CREATE( \
         istpl, \
         derives_seq, \
-        memext_seq, \
-        memint_seq) )
+        WG_PP_UTILS_SEQ_REMOVEHEADMARKERS(memext_seq), \
+        WG_PP_UTILS_SEQ_REMOVEHEADMARKERS(memint_seq), \
+        baseinit_seq) )
 
 #define WG_PP_LCLCLASS_END_IMPL() \
   WG_PP_LCLCLASS_CODEGEN_END()

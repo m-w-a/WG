@@ -10,39 +10,65 @@
 //Public APIs
 //###########
 
+//-----------------------------------------------------------------------------
+// [1]
+//
+// marked-parsed-bound-var-dcln:
+//   {
+//       ( WG_PP_MARKER_ERROR ... )
+//     |
+//       (
+//         WG_PP_MARKER_NOOP
+//         ( parsed-explicit-or-deduced-type )
+//         ( bound-var-name )
+//       )
+//   }
+//
+// marked-parsed-nlt-bound-var-dcln
+//   {
+//       ( WG_PP_MARKER_ERROR ... )
+//     |
+//       (
+//         WG_PP_MARKER_NOOP
+//         ( parsed-explicit-non-local-type-or-deduced-type )
+//         ( bound-var-name )
+//       )
+//   }
+//-----------------------------------------------------------------------------
+
 // boundvardcln:
 //   bound-var-dcln
 // Expands to the following:
-//   (parsed-explicit-or-deduced-type) (bound-var-name)
+//   marked-parsed-bound-var-dcln
 //
-// (For definition of terms see SymbolTable documentation.)
+// (For definition of terms see [1] and SymbolTable documentation.)
 #define WG_PP_BOUNDVARDCLN_NORMALIZE(boundvardcln) \
   WG_PP_BOUNDVARDCLN_NORMALIZE_IMPL(boundvardcln, 0)
 
 // boundvardcln:
 //   bound-var-dcln
 // Expands to the following:
-//   (parsed-explicit-or-deduced-type) (bound-var-name)
+//   marked-parsed-bound-var-dcln
 //
-// (For definition of terms see SymbolTable documentation.)
+// (For definition of terms see [1] and SymbolTable documentation.)
 #define WG_PP_BOUNDVARDCLN_NORMALIZE_TPL(boundvardcln) \
   WG_PP_BOUNDVARDCLN_NORMALIZE_IMPL(boundvardcln, 1)
 
 // boundvardcln:
 //   nlt-bound-var-dcln
 // Expands to the following:
-//   (parsed-explicit-non-local-type-or-deduced-type) (bound-var-name)
+//   marked-parsed-nlt-bound-var-dcln
 //
-// (For definition of terms see SymbolTable documentation.)
+// (For definition of terms see [1] and SymbolTable documentation.)
 #define WG_PP_BOUNDVARDCLN_NLT_NORMALIZE(boundvardcln) \
   WG_PP_BOUNDVARDCLN_NLT_NORMALIZE_IMPL(boundvardcln, 0)
 
 // boundvardcln:
 //   nlt-bound-var-dcln
 // Expands to the following:
-//   (parsed-explicit-non-local-type-or-deduced-type) (bound-var-name)
+//   marked-parsed-nlt-bound-var-dcln
 //
-// (For definition of terms see SymbolTable documentation.)
+// (For definition of terms see [1] and SymbolTable documentation.)
 #define WG_PP_BOUNDVARDCLN_NLT_NORMALIZE_TPL(boundvardcln) \
   WG_PP_BOUNDVARDCLN_NLT_NORMALIZE_IMPL(boundvardcln, 1)
 
@@ -51,17 +77,19 @@
 //###########
 
 #define WG_PP_BOUNDVARDCLN_NORMALIZE_IMPL(boundvardcln, istpl) \
-  BOOST_PP_IIF( \
-    WG_PP_VARDCLN_ISEXPLICIT(boundvardcln), \
-    WG_PP_VARDCLN_EXPLICIT_TUPLIZE, \
-    WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG) \
-  (boundvardcln, istpl)
+  WG_PP_VARDCLN_PERCOLATEERROR_OR_CONTINUE( \
+    BOOST_PP_IIF( \
+      WG_PP_VARDCLN_ISEXPLICIT(boundvardcln), \
+      WG_PP_VARDCLN_EXPLICIT_TUPLIZE, \
+      WG_PP_VARDCLN_IMPLICIT_TUPLIZE_BOUNDDCLN) \
+    (boundvardcln, istpl) )
 
 #define WG_PP_BOUNDVARDCLN_NLT_NORMALIZE_IMPL(boundvardcln, istpl) \
-  BOOST_PP_IIF( \
-    WG_PP_VARDCLN_ISEXPLICIT_NLT(boundvardcln), \
-    WG_PP_VARDCLN_EXPLICIT_NLT_TUPLIZE, \
-    WG_PP_VARDCLN_IMPLICIT_TUPLIZE_1ARG) \
-  (boundvardcln, istpl)
+  WG_PP_VARDCLN_PERCOLATEERROR_OR_CONTINUE( \
+    BOOST_PP_IIF( \
+      WG_PP_VARDCLN_ISEXPLICIT_NLT(boundvardcln), \
+      WG_PP_VARDCLN_EXPLICIT_NLT_TUPLIZE, \
+      WG_PP_VARDCLN_IMPLICIT_TUPLIZE_BOUNDDCLN) \
+    (boundvardcln, istpl) )
 
 #endif //WG_PP_BOUNDVARDCLNNORMALIZE_HH_

@@ -4,15 +4,15 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/type_traits/is_base_of.hpp>
 
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
   namespace detail = wg::lclfunction::detail::cpp11;
 #else
-  namespace detail = wg::lclfunction::detail;
+  namespace detail = wg::lclfunction::detail::cpp03;
 #endif
 
 TEST(wg_lclfunction_configparamsmaxaritydefault, OkIfLessThanDefault)
 {
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
   struct local_functor_type;
 #endif
 
@@ -20,7 +20,7 @@ TEST(wg_lclfunction_configparamsmaxaritydefault, OkIfLessThanDefault)
   typedef
     detail::global_functor_type
     <
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
       local_functor_type,
 #endif
       less_than_default_arity,
@@ -37,7 +37,7 @@ TEST(wg_lclfunction_configparamsmaxaritydefault, OkIfLessThanDefault)
 
 TEST(wg_lclfunction_configparamsmaxaritydefault, OkIfEqualToDefault)
 {
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
   struct local_functor_type;
 #endif
 
@@ -49,7 +49,7 @@ TEST(wg_lclfunction_configparamsmaxaritydefault, OkIfEqualToDefault)
   typedef
     detail::global_functor_type
     <
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
       local_functor_type,
 #endif
       equal_to_default_arity,
@@ -66,7 +66,7 @@ TEST(wg_lclfunction_configparamsmaxaritydefault, OkIfEqualToDefault)
 
 TEST(wg_lclfunction_configparamsmaxaritydefault, NotOkIfGreaterThanDefault)
 {
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
   struct local_functor_type;
 #endif
 
@@ -79,7 +79,7 @@ TEST(wg_lclfunction_configparamsmaxaritydefault, NotOkIfGreaterThanDefault)
   typedef
     detail::global_functor_type
     <
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
       local_functor_type,
 #endif
       greater_than_default_arity,

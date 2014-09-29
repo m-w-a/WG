@@ -195,15 +195,15 @@
   #define WG_PP_KEYWORDS_ADDCOMMAAFTER_TYPETUPLE_IMPL( \
     typetuple_prefixed_tokens) \
       WG_PP_KEYWORDS_TYPE \
-      WG_PP_KEYWORDS_EXPAND2( \
-        WG_PP_ADDCOMMA_AFTERTUPLE_ARITY1 \
+      WG_PP_ADDCOMMA_AFTERTUPLE( \
+        1, \
         WG_PP_KEYWORDS_EATHEAD_TYPE(typetuple_prefixed_tokens) )
 
   #define WG_PP_KEYWORDS_ADDCOMMAAFTER_LCLTYPETUPLE_IMPL( \
     lcltypetuple_prefixed_tokens) \
       WG_PP_KEYWORDS_LCLTYPE \
-      WG_PP_KEYWORDS_EXPAND3( \
-        WG_PP_ADDCOMMA_AFTERTUPLE_ARITY1 \
+      WG_PP_ADDCOMMA_AFTERTUPLE( \
+        1, \
         WG_PP_KEYWORDS_EATHEAD_LCLTYPE(lcltypetuple_prefixed_tokens) )
 
 #else
@@ -211,15 +211,13 @@
   #define WG_PP_KEYWORDS_ADDCOMMAAFTER_TYPETUPLE_IMPL( \
     typetuple_prefixed_tokens) \
       WG_PP_KEYWORDS_TYPE \
-      WG_PP_KEYWORDS_EXPAND4( \
-        WG_PP_ADDCOMMA_AFTERTUPLE_ARITYN \
+      WG_PP_ADDCOMMA_AFTERTUPLE_V( \
         WG_PP_KEYWORDS_EATHEAD_TYPE(typetuple_prefixed_tokens) )
 
   #define WG_PP_KEYWORDS_ADDCOMMAAFTER_LCLTYPETUPLE_IMPL( \
     lcltypetuple_prefixed_tokens) \
       WG_PP_KEYWORDS_LCLTYPE \
-      WG_PP_KEYWORDS_EXPAND5( \
-        WG_PP_ADDCOMMA_AFTERTUPLE_ARITYN \
+      WG_PP_ADDCOMMA_AFTERTUPLE_V( \
         WG_PP_KEYWORDS_EATHEAD_LCLTYPE(lcltypetuple_prefixed_tokens) )
 
 #endif

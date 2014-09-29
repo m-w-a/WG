@@ -1,11 +1,48 @@
+    enter_as(optional-type-qualifier variable-name)
+
 //----------
 //Semantics:
 //----------
 
 Note: All terms not defined here should be referenced in AutoFunctorSpec.txt
 
-adhoc-context-handlers:
+BOOST_NO_EXCEPTIONS controls whether exception support is generated.
+
+adhoc-scope-handlers:
   1) At least one handler must be specified.
+
+x) scope-manager-expr:
+  Is limited to an lvalue expression because if rvalues are allowed, then the 
+  question of captured by const vs non-const arises which complicates the macro 
+  syntax. So for the sake of simplicity, only lvalue expressions are handled.
+
+x) on_enter:
+  Upon entering the lclcontext's scope, the on_enter method of each declared 
+  scope manager object is called in the order in which they appeared in the 
+  opening macro, starting from first to last. Any return value is ignored unless 
+  otherwise specified in an associated "entered_as" macro parameter.
+  
+x) on_exit:
+  Upen exit of the lclcontext's scope for any reason (thrown exception, return 
+  statement, goto?, fall-through) the on_exit method of each declared scope 
+  manager object is called in the reverse order in which they appeared in the 
+  opening macro. If the lclcontext's scope was exited due to an exception being 
+  thrown from that scope then "true" is passed as a parameter to on_exit, else 
+  "false" is passed as a parameter.
+
+on_exit can only be triggered by the destructor in order for it to be invoked
+*any time* the scope is exited. The destructor doesn't have access to any
+expressions of the enclosing scope so foreach's "downcast" trick using the
+conditional operator can't be used. Hence the destructor's class must know the
+types of each scope manager in order to call on_exit. This means that either
+explicit scope managers or adhoc scope managers have to be type erased since in
+C++03 local classes can't be templated nor be used as template parameters.
+It has been decided to type erase adhoc scope managers since they are generated
+by the library. This means that in C++03 the on_exit call to them will have to
+go through a function pointer, but in C++11 this indirection is not necessary.
+Note: it is necessary to allow the calls to the on_exit method of explicit and
+  adhoc scope managers to be intermixed since the user may intermix them in the
+  declaring macro.
 
 //---
 //BNF
@@ -23,22 +60,19 @@ lclcontext-usage :=
 lclcontext-start-macro :=
     WG_LCLCONTEXT
   | WG_LCLCONTEXT_TPL
-  | WG_LCLCONTEXT_NOEX
-  | WG_LCLCONTEXT_NOEX_TPL
 
 lclcontext-spec :=
     with-dcln [ lclcontext-spec ]
   | with-adhoc-dcln [ lclcontext-spec ]
 
 with-dcln :=
-  with( context-manager-expr ) [ entered_as( type-var-dcln ) ]
+  with( scope-manager-expr ) [ entered_as( nlt-type-var-dcln ) ]
 
 with-adhoc-decln :=
-    with_adhoc [ varbind bound-tuple-seq ] adhoc-context-handlers
-  | with_adhoc( simple-declaration ) 
-    [ varbind bound-tuple-seq ]
-    [onenter( compound-statement )] [onexit( compound-statement )]
+  with_adhoc[ ( bound-tuple-seq ) ] adhoc-scope-handlers
 
-context-manager-expr := A C++ expression that evaluates to a context manager.
+adhoc-scope-handlers :=
+  [on_enter( compound-statement )] [on_exit( compound-statement )]
+
+scope-manager-expr := A C++ expression that evaluates to a scope manager.
 compound-statement := See C++ standard.
-simple-declaration := See C++ standard. 

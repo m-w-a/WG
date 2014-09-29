@@ -18,12 +18,15 @@
 
 // Expands to the following:
 //   (return) { (BOOST_PP_NIL) | (type) }
-//   (params) { (BOOST_PP_NIL) | ( {normalized-explicit-nlt-tuple}+ ) }
-//   (varbind) { (BOOST_PP_NIL) | ( {normalized-bound-nlt-tuple}+ ) }
-//   (varset) { (BOOST_PP_NIL) | ( {normalized-set-nlt-tuple}+ ) }
-//   (errors) { (BOOST_PP_NIL) | (WG_PP_MARKER_ERROR ...) }
+//   (params) { (BOOST_PP_NIL) | ( param-seq }
+//   (varbind) { (BOOST_PP_NIL) | { marked-parsed-nlt-bound-var-dcln }+ }
+//   (varset) { (BOOST_PP_NIL) | { marked-parsed-nlt-set-var-dcln }+ }
+//   (errors) { (BOOST_PP_NIL) | ( WG_PP_MARKER_ERROR ... ) }
 //
-// (For definition of terms see SymbolTable documentation.)
+// For definition of terms not defined here see:
+//   1) SymbolTable documentation
+//   2) BoundVarDclnNormalize.hh
+//   3) SetVarDclnNormalize.hh
 #define WG_PP_LCLFUNCTION_SPEC_NORMALIZE(spec, istpl) \
   WG_PP_LCLFUNCTION_SPEC_NORMALIZE_IMPL( \
     spec BOOST_PP_NIL, \

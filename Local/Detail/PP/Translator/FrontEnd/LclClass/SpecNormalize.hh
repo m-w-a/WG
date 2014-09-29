@@ -15,11 +15,15 @@
 
 // Expands to the following:
 //   (derives) { (BOOST_PP_NIL) | ( derives-tuple-seq ) }
-//   (memext) { (BOOST_PP_NIL) | ( {normalized-bound-tuple}+ ) }
-//   (memint) { (BOOST_PP_NIL) | ( {normalized-set-tuple}+ ) }
+//   (memext) { (BOOST_PP_NIL) | ( {marked-parsed-bound-var-dcln}+ ) }
+//   (memint) { (BOOST_PP_NIL) | ( {marked-parsed-set-var-dcln}+ ) }
+//   (baseinit) { (BOOST_PP_NIL) | ( baseinit-tuple-seq ) }
 //   (errors) { (BOOST_PP_NIL) | (WG_PP_MARKER_ERROR ...) }
 //
-// (For definition of terms see SymbolTable documentation.)
+// For definition of terms not defined here see:
+//   1) SymbolTable documentation
+//   2) BoundVarDclnNormalize.hh
+//   3) SetVarDclnNormalize.hh
 #define WG_PP_LCLCLASS_SPEC_NORMALIZE(spec, istpl) \
   WG_PP_LCLCLASS_SPEC_NORMALIZE_IMPL( \
     spec BOOST_PP_NIL, \
@@ -34,6 +38,7 @@
 #define WG_PP_LCLCLASS_SPEC_NORMALIZE_EXPAND1(x) x
 #define WG_PP_LCLCLASS_SPEC_NORMALIZE_EXPAND2(x) x
 #define WG_PP_LCLCLASS_SPEC_NORMALIZE_EXPAND3(x) x
+#define WG_PP_LCLCLASS_SPEC_NORMALIZE_EXPAND4(x) x
 
 #define WG_PP_LCLCLASS_SPEC_OPTIONS_MAKE(istpl) istpl
 #define WG_PP_LCLCLASS_SPEC_OPTIONS_ISTPL(specoptions) specoptions
@@ -124,9 +129,9 @@
   (memint) \
   WG_PP_LCLCLASS_SPEC_NORMALIZE_EXPAND3( \
     WG_PP_LCLCLASS_SPEC_NAMEDPARAMPARSER_MACRONAME( \
-      spec, MEMINT, ENDSPEC) \
+      spec, MEMINT, BASEINIT) \
     WG_PP_LCLCLASS_SPEC_NAMEDPARAMPARSER_MACROPARAMS( \
-      spec, specoptions, MEMINT, ENDSPEC) )
+      spec, specoptions, MEMINT, BASEINIT) )
 #define WG_PP_LCLCLASS_SPEC_NORMALIZE_PARSE_NOTFOUND_MEMINT() \
   (BOOST_PP_NIL)
 #define WG_PP_LCLCLASS_SPEC_NORMALIZE_PARSE_FOUND_MEMINT( \
@@ -142,6 +147,31 @@
       nexttransform, \
       specoptions)
 #define WG_PP_LCLCLASS_SPEC_NORMALIZE_PARSE_FOUND_MEMINT2( \
+  head_rest_tuple, nexttransform, specoptions) \
+    ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
+    nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) , specoptions)
+
+#define WG_PP_LCLCLASS_SPEC_NORMALIZE_PARSE_BASEINIT(spec, specoptions) \
+  (baseinit) \
+  WG_PP_LCLCLASS_SPEC_NORMALIZE_EXPAND4( \
+    WG_PP_LCLCLASS_SPEC_NAMEDPARAMPARSER_MACRONAME( \
+      spec, BASEINIT, ENDSPEC) \
+    WG_PP_LCLCLASS_SPEC_NAMEDPARAMPARSER_MACROPARAMS( \
+      spec, specoptions, BASEINIT, ENDSPEC) )
+#define WG_PP_LCLCLASS_SPEC_NORMALIZE_PARSE_NOTFOUND_BASEINIT() \
+  (BOOST_PP_NIL)
+#define WG_PP_LCLCLASS_SPEC_NORMALIZE_PARSE_FOUND_BASEINIT( \
+  spec, specoptions, nexttransform) \
+    WG_PP_LCLCLASS_SPEC_NORMALIZE_PARSE_FOUND_BASEINIT2( \
+      WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
+        1, \
+        WG_PP_LCLCLASS_KEYWORDS_EAT_HEADKEYWORD(spec), \
+        WG_PP_TUPLIZE_ARG1, \
+        WG_PP_TUPLIZE_ARG1, \
+        WG_PP_TUPLIZE_ARG1), \
+      nexttransform, \
+      specoptions)
+#define WG_PP_LCLCLASS_SPEC_NORMALIZE_PARSE_FOUND_BASEINIT2( \
   head_rest_tuple, nexttransform, specoptions) \
     ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
     nexttransform( BOOST_PP_SEQ_ELEM(1, head_rest_tuple) , specoptions)

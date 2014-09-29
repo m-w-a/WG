@@ -15,4 +15,12 @@ LclClass:
 
 LclFunction:
   Binder: local namespace to lclfunction namespace?
+  Implementation outline.
   Boost.LocalFunction array bugs.
+
+BOOST_NO_CXX11_* -> WG_*
+
+AutoSimulator:  
+  How to test:
+    defined(WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME) &&
+    defined(BOOST_NO_CXX11_RVALUE_REFERENCES)

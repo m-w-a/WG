@@ -12,14 +12,14 @@
 //###########
 
 // Expands to the following:
-//   {normalized-explicit-nlt-tuple}+
+//   param-seq
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE(paramdcln) \
   WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_IMPL(paramdcln, 0)
 
 // Expands to the following:
-//   {normalized-explicit-nlt-tuple}+
+//   param-seq
 //
 // (For definition of terms see SymbolTable documentation.)
 #define WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE_TPL(paramdcln) \
