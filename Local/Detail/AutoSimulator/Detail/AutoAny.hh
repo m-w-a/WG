@@ -96,8 +96,12 @@ struct expr_category_mutable_rvalue : public expr_category_rvalue {};
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE_IMPL(captured_obj, expr)
 
 // This is runtime deduction, not compile-time deduction.
+// This macro does not evaluate expr.
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_DEDUCEDPTRTYPE(expr) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_DEDUCEDPTRTYPE_IMPL(expr)
+
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL(captured_obj, expr) \
+  WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_IMPL(captured_obj, expr)
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE(obj) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE_IMPL(obj)
@@ -130,7 +134,8 @@ struct auto_any
 
 protected:
   auto_any() {}
-  auto_any(BOOST_RV_REF(auto_any) rhs) {}
+  auto_any(auto_any const &) {}
+  auto_any(BOOST_RV_REF(auto_any) ) {}
 
 private:
   //Declared and purposefully not defined.
@@ -174,7 +179,8 @@ struct auto_any_impl
   {}
 
   auto_any_impl(bool, BOOST_RV_REF(CapturedType) obj)
-  : item(::boost::move(obj))
+  : auto_any(::boost::move(static_cast<auto_any &>(rhs))),
+    item(::boost::move(obj))
   {}
 
 // [1]:
@@ -848,6 +854,12 @@ inline auto_any_impl
     captured_obj, \
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
     WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr)).is_rvalue()
+
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_IMPL(captured_obj, expr) \
+  ::wg::autosimulator::detail::auto_any_impl_cast( \
+    captured_obj, \
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
+    WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr))
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE_IMPL(obj) \
   obj.value()
