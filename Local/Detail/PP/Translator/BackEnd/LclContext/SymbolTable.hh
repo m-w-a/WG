@@ -16,6 +16,9 @@
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_ISTPL(symbtbl) \
   WG_PP_LCLCONTEXT_ST_GET(symbtbl, ISPTL)
 
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_CUSTOMENTRYHANDLER(symbtbl) \
+  WG_PP_MAP_TO_NOTHING_ARG1
+
 // Returns: { unsigned integer }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOLCOUNT_EXTANT(symbtbl) \
   WG_PP_LCLCONTEXT_ST_GET(symbtbl, SYMBOLCOUNT_EXTANT)
@@ -98,13 +101,15 @@
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_VARBINDSEQ(symbol) \
   BOOST_PP_SEQ_ELEM(3, symbol)
 
-// Returns: { compound-statement }
+// Returns: { empty-string | compound-statement }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_ONENTERSEQ(symbol) \
-  BOOST_PP_SEQ_ELEM(4, symbol)
+  WG_PP_SEQ_NOTHING_FLATTEN( \
+    BOOST_PP_SEQ_ELEM(4, symbol) )
 
-// Returns: { compound-statement }
+// Returns: { empty-string | compound-statement }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_ONEXITSEQ(symbol) \
-  BOOST_PP_SEQ_ELEM(5, symbol)
+  WG_PP_SEQ_NOTHING_FLATTEN( \
+    BOOST_PP_SEQ_ELEM(5, symbol) )
 
 //-----
 //NOTE:

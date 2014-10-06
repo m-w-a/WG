@@ -20,8 +20,6 @@ namespace detail
 class extant_scopemngr_proxy;
 typedef extant_scopemngr_proxy const & extant_scopemngr_proxy_t;
 
-typedef void (*extant_exit_proxy_type)(extant_scopemngr_proxy_t, bool const);
-
 }
 }
 }
@@ -37,18 +35,19 @@ typedef void (*extant_exit_proxy_type)(extant_scopemngr_proxy_t, bool const);
       expr, mutable_boolean_flag)
 
 #define WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_ENTER( \
-  scopemngr_proxy, expr) \
-    WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_ENTER_IMPL(scopemngr_proxy, expr)
+  scopemngr_proxy, expr, rettype) \
+    WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_ENTER_IMPL( \
+      scopemngr_proxy, expr, rettype)
 
 #define WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_EXIT( \
-  scopemngr_proxy, expr) \
-    WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_EXIT_IMPL(scopemngr_proxy, expr)
+  scopemngr_proxy, expr, scope_completed) \
+    WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_EXIT_IMPL( \
+      scopemngr_proxy, expr, scope_completed)
 
-// Expands to an object of type extant_exit_proxy_type.
 #define WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_EXITPROXY( \
-  scopemngr_proxy, expr) \
+  scopemngr_proxy, scope_completed) \
     WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_EXITPROXY_IMPL( \
-      scopemngr_proxy, expr)
+      scopemngr_proxy, scope_completed)
 
 //####
 //Impl
@@ -60,20 +59,18 @@ typedef void (*extant_exit_proxy_type)(extant_scopemngr_proxy_t, bool const);
       WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, mutable_boolean_flag) )
 
 #define WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_ENTER_IMPL( \
-  scopemngr_proxy, expr) \
+  scopemngr_proxy, expr, rettype) \
     WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_DOWNCAST( \
-      scopemngr_proxy, expr).enter()
+      scopemngr_proxy, expr).enter<rettype>()
 
 #define WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_EXIT_IMPL( \
-  scopemngr_proxy, expr) \
+  scopemngr_proxy, expr, scope_completed) \
     WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_DOWNCAST( \
-      scopemngr_proxy, expr).exit()
+      scopemngr_proxy, expr).exit( scope_completed )
 
 #define WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_EXITPROXY_IMPL( \
-  scopemngr_proxy, expr) \
-    ::wg::lclcontext::detail::make_extant_exit_proxy( \
-      WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_DOWNCAST( \
-        scopemngr_proxy, expr) )
+  scopemngr_proxy, scope_completed) \
+    scopemngr_proxy.exit( scope_completed )
 
 #define WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_DOWNCAST( \
   scopemngr_proxy, expr) \
@@ -88,18 +85,36 @@ namespace lclcontext
 namespace detail
 {
 
+typedef void (*extant_exit_proxy_type)(extant_scopemngr_proxy_t, bool const);
+
 class extant_scopemngr_proxy
 {
 public:
-  extant_scopemngr_proxy() {}
+  explicit extant_scopemngr_proxy(extant_exit_proxy_type const exit_proxy)
+  : m_exit_proxy(exit_proxy)
+  {}
+
+  void exit(bool const scope_completed) const
+  {
+    m_exit_proxy(*this, scope_completed);
+  }
+
 protected:
-  extant_scopemngr_proxy(extant_scopemngr_proxy const &) {}
-  extant_scopemngr_proxy(BOOST_RV_REF(extant_scopemngr_proxy) ) {}
+  extant_scopemngr_proxy(extant_scopemngr_proxy const & rhs)
+  : m_exit_proxy(rhs.m_exit_proxy)
+  {}
+
+  extant_scopemngr_proxy(BOOST_RV_REF(extant_scopemngr_proxy) rhs)
+  : m_exit_proxy(rhs.m_exit_proxy)
+  {}
+
 private:
   BOOST_COPYABLE_AND_MOVABLE(extant_scopemngr_proxy)
 private:
   // Declared and purposefully not defined.
   extant_scopemngr_proxy & operator=(extant_scopemngr_proxy);
+private:
+  extant_scopemngr_proxy const m_exit_proxy;
 };
 
 template <typename AutoAnyImplType>
@@ -112,7 +127,8 @@ public:
   // Purposefully capture by value so as to enable copy elision.
   // It is guaranteed that the parameter to this ctor will always be a rvalue.
   explicit extant_scopemngr_proxy_impl(auto_any_impl_type scopemngr)
-  : m_did_call_exit(false),
+  : extant_scopemngr_proxy(::boost::addressof(exit_proxy)),
+    m_did_call_exit(false),
     m_scopemngr(::boost::move(scopemngr))
   {}
 
@@ -133,20 +149,30 @@ public:
     return WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE(m_scopemngr).enter();
   }
 
-  void exit(bool const didthrow) const
+  void exit(bool const scope_completed) const
   {
     if( ! m_did_call_exit )
     {
       m_did_call_exit = true;
-      WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE(m_scopemngr).exit(didthrow);
+      WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE(m_scopemngr).exit(scope_completed);
     }
   }
 
 private:
+  BOOST_COPYABLE_AND_MOVABLE(extant_scopemngr_proxy_impl)
+private:
   // Declared and purposefully not defined.
   extant_scopemngr_proxy_impl & operator=(extant_scopemngr_proxy_impl);
 private:
-  BOOST_COPYABLE_AND_MOVABLE(extant_scopemngr_proxy_impl)
+  static void exit_proxy(
+    extant_scopemngr_proxy_t scopemngr_proxy,
+    bool const scope_completed)
+  {
+    static_cast
+    <
+      extant_scopemngr_proxy_impl<AutoAnyImplType> const *
+    >(::boost::addressof(scopemngr_proxy))->exit(scope_completed);
+  }
 private:
   // Objects of this type will always be accessed through a base class
   // const reference, therefore declare all members as mutable.
@@ -209,38 +235,6 @@ extant_scopemngr_proxy_downcast(
       extant_scopemngr_proxy_impl<scopemngr_type> const *
     >(::boost::addressof(scopemngr_proxy));
 }
-
-template <typename AutoAnyImplType>
-extant_exit_proxy_type make_extant_exit_proxy(
-  extant_scopemngr_proxy_impl<AutoAnyImplType> const & scopemngr_proxy)
-{
-  struct extant_exit_proxy
-  {
-    static void impl(
-      extant_scopemngr_proxy_t scopemngr_proxy,
-      bool const didthrow)
-    {
-      static_cast
-      <
-        extant_scopemngr_proxy_impl<AutoAnyImplType> const *
-      >(::boost::addressof(scopemngr_proxy))->exit(didthrow);
-    }
-  };
-
-  return ::boost::addressof(extant_exit_proxy::impl);
-}
-
-//TODO: to remove.
-//template <typename AutoAnyImplType>
-//void extant_exit_proxy_impl(
-//  extant_scopemngr_proxy const * scopemngr_proxy,
-//  bool const didthrow)
-//{
-//  static_cast
-//  <
-//    extant_scopemngr_proxy_impl<AutoAnyImplType> const *
-//  >(scopemngr_proxy)->exit(didthrow);
-//}
 
 }
 }

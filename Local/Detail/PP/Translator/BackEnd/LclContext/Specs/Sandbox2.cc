@@ -17,68 +17,77 @@ WG_LCLCONTEXT_END2
   bool autosimflag = false;
 
 #define EXPR employee.timecard()
-  ::wg::lclcontext::detail::scopemngr_proxy_t wgXXXlclcontextXXXscopemngr =
-    WG_AUTOSIMULATOR_AUTOANY_CUSTOM_CAPTURE(
-      ::wg::lclcontext::detail::scopemngr_proxy,
+  ::wg::lclcontext::detail::extant_scopemngr_proxy_t wgXXXlclcontextXXXscopemngr0 =
+    WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_MAKE(
       EXPR,
       autosimflag);
 
 #ifndef NOEX
   try
-#endif
   {
+#endif
     wg_lclcontext_enteredas_typealiases::type0 starttime =
-      WG_AUTOSIMULATOR_AUTOANY_VALUE(
-        wgXXXlclcontextXXXscpmngrproxy,
-        EXPR).enter();
+      WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_ENTER(
+        wgXXXlclcontextXXXscpmngrproxy0,
+        EXPR,
+        wg_lclcontext_enteredas_typealiases::type0) ;
+
+    customentryhandler( starttime )
 
     WG_LCLCLASS(
-      wgXXXlclcontextXXXadhoc_scopemngr1_t,
-      memext (employee) memint (type(bool) did_call_exit, false)
+      wgXXXlclcontextXXXadhoc_scopemngr0_t,
+      memext (employee) memint (type(bool) m_didcallexit, false)
     )
       void enter()
       {
         employee.zone_out();
       }
 
-      void exit(bool const did_throw)
+      void exit(bool const scope_completed)
       {
-        did_call_exit = true;
-        (void)did_throw;
+        m_didcallexit = true;
+        (void)scope_completed;
         employee.zone_in();
       }
 
-      ~wgXXXlclcontextXXXadhoc_scopemngr1_t()
+      ~wgXXXlclcontextXXXadhoc_scopemngr0_t()
       {
-        if( ! did_call_exit )
+        if( ! m_didcallexit )
         {
           this->exit(false);
         }
       }
     WG_LCLCLASS_END;
 
-    wgXXXlclcontextXXXadhoc_scopemngr1_t
-      wgXXXlclcontextXXXscopemngr(employee);
+    wgXXXlclcontextXXXadhoc_scopemngr0_t
+      wgXXXlclcontextXXXscopemngr1(employee);
+
+  #ifndef NOEX
+    try
+    {
+  #endif
+      wgXXXlclcontextXXXscopemngr1.enter();
+
+      {
+        // User code goes here.
+      }
 
     #ifndef NOEX
-    try
-    #endif
-    {
-      // User code goes here.
     }
-    #ifndef NOEX
     catch(...)
     {
-      wgXXXlclcontextXXXscopemngr.exit(true);
+      wgXXXlclcontextXXXscopemngr1.exit(false);
       throw;
     }
     #endif
-  }
+    wgXXXlclcontextXXXscopemngr1.exit(true);
   #ifndef NOEX
+  }
   catch(...)
   {
-    wgXXXlclcontextXXXscopemngr.exit(true);
+    wgXXXlclcontextXXXscopemngr0.exit(false);
     throw;
   }
   #endif
+  wgXXXlclcontextXXXscopemngr0.exit(true);
 }
