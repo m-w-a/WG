@@ -70,8 +70,7 @@
     bool WG_PP_LCLCONTEXT_NAMES_SCOPEMNGR_AUTOSIMFLAGNAME() = false; \
     \
     WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS( \
-      symbtbl, WG_PP_LCLCONTEXT_NAMES_SCOPEMNGR_AUTOSIMFLAGNAME() ) \
-    TODO
+      symbtbl, WG_PP_LCLCONTEXT_NAMES_SCOPEMNGR_AUTOSIMFLAGNAME() )
 
 //------------------------
 //EnteredAsTypeAliasorDcln
@@ -223,7 +222,7 @@
         WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_ONEXITSEQ(symbol) \
       } \
       \
-      ~ adhocclass () \
+      ~ adhocclass () BOOST_NOEXCEPT_IF(false) \
       { \
         if( ! m_didcallexit ) \
         { \

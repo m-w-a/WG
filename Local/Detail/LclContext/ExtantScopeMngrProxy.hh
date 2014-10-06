@@ -1,6 +1,7 @@
 #ifndef WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_HH_
 #define WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_HH_
 
+#include <boost/config.hpp>
 #include <boost/utility/addressof.hpp>
 #include <boost/move/core.hpp>
 #include <boost/move/utility.hpp>
@@ -128,17 +129,17 @@ public:
   // It is guaranteed that the parameter to this ctor will always be a rvalue.
   explicit extant_scopemngr_proxy_impl(auto_any_impl_type scopemngr)
   : extant_scopemngr_proxy(::boost::addressof(exit_proxy)),
-    m_did_call_exit(false),
+    m_didcallexit(false),
     m_scopemngr(::boost::move(scopemngr))
   {}
 
   extant_scopemngr_proxy_impl(BOOST_RV_REF(extant_scopemngr_proxy_impl) rhs)
   : extant_scopemngr_proxy(::boost::move(static_cast<extant_scopemngr_proxy &>(rhs))),
-    m_did_call_exit(rhs.m_did_call_exit),
+    m_didcallexit(rhs.m_didcallexit),
     m_scopemngr(::boost::move(rhs.m_scopemngr))
   {}
 
-  ~extant_scopemngr_proxy_impl()
+  ~extant_scopemngr_proxy_impl() BOOST_NOEXCEPT_IF(false)
   {
     this->exit();
   }
@@ -151,9 +152,9 @@ public:
 
   void exit(bool const scope_completed) const
   {
-    if( ! m_did_call_exit )
+    if( ! m_didcallexit )
     {
-      m_did_call_exit = true;
+      m_didcallexit = true;
       WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE(m_scopemngr).exit(scope_completed);
     }
   }
@@ -176,7 +177,7 @@ private:
 private:
   // Objects of this type will always be accessed through a base class
   // const reference, therefore declare all members as mutable.
-  mutable bool m_did_call_exit;
+  mutable bool m_didcallexit;
   mutable auto_any_impl_type m_scopemngr;
 };
 
