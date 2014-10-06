@@ -121,11 +121,11 @@
     ( autosimflag ) \
     ( WG_PP_LCLCONTEXT_SYMBOLTABLE_ISTPL(symbtbl) ) \
     ( WG_PP_LCLCONTEXT_SYMBOLTABLE_CUSTOMENTRYHANDLER(symbtbl) ) , \
-    seq )
+    WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOLS(symbtbl) )
 
 // BOOST_PP_SEQ_FOR_EACH_I functor.
 #define WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ENTRY( \
-  r, istpl_customentryhandler, indx, symbol) \
+  r, autosimflag_istpl_customentryhandler, indx, symbol) \
     BOOST_PP_IIF( \
       WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOL_CATEGORY_ISEXTANT(symbol), \
       WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_EXTANT, \
@@ -133,9 +133,9 @@
     ( \
       symbol, \
       indx, \
-      BOOST_PP_SEQ_ELEM(0, istpl_customentryhandler), \
-      BOOST_PP_SEQ_ELEM(1, istpl_customentryhandler), \
-      BOOST_PP_SEQ_ELEM(2, istpl_customentryhandler) \
+      BOOST_PP_SEQ_ELEM(0, autosimflag_istpl_customentryhandler), \
+      BOOST_PP_SEQ_ELEM(1, autosimflag_istpl_customentryhandler), \
+      BOOST_PP_SEQ_ELEM(2, autosimflag_istpl_customentryhandler) \
     )
 
 //-----------------------
@@ -165,7 +165,7 @@
         istpl, \
         WG_PP_LCLCONTEXT_NAMES_ENTEREDASDCLNS_TYPEALIASOR_CLASSNAME(), \
         WG_PP_LCLCONTEXT_NAMES_ENTEREDASDCLNS_TYPEALIASOR_ALIASROOTNAME(), \
-        WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_ID(symbol) ) ) \
+        WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_ID(symbol) ) ) ; \
     \
     BOOST_PP_IIF( \
       WG_PP_STARTSWITH_BOOST_PP_NIL(customentryhandler), \
@@ -275,18 +275,25 @@
 //------------
 
 #define WG_PP_LCLCONTEXT_CODEGEN_END_IMPL(count) \
-  WG_PP_SEQ_FLATTEN( \
+  WG_PP_LCLCONTEXT_CG_END_TRYEND( \
     BOOST_PP_SEQ_REVERSE( \
       BOOST_PP_REPEAT( \
         count, \
-        WG_PP_LCLCONTEXT_CODEGEN_END_ENTRY, \
+        WG_PP_LCLCONTEXT_CG_END_SCOPEMNGRSEQ_ENTRY, \
         ~) ) )
 
 // BOOST_PP_REPEAT functor.
-#define WG_PP_LCLCONTEXT_CODEGEN_END_ENTRY(z, indx, data), \
-  ( \
-    WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_TRYEND( \
-      WG_PP_LCLCONTEXT_NAMES_SCOPEMNGR_OBJNAME(indx) ) \
-  )
+#define WG_PP_LCLCONTEXT_CG_END_SCOPEMNGRSEQ_ENTRY(z, indx, data) \
+  ( WG_PP_LCLCONTEXT_NAMES_SCOPEMNGR_OBJNAME(indx) )
+
+#define WG_PP_LCLCONTEXT_CG_END_TRYEND(scopemngr_seq) \
+  BOOST_PP_SEQ_FOR_EACH( \
+    WG_PP_LCLCONTEXT_CG_END_TRYEND_ENTRY, \
+    ~, \
+    scopemngr_seq)
+
+// BOOST_PP_SEQ_FOR_EACH functor.
+#define WG_PP_LCLCONTEXT_CG_END_TRYEND_ENTRY(r, data, scopemngr) \
+  WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_TRYEND(scopemngr)
 
 #endif /* WG_PP_LCLCONTEXT_CODEGEN2_HH_ */
