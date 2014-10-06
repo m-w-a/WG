@@ -275,11 +275,12 @@
 //------------
 
 #define WG_PP_LCLCONTEXT_CODEGEN_END_IMPL(count) \
-  BOOST_PP_SEQ_REVERSE( \
-    BOOST_PP_REPEAT( \
-      count, \
-      WG_PP_LCLCONTEXT_CODEGEN_END_ENTRY, \
-      ~) )
+  WG_PP_SEQ_FLATTEN( \
+    BOOST_PP_SEQ_REVERSE( \
+      BOOST_PP_REPEAT( \
+        count, \
+        WG_PP_LCLCONTEXT_CODEGEN_END_ENTRY, \
+        ~) ) )
 
 // BOOST_PP_REPEAT functor.
 #define WG_PP_LCLCONTEXT_CODEGEN_END_ENTRY(z, indx, data), \
