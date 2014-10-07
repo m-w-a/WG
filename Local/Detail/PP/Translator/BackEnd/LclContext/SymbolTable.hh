@@ -71,7 +71,7 @@
 
 // Returns: { 0 | 1 }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_ISENTRYCAPTURED(symbol) \
-  WG_PP_SEQ_ISNIL( BOOST_PP_SEQ_ELEM(4, symbol) )
+  BOOST_PP_COMPL( WG_PP_SEQ_ISNIL( BOOST_PP_SEQ_ELEM(4, symbol) ) )
 
 // Returns: { parsed-nlt-set-var-dcln }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY(symbol) \

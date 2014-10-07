@@ -12,6 +12,7 @@
 #include <WG/Local/LclClass.hh>
 #include <WG/Local/Detail/AutoSimulator/AutoSimulator.hh>
 #include <WG/Local/Detail/PP/Translator/Markers.hh>
+#include <WG/Local/Detail/LclContext/ExtantScopeMngrProxy.hh>
 
 //###########
 //Public APIs
@@ -280,7 +281,8 @@
       BOOST_PP_REPEAT( \
         count, \
         WG_PP_LCLCONTEXT_CG_END_SCOPEMNGRSEQ_ENTRY, \
-        ~) ) )
+        ~) ) ) \
+  }
 
 // BOOST_PP_REPEAT functor.
 #define WG_PP_LCLCONTEXT_CG_END_SCOPEMNGRSEQ_ENTRY(z, indx, data) \

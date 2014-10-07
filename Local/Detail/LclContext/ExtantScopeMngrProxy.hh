@@ -92,21 +92,21 @@ class extant_scopemngr_proxy
 {
 public:
   explicit extant_scopemngr_proxy(extant_exit_proxy_type const exit_proxy)
-  : m_exit_proxy(exit_proxy)
+  : m_exitproxy(exit_proxy)
   {}
 
   void exit(bool const scope_completed) const
   {
-    m_exit_proxy(*this, scope_completed);
+    m_exitproxy(*this, scope_completed);
   }
 
 protected:
   extant_scopemngr_proxy(extant_scopemngr_proxy const & rhs)
-  : m_exit_proxy(rhs.m_exit_proxy)
+  : m_exitproxy(rhs.m_exitproxy)
   {}
 
   extant_scopemngr_proxy(BOOST_RV_REF(extant_scopemngr_proxy) rhs)
-  : m_exit_proxy(rhs.m_exit_proxy)
+  : m_exitproxy(rhs.m_exitproxy)
   {}
 
 private:
@@ -115,14 +115,14 @@ private:
   // Declared and purposefully not defined.
   extant_scopemngr_proxy & operator=(extant_scopemngr_proxy);
 private:
-  extant_scopemngr_proxy const m_exit_proxy;
+  extant_exit_proxy_type const m_exitproxy;
 };
 
 template <typename AutoAnyImplType>
 class extant_scopemngr_proxy_impl : public extant_scopemngr_proxy
 {
 public:
-  typedef AutoAnyImplType auto_any_impl_type
+  typedef AutoAnyImplType auto_any_impl_type;
 
 public:
   // Purposefully capture by value so as to enable copy elision.
@@ -141,7 +141,7 @@ public:
 
   ~extant_scopemngr_proxy_impl() BOOST_NOEXCEPT_IF(false)
   {
-    this->exit();
+    this->exit(false);
   }
 
   template <typename R>
@@ -184,7 +184,16 @@ private:
 template <typename ExprCategory, typename CapturedType, typename EnableIfDummyArg>
 // Purposefully capture by value so as to enable copy elision.
 // It is guaranteed that the parameter to this ctor will always be a rvalue.
-extant_scopemngr_proxy make_extant_scopemngr_proxy(
+extant_scopemngr_proxy_impl
+<
+  ::wg::autosimulator::detail::auto_any_impl
+  <
+    ExprCategory,
+    CapturedType,
+    EnableIfDummyArg
+  >
+>
+make_extant_scopemngr_proxy(
   ::wg::autosimulator::detail::auto_any_impl
   <
     ExprCategory,
@@ -220,7 +229,7 @@ extant_scopemngr_proxy_downcast(
     ExprCategory,
     CapturedType,
     EnableIfDummyArg
-  > const *)
+  > *)
 {
   typedef
     ::wg::autosimulator::detail::auto_any_impl
@@ -228,7 +237,7 @@ extant_scopemngr_proxy_downcast(
       ExprCategory,
       CapturedType,
       EnableIfDummyArg
-    > const
+    >
       scopemngr_type;
   return
     *static_cast

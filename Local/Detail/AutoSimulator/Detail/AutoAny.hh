@@ -97,6 +97,7 @@ struct expr_category_mutable_rvalue : public expr_category_rvalue {};
 
 // This is runtime deduction, not compile-time deduction.
 // This macro does not evaluate expr.
+// This macro expands to "auto_any_impl_type<...> *"
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_DEDUCEDPTRTYPE(expr) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_DEDUCEDPTRTYPE_IMPL(expr)
 
@@ -179,8 +180,7 @@ struct auto_any_impl
   {}
 
   auto_any_impl(bool, BOOST_RV_REF(CapturedType) obj)
-  : auto_any(::boost::move(static_cast<auto_any &>(rhs))),
-    item(::boost::move(obj))
+  : item(::boost::move(obj))
   {}
 
 // [1]:
