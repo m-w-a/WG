@@ -10,7 +10,6 @@
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclContext/SymbolTable.hh>
 #include <WG/Local/Detail/PP/Translator/BackEnd/LclContext/Names.hh>
 #include <WG/Local/LclClass.hh>
-#include <WG/Local/Detail/AutoSimulator/AutoSimulator.hh>
 #include <WG/Local/Detail/PP/Translator/Markers.hh>
 #include <WG/Local/Detail/LclContext/ExtantScopeMngrProxy.hh>
 
@@ -94,9 +93,23 @@
 #define WG_PP_LCLCONTEXT_CG_EXTANTSYMBOLS_NONEMPTY_ENTRY(r, data, symbol) \
   BOOST_PP_IIF( \
     WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOL_CATEGORY_ISEXTANT(symbol), \
-    WG_PP_TUPLIZE_ARG1, \
+    WG_PP_LCLCONTEXT_CG_EXTANTSYMBOLS_NONEMPTY_ENTRY2, \
     WG_PP_MAPTO_NOTHING_ARG1) \
   (symbol)
+
+#define WG_PP_LCLCONTEXT_CG_EXTANTSYMBOLS_NONEMPTY_ENTRY2(symbol) \
+  BOOST_PP_IIF( \
+    WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_ISENTRYCAPTURED(symbol), \
+    WG_PP_TUPLIZE_ARG1, \
+    WG_PP_LCLCONTEXT_CG_EXTANTSYMBOLS_NONEMPTY_VOIDENTRY) \
+  (symbol)
+
+#define WG_PP_LCLCONTEXT_CG_EXTANTSYMBOLS_NONEMPTY_VOIDENTRY(symbol) \
+  ( \
+    WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY_REPLACE( \
+      symbol, \
+      ( WG_PP_MARKER_NOOP type(void) ) ( BOOST_PP_NIL ) ( BOOST_PP_NIL ) ) \
+  )
 
 #define WG_PP_LCLCONTEXT_CG_ENTEREDAS_TYPEALIASORDCLN_SPECSEQ() \
   ( \

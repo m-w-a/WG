@@ -20,6 +20,8 @@ LclFunction:
 
 BOOST_NO_CXX11_* -> WG_*
 
+Remove support for local types in C++03?
+
 AutoSimulator:  
   How to test:
     defined(WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME) &&

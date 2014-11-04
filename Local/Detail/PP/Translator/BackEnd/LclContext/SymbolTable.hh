@@ -77,6 +77,10 @@
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY(symbol) \
   BOOST_PP_SEQ_ELEM(4, symbol)
 
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY_REPLACE( \
+  symbol, newentry) \
+    BOOST_PP_SEQ_REPLACE(symbol, 4, newentry)
+
 // Returns: { marked-parsed-explicit-non-local-type-or-deduced-type }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY_MARKEDTYPE(symbol) \
   BOOST_PP_SEQ_ELEM( \
@@ -160,15 +164,15 @@
 //
 // parsed-nlt-set-var-dcln:
 //   {
-//     ( WG_PP_MARKER_<NOOP | DEDUCED> parsed-explicit-non-local-type-or-deduced-type )
+//     ( marked-parsed-explicit-non-local-type-or-deduced-type )
 //     ( var-name )
 //     ( value-expr )
 //   }
 // marked-parsed-explicit-non-local-type-or-deduced-type :=
 //   WG_PP_MARKER_<NOOP | DEDUCED> parsed-explicit-non-local-type-or-deduced-type )
 // parsed-explicit-non-local-type-or-deduced-type :=
-//    WG_PP_MARKER_NOOP parsed-explicit-non-local-type
-//  | WG_PP_MARKER_DEDUCEDTYPE parsed-deduced-type
+//    parsed-explicit-non-local-type
+//  | parsed-deduced-type
 // parsed-explicit-non-local-type := type explicit-non-local-type
 // parsed-deduced-type :=
 //   type( { BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> > } )
