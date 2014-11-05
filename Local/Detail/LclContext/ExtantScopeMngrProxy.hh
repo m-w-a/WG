@@ -6,6 +6,8 @@
 #include <boost/move/core.hpp>
 #include <boost/move/utility.hpp>
 #include <WG/Local/Detail/AutoSimulator/Detail/AutoAny.hh>
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_void.hpp>
 
 //###########
 //Public APIs
@@ -145,7 +147,15 @@ public:
   }
 
   template <typename R>
-  R enter() const
+  typename ::boost::enable_if< ::boost::is_void<R>, R>::type
+    enter() const
+  {
+    (void)WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE(m_scopemngr).enter();
+  }
+
+  template <typename R>
+  typename ::boost::disable_if< ::boost::is_void<R>, R>::type
+    enter() const
   {
     return WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE(m_scopemngr).enter();
   }
