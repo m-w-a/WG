@@ -463,37 +463,28 @@ test_lclfunction_codegenspec_cpp03_SOURCES = \
 test_lclfunction_codegenspec_cpp11_SOURCES = \
     ../../Detail/PP/Translator/BackEnd/LclFunction/Specs/C++11Spec.cc
 
-test_autosimulator_cpp03_SOURCES = \
+AUTOSIMULATOR_SRC = \
     ../../Detail/AutoSimulator/Tests/TestMain.cc \
     ../../Detail/AutoSimulator/Tests/UtilsUnitTest.cc \
     ../../Detail/AutoSimulator/Detail/Tests/TypeTraitsUnitTest.cc \
-    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyUnitTest03.cc \
-    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyGroupUnitTest.cc \
     ../../Detail/AutoSimulator/Tests/AutoAnyNonArrayExpr.cc \
-    ../../Detail/AutoSimulator/Tests/AutoAnyArrayExpr.cc \
-    ../../Detail/AutoSimulator/Tests/AutoAnyGroup.cc \
-    ../../Detail/AutoSimulator/Tests/AutoAnyGroupCustomBaseClass.cc
+    ../../Detail/AutoSimulator/Tests/AutoAnyArrayExpr.cc
+
+test_autosimulator_cpp03_SOURCES = \
+    $(AUTOSIMULATOR_SRC) \
+    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyUnitTest03.cc
 
 test_autosimulator_cpp11_SOURCES = \
-    ../../Detail/AutoSimulator/Tests/TestMain.cc \
-    ../../Detail/AutoSimulator/Tests/UtilsUnitTest.cc \
-    ../../Detail/AutoSimulator/Detail/Tests/TypeTraitsUnitTest.cc \
-    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyUnitTest11.cc \
-    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyGroupUnitTest.cc \
-    ../../Detail/AutoSimulator/Tests/AutoAnyNonArrayExpr.cc \
-    ../../Detail/AutoSimulator/Tests/AutoAnyArrayExpr.cc \
-    ../../Detail/AutoSimulator/Tests/AutoAnyGroup.cc \
-    ../../Detail/AutoSimulator/Tests/AutoAnyGroupCustomBaseClass.cc
+    $(AUTOSIMULATOR_SRC) \
+    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyUnitTest11.cc
 
-test_lclcontext_cpp03_SOURCES = \
+LCLCONTEXT_SRC = \
     ../LclContext/TestMain.cc \
     ../LclContext/UtilsUnitTest.cc \
-    ../LclContext/ExtantNoThrow.cc
-    
-test_lclcontext_cpp11_SOURCES = \
-    ../LclContext/TestMain.cc \
-    ../LclContext/UtilsUnitTest.cc \
-    ../LclContext/ExtantNoThrow.cc
+    ../LclContext/ExtantUncapturedEntry.cc
+
+test_lclcontext_cpp03_SOURCES = $(LCLCONTEXT_SRC)
+test_lclcontext_cpp11_SOURCES = $(LCLCONTEXT_SRC)
 
 EXTRA_DIST = 
 

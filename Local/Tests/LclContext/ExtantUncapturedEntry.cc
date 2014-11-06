@@ -4,7 +4,7 @@
 
 using namespace ::wg::lclcontext::detail::test;
 
-TEST(wg_lclcontext_extant_nothrow, CompletedSTEPScope)
+TEST(wg_lclcontext_extant_uncapturedentry, CompletedSTEPScope)
 {
   RecordKeeper records;
   SimpleScopeMngr scopemngr(ScopeManager::Id0, records);
@@ -23,7 +23,7 @@ TEST(wg_lclcontext_extant_nothrow, CompletedSTEPScope)
   EXPECT_TRUE(scopemngrRecord.wasScopeCompleted());
 }
 
-TEST(wg_lclcontext_extant_nothrow, GoToInducedIncompletedScope)
+TEST(wg_lclcontext_extant_uncapturedentry, GoToInducedIncompletedScope)
 {
   RecordKeeper records;
   SimpleScopeMngr scopemngr(ScopeManager::Id0, records);
@@ -67,7 +67,7 @@ void returnInducedIncompletedScope(
 
 }
 
-TEST(wg_lclcontext_extant_nothrow, ReturnInducedIncompletedScope)
+TEST(wg_lclcontext_extant_uncapturedentry, ReturnInducedIncompletedScope)
 {
   RecordKeeper records;
   SimpleScopeMngr scopemngr(ScopeManager::Id0, records);
@@ -79,7 +79,7 @@ TEST(wg_lclcontext_extant_nothrow, ReturnInducedIncompletedScope)
   EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
 }
 
-TEST(wg_lclcontext_extant_nothrow, BreakInducedIncompletedScope)
+TEST(wg_lclcontext_extant_uncapturedentry, BreakInducedIncompletedScope)
 {
   RecordKeeper records;
   SimpleScopeMngr scopemngr(ScopeManager::Id0, records);
@@ -108,7 +108,7 @@ TEST(wg_lclcontext_extant_nothrow, BreakInducedIncompletedScope)
   EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
 }
 
-TEST(wg_lclcontext_extant_nothrow, ContinueInducedIncompletedScope)
+TEST(wg_lclcontext_extant_uncapturedentry, ContinueInducedIncompletedScope)
 {
   RecordKeeper records;
   SimpleScopeMngr scopemngr(ScopeManager::Id0, records);
