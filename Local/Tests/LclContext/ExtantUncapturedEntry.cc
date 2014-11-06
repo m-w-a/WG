@@ -136,3 +136,36 @@ TEST(wg_lclcontext_extant_uncapturedentry, ContinueInducedIncompletedScope)
   EXPECT_TRUE(scopemngrRecord.didCallExit());
   EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
 }
+
+#ifndef BOOST_NO_EXCEPTIONS
+TEST(wg_lclcontext_extant_uncapturedentry, ThrowInducedIncompletedScope)
+{
+  RecordKeeper records;
+  SimpleScopeMngr scopemngr(ScopeManager::Id0, records);
+  Record & scopemngrRecord = records.back();
+
+  bool didthrow = false;
+  try
+  {
+    EXPECT_FALSE(scopemngrRecord.didCallEnter());
+    WG_LCLCONTEXT( with(scopemngr) )
+    {
+      EXPECT_TRUE(scopemngrRecord.didCallEnter());
+      EXPECT_FALSE(scopemngrRecord.didCallExit());
+      EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
+
+      throw -1;
+    }
+    WG_LCLCONTEXT_END1
+  }
+  catch(...)
+  {
+    didthrow = true;
+  }
+
+  EXPECT_TRUE(didthrow);
+
+  EXPECT_TRUE(scopemngrRecord.didCallExit());
+  EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
+}
+#endif
