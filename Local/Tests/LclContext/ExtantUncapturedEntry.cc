@@ -154,7 +154,7 @@ TEST(wg_lclcontext_extant_uncapturedentry, ThrowInducedIncompletedScope)
       EXPECT_FALSE(scopemngrRecord.didCallExit());
       EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
 
-      throw -1;
+      throw Exception1();
     }
     WG_LCLCONTEXT_END1
   }

@@ -12,6 +12,10 @@ namespace detail
 namespace test
 {
 
+struct Exception1 {};
+struct Exception2 {};
+struct Exception3 {};
+
 struct ScopeManager
 {
   enum Id
