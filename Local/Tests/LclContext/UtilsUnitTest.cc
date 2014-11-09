@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <stdexcept>
 #include <WG/Local/Tests/LclContext/Utils.hh>
 
 using namespace ::wg::lclcontext::detail::test;
@@ -27,20 +28,39 @@ TEST(wg_lclcontext_utils_Record, VerifyMutators)
   EXPECT_TRUE(rcd.wasScopeCompleted());
 }
 
+TEST(wg_lclcontext_utils_RecordKeeper, VerifyStartState)
+{
+  RecordKeeper records;
+
+  EXPECT_THROW(records.getRecordFor(ScopeManager::Id0), std::invalid_argument);
+  EXPECT_THROW(records.markEntryCallFor(ScopeManager::Id0), std::invalid_argument);
+  EXPECT_THROW(records.markExitCallFor(ScopeManager::Id0), std::invalid_argument);
+  EXPECT_THROW(records.markScopeCompletionFor(ScopeManager::Id0), std::invalid_argument);
+
+  EXPECT_TRUE(records.isEntryCallOrderCorrect());
+  EXPECT_TRUE(records.isExitCallOrderCorrect());
+}
+
 TEST(wg_lclcontext_utils_RecordKeeper, VerifyMutators)
 {
   RecordKeeper records;
 
   records.makeRecordFor(ScopeManager::Id0);
+  EXPECT_THROW(records.makeRecordFor(ScopeManager::Id0), std::invalid_argument);
+
+  EXPECT_THROW(records.getRecordFor(ScopeManager::Id1), std::invalid_argument);
   Record const & rcd = records.getRecordFor(ScopeManager::Id0);
   EXPECT_EQ(ScopeManager::Id0, rcd.id());
 
+  EXPECT_THROW(records.markEntryCallFor(ScopeManager::Id1), std::invalid_argument);
   records.markEntryCallFor(ScopeManager::Id0);
   EXPECT_TRUE(rcd.didCallEnter());
 
+  EXPECT_THROW(records.markExitCallFor(ScopeManager::Id1), std::invalid_argument);
   records.markExitCallFor(ScopeManager::Id0);
   EXPECT_TRUE(rcd.didCallExit());
 
+  EXPECT_THROW(records.markScopeCompletionFor(ScopeManager::Id1), std::invalid_argument);
   records.markScopeCompletionFor(ScopeManager::Id0);
   EXPECT_TRUE(rcd.wasScopeCompleted());
 }
