@@ -481,7 +481,7 @@ test_autosimulator_cpp11_SOURCES = \
 LCLCONTEXT_SRC = \
     ../LclContext/TestMain.cc \
     ../LclContext/Utils.cc \
-    ../LclContext/UtilsUnitTest.cc #\
+    ../LclContext/UtilsUnitTest.cc \
     ../LclContext/ExtantUncapturedEntry.cc
 
 test_lclcontext_cpp03_SOURCES = $(LCLCONTEXT_SRC)

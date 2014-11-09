@@ -4,37 +4,40 @@
 
 using namespace ::wg::lclcontext::detail::test;
 
-TEST(wg_lclcontext_extant_uncapturedentry, CompletedSTEPScope)
+TEST(wg_lclcontext_extant_uncapturedentry, CompletedScope)
 {
   RecordKeeper records;
-  SimpleScopeMngr scopemngr(ScopeManager::Id0, records);
-  Record & scopemngrRecord = records.back();
+  SimpleScopeMngr scpmngr(ScopeManager::Id0, records);
+  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
 
-  EXPECT_FALSE(scopemngrRecord.didCallEnter());
-  WG_LCLCONTEXT( with(scopemngr) )
+  EXPECT_FALSE(rcd.didCallEnter());
+  WG_LCLCONTEXT( with(scpmngr) )
   {
-    EXPECT_TRUE(scopemngrRecord.didCallEnter());
-    EXPECT_FALSE(scopemngrRecord.didCallExit());
-    EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
+    EXPECT_TRUE(rcd.didCallEnter());
+    EXPECT_FALSE(rcd.didCallExit());
+    EXPECT_FALSE(rcd.wasScopeCompleted());
   }
   WG_LCLCONTEXT_END1
 
-  EXPECT_TRUE(scopemngrRecord.didCallExit());
-  EXPECT_TRUE(scopemngrRecord.wasScopeCompleted());
+  EXPECT_TRUE(rcd.didCallExit());
+  EXPECT_TRUE(rcd.wasScopeCompleted());
+
+  EXPECT_TRUE(records.isEntryCallOrderCorrect());
+  EXPECT_TRUE(records.isExitCallOrderCorrect());
 }
 
 TEST(wg_lclcontext_extant_uncapturedentry, GoToInducedIncompletedScope)
 {
   RecordKeeper records;
-  SimpleScopeMngr scopemngr(ScopeManager::Id0, records);
-  Record & scopemngrRecord = records.back();
+  SimpleScopeMngr scpmngr(ScopeManager::Id0, records);
+  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
 
-  EXPECT_FALSE(scopemngrRecord.didCallEnter());
-  WG_LCLCONTEXT( with(scopemngr) )
+  EXPECT_FALSE(rcd.didCallEnter());
+  WG_LCLCONTEXT( with(scpmngr) )
   {
-    EXPECT_TRUE(scopemngrRecord.didCallEnter());
-    EXPECT_FALSE(scopemngrRecord.didCallExit());
-    EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
+    EXPECT_TRUE(rcd.didCallEnter());
+    EXPECT_FALSE(rcd.didCallExit());
+    EXPECT_FALSE(rcd.wasScopeCompleted());
 
     goto label1;
   }
@@ -42,23 +45,26 @@ TEST(wg_lclcontext_extant_uncapturedentry, GoToInducedIncompletedScope)
 
   label1:
 
-  EXPECT_TRUE(scopemngrRecord.didCallExit());
-  EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
+  EXPECT_TRUE(rcd.didCallExit());
+  EXPECT_FALSE(rcd.wasScopeCompleted());
+
+  EXPECT_TRUE(records.isEntryCallOrderCorrect());
+  EXPECT_TRUE(records.isExitCallOrderCorrect());
 }
 
 namespace
 {
 
 void returnInducedIncompletedScope(
-  SimpleScopeMngr & scopemngr,
-  Record & scopemngrRecord)
+  SimpleScopeMngr & scpmngr,
+  Record const & rcd)
 {
-  EXPECT_FALSE(scopemngrRecord.didCallEnter());
-  WG_LCLCONTEXT( with(scopemngr) )
+  EXPECT_FALSE(rcd.didCallEnter());
+  WG_LCLCONTEXT( with(scpmngr) )
   {
-    EXPECT_TRUE(scopemngrRecord.didCallEnter());
-    EXPECT_FALSE(scopemngrRecord.didCallExit());
-    EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
+    EXPECT_TRUE(rcd.didCallEnter());
+    EXPECT_FALSE(rcd.didCallExit());
+    EXPECT_FALSE(rcd.wasScopeCompleted());
 
     return;
   }
@@ -70,32 +76,35 @@ void returnInducedIncompletedScope(
 TEST(wg_lclcontext_extant_uncapturedentry, ReturnInducedIncompletedScope)
 {
   RecordKeeper records;
-  SimpleScopeMngr scopemngr(ScopeManager::Id0, records);
-  Record & scopemngrRecord = records.back();
+  SimpleScopeMngr scpmngr(ScopeManager::Id0, records);
+  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
 
-  returnInducedIncompletedScope(scopemngr, scopemngrRecord);
+  returnInducedIncompletedScope(scpmngr, rcd);
 
-  EXPECT_TRUE(scopemngrRecord.didCallExit());
-  EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
+  EXPECT_TRUE(rcd.didCallExit());
+  EXPECT_FALSE(rcd.wasScopeCompleted());
+
+  EXPECT_TRUE(records.isEntryCallOrderCorrect());
+  EXPECT_TRUE(records.isExitCallOrderCorrect());
 }
 
 TEST(wg_lclcontext_extant_uncapturedentry, BreakInducedIncompletedScope)
 {
   RecordKeeper records;
-  SimpleScopeMngr scopemngr(ScopeManager::Id0, records);
-  Record & scopemngrRecord = records.back();
+  SimpleScopeMngr scpmngr(ScopeManager::Id0, records);
+  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
 
   int counter = 1;
   while(counter > 0)
   {
     --counter;
 
-    EXPECT_FALSE(scopemngrRecord.didCallEnter());
-    WG_LCLCONTEXT( with(scopemngr) )
+    EXPECT_FALSE(rcd.didCallEnter());
+    WG_LCLCONTEXT( with(scpmngr) )
     {
-      EXPECT_TRUE(scopemngrRecord.didCallEnter());
-      EXPECT_FALSE(scopemngrRecord.didCallExit());
-      EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
+      EXPECT_TRUE(rcd.didCallEnter());
+      EXPECT_FALSE(rcd.didCallExit());
+      EXPECT_FALSE(rcd.wasScopeCompleted());
 
       break;
     }
@@ -104,27 +113,30 @@ TEST(wg_lclcontext_extant_uncapturedentry, BreakInducedIncompletedScope)
 
   EXPECT_EQ(0, counter);
 
-  EXPECT_TRUE(scopemngrRecord.didCallExit());
-  EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
+  EXPECT_TRUE(rcd.didCallExit());
+  EXPECT_FALSE(rcd.wasScopeCompleted());
+
+  EXPECT_TRUE(records.isEntryCallOrderCorrect());
+  EXPECT_TRUE(records.isExitCallOrderCorrect());
 }
 
 TEST(wg_lclcontext_extant_uncapturedentry, ContinueInducedIncompletedScope)
 {
   RecordKeeper records;
-  SimpleScopeMngr scopemngr(ScopeManager::Id0, records);
-  Record & scopemngrRecord = records.back();
+  SimpleScopeMngr scpmngr(ScopeManager::Id0, records);
+  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
 
   int counter = 1;
   while(counter > 0)
   {
     --counter;
 
-    EXPECT_FALSE(scopemngrRecord.didCallEnter());
-    WG_LCLCONTEXT( with(scopemngr) )
+    EXPECT_FALSE(rcd.didCallEnter());
+    WG_LCLCONTEXT( with(scpmngr) )
     {
-      EXPECT_TRUE(scopemngrRecord.didCallEnter());
-      EXPECT_FALSE(scopemngrRecord.didCallExit());
-      EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
+      EXPECT_TRUE(rcd.didCallEnter());
+      EXPECT_FALSE(rcd.didCallExit());
+      EXPECT_FALSE(rcd.wasScopeCompleted());
 
       continue;
     }
@@ -133,26 +145,29 @@ TEST(wg_lclcontext_extant_uncapturedentry, ContinueInducedIncompletedScope)
 
   EXPECT_EQ(0, counter);
 
-  EXPECT_TRUE(scopemngrRecord.didCallExit());
-  EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
+  EXPECT_TRUE(rcd.didCallExit());
+  EXPECT_FALSE(rcd.wasScopeCompleted());
+
+  EXPECT_TRUE(records.isEntryCallOrderCorrect());
+  EXPECT_TRUE(records.isExitCallOrderCorrect());
 }
 
 #ifndef BOOST_NO_EXCEPTIONS
 TEST(wg_lclcontext_extant_uncapturedentry, ThrowInducedIncompletedScope)
 {
   RecordKeeper records;
-  SimpleScopeMngr scopemngr(ScopeManager::Id0, records);
-  Record & scopemngrRecord = records.back();
+  SimpleScopeMngr scpmngr(ScopeManager::Id0, records);
+  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
 
   bool didthrow = false;
   try
   {
-    EXPECT_FALSE(scopemngrRecord.didCallEnter());
-    WG_LCLCONTEXT( with(scopemngr) )
+    EXPECT_FALSE(rcd.didCallEnter());
+    WG_LCLCONTEXT( with(scpmngr) )
     {
-      EXPECT_TRUE(scopemngrRecord.didCallEnter());
-      EXPECT_FALSE(scopemngrRecord.didCallExit());
-      EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
+      EXPECT_TRUE(rcd.didCallEnter());
+      EXPECT_FALSE(rcd.didCallExit());
+      EXPECT_FALSE(rcd.wasScopeCompleted());
 
       throw Exception1();
     }
@@ -165,7 +180,10 @@ TEST(wg_lclcontext_extant_uncapturedentry, ThrowInducedIncompletedScope)
 
   EXPECT_TRUE(didthrow);
 
-  EXPECT_TRUE(scopemngrRecord.didCallExit());
-  EXPECT_FALSE(scopemngrRecord.wasScopeCompleted());
+  EXPECT_TRUE(rcd.didCallExit());
+  EXPECT_FALSE(rcd.wasScopeCompleted());
+
+  EXPECT_TRUE(records.isEntryCallOrderCorrect());
+  EXPECT_TRUE(records.isExitCallOrderCorrect());
 }
 #endif
