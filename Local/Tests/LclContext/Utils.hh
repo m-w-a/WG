@@ -7,6 +7,8 @@
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/mem_fun.hpp>
 #include <boost/multi_index/tag.hpp>
+#include <boost/type_traits/remove_reference.hpp>
+#include <stdexcept>
 
 namespace wg
 {
@@ -100,7 +102,7 @@ private:
   typedef RecordCntr::index<by_id>::type RecordsIndexedById;
   typedef RecordCntr::index<by_dcln_order>::type RecordsIndexedByDclnOrder;
 
-  typedef std::vector<ScopeManager::Id> IdVector;
+  typedef std::vector<ScopeManager::Id /*const*/> IdVector;
 private:
   RecordsIndexedById::iterator getMutableRecordFor(ScopeManager::Id const id);
 private:
@@ -109,21 +111,44 @@ private:
   IdVector m_ExitCalls;
 };
 
-class SimpleScopeMngr
+struct EnterThrows {};
+struct ExitThrows {};
+
+template
+<
+  typename EntryReturnType,
+  typename EntryThrows = void,
+  typename ExitThrows = void
+>
+class ScopeMngrTemplate;
+
+typedef ScopeMngrTemplate<void> SimpleScopeMngr;
+
+template
+<
+  typename EntryReturnType,
+  typename EntryThrows,
+  typename ExitThrows
+>
+class ScopeMngrTemplate
 {
 public:
-  explicit SimpleScopeMngr(ScopeManager::Id const id, RecordKeeper & records)
+  explicit ScopeMngrTemplate(ScopeManager::Id const id, RecordKeeper & records)
   : m_Id(id),
     m_Records(records)
   {
     m_Records.makeRecordFor(m_Id);
   }
 
-  void enter()
+  // Note specializations below.
+  EntryReturnType enter()
   {
     m_Records.markEntryCallFor(m_Id);
+    static typename ::boost::remove_reference<EntryReturnType>::type retVal;
+    return retVal;
   }
 
+  // Note specializations below.
   void exit(bool const scope_completed)
   {
     m_Records.markExitCallFor(m_Id);
@@ -137,6 +162,32 @@ private:
   ScopeManager::Id const m_Id;
   RecordKeeper & m_Records;
 };
+
+template <>
+inline void ScopeMngrTemplate<void, void, void>::enter()
+{
+  m_Records.markEntryCallFor(m_Id);
+}
+
+template <>
+inline void ScopeMngrTemplate<void, EnterThrows, void>::enter()
+{
+  m_Records.markEntryCallFor(m_Id);
+  throw std::runtime_error("Throwing entry.");
+}
+
+template <>
+inline void
+  ScopeMngrTemplate<void, void, ExitThrows>::exit(bool const scope_completed)
+{
+  m_Records.markExitCallFor(m_Id);
+  if(scope_completed)
+  {
+    m_Records.markScopeCompletionFor(m_Id);
+  }
+
+  throw std::runtime_error("Throwing exit.");
+}
 
 }
 }
