@@ -8,6 +8,7 @@
 #include <boost/multi_index/mem_fun.hpp>
 #include <boost/multi_index/tag.hpp>
 #include <boost/type_traits/remove_reference.hpp>
+#include <boost/optional.hpp>
 #include <stdexcept>
 
 namespace wg
@@ -68,15 +69,24 @@ public:
 public:
   // Throws std::invalid_argument if duplicate "id" entered.
   void makeRecordFor(ScopeManager::Id const id);
+  // Throws std::invalid_argument if duplicate "id" entered.
+  void makeRecordFor(ScopeManager::Id const id, std::size_t const position);
   // Throws std::invalid_argument if record not found.
   Record const & getRecordFor(ScopeManager::Id const id);
   // Throws std::invalid_argument if record not found.
   void markEntryCallFor(ScopeManager::Id const id);
   // Throws std::invalid_argument if record not found.
+  void markEntryWillThrowFor(ScopeManager::Id const id);
+  // Throws std::invalid_argument if record not found.
   void markExitCallFor(ScopeManager::Id const id);
   // Throws std::invalid_argument if record not found.
   void markScopeCompletionFor(ScopeManager::Id const id);
+  // Returns true only if enter calls were made for each registered scope manager
+  // id in the order in which those ids where registered, but only up to and
+  // including the id, if any, of the first throwing scope manager.
   bool isEntryCallOrderCorrect() const;
+  // Returns true only if the number of exit calls equals the number of enter
+  // calls and the exit calls were made in the reverse order of the enter calls.
   bool isExitCallOrderCorrect() const;
 private:
   struct by_dcln_order {};
@@ -107,10 +117,12 @@ private:
   RecordsIndexedById::iterator getMutableRecordFor(ScopeManager::Id const id);
 private:
   RecordCntr m_Records;
+  ::boost::optional<ScopeManager::Id> m_EnterMethodThatThrew;
   IdVector m_EntryCalls;
   IdVector m_ExitCalls;
 };
 
+struct EmptyCntr {};
 struct EnterThrows {};
 struct ExitThrows {};
 
@@ -123,6 +135,11 @@ template
 class ScopeMngrTemplate;
 
 typedef ScopeMngrTemplate<void> SimpleScopeMngr;
+typedef ScopeMngrTemplate<void, EnterThrows, void> EnterThrowsScopeMngr;
+typedef ScopeMngrTemplate<void, void, ExitThrows> ExitThrowsScopeMngr;
+typedef ScopeMngrTemplate<void, EnterThrows, ExitThrows> EnterAndExitThrowScopeMngr;
+typedef ScopeMngrTemplate<EmptyCntr> ByValueEntryScopeMngr;
+typedef ScopeMngrTemplate<EmptyCntr &> ByRefEntryScopeMngr;
 
 template
 <
@@ -138,6 +155,16 @@ public:
     m_Records(records)
   {
     m_Records.makeRecordFor(m_Id);
+  }
+
+  explicit ScopeMngrTemplate(
+    ScopeManager::Id const id,
+    RecordKeeper & records,
+    std::size_t const position)
+  : m_Id(id),
+    m_Records(records)
+  {
+    m_Records.makeRecordFor(m_Id, position);
   }
 
   // Note specializations below.
@@ -169,12 +196,27 @@ inline void ScopeMngrTemplate<void, void, void>::enter()
   m_Records.markEntryCallFor(m_Id);
 }
 
+struct EntryException : public std::runtime_error
+{
+  EntryException()
+  : std::runtime_error("")
+  {}
+};
+
 template <>
 inline void ScopeMngrTemplate<void, EnterThrows, void>::enter()
 {
   m_Records.markEntryCallFor(m_Id);
-  throw std::runtime_error("Throwing entry.");
+  m_Records.markEntryWillThrowFor(m_Id);
+  throw EntryException();
 }
+
+struct ExitException : public std::runtime_error
+{
+  ExitException()
+  : std::runtime_error("")
+  {}
+};
 
 template <>
 inline void
@@ -186,7 +228,7 @@ inline void
     m_Records.markScopeCompletionFor(m_Id);
   }
 
-  throw std::runtime_error("Throwing exit.");
+  throw ExitException();
 }
 
 }

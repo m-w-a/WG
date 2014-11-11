@@ -16,8 +16,27 @@ namespace test
 //------------
 
 RecordKeeper::RecordKeeper()
-: m_Records(), m_EntryCalls(), m_ExitCalls()
+: m_Records(), m_EnterMethodThatThrew(), m_EntryCalls(), m_ExitCalls()
 {
+}
+
+void RecordKeeper::makeRecordFor(
+  ScopeManager::Id const id,
+  std::size_t const position)
+{
+  RecordsIndexedByDclnOrder::iterator it = m_Records.get<by_dcln_order>().begin();
+  for(std::size_t indx = 0; indx < position; ++indx)
+  {
+    ++it;
+  }
+
+  std::pair<RecordsIndexedByDclnOrder::iterator, bool> result =
+    m_Records.get<by_dcln_order>().insert(it, Record(id));
+
+  if( ! result.second )
+  {
+    throw std::invalid_argument("Duplicate ScopeManager ID.");
+  }
 }
 
 void RecordKeeper::makeRecordFor(ScopeManager::Id const id)
@@ -55,6 +74,15 @@ void RecordKeeper::markEntryCallFor(ScopeManager::Id const id)
   }
 
   this->m_EntryCalls.push_back(id);
+}
+
+void RecordKeeper::markEntryWillThrowFor(ScopeManager::Id const id)
+{
+  // Ensure record exists.
+  RecordsIndexedById::iterator itRcd = this->getMutableRecordFor(id);
+  (void)itRcd;
+
+  m_EnterMethodThatThrew = id;
 }
 
 void RecordKeeper::markExitCallFor(ScopeManager::Id const id)
@@ -102,7 +130,8 @@ bool RecordKeeper::isEntryCallOrderCorrect() const
   RecordsIndexedByDclnOrder const & recordsByDclnOrder =
     m_Records.get<by_dcln_order>();
 
-  if(m_EntryCalls.size() != recordsByDclnOrder.size())
+  if( ! m_EnterMethodThatThrew
+      && m_EntryCalls.size() != recordsByDclnOrder.size() )
   {
     return false;
   }
@@ -113,7 +142,7 @@ bool RecordKeeper::isEntryCallOrderCorrect() const
     IdVector::const_iterator
   > ItPair;
   for(ItPair its = std::make_pair(recordsByDclnOrder.begin(), m_EntryCalls.begin());
-    its.first != recordsByDclnOrder.end();
+    its.second != m_EntryCalls.end();
     ++its.first, ++its.second)
   {
     if(its.first->id() != *its.second)
@@ -127,25 +156,22 @@ bool RecordKeeper::isEntryCallOrderCorrect() const
 
 bool RecordKeeper::isExitCallOrderCorrect() const
 {
-  RecordsIndexedByDclnOrder const & recordsByDclnOrder =
-    m_Records.get<by_dcln_order>();
-
-  if(m_EntryCalls.size() != recordsByDclnOrder.size())
+  if(m_EntryCalls.size() != m_ExitCalls.size())
   {
     return false;
   }
 
   typedef std::pair
   <
-    RecordsIndexedByDclnOrder::const_iterator,
+    IdVector::const_iterator,
     IdVector::const_reverse_iterator
   > ItPair;
 
-  for(ItPair its = std::make_pair(recordsByDclnOrder.begin(), m_ExitCalls.rbegin());
-    its.first != recordsByDclnOrder.end();
+  for(ItPair its = std::make_pair(m_EntryCalls.begin(), m_ExitCalls.rbegin());
+    its.first != m_EntryCalls.end();
     ++its.first, ++its.second)
   {
-    if(its.first->id() != *its.second)
+    if(*its.first != *its.second)
     {
       return false;
     }

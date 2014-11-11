@@ -345,7 +345,7 @@ TEST(wg_lclcontext_extant_uncapturedentry, NestedCompletedScope)
   EXPECT_TRUE(records.isExitCallOrderCorrect());
 }
 
-TEST(wg_lclcontext_extant_uncapturedentry, PartiallyCompletedScope)
+TEST(wg_lclcontext_extant_uncapturedentry, NestedPartiallyCompletedScope)
 {
   RecordKeeper records;
 
@@ -410,7 +410,7 @@ TEST(wg_lclcontext_extant_uncapturedentry, PartiallyCompletedScope)
   EXPECT_TRUE(records.isExitCallOrderCorrect());
 }
 
-TEST(wg_lclcontext_extant_uncapturedentry, IncompletedScope)
+TEST(wg_lclcontext_extant_uncapturedentry, NestedIncompletedScope)
 {
   RecordKeeper records;
 
@@ -477,4 +477,124 @@ TEST(wg_lclcontext_extant_uncapturedentry, IncompletedScope)
 
   EXPECT_TRUE(records.isEntryCallOrderCorrect());
   EXPECT_TRUE(records.isExitCallOrderCorrect());
+}
+
+TEST(wg_lclcontext_extant_uncapturedentry, EnterThrows)
+{
+  // OneDclnContextOneScopeMngrThrows
+  {
+    RecordKeeper records;
+    EnterThrowsScopeMngr scpmngr(ScopeManager::Id0, records);
+    Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+
+    bool didEnterThrow = false;
+    try
+    {
+      EXPECT_FALSE(rcd.didCallEnter());
+      WG_LCLCONTEXT( with(scpmngr) )
+      {
+        ADD_FAILURE() << "Unreachable code executed.";
+      }
+      WG_LCLCONTEXT_END1
+    }
+    catch(EntryException const &)
+    {
+      didEnterThrow = true;
+    }
+
+    EXPECT_TRUE(didEnterThrow);
+
+    EXPECT_TRUE(rcd.didCallEnter());
+    EXPECT_TRUE(rcd.didCallExit());
+    EXPECT_FALSE(rcd.wasScopeCompleted());
+
+    EXPECT_TRUE(records.isEntryCallOrderCorrect());
+    EXPECT_TRUE(records.isExitCallOrderCorrect());
+  }
+
+  // MultiDclnContextOneScopeMngrThrows
+  {
+    RecordKeeper records;
+    SimpleScopeMngr scpmngr0(ScopeManager::Id0, records);
+    SimpleScopeMngr scpmngr2(ScopeManager::Id2, records);
+
+    bool didEnterThrow = false;
+    try
+    {
+      WG_LCLCONTEXT(
+        with(scpmngr0)
+        with(EnterThrowsScopeMngr(ScopeManager::Id1, records, 1))
+        with(scpmngr2) )
+      {
+        ADD_FAILURE() << "Unreachable code executed.";
+      }
+      WG_LCLCONTEXT_END3
+    }
+    catch(EntryException const &)
+    {
+      didEnterThrow = true;
+    }
+
+    EXPECT_TRUE(didEnterThrow);
+
+    Record const & rcd0 = records.getRecordFor(ScopeManager::Id0);
+    Record const & rcd1 = records.getRecordFor(ScopeManager::Id1);
+    Record const & rcd2 = records.getRecordFor(ScopeManager::Id2);
+
+    EXPECT_TRUE(rcd0.didCallEnter());
+    EXPECT_TRUE(rcd0.didCallExit());
+    EXPECT_FALSE(rcd0.wasScopeCompleted());
+
+    EXPECT_TRUE(rcd1.didCallEnter());
+    EXPECT_TRUE(rcd1.didCallExit());
+    EXPECT_FALSE(rcd1.wasScopeCompleted());
+
+    EXPECT_FALSE(rcd2.didCallEnter());
+    EXPECT_FALSE(rcd2.didCallExit());
+    EXPECT_FALSE(rcd2.wasScopeCompleted());
+
+    EXPECT_TRUE(records.isEntryCallOrderCorrect());
+    EXPECT_TRUE(records.isExitCallOrderCorrect());
+  }
+
+  // MultiDclnContextMultiScopeMngrThrow
+  {
+    RecordKeeper records;
+    EnterThrowsScopeMngr scpmngr0(ScopeManager::Id0, records);
+    EnterThrowsScopeMngr scpmngr2(ScopeManager::Id2, records);
+
+    bool didEnterThrow = false;
+    try
+    {
+      WG_LCLCONTEXT(
+        with(scpmngr0)
+        with(SimpleScopeMngr(ScopeManager::Id1, records, 1))
+        with(scpmngr2) )
+      {
+        ADD_FAILURE() << "Unreachable code executed.";
+      }
+      WG_LCLCONTEXT_END3
+    }
+    catch(EntryException const &)
+    {
+      didEnterThrow = true;
+    }
+
+    EXPECT_TRUE(didEnterThrow);
+
+    Record const & rcd0 = records.getRecordFor(ScopeManager::Id0);
+    EXPECT_THROW(records.getRecordFor(ScopeManager::Id1), std::invalid_argument);
+    Record const & rcd2 = records.getRecordFor(ScopeManager::Id2);
+
+    EXPECT_TRUE(rcd0.didCallEnter());
+    EXPECT_TRUE(rcd0.didCallExit());
+    EXPECT_FALSE(rcd0.wasScopeCompleted());
+
+    EXPECT_FALSE(rcd2.didCallEnter());
+    EXPECT_FALSE(rcd2.didCallExit());
+    EXPECT_FALSE(rcd2.wasScopeCompleted());
+
+    EXPECT_TRUE(records.isEntryCallOrderCorrect());
+    EXPECT_TRUE(records.isExitCallOrderCorrect());
+  }
 }

@@ -47,6 +47,7 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyMutators)
 
   records.makeRecordFor(ScopeManager::Id0);
   EXPECT_THROW(records.makeRecordFor(ScopeManager::Id0), std::invalid_argument);
+  EXPECT_THROW(records.makeRecordFor(ScopeManager::Id0, 1), std::invalid_argument);
 
   EXPECT_THROW(records.getRecordFor(ScopeManager::Id1), std::invalid_argument);
   Record const & rcd = records.getRecordFor(ScopeManager::Id0);
@@ -55,6 +56,9 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyMutators)
   EXPECT_THROW(records.markEntryCallFor(ScopeManager::Id1), std::invalid_argument);
   records.markEntryCallFor(ScopeManager::Id0);
   EXPECT_TRUE(rcd.didCallEnter());
+
+  EXPECT_THROW(records.markEntryWillThrowFor(ScopeManager::Id1), std::invalid_argument);
+  records.markEntryWillThrowFor(ScopeManager::Id0);
 
   EXPECT_THROW(records.markExitCallFor(ScopeManager::Id1), std::invalid_argument);
   records.markExitCallFor(ScopeManager::Id0);
@@ -96,6 +100,26 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     records.makeRecordFor(ScopeManager::Id0);
     records.makeRecordFor(ScopeManager::Id1);
     records.makeRecordFor(ScopeManager::Id2);
+
+    records.markEntryCallFor(ScopeManager::Id0);
+    records.markEntryCallFor(ScopeManager::Id1);
+    records.markEntryCallFor(ScopeManager::Id2);
+
+    records.markExitCallFor(ScopeManager::Id2);
+    records.markExitCallFor(ScopeManager::Id1);
+    records.markExitCallFor(ScopeManager::Id0);
+
+    EXPECT_TRUE(records.isEntryCallOrderCorrect());
+    EXPECT_TRUE(records.isExitCallOrderCorrect());
+  }
+
+  // VerifyCorrectCallOrderForPositionalInsertion
+  {
+    RecordKeeper records;
+
+    records.makeRecordFor(ScopeManager::Id0);
+    records.makeRecordFor(ScopeManager::Id2);
+    records.makeRecordFor(ScopeManager::Id1, 1);
 
     records.markEntryCallFor(ScopeManager::Id0);
     records.markEntryCallFor(ScopeManager::Id1);
@@ -291,6 +315,63 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
   }
 }
 
+TEST(
+  wg_lclcontext_utils_RecordKeeper,
+  VerifyCallOrderForThreeRecordsInPresenceOfThrow)
+{
+  // VerifyCorrectCallOrder
+  {
+    RecordKeeper records;
+
+    records.makeRecordFor(ScopeManager::Id0);
+    records.makeRecordFor(ScopeManager::Id1);
+    records.makeRecordFor(ScopeManager::Id2);
+
+    records.markEntryCallFor(ScopeManager::Id0);
+    records.markEntryCallFor(ScopeManager::Id1);
+    records.markEntryWillThrowFor(ScopeManager::Id1);
+
+    records.markExitCallFor(ScopeManager::Id1);
+    records.markExitCallFor(ScopeManager::Id0);
+
+    EXPECT_TRUE(records.isEntryCallOrderCorrect());
+    EXPECT_TRUE(records.isExitCallOrderCorrect());
+  }
+
+  // VerifyIncorrectEntryCallOrder
+  {
+    RecordKeeper records;
+
+    records.makeRecordFor(ScopeManager::Id0);
+    records.makeRecordFor(ScopeManager::Id1);
+    records.markEntryWillThrowFor(ScopeManager::Id1);
+
+    records.markEntryCallFor(ScopeManager::Id1);
+    records.markEntryCallFor(ScopeManager::Id0);
+
+    EXPECT_FALSE(records.isEntryCallOrderCorrect());
+  }
+
+  // VerifyIncorrectExitCallOrder
+  {
+    RecordKeeper records;
+
+    records.makeRecordFor(ScopeManager::Id0);
+    records.makeRecordFor(ScopeManager::Id1);
+    records.makeRecordFor(ScopeManager::Id2);
+
+    records.markEntryCallFor(ScopeManager::Id0);
+    records.markEntryCallFor(ScopeManager::Id1);
+    records.markEntryWillThrowFor(ScopeManager::Id1);
+
+    records.markExitCallFor(ScopeManager::Id0);
+    records.markExitCallFor(ScopeManager::Id1);
+
+    EXPECT_TRUE(records.isEntryCallOrderCorrect());
+    EXPECT_FALSE(records.isExitCallOrderCorrect());
+  }
+}
+
 TEST(wg_lclcontext_utils_SimpleScopeMngr, VerifyStartState)
 {
   RecordKeeper records;
@@ -302,7 +383,7 @@ TEST(wg_lclcontext_utils_SimpleScopeMngr, VerifyStartState)
   EXPECT_FALSE(rcd.didCallExit());
   EXPECT_FALSE(rcd.wasScopeCompleted());
   EXPECT_FALSE(records.isEntryCallOrderCorrect());
-  EXPECT_FALSE(records.isExitCallOrderCorrect());
+  EXPECT_TRUE(records.isExitCallOrderCorrect());
 }
 
 TEST(wg_lclcontext_utils_SimpleScopeMngr, VerifyMutatorsForOneObject)
