@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <WG/Local/LclContext.hh>
-#include <WG/Local/Tests/LclContext/Utils.hh>
+#include <WG/Local/Tests/LclContext/Utils/Utils.hh>
 
 using namespace ::wg::lclcontext::detail::test;
 

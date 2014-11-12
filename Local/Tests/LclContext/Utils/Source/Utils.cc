@@ -1,4 +1,4 @@
-#include <WG/Local/Tests/LclContext/Utils.hh>
+#include <WG/Local/Tests/LclContext/Utils/Utils.hh>
 #include <stdexcept>
 #include <utility>
 
