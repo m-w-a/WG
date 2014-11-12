@@ -632,3 +632,57 @@ TEST(wg_lclcontext_utils_SimpleScopeMngr, VerifyMutatorsForThreeObjects)
     }
   }
 }
+
+TEST(wg_lclcontext_utils_EnterThrowsScopeMngr, VerifyEnterThrows)
+{
+  RecordKeeper records;
+  EnterThrowsScopeMngr scpmngr(ScopeManager::Id0, records);
+
+  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+
+  EXPECT_THROW(scpmngr.enter(), EnterThrows);
+  EXPECT_TRUE(rcd.didCallEnter());
+
+  scpmngr.exit(false);
+  EXPECT_TRUE(rcd.didCallExit());
+  EXPECT_FALSE(rcd.wasScopeCompleted());
+
+  EXPECT_TRUE(records.isEntryCallOrderCorrect());
+  EXPECT_TRUE(records.isExitCallOrderCorrect());
+}
+
+TEST(wg_lclcontext_utils_EnterThrowsScopeMngr, VerifyExitThrows)
+{
+  RecordKeeper records;
+  ExitThrowsScopeMngr scpmngr(ScopeManager::Id0, records);
+
+  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+
+  scpmngr.enter();
+  EXPECT_TRUE(rcd.didCallEnter());
+
+  EXPECT_THROW(scpmngr.exit(false), ExitThrows);
+  EXPECT_TRUE(rcd.didCallExit());
+  EXPECT_FALSE(rcd.wasScopeCompleted());
+
+  EXPECT_TRUE(records.isEntryCallOrderCorrect());
+  EXPECT_TRUE(records.isExitCallOrderCorrect());
+}
+
+TEST(wg_lclcontext_utils_EnterThrowsScopeMngr, VerifyEnterAndExitThrow)
+{
+  RecordKeeper records;
+  ExitThrowsScopeMngr scpmngr(ScopeManager::Id0, records);
+
+  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+
+  EXPECT_THROW(scpmngr.enter(), EnterThrows);
+  EXPECT_TRUE(rcd.didCallEnter());
+
+  EXPECT_THROW(scpmngr.exit(false), ExitThrows);
+  EXPECT_TRUE(rcd.didCallExit());
+  EXPECT_FALSE(rcd.wasScopeCompleted());
+
+  EXPECT_TRUE(records.isEntryCallOrderCorrect());
+  EXPECT_TRUE(records.isExitCallOrderCorrect());
+}

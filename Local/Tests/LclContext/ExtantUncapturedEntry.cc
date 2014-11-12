@@ -497,7 +497,7 @@ TEST(wg_lclcontext_extant_uncapturedentry, EnterThrows)
       }
       WG_LCLCONTEXT_END1
     }
-    catch(EntryException const &)
+    catch(EnterException const &)
     {
       didEnterThrow = true;
     }
@@ -530,7 +530,7 @@ TEST(wg_lclcontext_extant_uncapturedentry, EnterThrows)
       }
       WG_LCLCONTEXT_END3
     }
-    catch(EntryException const &)
+    catch(EnterException const &)
     {
       didEnterThrow = true;
     }
@@ -575,7 +575,7 @@ TEST(wg_lclcontext_extant_uncapturedentry, EnterThrows)
       }
       WG_LCLCONTEXT_END3
     }
-    catch(EntryException const &)
+    catch(EnterException const &)
     {
       didEnterThrow = true;
     }
