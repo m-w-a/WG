@@ -640,7 +640,7 @@ TEST(wg_lclcontext_utils_EnterThrowsScopeMngr, VerifyEnterThrows)
 
   Record const & rcd = records.getRecordFor(ScopeManager::Id0);
 
-  EXPECT_THROW(scpmngr.enter(), EnterThrows);
+  EXPECT_THROW(scpmngr.enter(), EnterException);
   EXPECT_TRUE(rcd.didCallEnter());
 
   scpmngr.exit(false);
@@ -661,7 +661,7 @@ TEST(wg_lclcontext_utils_EnterThrowsScopeMngr, VerifyExitThrows)
   scpmngr.enter();
   EXPECT_TRUE(rcd.didCallEnter());
 
-  EXPECT_THROW(scpmngr.exit(false), ExitThrows);
+  EXPECT_THROW(scpmngr.exit(false), ExitException);
   EXPECT_TRUE(rcd.didCallExit());
   EXPECT_FALSE(rcd.wasScopeCompleted());
 
@@ -672,14 +672,14 @@ TEST(wg_lclcontext_utils_EnterThrowsScopeMngr, VerifyExitThrows)
 TEST(wg_lclcontext_utils_EnterThrowsScopeMngr, VerifyEnterAndExitThrow)
 {
   RecordKeeper records;
-  ExitThrowsScopeMngr scpmngr(ScopeManager::Id0, records);
+  EnterAndExitThrowScopeMngr scpmngr(ScopeManager::Id0, records);
 
   Record const & rcd = records.getRecordFor(ScopeManager::Id0);
 
-  EXPECT_THROW(scpmngr.enter(), EnterThrows);
+  EXPECT_THROW(scpmngr.enter(), EnterException);
   EXPECT_TRUE(rcd.didCallEnter());
 
-  EXPECT_THROW(scpmngr.exit(false), ExitThrows);
+  EXPECT_THROW(scpmngr.exit(false), ExitException);
   EXPECT_TRUE(rcd.didCallExit());
   EXPECT_FALSE(rcd.wasScopeCompleted());
 
