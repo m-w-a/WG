@@ -27,4 +27,7 @@ AutoSimulator:
     defined(WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME) &&
     defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
     
-    Remove AutoAnyGroup + tests.
+    x) Remove AutoAnyGroup + tests.
+
+LclContext:
+  Test tpls.

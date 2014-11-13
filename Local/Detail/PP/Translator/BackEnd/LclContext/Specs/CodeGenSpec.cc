@@ -16,6 +16,8 @@ WG_LCLCONTEXT_END2
 {
   bool autosimflag = false;
 
+  bool did_scope_complete = false;
+
 #define EXPR employee.timecard()
   ::wg::lclcontext::detail::extant_scopemngr_proxy_t wgXXXlclcontextXXXscopemngr0 =
     WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_MAKE(
@@ -72,11 +74,13 @@ WG_LCLCONTEXT_END2
         // User code goes here.
       }
 
+      did_scope_complete = true;
+
     #ifndef NOEX
     }
     catch(...)
     {
-      wgXXXlclcontextXXXscopemngr1.exit(false);
+      wgXXXlclcontextXXXscopemngr1.exit(did_scope_complete);
       throw;
     }
     #endif
@@ -85,7 +89,7 @@ WG_LCLCONTEXT_END2
   }
   catch(...)
   {
-    wgXXXlclcontextXXXscopemngr0.exit(false);
+    wgXXXlclcontextXXXscopemngr0.exit(did_scope_complete);
     throw;
   }
   #endif

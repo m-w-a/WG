@@ -921,6 +921,7 @@ TEST(wg_lclcontext_extant_uncapturedentry, EnterAndExitThrow)
 TEST(wg_lclcontext_extant_uncapturedentry, ConstScopeMngr)
 {
   RecordKeeper records;
+  // Make sure to declare the object const!
   ConstScopeMngr const scpmngr(ScopeManager::Id0, records);
   Record const & rcd = records.getRecordFor(ScopeManager::Id0);
 
@@ -938,6 +939,66 @@ TEST(wg_lclcontext_extant_uncapturedentry, ConstScopeMngr)
 
   EXPECT_TRUE(records.isEntryCallOrderCorrect());
   EXPECT_TRUE(records.isExitCallOrderCorrect());
+}
+
+namespace
+{
+
+template <typename T>
+struct InTemplate
+{
+  static void run()
+  {
+    RecordKeeper records;
+    SimpleScopeMngr scpmngr0(ScopeManager::Id0, records);
+    SimpleScopeMngr scpmngr1(ScopeManager::Id1, records);
+
+    WG_LCLCONTEXT_TPL(
+      with(scpmngr0)
+      with(scpmngr1)
+      with( T(ScopeManager::Id2, records)) )
+    {
+      Record const & rcd0 = records.getRecordFor(ScopeManager::Id0);
+      Record const & rcd1 = records.getRecordFor(ScopeManager::Id1);
+      Record const & rcd2 = records.getRecordFor(ScopeManager::Id2);
+
+      EXPECT_TRUE(rcd0.didCallEnter());
+      EXPECT_FALSE(rcd0.didCallExit());
+      EXPECT_FALSE(rcd0.wasScopeCompleted());
+
+      EXPECT_TRUE(rcd1.didCallEnter());
+      EXPECT_FALSE(rcd1.didCallExit());
+      EXPECT_FALSE(rcd1.wasScopeCompleted());
+
+      EXPECT_TRUE(rcd2.didCallEnter());
+      EXPECT_FALSE(rcd2.didCallExit());
+      EXPECT_FALSE(rcd2.wasScopeCompleted());
+    }
+    WG_LCLCONTEXT_END3
+
+    Record const & rcd0 = records.getRecordFor(ScopeManager::Id0);
+    Record const & rcd1 = records.getRecordFor(ScopeManager::Id1);
+    Record const & rcd2 = records.getRecordFor(ScopeManager::Id2);
+
+    EXPECT_TRUE(rcd0.didCallExit());
+    EXPECT_TRUE(rcd0.wasScopeCompleted());
+
+    EXPECT_TRUE(rcd1.didCallExit());
+    EXPECT_TRUE(rcd1.wasScopeCompleted());
+
+    EXPECT_TRUE(rcd2.didCallExit());
+    EXPECT_TRUE(rcd2.wasScopeCompleted());
+
+    EXPECT_TRUE(records.isEntryCallOrderCorrect());
+    EXPECT_TRUE(records.isExitCallOrderCorrect());
+  }
+};
+
+}
+
+TEST(wg_lclcontext_extant_uncapturedentry, InTemplate)
+{
+  InTemplate<SimpleScopeMngr>::run();
 }
 
 #endif // BOOST_NO_EXCEPTIONS

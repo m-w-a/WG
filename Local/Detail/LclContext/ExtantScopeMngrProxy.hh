@@ -2,6 +2,7 @@
 #define WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_HH_
 
 #include <boost/config.hpp>
+#include <boost/preprocessor/cat.hpp>
 #include <boost/utility/addressof.hpp>
 #include <boost/move/core.hpp>
 #include <boost/move/utility.hpp>
@@ -38,9 +39,9 @@ typedef extant_scopemngr_proxy const & extant_scopemngr_proxy_t;
       expr, mutable_boolean_flag)
 
 #define WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_ENTER( \
-  scopemngr_proxy, expr, rettype) \
+  istpl, scopemngr_proxy, expr, rettype) \
     WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_ENTER_IMPL( \
-      scopemngr_proxy, expr, rettype)
+      istpl, scopemngr_proxy, expr, rettype)
 
 #define WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_EXIT( \
   scopemngr_proxy, expr, scope_completed) \
@@ -61,10 +62,16 @@ typedef extant_scopemngr_proxy const & extant_scopemngr_proxy_t;
     ::wg::lclcontext::detail::make_extant_scopemngr_proxy( \
       WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CAPTURE(expr, mutable_boolean_flag) )
 
+#define WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_ADDTPL_0
+#define WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_ADDTPL_1 template
+#define WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_ADDTPL(istpl) \
+  BOOST_PP_CAT(WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_ADDTPL_, istpl)
+
 #define WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_ENTER_IMPL( \
-  scopemngr_proxy, expr, rettype) \
+  istpl, scopemngr_proxy, expr, rettype) \
     WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_DOWNCAST( \
-      scopemngr_proxy, expr).enter<rettype>()
+      scopemngr_proxy, expr) . \
+        WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_ADDTPL(istpl) enter<rettype>()
 
 #define WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_EXIT_IMPL( \
   scopemngr_proxy, expr, scope_completed) \
