@@ -53,11 +53,14 @@
   } \
   catch(...) \
   { \
-    scopemngr . exit(false); \
+    scopemngr . exit( WG_PP_LCLCONTEXT_CG_DIDSCOPECOMPLETEFLAG() ); \
     throw; \
   } \
   \
   scopemngr . exit(true);
+
+#define WG_PP_LCLCONTEXT_CG_DIDSCOPECOMPLETEFLAG() \
+  WG_PP_LCLCONTEXT_NAMES_MANGLE(did_scope_complete)
 
 //--------------
 //CodeGen::Start
@@ -66,6 +69,8 @@
 #define WG_PP_LCLCONTEXT_CODEGEN_START_IMPL(symbtbl) \
   { \
     WG_PP_LCLCONTEXT_CG_ENTEREDAS_TYPEALIASORDCLN(symbtbl) \
+    \
+    bool WG_PP_LCLCONTEXT_CG_DIDSCOPECOMPLETEFLAG() = false; \
     \
     bool WG_PP_LCLCONTEXT_NAMES_SCOPEMNGR_AUTOSIMFLAGNAME() = false; \
     \
@@ -289,6 +294,8 @@
 //------------
 
 #define WG_PP_LCLCONTEXT_CODEGEN_END_IMPL(count) \
+  WG_PP_LCLCONTEXT_CG_DIDSCOPECOMPLETEFLAG() = true; \
+  \
   WG_PP_LCLCONTEXT_CG_END_TRYEND( \
     BOOST_PP_SEQ_REVERSE( \
       BOOST_PP_REPEAT( \

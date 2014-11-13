@@ -7,6 +7,11 @@
 //Public APIs
 //###########
 
+#define WG_PP_LCLCONTEXT_NAMES_MANGLE(name) \
+  WG_PP_ID_CAT( \
+    WG_PP_ID_MAKE_GLOBAL(lclcontext), \
+    name)
+
 #define WG_PP_LCLCONTEXT_NAMES_ENTEREDASDCLNS_TYPEALIASOR_ALIASROOTNAME() \
   WG_PP_LCLCONTEXT_NAMES_ENTEREDASDCLNS_TYPEALIASOR_ALIASROOTNAME_IMPL()
 #define WG_PP_LCLCONTEXT_NAMES_ENTEREDASDCLNS_TYPEALIASOR_CLASSNAME() \
@@ -25,15 +30,6 @@
 //Impl Macros
 //###########
 
-//------
-//Utils.
-//------
-
-#define WG_PP_LCLCONTEXT_NAMES_FORMATNAME(name) \
-  WG_PP_ID_CAT( \
-    WG_PP_ID_MAKE_GLOBAL(lclcontext), \
-    name)
-
 //--------------
 //ENTEREDASDCLNS
 //--------------
@@ -43,7 +39,7 @@
 
 #define WG_PP_LCLCONTEXT_NAMES_ENTEREDASDCLNS_TYPEALIASOR_CLASSNAME_IMPL() \
   WG_PP_ID_CAT( \
-    WG_PP_LCLCONTEXT_NAMES_FORMATNAME(typealiaser), \
+    WG_PP_LCLCONTEXT_NAMES_MANGLE(typealiaser), \
     enteredas_dclns)
 
 //--------------
@@ -52,7 +48,7 @@
 
 #define WG_PP_LCLCONTEXT_NAMES_ADHOCSCOPEMNGR_CLASSNAME_IMPL(indx) \
   WG_PP_ID_CAT( \
-    WG_PP_LCLCONTEXT_NAMES_FORMATNAME(adhoc_scopemngr), \
+    WG_PP_LCLCONTEXT_NAMES_MANGLE(adhoc_scopemngr), \
     indx)
 
 //---------
@@ -61,10 +57,10 @@
 
 #define WG_PP_LCLCONTEXT_NAMES_SCOPEMNGR_OBJNAME_IMPL(indx) \
   WG_PP_ID_CAT( \
-    WG_PP_LCLCONTEXT_NAMES_FORMATNAME(scopemngr), \
+    WG_PP_LCLCONTEXT_NAMES_MANGLE(scopemngr), \
     indx)
 
 #define WG_PP_LCLCONTEXT_NAMES_SCOPEMNGR_AUTOSIMFLAGNAME_IMPL() \
-  WG_PP_LCLCONTEXT_NAMES_FORMATNAME(autosimflag)
+  WG_PP_LCLCONTEXT_NAMES_MANGLE(autosimflag)
 
 #endif /* WG_PP_LCLCONTEXT_NAMES_HH_ */
