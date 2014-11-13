@@ -496,13 +496,17 @@ test_autosimulator_cpp11_SOURCES = \
     ../../Detail/AutoSimulator/Detail/Tests/AutoAnyUnitTest11.cc
 
 test_lclcontext_testutils_SOURCES = \
-    ../LclContext/Utils/Source/Utils.cc \
     ../LclContext/Utils/Tests/TestMain.cc \
-    ../LclContext/Utils/Tests/UtilsUnitTest.cc
+    ../LclContext/Utils/Source/Utils.cc \
+    ../LclContext/Utils/Source/Records.cc \
+    ../LclContext/Utils/Tests/UtilsUnitTest.cc \
+    ../LclContext/Utils/Tests/RecordsUnitTest.cc \
+    ../LclContext/Utils/Tests/ScopeMngrUnitTest.cc
 
 LCLCONTEXT_SRC = \
     ../LclContext/TestMain.cc \
     ../LclContext/Utils/Source/Utils.cc \
+    ../LclContext/Utils/Source/Records.cc \
     ../LclContext/ExtantUncapturedEntry.cc
 
 test_lclcontext_cpp03_SOURCES = $(LCLCONTEXT_SRC)

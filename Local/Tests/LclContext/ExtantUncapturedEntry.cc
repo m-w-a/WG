@@ -2,6 +2,9 @@
 #include <boost/config.hpp>
 #include <WG/Local/LclContext.hh>
 #include <WG/Local/Tests/LclContext/Utils/Utils.hh>
+#include <WG/Local/Tests/LclContext/Utils/Records.hh>
+#include <WG/Local/Tests/LclContext/Utils/ScopeMngrTemplate.hh>
+#include <WG/Local/Tests/LclContext/Utils/ConstScopeMngr.hh>
 
 using namespace ::wg::lclcontext::detail::test;
 
@@ -159,6 +162,8 @@ TEST(wg_lclcontext_extant_uncapturedentry, ThrowInducedIncompletedScope)
   RecordKeeper records;
   SimpleScopeMngr scpmngr(ScopeManager::Id0, records);
   Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+
+  struct Exception1 {};
 
   bool didthrow = false;
   try
@@ -911,6 +916,28 @@ TEST(wg_lclcontext_extant_uncapturedentry, EnterAndExitThrow)
     EXPECT_TRUE(records.isEntryCallOrderCorrect());
     EXPECT_TRUE(records.isExitCallOrderCorrect());
   }
+}
+
+TEST(wg_lclcontext_extant_uncapturedentry, ConstScopeMngr)
+{
+  RecordKeeper records;
+  ConstScopeMngr const scpmngr(ScopeManager::Id0, records);
+  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+
+  EXPECT_FALSE(rcd.didCallEnter());
+  WG_LCLCONTEXT( with(scpmngr) )
+  {
+    EXPECT_TRUE(rcd.didCallEnter());
+    EXPECT_FALSE(rcd.didCallExit());
+    EXPECT_FALSE(rcd.wasScopeCompleted());
+  }
+  WG_LCLCONTEXT_END1
+
+  EXPECT_TRUE(rcd.didCallExit());
+  EXPECT_TRUE(rcd.wasScopeCompleted());
+
+  EXPECT_TRUE(records.isEntryCallOrderCorrect());
+  EXPECT_TRUE(records.isExitCallOrderCorrect());
 }
 
 #endif // BOOST_NO_EXCEPTIONS
