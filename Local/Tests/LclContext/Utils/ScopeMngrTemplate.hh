@@ -4,6 +4,8 @@
 #include <WG/Local/Tests/LclContext/Utils/Utils.hh>
 #include <WG/Local/Tests/LclContext/Utils/Records.hh>
 #include <boost/type_traits/remove_reference.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_void.hpp>
 #include <stdexcept>
 
 namespace wg
@@ -48,13 +50,24 @@ struct ExitException : public std::runtime_error
   {}
 };
 
+template <typename T>
+struct EntryValue
+{
+  typedef typename ::boost::remove_reference<T>::type EntryValueType;
+  EntryValueType EntryObj;
+};
+
+template <>
+struct EntryValue<void>
+{};
+
 template
 <
   typename EntryReturnType,
   typename EnterThrowsT,
   typename ExitThrowsT
 >
-class ScopeMngrTemplate
+class ScopeMngrTemplate : public EntryValue<EntryReturnType>
 {
 public:
   explicit ScopeMngrTemplate(ScopeManager::Id const id, RecordKeeper & records)
@@ -80,11 +93,7 @@ public:
 
     this->enterThrows(static_cast<EnterThrowsT *>(0));
 
-    typedef
-      typename ::boost::remove_reference<EntryReturnType>::type
-        NoRefEntryReturnType;
-    return this->enterImpl<EntryReturnType>(
-      static_cast<NoRefEntryReturnType *>(0) );
+    return this->enterImpl<EntryReturnType>();
   }
 
   void exit(bool const scope_completed)
@@ -99,15 +108,16 @@ public:
   }
 
 private:
-  template <typename R, typename P1>
-  R enterImpl(P1 *)
+  template <typename R>
+  typename ::boost::disable_if< ::boost::is_void<R>, R >::type
+    enterImpl()
   {
-    static ::boost::value_initialized<P1> retVal;
-    return retVal;
+    return this->EntryObj;
   }
 
   template <typename R>
-  R enterImpl(void *)
+  typename ::boost::enable_if< ::boost::is_void<R> >::type
+    enterImpl()
   {}
 
   void enterThrows(void *)
