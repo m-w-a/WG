@@ -1,5 +1,3 @@
-    enter_as(optional-type-qualifier variable-name)
-
 //----------
 //Semantics:
 //----------
@@ -30,7 +28,7 @@ x) on_exit:
   thrown from that scope then "true" is passed as a parameter to on_exit, else 
   "false" is passed as a parameter.
 
-on_exit can only be triggered by the destructor in order for it to be invoked
+x) on_exit can only be triggered by the destructor in order for it to be invoked
 *any time* the scope is exited. The destructor doesn't have access to any
 expressions of the enclosing scope so foreach's "downcast" trick using the
 conditional operator can't be used. Hence the destructor's class must know the

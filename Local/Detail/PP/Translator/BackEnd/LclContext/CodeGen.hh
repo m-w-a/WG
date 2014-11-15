@@ -227,19 +227,20 @@
       WG_LCLCLASS) \
     ( \
       adhocclass, \
-      memext WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_VARBINDSEQ(symbol) \
+      WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ADHOC_MEMEXTSPEC( \
+        WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_VARBINDSEQ(symbol) ) \
       memint (type(bool) m_didcallexit, false) \
     ) \
       void enter() \
       { \
-        WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_ONENTERSEQ(symbol) \
+        WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_ONENTERSEQ(symbol) ; \
       } \
       \
       void exit(bool const scope_completed) \
       { \
         m_didcallexit = true; \
         (void)scope_completed; \
-        WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_ONEXITSEQ(symbol) \
+        WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_ONEXITSEQ(symbol) ; \
       } \
       \
       ~ adhocclass () BOOST_NOEXCEPT_IF(false) \
@@ -260,6 +261,12 @@
     WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_TRYSTART() \
     \
     adhocobj . enter() ;
+
+#define WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ADHOC_MEMEXTSPEC(varbindseq) \
+  BOOST_PP_IIF( \
+    WG_PP_SEQ_ISNIL(varbindseq), \
+    BOOST_PP_EMPTY, \
+    memext ( varbindseq ) BOOST_PP_EMPTY) ()
 
 #define WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ADHOC_SCOPEMNGROBJINITARGS(symbol) \
   WG_PP_SEQ_ENUM( \
