@@ -203,7 +203,7 @@
           1, \
           WG_PP_LCLCONTEXT_KEYWORDS_EAT_HEADKEYWORD(spec), \
           WG_PP_TUPLIZE_ARG1, \
-          WG_PP_ADDCOMMA_AFTERTUPLE_ARITY1, \
+          WG_PP_ADDCOMMA_AFTERTOKENS, \
           WG_PP_IDENTITY_ARG1) \
       BOOST_PP_RPAREN() )
 
@@ -228,7 +228,7 @@
         1, \
         WG_PP_LCLCONTEXT_KEYWORDS_EAT_HEADKEYWORD(spec), \
         WG_PP_TUPLIZE_ARG1, \
-        WG_PP_ADDCOMMA_AFTERTUPLE_ARITY1, \
+        WG_PP_ADDCOMMA_AFTERTOKENS, \
         WG_PP_IDENTITY_ARG1) \
     BOOST_PP_RPAREN() )
 
@@ -324,17 +324,17 @@
       WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ADHOC_BOUNDVARDCLNS2 \
       BOOST_PP_LPAREN() \
         state BOOST_PP_COMMA() \
-        WG_PP_SPLITHEADTUPLEFROMTOKENS( \
+        WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
           1, \
           spec, \
           WG_PP_TUPLIZE_ARG1, \
-          WG_PP_ADDCOMMA_AFTERTUPLE_ARITY1, \
+          WG_PP_ADDCOMMA_AFTERTOKENS, \
           WG_PP_IDENTITY_ARG1) \
       BOOST_PP_RPAREN() )
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ADHOC_BOUNDVARDCLNS2( \
-  state, boundvarseqtuple, spec) \
-    boundvarseqtuple \
+  state, boundvarseq, spec) \
+    ( boundvarseq ) \
     WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ADHOC2(state, spec)
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ADHOC2(state, spec) \
@@ -353,7 +353,7 @@
         1, \
         WG_PP_LCLCONTEXT_KEYWORDS_EAT_HEADKEYWORD(spec), \
         WG_PP_TUPLIZE_ARG1, \
-        WG_PP_ADDCOMMA_AFTERTUPLE_ARITY1, \
+        WG_PP_ADDCOMMA_AFTERTOKENS, \
         WG_PP_IDENTITY_ARG1) \
     BOOST_PP_RPAREN() )
 

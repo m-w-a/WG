@@ -89,9 +89,17 @@
 #define WG_PP_ISNEXTTOKEN_A_TUPLE(tuplearity, tokens) \
   WG_PP_ISNEXTTOKEN_A_TUPLE_IMPL(tuplearity, tokens)
 
+#define WG_PP_ADDCOMMA_AFTERTOKENS(tokens) tokens ,
+
+// tokens:
+//   A sequence of tokens whose head token is a 1-tuple.
+// Inserts a comma after the head tuple.
 #define WG_PP_ADDCOMMA_AFTERTUPLE_ARITY1(tokens) \
   WG_PP_ADDCOMMA_AFTERTUPLE(1, tokens)
 
+// tokens:
+//   A sequence of tokens whose head token is a arity-tuple.
+// Inserts a comma after the head tuple.
 #define WG_PP_ADDCOMMA_AFTERTUPLE(arity, tokens) \
   BOOST_PP_CAT(WG_PP_ADDCOMMA_AFTERTUPLE_IMPL, arity) tokens
 #if BOOST_PP_VARIADICS

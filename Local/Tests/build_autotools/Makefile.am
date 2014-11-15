@@ -508,7 +508,8 @@ LCLCONTEXT_SRC = \
     ../LclContext/Utils/Source/Utils.cc \
     ../LclContext/Utils/Source/Records.cc \
     ../LclContext/ExtantUncapturedEntry.cc \
-    ../LclContext/ExtantCapturedEntry.cc
+    ../LclContext/ExtantCapturedEntry.cc \
+    ../LclContext/Adhoc.cc
 
 test_lclcontext_cpp03_SOURCES = $(LCLCONTEXT_SRC)
 test_lclcontext_cpp11_SOURCES = $(LCLCONTEXT_SRC)
