@@ -48,7 +48,7 @@
 
 #define WG_PP_LCLCONTEXT_NAMES_ADHOCSCOPEMNGR_CLASSNAME_IMPL(indx) \
   WG_PP_ID_CAT( \
-    WG_PP_LCLCONTEXT_NAMES_MANGLE(adhoc_scopemngr), \
+    WG_PP_LCLCONTEXT_NAMES_MANGLE(adhoc_scopemngr_type), \
     indx)
 
 //---------

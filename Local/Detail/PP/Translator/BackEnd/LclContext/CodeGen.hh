@@ -135,16 +135,27 @@
 //---------------
 
 #define WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS(symbtbl, autosimflag) \
-  BOOST_PP_SEQ_FOR_EACH_I( \
+  BOOST_PP_REPEAT( \
+    WG_PP_SEQ_SIZE(WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOLS(symbtbl)), \
     WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ENTRY, \
-    ( autosimflag ) \
-    ( WG_PP_LCLCONTEXT_SYMBOLTABLE_ISTPL(symbtbl) ) \
-    ( WG_PP_LCLCONTEXT_SYMBOLTABLE_CUSTOMENTRYHANDLER(symbtbl) ) , \
-    WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOLS(symbtbl) )
+    ( \
+      ( autosimflag ) \
+      ( WG_PP_LCLCONTEXT_SYMBOLTABLE_ISTPL(symbtbl) ) \
+      ( WG_PP_LCLCONTEXT_SYMBOLTABLE_CUSTOMENTRYHANDLER(symbtbl) ) \
+    ) \
+    ( WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOLS(symbtbl) ) \
+  )
 
-// BOOST_PP_SEQ_FOR_EACH_I functor.
+// BOOST_PP_REPEAT functor.
 #define WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ENTRY( \
-  r, autosimflag_istpl_customentryhandler, indx, symbol) \
+  z, indx, data) \
+    WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ENTRY2( \
+      indx, \
+      BOOST_PP_SEQ_ELEM(0, data), \
+      WG_PP_SEQ_ELEM(indx, BOOST_PP_SEQ_ELEM(1, data)) )
+
+#define WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ENTRY2( \
+  indx, autosimflag_istpl_customentryhandler, symbol) \
     BOOST_PP_IIF( \
       WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOL_CATEGORY_ISEXTANT(symbol), \
       WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_EXTANT, \
@@ -231,6 +242,7 @@
         WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_VARBINDSEQ(symbol) ) \
       memint (type(bool) m_didcallexit, false) \
     ) \
+    public: \
       void enter() \
       { \
         WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_ONENTERSEQ(symbol) ; \
@@ -254,9 +266,8 @@
     WG_LCLCLASS_END ; \
     \
     adhocclass \
-      adhocobj( \
-        WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ADHOC_SCOPEMNGROBJINITARGS( \
-          symbol) ) ; \
+      adhocobj \
+        WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ADHOC_SCOPEMNGROBJINITARGS(symbol) ; \
     \
     WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_TRYSTART() \
     \
@@ -269,11 +280,25 @@
     memext ( varbindseq ) BOOST_PP_EMPTY) ()
 
 #define WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ADHOC_SCOPEMNGROBJINITARGS(symbol) \
-  WG_PP_SEQ_ENUM( \
+  WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ADHOC_SCOPEMNGROBJINITARGS2( \
     WG_PP_SEQ_FOR_EACH( \
       WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ADHOC_SCOPEMNGROBJINITARGS_ENTRY, \
       ~, \
       WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_VARBINDSEQ(symbol) ))
+
+#define WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ADHOC_SCOPEMNGROBJINITARGS2( \
+  argsseq) \
+    BOOST_PP_IIF( \
+      WG_PP_SEQ_ISNIL(argsseq), \
+      BOOST_PP_EMPTY, \
+      BOOST_PP_LPAREN) () \
+    \
+    WG_PP_SEQ_ENUM(argsseq) \
+    \
+    BOOST_PP_IIF( \
+      WG_PP_SEQ_ISNIL(argsseq), \
+      BOOST_PP_EMPTY, \
+      BOOST_PP_RPAREN) ()
 
 // WG_PP_SEQ_FOR_EACH functor.
 #define WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ADHOC_SCOPEMNGROBJINITARGS_ENTRY( \
