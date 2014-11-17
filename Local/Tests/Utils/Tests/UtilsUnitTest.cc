@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/Local/Tests/Utils/Utils.hh>
 
-TEST(wg_tests_testhelper_equal, OkIfEqual)
+TEST(wg_tests_utils_equal, OkIfEqual)
 {
   typedef int Arr2x3[2][3];
 
@@ -10,7 +10,7 @@ TEST(wg_tests_testhelper_equal, OkIfEqual)
   EXPECT_TRUE( ::wg::lcl::test::equal(arr1, arr1) );
 }
 
-TEST(wg_tests_testhelper_equal, OkIfNotEqual)
+TEST(wg_tests_utils_equal, OkIfNotEqual)
 {
   typedef int Arr2x3[2][3];
 

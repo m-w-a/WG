@@ -282,7 +282,8 @@ TESTS = \
 
 test_testutils_SOURCES = \
     ../Utils/Tests/TestMain.cc \
-    ../Utils/Tests/UtilsUnitTest.cc
+    ../Utils/Tests/UtilsUnitTest.cc \
+    ../Utils/Tests/TrileanUnitTest.cc
 
 test_pp_pp_SOURCES = ../../Detail/PP/Tests/PPUnitTest.cc
 test_pp_wgseq_SOURCES = ../../Detail/PP/Tests/SeqUnitTest.cc
@@ -509,7 +510,9 @@ LCLCONTEXT_SRC = \
     ../LclContext/Utils/Source/Records.cc \
     ../LclContext/ExtantUncapturedEntry.cc \
     ../LclContext/ExtantCapturedEntry.cc \
-    ../LclContext/Adhoc.cc
+    ../LclContext/AdhocEnterSpecified.cc \
+    ../LclContext/AdhocExitSpecified.cc \
+    ../LclContext/AdhocEnterAndExitSpecified.cc
 
 test_lclcontext_cpp03_SOURCES = $(LCLCONTEXT_SRC)
 test_lclcontext_cpp11_SOURCES = $(LCLCONTEXT_SRC)

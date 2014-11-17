@@ -7,23 +7,6 @@
 
 using namespace ::wg::lclcontext::detail::test;
 
-TEST(wg_lclcontext_adhoc, EnterSpecifiedCompletedScope)
-{
-  bool didCallEnter = false;
-  bool wasScopeCompleted = false;
-
-  WG_LCLCONTEXT(
-    with_adhoc (ref didCallEnter)
-      on_enter( didCallEnter = true )  )
-  {
-    EXPECT_TRUE(didCallEnter);
-    wasScopeCompleted = true;
-  }
-  WG_LCLCONTEXT_END1
-
-  EXPECT_TRUE(wasScopeCompleted);
-}
-
 TEST(wg_lclcontext_adhoc, EnterAndExitSpecifiedCompletedScope)
 {
   RecordKeeper records;
