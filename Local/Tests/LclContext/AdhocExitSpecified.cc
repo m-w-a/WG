@@ -168,3 +168,35 @@ TEST(wg_lclcontext_adhoc, ExitSpecifiedIncompletedScope)
   }
 #endif // BOOST_NO_EXCEPTIONS
 }
+
+namespace
+{
+
+template <typename T>
+struct ExitSpecifiedInTemplate
+{
+  static void run()
+  {
+    T wasScopeExecuted = false;
+    T didCallExit = false;
+    T wasScopeCompleted = false;
+
+    WG_LCLCONTEXT_TPL(
+      with_adhoc (ref didCallExit) (ref wasScopeCompleted)
+        on_exit(didCallExit = true; this->wasScopeCompleted = scope_completed;) )
+    {
+      wasScopeExecuted = true;
+    }
+    WG_LCLCONTEXT_END1
+
+    EXPECT_TRUE(wasScopeExecuted);
+    EXPECT_TRUE(didCallExit);
+    EXPECT_TRUE(wasScopeCompleted);
+  }
+};
+
+}
+TEST(wg_lclcontext_adhoc, ExitSpecifiedInTemplate)
+{
+  ExitSpecifiedInTemplate<bool>::run();
+}

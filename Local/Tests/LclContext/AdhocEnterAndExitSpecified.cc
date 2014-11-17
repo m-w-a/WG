@@ -212,3 +212,41 @@ TEST(wg_lclcontext_adhoc, EnterAndExitSpecifiedIncompletedScope)
   }
 #endif // BOOST_NO_EXCEPTIONS
 }
+
+namespace
+{
+
+template <typename T>
+struct EnterAndExitSpecifiedInTemplate
+{
+  static void run()
+  {
+    RecordKeeper records;
+    T scpmngr(ScopeManager::Id0, records);
+    Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+
+    EXPECT_FALSE(rcd.didCallEnter());
+    WG_LCLCONTEXT_TPL(
+      with_adhoc (ref scpmngr)
+        on_enter( scpmngr.enter() )
+        on_exit( scpmngr.exit(scope_completed) )  )
+    {
+      EXPECT_TRUE(rcd.didCallEnter());
+      EXPECT_FALSE(rcd.didCallExit());
+      EXPECT_FALSE(rcd.wasScopeCompleted());
+    }
+    WG_LCLCONTEXT_END1
+
+    EXPECT_TRUE(rcd.didCallExit());
+    EXPECT_TRUE(rcd.wasScopeCompleted());
+
+    EXPECT_TRUE(records.isEntryCallOrderCorrect());
+    EXPECT_TRUE(records.isExitCallOrderCorrect());
+  }
+};
+
+}
+TEST(wg_lclcontext_adhoc, EnterAndExitSpecifiedInTemplate)
+{
+  EnterAndExitSpecifiedInTemplate<SimpleScopeMngr>::run();
+}
