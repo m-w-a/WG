@@ -34,7 +34,9 @@ noinst_PROGRAMS = \
     test_autosimulator_cpp11 \
     test_lclcontext_testutils \
     test_lclcontext_cpp03 \
-    test_lclcontext_cpp11
+    test_lclcontext_cpp11 \
+    test_lclcontext_cpp03_noex \
+    test_lclcontext_cpp11_noex
 
 # Don't auto build test_autofunctor_cf_* since they're compile-failure tests.
 if DO_NOT_BUILD
@@ -132,12 +134,26 @@ TEST_WG_LCLCONTEXT_CPP03_APPALTPATH = \
 TEST_WG_LCLCONTEXT_CPP03_APPBUILDLOC = \
     $(abs_builddir)/$(TEST_WG_LCLCONTEXT_CPP03_APPNAME)
 
+TEST_WG_LCLCONTEXT_CPP03_NOEX_APPNAME = \
+    test_LCLCONTEXT_CPP03_NOEX$(EXEEXT)
+TEST_WG_LCLCONTEXT_CPP03_NOEX_APPALTPATH = \
+    $(TEST_BIN_DIR)/$(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPNAME)
+TEST_WG_LCLCONTEXT_CPP03_NOEX_APPBUILDLOC = \
+    $(abs_builddir)/$(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPNAME)
+
 TEST_WG_LCLCONTEXT_CPP11_APPNAME = \
     test_lclcontext_cpp11$(EXEEXT)
 TEST_WG_LCLCONTEXT_CPP11_APPALTPATH = \
     $(TEST_BIN_DIR)/$(TEST_WG_LCLCONTEXT_CPP11_APPNAME)
 TEST_WG_LCLCONTEXT_CPP11_APPBUILDLOC = \
     $(abs_builddir)/$(TEST_WG_LCLCONTEXT_CPP11_APPNAME)
+
+TEST_WG_LCLCONTEXT_CPP11_NOEX_APPNAME = \
+    test_LCLCONTEXT_CPP11_NOEX$(EXEEXT)
+TEST_WG_LCLCONTEXT_CPP11_NOEX_APPALTPATH = \
+    $(TEST_BIN_DIR)/$(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPNAME)
+TEST_WG_LCLCONTEXT_CPP11_NOEX_APPBUILDLOC = \
+    $(abs_builddir)/$(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPNAME)
 
 #Custom init.
 all-local : \
@@ -155,7 +171,9 @@ all-local : \
     $(TEST_WG_AUTOSIMULATOR_CPP11_APPALTPATH) \
     $(TEST_WG_LCLCONTEXT_TESTUTILS_APPALTPATH) \
     $(TEST_WG_LCLCONTEXT_CPP03_APPALTPATH) \
-    $(TEST_WG_LCLCONTEXT_CPP11_APPALTPATH)
+    $(TEST_WG_LCLCONTEXT_CPP11_APPALTPATH) \
+    $(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPALTPATH) \
+    $(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPALTPATH)
     
 $(TEST_BIN_DIR) :
 	$(MKDIR_P) $(TEST_BIN_DIR)
@@ -237,12 +255,24 @@ $(TEST_WG_LCLCONTEXT_CPP03_APPALTPATH) : $(TEST_WG_LCLCONTEXT_CPP03_APPBUILDLOC)
 	  $(LN_S) -f \
 	      $(TEST_WG_LCLCONTEXT_CPP03_APPBUILDLOC) \
 	      $(TEST_WG_LCLCONTEXT_CPP03_APPNAME); )
-	      
+
+$(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPALTPATH) : $(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPBUILDLOC)
+	( cd $(TEST_BIN_DIR); \
+	  $(LN_S) -f \
+	      $(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPBUILDLOC) \
+	      $(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPNAME); )
+
 $(TEST_WG_LCLCONTEXT_CPP11_APPALTPATH) : $(TEST_WG_LCLCONTEXT_CPP11_APPBUILDLOC)
 	( cd $(TEST_BIN_DIR); \
 	  $(LN_S) -f \
 	      $(TEST_WG_LCLCONTEXT_CPP11_APPBUILDLOC) \
 	      $(TEST_WG_LCLCONTEXT_CPP11_APPNAME); )
+
+$(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPALTPATH) : $(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPBUILDLOC)
+	( cd $(TEST_BIN_DIR); \
+	  $(LN_S) -f \
+	      $(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPBUILDLOC) \
+	      $(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPNAME); )
 
 #Custom finalize.
 clean-local : \
@@ -259,7 +289,9 @@ clean-local : \
     rm -rf $(TEST_WG_AUTOSIMULATOR_CPP11_APPNAME) \
     rm -rf $(TEST_WG_LCLCONTEXT_TESTUTILS_APPNAME) \
     rm -rf $(TEST_WG_LCLCONTEXT_CPP03_APPNAME) \
-    rm -rf $(TEST_WG_LCLCONTEXT_CPP11_APPNAME)
+    rm -rf $(TEST_WG_LCLCONTEXT_CPP11_APPNAME) \
+    rm -rf $(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPNAME) \
+    rm -rf $(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPNAME)
 
 ##############################
 #Automatically executed tests.
@@ -278,7 +310,9 @@ TESTS = \
     $(TEST_WG_AUTOSIMULATOR_CPP11_APPNAME) \
     $(TEST_WG_LCLCONTEXT_TESTUTILS_APPNAME) \
     $(TEST_WG_LCLCONTEXT_CPP03_APPNAME) \
-    $(TEST_WG_LCLCONTEXT_CPP11_APPNAME)
+    $(TEST_WG_LCLCONTEXT_CPP11_APPNAME) \
+    $(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPNAME) \
+    $(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPNAME)
 
 test_testutils_SOURCES = \
     ../Utils/Tests/TestMain.cc \
@@ -517,6 +551,8 @@ LCLCONTEXT_SRC = \
 
 test_lclcontext_cpp03_SOURCES = $(LCLCONTEXT_SRC)
 test_lclcontext_cpp11_SOURCES = $(LCLCONTEXT_SRC)
+test_lclcontext_cpp03_noex_SOURCES = $(LCLCONTEXT_SRC)
+test_lclcontext_cpp11_noex_SOURCES = $(LCLCONTEXT_SRC)
 
 EXTRA_DIST = 
 
@@ -583,6 +619,16 @@ test_lclcontext_cpp11_CPPFLAGS = \
     $(AM_CPPFLAGS) \
     $(GTEST_CPPFLAGS)
 
+test_lclcontext_cpp03_noex_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
+    $(GTEST_CPPFLAGS) \
+    -DBOOST_NO_EXCEPTIONS
+
+test_lclcontext_cpp11_noex_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
+    $(GTEST_CPPFLAGS) \
+    -DBOOST_NO_EXCEPTIONS
+
 ################
 #Compiler Flags.
 ################
@@ -646,6 +692,16 @@ test_lclcontext_cpp11_CXXFLAGS = \
     $(AM_CXXFLAGS) \
     -std=gnu++11
 
+test_lclcontext_cpp03_noex_CXXFLAGS = \
+    $(AM_CXXFLAGS) \
+    -std=gnu++98 \
+    -fno-exceptions
+    
+test_lclcontext_cpp11_noex_CXXFLAGS = \
+    $(AM_CXXFLAGS) \
+    -std=gnu++11 \
+    -fno-exceptions
+
 ##############
 #Linker Flags.
 ##############
@@ -667,3 +723,5 @@ test_autosimulator_cpp11_LDADD = $(GTEST_LTLIB)
 test_lclcontext_testutils_LDADD = $(GTEST_LTLIB)
 test_lclcontext_cpp03_LDADD = $(GTEST_LTLIB)
 test_lclcontext_cpp11_LDADD = $(GTEST_LTLIB)
+test_lclcontext_cpp03_noex_LDADD = $(GTEST_LTLIB)
+test_lclcontext_cpp11_noex_LDADD = $(GTEST_LTLIB)

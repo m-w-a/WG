@@ -123,19 +123,21 @@ private:
   void enterThrows(void *)
   {}
 
+  void exitThrows(void *)
+  {}
+
+#ifndef BOOST_NO_EXCEPTIONS
   void enterThrows(EnterThrows *)
   {
     m_Records.markEntryWillThrowFor(m_Id);
     throw EnterException();
   }
 
-  void exitThrows(void *)
-  {}
-
   void exitThrows(ExitThrows *)
   {
     throw ExitException();
   }
+#endif
 
 private:
   ScopeManager::Id const m_Id;
