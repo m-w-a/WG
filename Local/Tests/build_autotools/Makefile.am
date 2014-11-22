@@ -536,7 +536,7 @@ test_lclcontext_testutils_SOURCES = \
     ../LclContext/Utils/Source/Records.cc \
     ../LclContext/Utils/Tests/UtilsUnitTest.cc \
     ../LclContext/Utils/Tests/RecordsUnitTest.cc \
-    ../LclContext/Utils/Tests/ScopeMngrUnitTest.cc
+    ../LclContext/Utils/Tests/ScopeMngrTemplateUnitTest.cc
 
 LCLCONTEXT_SRC = \
     ../LclContext/TestMain.cc \

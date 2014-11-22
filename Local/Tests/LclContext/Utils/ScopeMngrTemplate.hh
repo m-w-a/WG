@@ -72,9 +72,9 @@ class ScopeMngrTemplate : public EntryValue<EntryReturnType>
 public:
   explicit ScopeMngrTemplate(ScopeManager::Id const id, RecordKeeper & records)
   : m_Id(id),
-    m_Records(records)
+    m_Recorder(records)
   {
-    m_Records.makeRecordFor(m_Id);
+    m_Recorder.makeRecordFor(m_Id);
   }
 
   explicit ScopeMngrTemplate(
@@ -82,14 +82,14 @@ public:
     RecordKeeper & records,
     std::size_t const position)
   : m_Id(id),
-    m_Records(records)
+    m_Recorder(records)
   {
-    m_Records.makeRecordFor(m_Id, position);
+    m_Recorder.makeRecordFor(m_Id, position);
   }
 
   EntryReturnType enter()
   {
-    m_Records.markEntryCallFor(m_Id);
+    m_Recorder.markEntryCallFor(m_Id);
 
     this->enterThrows(static_cast<EnterThrowsT *>(0));
 
@@ -98,10 +98,10 @@ public:
 
   void exit(bool const scope_completed)
   {
-    m_Records.markExitCallFor(m_Id);
+    m_Recorder.markExitCallFor(m_Id);
     if(scope_completed)
     {
-      m_Records.markScopeCompletionFor(m_Id);
+      m_Recorder.markScopeCompletionFor(m_Id);
     }
 
     this->exitThrows(static_cast<ExitThrowsT *>(0));
@@ -129,7 +129,7 @@ private:
 #ifndef BOOST_NO_EXCEPTIONS
   void enterThrows(EnterThrows *)
   {
-    m_Records.markEntryWillThrowFor(m_Id);
+    m_Recorder.markEntryWillThrowFor(m_Id);
     throw EnterException();
   }
 
@@ -141,7 +141,7 @@ private:
 
 private:
   ScopeManager::Id const m_Id;
-  RecordKeeper & m_Records;
+  IRecorder m_Recorder;
 };
 
 }

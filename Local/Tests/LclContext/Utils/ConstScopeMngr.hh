@@ -18,28 +18,28 @@ class ConstScopeMngr
 public:
   explicit ConstScopeMngr(ScopeManager::Id const id, RecordKeeper & records)
   : m_Id(id),
-    m_Records(records)
+    m_Recorder(records)
   {
-    m_Records.makeRecordFor(m_Id);
+    m_Recorder.makeRecordFor(m_Id);
   }
 
   void enter() const
   {
-    m_Records.markEntryCallFor(m_Id);
+    m_Recorder.markEntryCallFor(m_Id);
   }
 
   void exit(bool const scope_completed) const
   {
-    m_Records.markExitCallFor(m_Id);
+    m_Recorder.markExitCallFor(m_Id);
     if(scope_completed)
     {
-      m_Records.markScopeCompletionFor(m_Id);
+      m_Recorder.markScopeCompletionFor(m_Id);
     }
   }
 
 private:
   ScopeManager::Id const m_Id;
-  RecordKeeper & m_Records;
+  mutable IRecorder m_Recorder;
 };
 
 }

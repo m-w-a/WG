@@ -32,11 +32,12 @@ TEST(wg_lclcontext_utils_Record, VerifyMutators)
 TEST(wg_lclcontext_utils_RecordKeeper, VerifyStartState)
 {
   RecordKeeper records;
+  IRecorder recorder(records);
 
   EXPECT_THROW(records.getRecordFor(ScopeManager::Id0), std::invalid_argument);
-  EXPECT_THROW(records.markEntryCallFor(ScopeManager::Id0), std::invalid_argument);
-  EXPECT_THROW(records.markExitCallFor(ScopeManager::Id0), std::invalid_argument);
-  EXPECT_THROW(records.markScopeCompletionFor(ScopeManager::Id0), std::invalid_argument);
+  EXPECT_THROW(recorder.markEntryCallFor(ScopeManager::Id0), std::invalid_argument);
+  EXPECT_THROW(recorder.markExitCallFor(ScopeManager::Id0), std::invalid_argument);
+  EXPECT_THROW(recorder.markScopeCompletionFor(ScopeManager::Id0), std::invalid_argument);
 
   EXPECT_TRUE(records.isEntryCallOrderCorrect());
   EXPECT_TRUE(records.isExitCallOrderCorrect());
@@ -45,28 +46,29 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyStartState)
 TEST(wg_lclcontext_utils_RecordKeeper, VerifyMutators)
 {
   RecordKeeper records;
+  IRecorder recorder(records);
 
-  records.makeRecordFor(ScopeManager::Id0);
-  EXPECT_THROW(records.makeRecordFor(ScopeManager::Id0), std::invalid_argument);
-  EXPECT_THROW(records.makeRecordFor(ScopeManager::Id0, 1), std::invalid_argument);
+  recorder.makeRecordFor(ScopeManager::Id0);
+  EXPECT_THROW(recorder.makeRecordFor(ScopeManager::Id0), std::invalid_argument);
+  EXPECT_THROW(recorder.makeRecordFor(ScopeManager::Id0, 1), std::invalid_argument);
 
   EXPECT_THROW(records.getRecordFor(ScopeManager::Id1), std::invalid_argument);
   Record const & rcd = records.getRecordFor(ScopeManager::Id0);
   EXPECT_EQ(ScopeManager::Id0, rcd.id());
 
-  EXPECT_THROW(records.markEntryCallFor(ScopeManager::Id1), std::invalid_argument);
-  records.markEntryCallFor(ScopeManager::Id0);
+  EXPECT_THROW(recorder.markEntryCallFor(ScopeManager::Id1), std::invalid_argument);
+  recorder.markEntryCallFor(ScopeManager::Id0);
   EXPECT_TRUE(rcd.didCallEnter());
 
-  EXPECT_THROW(records.markEntryWillThrowFor(ScopeManager::Id1), std::invalid_argument);
-  records.markEntryWillThrowFor(ScopeManager::Id0);
+  EXPECT_THROW(recorder.markEntryWillThrowFor(ScopeManager::Id1), std::invalid_argument);
+  recorder.markEntryWillThrowFor(ScopeManager::Id0);
 
-  EXPECT_THROW(records.markExitCallFor(ScopeManager::Id1), std::invalid_argument);
-  records.markExitCallFor(ScopeManager::Id0);
+  EXPECT_THROW(recorder.markExitCallFor(ScopeManager::Id1), std::invalid_argument);
+  recorder.markExitCallFor(ScopeManager::Id0);
   EXPECT_TRUE(rcd.didCallExit());
 
-  EXPECT_THROW(records.markScopeCompletionFor(ScopeManager::Id1), std::invalid_argument);
-  records.markScopeCompletionFor(ScopeManager::Id0);
+  EXPECT_THROW(recorder.markScopeCompletionFor(ScopeManager::Id1), std::invalid_argument);
+  recorder.markScopeCompletionFor(ScopeManager::Id0);
   EXPECT_TRUE(rcd.wasScopeCompleted());
 }
 
@@ -81,12 +83,13 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForNoRecord)
 TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForOneRecord)
 {
   RecordKeeper records;
+  IRecorder recorder(records);
 
-  records.makeRecordFor(ScopeManager::Id0);
+  recorder.makeRecordFor(ScopeManager::Id0);
 
-  records.markEntryCallFor(ScopeManager::Id0);
+  recorder.markEntryCallFor(ScopeManager::Id0);
 
-  records.markExitCallFor(ScopeManager::Id0);
+  recorder.markExitCallFor(ScopeManager::Id0);
 
   EXPECT_TRUE(records.isEntryCallOrderCorrect());
   EXPECT_TRUE(records.isExitCallOrderCorrect());
@@ -97,18 +100,19 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
   // VerifyCorrectCallOrder
   {
     RecordKeeper records;
+    IRecorder recorder(records);
 
-    records.makeRecordFor(ScopeManager::Id0);
-    records.makeRecordFor(ScopeManager::Id1);
-    records.makeRecordFor(ScopeManager::Id2);
+    recorder.makeRecordFor(ScopeManager::Id0);
+    recorder.makeRecordFor(ScopeManager::Id1);
+    recorder.makeRecordFor(ScopeManager::Id2);
 
-    records.markEntryCallFor(ScopeManager::Id0);
-    records.markEntryCallFor(ScopeManager::Id1);
-    records.markEntryCallFor(ScopeManager::Id2);
+    recorder.markEntryCallFor(ScopeManager::Id0);
+    recorder.markEntryCallFor(ScopeManager::Id1);
+    recorder.markEntryCallFor(ScopeManager::Id2);
 
-    records.markExitCallFor(ScopeManager::Id2);
-    records.markExitCallFor(ScopeManager::Id1);
-    records.markExitCallFor(ScopeManager::Id0);
+    recorder.markExitCallFor(ScopeManager::Id2);
+    recorder.markExitCallFor(ScopeManager::Id1);
+    recorder.markExitCallFor(ScopeManager::Id0);
 
     EXPECT_TRUE(records.isEntryCallOrderCorrect());
     EXPECT_TRUE(records.isExitCallOrderCorrect());
@@ -117,18 +121,19 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
   // VerifyCorrectCallOrderForPositionalInsertion
   {
     RecordKeeper records;
+    IRecorder recorder(records);
 
-    records.makeRecordFor(ScopeManager::Id0);
-    records.makeRecordFor(ScopeManager::Id2);
-    records.makeRecordFor(ScopeManager::Id1, 1);
+    recorder.makeRecordFor(ScopeManager::Id0);
+    recorder.makeRecordFor(ScopeManager::Id2);
+    recorder.makeRecordFor(ScopeManager::Id1, 1);
 
-    records.markEntryCallFor(ScopeManager::Id0);
-    records.markEntryCallFor(ScopeManager::Id1);
-    records.markEntryCallFor(ScopeManager::Id2);
+    recorder.markEntryCallFor(ScopeManager::Id0);
+    recorder.markEntryCallFor(ScopeManager::Id1);
+    recorder.markEntryCallFor(ScopeManager::Id2);
 
-    records.markExitCallFor(ScopeManager::Id2);
-    records.markExitCallFor(ScopeManager::Id1);
-    records.markExitCallFor(ScopeManager::Id0);
+    recorder.markExitCallFor(ScopeManager::Id2);
+    recorder.markExitCallFor(ScopeManager::Id1);
+    recorder.markExitCallFor(ScopeManager::Id0);
 
     EXPECT_TRUE(records.isEntryCallOrderCorrect());
     EXPECT_TRUE(records.isExitCallOrderCorrect());
@@ -139,14 +144,15 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder021
     {
       RecordKeeper records;
+      IRecorder recorder(records);
 
-      records.makeRecordFor(ScopeManager::Id0);
-      records.makeRecordFor(ScopeManager::Id1);
-      records.makeRecordFor(ScopeManager::Id2);
+      recorder.makeRecordFor(ScopeManager::Id0);
+      recorder.makeRecordFor(ScopeManager::Id1);
+      recorder.makeRecordFor(ScopeManager::Id2);
 
-      records.markEntryCallFor(ScopeManager::Id0);
-      records.markEntryCallFor(ScopeManager::Id2);
-      records.markEntryCallFor(ScopeManager::Id1);
+      recorder.markEntryCallFor(ScopeManager::Id0);
+      recorder.markEntryCallFor(ScopeManager::Id2);
+      recorder.markEntryCallFor(ScopeManager::Id1);
 
       EXPECT_FALSE(records.isEntryCallOrderCorrect());
     }
@@ -154,14 +160,15 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder102
     {
       RecordKeeper records;
+      IRecorder recorder(records);
 
-      records.makeRecordFor(ScopeManager::Id0);
-      records.makeRecordFor(ScopeManager::Id1);
-      records.makeRecordFor(ScopeManager::Id2);
+      recorder.makeRecordFor(ScopeManager::Id0);
+      recorder.makeRecordFor(ScopeManager::Id1);
+      recorder.makeRecordFor(ScopeManager::Id2);
 
-      records.markEntryCallFor(ScopeManager::Id1);
-      records.markEntryCallFor(ScopeManager::Id0);
-      records.markEntryCallFor(ScopeManager::Id2);
+      recorder.markEntryCallFor(ScopeManager::Id1);
+      recorder.markEntryCallFor(ScopeManager::Id0);
+      recorder.markEntryCallFor(ScopeManager::Id2);
 
       EXPECT_FALSE(records.isEntryCallOrderCorrect());
     }
@@ -169,14 +176,15 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder120
     {
       RecordKeeper records;
+      IRecorder recorder(records);
 
-      records.makeRecordFor(ScopeManager::Id0);
-      records.makeRecordFor(ScopeManager::Id1);
-      records.makeRecordFor(ScopeManager::Id2);
+      recorder.makeRecordFor(ScopeManager::Id0);
+      recorder.makeRecordFor(ScopeManager::Id1);
+      recorder.makeRecordFor(ScopeManager::Id2);
 
-      records.markEntryCallFor(ScopeManager::Id1);
-      records.markEntryCallFor(ScopeManager::Id2);
-      records.markEntryCallFor(ScopeManager::Id0);
+      recorder.markEntryCallFor(ScopeManager::Id1);
+      recorder.markEntryCallFor(ScopeManager::Id2);
+      recorder.markEntryCallFor(ScopeManager::Id0);
 
       EXPECT_FALSE(records.isEntryCallOrderCorrect());
     }
@@ -184,14 +192,15 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder201
     {
       RecordKeeper records;
+      IRecorder recorder(records);
 
-      records.makeRecordFor(ScopeManager::Id0);
-      records.makeRecordFor(ScopeManager::Id1);
-      records.makeRecordFor(ScopeManager::Id2);
+      recorder.makeRecordFor(ScopeManager::Id0);
+      recorder.makeRecordFor(ScopeManager::Id1);
+      recorder.makeRecordFor(ScopeManager::Id2);
 
-      records.markEntryCallFor(ScopeManager::Id2);
-      records.markEntryCallFor(ScopeManager::Id0);
-      records.markEntryCallFor(ScopeManager::Id1);
+      recorder.markEntryCallFor(ScopeManager::Id2);
+      recorder.markEntryCallFor(ScopeManager::Id0);
+      recorder.markEntryCallFor(ScopeManager::Id1);
 
       EXPECT_FALSE(records.isEntryCallOrderCorrect());
     }
@@ -199,14 +208,15 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder210
     {
       RecordKeeper records;
+      IRecorder recorder(records);
 
-      records.makeRecordFor(ScopeManager::Id0);
-      records.makeRecordFor(ScopeManager::Id1);
-      records.makeRecordFor(ScopeManager::Id2);
+      recorder.makeRecordFor(ScopeManager::Id0);
+      recorder.makeRecordFor(ScopeManager::Id1);
+      recorder.makeRecordFor(ScopeManager::Id2);
 
-      records.markEntryCallFor(ScopeManager::Id2);
-      records.markEntryCallFor(ScopeManager::Id1);
-      records.markEntryCallFor(ScopeManager::Id0);
+      recorder.markEntryCallFor(ScopeManager::Id2);
+      recorder.markEntryCallFor(ScopeManager::Id1);
+      recorder.markEntryCallFor(ScopeManager::Id0);
 
       EXPECT_FALSE(records.isEntryCallOrderCorrect());
     }
@@ -217,18 +227,19 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder201
     {
       RecordKeeper records;
+      IRecorder recorder(records);
 
-      records.makeRecordFor(ScopeManager::Id0);
-      records.makeRecordFor(ScopeManager::Id1);
-      records.makeRecordFor(ScopeManager::Id2);
+      recorder.makeRecordFor(ScopeManager::Id0);
+      recorder.makeRecordFor(ScopeManager::Id1);
+      recorder.makeRecordFor(ScopeManager::Id2);
 
-      records.markEntryCallFor(ScopeManager::Id0);
-      records.markEntryCallFor(ScopeManager::Id1);
-      records.markEntryCallFor(ScopeManager::Id2);
+      recorder.markEntryCallFor(ScopeManager::Id0);
+      recorder.markEntryCallFor(ScopeManager::Id1);
+      recorder.markEntryCallFor(ScopeManager::Id2);
 
-      records.markExitCallFor(ScopeManager::Id2);
-      records.markExitCallFor(ScopeManager::Id0);
-      records.markExitCallFor(ScopeManager::Id1);
+      recorder.markExitCallFor(ScopeManager::Id2);
+      recorder.markExitCallFor(ScopeManager::Id0);
+      recorder.markExitCallFor(ScopeManager::Id1);
 
       EXPECT_TRUE(records.isEntryCallOrderCorrect());
       EXPECT_FALSE(records.isExitCallOrderCorrect());
@@ -237,18 +248,19 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder120
     {
       RecordKeeper records;
+      IRecorder recorder(records);
 
-      records.makeRecordFor(ScopeManager::Id0);
-      records.makeRecordFor(ScopeManager::Id1);
-      records.makeRecordFor(ScopeManager::Id2);
+      recorder.makeRecordFor(ScopeManager::Id0);
+      recorder.makeRecordFor(ScopeManager::Id1);
+      recorder.makeRecordFor(ScopeManager::Id2);
 
-      records.markEntryCallFor(ScopeManager::Id0);
-      records.markEntryCallFor(ScopeManager::Id1);
-      records.markEntryCallFor(ScopeManager::Id2);
+      recorder.markEntryCallFor(ScopeManager::Id0);
+      recorder.markEntryCallFor(ScopeManager::Id1);
+      recorder.markEntryCallFor(ScopeManager::Id2);
 
-      records.markExitCallFor(ScopeManager::Id1);
-      records.markExitCallFor(ScopeManager::Id2);
-      records.markExitCallFor(ScopeManager::Id0);
+      recorder.markExitCallFor(ScopeManager::Id1);
+      recorder.markExitCallFor(ScopeManager::Id2);
+      recorder.markExitCallFor(ScopeManager::Id0);
 
       EXPECT_TRUE(records.isEntryCallOrderCorrect());
       EXPECT_FALSE(records.isExitCallOrderCorrect());
@@ -257,18 +269,19 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder102
     {
       RecordKeeper records;
+      IRecorder recorder(records);
 
-      records.makeRecordFor(ScopeManager::Id0);
-      records.makeRecordFor(ScopeManager::Id1);
-      records.makeRecordFor(ScopeManager::Id2);
+      recorder.makeRecordFor(ScopeManager::Id0);
+      recorder.makeRecordFor(ScopeManager::Id1);
+      recorder.makeRecordFor(ScopeManager::Id2);
 
-      records.markEntryCallFor(ScopeManager::Id0);
-      records.markEntryCallFor(ScopeManager::Id1);
-      records.markEntryCallFor(ScopeManager::Id2);
+      recorder.markEntryCallFor(ScopeManager::Id0);
+      recorder.markEntryCallFor(ScopeManager::Id1);
+      recorder.markEntryCallFor(ScopeManager::Id2);
 
-      records.markExitCallFor(ScopeManager::Id1);
-      records.markExitCallFor(ScopeManager::Id0);
-      records.markExitCallFor(ScopeManager::Id2);
+      recorder.markExitCallFor(ScopeManager::Id1);
+      recorder.markExitCallFor(ScopeManager::Id0);
+      recorder.markExitCallFor(ScopeManager::Id2);
 
       EXPECT_TRUE(records.isEntryCallOrderCorrect());
       EXPECT_FALSE(records.isExitCallOrderCorrect());
@@ -277,18 +290,19 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder021
     {
       RecordKeeper records;
+      IRecorder recorder(records);
 
-      records.makeRecordFor(ScopeManager::Id0);
-      records.makeRecordFor(ScopeManager::Id1);
-      records.makeRecordFor(ScopeManager::Id2);
+      recorder.makeRecordFor(ScopeManager::Id0);
+      recorder.makeRecordFor(ScopeManager::Id1);
+      recorder.makeRecordFor(ScopeManager::Id2);
 
-      records.markEntryCallFor(ScopeManager::Id0);
-      records.markEntryCallFor(ScopeManager::Id1);
-      records.markEntryCallFor(ScopeManager::Id2);
+      recorder.markEntryCallFor(ScopeManager::Id0);
+      recorder.markEntryCallFor(ScopeManager::Id1);
+      recorder.markEntryCallFor(ScopeManager::Id2);
 
-      records.markExitCallFor(ScopeManager::Id0);
-      records.markExitCallFor(ScopeManager::Id2);
-      records.markExitCallFor(ScopeManager::Id1);
+      recorder.markExitCallFor(ScopeManager::Id0);
+      recorder.markExitCallFor(ScopeManager::Id2);
+      recorder.markExitCallFor(ScopeManager::Id1);
 
       EXPECT_TRUE(records.isEntryCallOrderCorrect());
       EXPECT_FALSE(records.isExitCallOrderCorrect());
@@ -297,18 +311,19 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder012
     {
       RecordKeeper records;
+      IRecorder recorder(records);
 
-      records.makeRecordFor(ScopeManager::Id0);
-      records.makeRecordFor(ScopeManager::Id1);
-      records.makeRecordFor(ScopeManager::Id2);
+      recorder.makeRecordFor(ScopeManager::Id0);
+      recorder.makeRecordFor(ScopeManager::Id1);
+      recorder.makeRecordFor(ScopeManager::Id2);
 
-      records.markEntryCallFor(ScopeManager::Id0);
-      records.markEntryCallFor(ScopeManager::Id1);
-      records.markEntryCallFor(ScopeManager::Id2);
+      recorder.markEntryCallFor(ScopeManager::Id0);
+      recorder.markEntryCallFor(ScopeManager::Id1);
+      recorder.markEntryCallFor(ScopeManager::Id2);
 
-      records.markExitCallFor(ScopeManager::Id0);
-      records.markExitCallFor(ScopeManager::Id1);
-      records.markExitCallFor(ScopeManager::Id2);
+      recorder.markExitCallFor(ScopeManager::Id0);
+      recorder.markExitCallFor(ScopeManager::Id1);
+      recorder.markExitCallFor(ScopeManager::Id2);
 
       EXPECT_TRUE(records.isEntryCallOrderCorrect());
       EXPECT_FALSE(records.isExitCallOrderCorrect());
@@ -323,17 +338,18 @@ TEST(
   // VerifyCorrectCallOrder
   {
     RecordKeeper records;
+    IRecorder recorder(records);
 
-    records.makeRecordFor(ScopeManager::Id0);
-    records.makeRecordFor(ScopeManager::Id1);
-    records.makeRecordFor(ScopeManager::Id2);
+    recorder.makeRecordFor(ScopeManager::Id0);
+    recorder.makeRecordFor(ScopeManager::Id1);
+    recorder.makeRecordFor(ScopeManager::Id2);
 
-    records.markEntryCallFor(ScopeManager::Id0);
-    records.markEntryCallFor(ScopeManager::Id1);
-    records.markEntryWillThrowFor(ScopeManager::Id1);
+    recorder.markEntryCallFor(ScopeManager::Id0);
+    recorder.markEntryCallFor(ScopeManager::Id1);
+    recorder.markEntryWillThrowFor(ScopeManager::Id1);
 
-    records.markExitCallFor(ScopeManager::Id1);
-    records.markExitCallFor(ScopeManager::Id0);
+    recorder.markExitCallFor(ScopeManager::Id1);
+    recorder.markExitCallFor(ScopeManager::Id0);
 
     EXPECT_TRUE(records.isEntryCallOrderCorrect());
     EXPECT_TRUE(records.isExitCallOrderCorrect());
@@ -342,13 +358,14 @@ TEST(
   // VerifyIncorrectEntryCallOrder
   {
     RecordKeeper records;
+    IRecorder recorder(records);
 
-    records.makeRecordFor(ScopeManager::Id0);
-    records.makeRecordFor(ScopeManager::Id1);
-    records.markEntryWillThrowFor(ScopeManager::Id1);
+    recorder.makeRecordFor(ScopeManager::Id0);
+    recorder.makeRecordFor(ScopeManager::Id1);
+    recorder.markEntryWillThrowFor(ScopeManager::Id1);
 
-    records.markEntryCallFor(ScopeManager::Id1);
-    records.markEntryCallFor(ScopeManager::Id0);
+    recorder.markEntryCallFor(ScopeManager::Id1);
+    recorder.markEntryCallFor(ScopeManager::Id0);
 
     EXPECT_FALSE(records.isEntryCallOrderCorrect());
   }
@@ -356,17 +373,18 @@ TEST(
   // VerifyIncorrectExitCallOrder
   {
     RecordKeeper records;
+    IRecorder recorder(records);
 
-    records.makeRecordFor(ScopeManager::Id0);
-    records.makeRecordFor(ScopeManager::Id1);
-    records.makeRecordFor(ScopeManager::Id2);
+    recorder.makeRecordFor(ScopeManager::Id0);
+    recorder.makeRecordFor(ScopeManager::Id1);
+    recorder.makeRecordFor(ScopeManager::Id2);
 
-    records.markEntryCallFor(ScopeManager::Id0);
-    records.markEntryCallFor(ScopeManager::Id1);
-    records.markEntryWillThrowFor(ScopeManager::Id1);
+    recorder.markEntryCallFor(ScopeManager::Id0);
+    recorder.markEntryCallFor(ScopeManager::Id1);
+    recorder.markEntryWillThrowFor(ScopeManager::Id1);
 
-    records.markExitCallFor(ScopeManager::Id0);
-    records.markExitCallFor(ScopeManager::Id1);
+    recorder.markExitCallFor(ScopeManager::Id0);
+    recorder.markExitCallFor(ScopeManager::Id1);
 
     EXPECT_TRUE(records.isEntryCallOrderCorrect());
     EXPECT_FALSE(records.isExitCallOrderCorrect());
