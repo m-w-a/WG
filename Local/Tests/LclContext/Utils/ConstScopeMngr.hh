@@ -3,6 +3,7 @@
 
 #include <WG/Local/Tests/LclContext/Utils/Utils.hh>
 #include <WG/Local/Tests/LclContext/Utils/Records.hh>
+#include <WG/Local/Tests/LclContext/Utils/Detail/IRecorder.hh>
 
 namespace wg
 {
@@ -39,7 +40,7 @@ public:
 
 private:
   ScopeManager::Id const m_Id;
-  mutable IRecorder m_Recorder;
+  mutable detail::IRecorder m_Recorder;
 };
 
 }

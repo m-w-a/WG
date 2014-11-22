@@ -47,6 +47,11 @@ private:
   bool m_WasScopeCompleted;
 };
 
+namespace detail
+{
+class IRecorder;
+}
+
 class RecordKeeper
 {
 public:
@@ -67,7 +72,7 @@ private:
   //Declared and purposefully not defined.
   RecordKeeper & operator=(RecordKeeper);
 private:
-  friend class IRecorder;
+  friend class detail::IRecorder;
   // Throws std::invalid_argument if duplicate "id" entered.
   void makeRecordFor(ScopeManager::Id const id);
   // Throws std::invalid_argument if duplicate "id" entered.
@@ -112,53 +117,6 @@ private:
   ::boost::optional<ScopeManager::Id> m_EnterMethodThatThrew;
   IdVector m_EntryCalls;
   IdVector m_ExitCalls;
-};
-
-class IRecorder
-{
-public:
-  explicit IRecorder(RecordKeeper & impl)
-  : m_pImpl(::boost::addressof(impl))
-  {}
-
-  // Throws std::invalid_argument if duplicate "id" entered.
-  void makeRecordFor(ScopeManager::Id const id)
-  {
-    m_pImpl->makeRecordFor(id);
-  }
-
-  // Throws std::invalid_argument if duplicate "id" entered.
-  void makeRecordFor(ScopeManager::Id const id, std::size_t const position)
-  {
-    m_pImpl->makeRecordFor(id, position);
-  }
-
-  // Throws std::invalid_argument if record not found.
-  void markEntryCallFor(ScopeManager::Id const id)
-  {
-    m_pImpl->markEntryCallFor(id);
-  }
-
-  // Throws std::invalid_argument if record not found.
-  void markEntryWillThrowFor(ScopeManager::Id const id)
-  {
-    m_pImpl->markEntryWillThrowFor(id);
-  }
-
-  // Throws std::invalid_argument if record not found.
-  void markExitCallFor(ScopeManager::Id const id)
-  {
-    m_pImpl->markExitCallFor(id);
-  }
-
-  // Throws std::invalid_argument if record not found.
-  void markScopeCompletionFor(ScopeManager::Id const id)
-  {
-    m_pImpl->markScopeCompletionFor(id);
-  }
-
-private:
-  RecordKeeper * /* const */ m_pImpl;
 };
 
 }

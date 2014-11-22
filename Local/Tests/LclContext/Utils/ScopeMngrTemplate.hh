@@ -7,6 +7,7 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_void.hpp>
 #include <stdexcept>
+#include <WG/Local/Tests/LclContext/Utils/Detail/IRecorder.hh>
 
 namespace wg
 {
@@ -141,7 +142,7 @@ private:
 
 private:
   ScopeManager::Id const m_Id;
-  IRecorder m_Recorder;
+  detail::IRecorder m_Recorder;
 };
 
 }

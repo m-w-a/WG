@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <WG/Local/Tests/LclContext/Utils/Utils.hh>
 #include <WG/Local/Tests/LclContext/Utils/Records.hh>
+#include <WG/Local/Tests/LclContext/Utils/Detail/IRecorder.hh>
 
 using namespace ::wg::lclcontext::detail::test;
 
@@ -32,7 +33,7 @@ TEST(wg_lclcontext_utils_Record, VerifyMutators)
 TEST(wg_lclcontext_utils_RecordKeeper, VerifyStartState)
 {
   RecordKeeper records;
-  IRecorder recorder(records);
+  detail::IRecorder recorder(records);
 
   EXPECT_THROW(records.getRecordFor(ScopeManager::Id0), std::invalid_argument);
   EXPECT_THROW(recorder.markEntryCallFor(ScopeManager::Id0), std::invalid_argument);
@@ -46,7 +47,7 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyStartState)
 TEST(wg_lclcontext_utils_RecordKeeper, VerifyMutators)
 {
   RecordKeeper records;
-  IRecorder recorder(records);
+  detail::IRecorder recorder(records);
 
   recorder.makeRecordFor(ScopeManager::Id0);
   EXPECT_THROW(recorder.makeRecordFor(ScopeManager::Id0), std::invalid_argument);
@@ -83,7 +84,7 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForNoRecord)
 TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForOneRecord)
 {
   RecordKeeper records;
-  IRecorder recorder(records);
+  detail::IRecorder recorder(records);
 
   recorder.makeRecordFor(ScopeManager::Id0);
 
@@ -100,7 +101,7 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
   // VerifyCorrectCallOrder
   {
     RecordKeeper records;
-    IRecorder recorder(records);
+    detail::IRecorder recorder(records);
 
     recorder.makeRecordFor(ScopeManager::Id0);
     recorder.makeRecordFor(ScopeManager::Id1);
@@ -121,7 +122,7 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
   // VerifyCorrectCallOrderForPositionalInsertion
   {
     RecordKeeper records;
-    IRecorder recorder(records);
+    detail::IRecorder recorder(records);
 
     recorder.makeRecordFor(ScopeManager::Id0);
     recorder.makeRecordFor(ScopeManager::Id2);
@@ -144,7 +145,7 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder021
     {
       RecordKeeper records;
-      IRecorder recorder(records);
+      detail::IRecorder recorder(records);
 
       recorder.makeRecordFor(ScopeManager::Id0);
       recorder.makeRecordFor(ScopeManager::Id1);
@@ -160,7 +161,7 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder102
     {
       RecordKeeper records;
-      IRecorder recorder(records);
+      detail::IRecorder recorder(records);
 
       recorder.makeRecordFor(ScopeManager::Id0);
       recorder.makeRecordFor(ScopeManager::Id1);
@@ -176,7 +177,7 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder120
     {
       RecordKeeper records;
-      IRecorder recorder(records);
+      detail::IRecorder recorder(records);
 
       recorder.makeRecordFor(ScopeManager::Id0);
       recorder.makeRecordFor(ScopeManager::Id1);
@@ -192,7 +193,7 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder201
     {
       RecordKeeper records;
-      IRecorder recorder(records);
+      detail::IRecorder recorder(records);
 
       recorder.makeRecordFor(ScopeManager::Id0);
       recorder.makeRecordFor(ScopeManager::Id1);
@@ -208,7 +209,7 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder210
     {
       RecordKeeper records;
-      IRecorder recorder(records);
+      detail::IRecorder recorder(records);
 
       recorder.makeRecordFor(ScopeManager::Id0);
       recorder.makeRecordFor(ScopeManager::Id1);
@@ -227,7 +228,7 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder201
     {
       RecordKeeper records;
-      IRecorder recorder(records);
+      detail::IRecorder recorder(records);
 
       recorder.makeRecordFor(ScopeManager::Id0);
       recorder.makeRecordFor(ScopeManager::Id1);
@@ -248,7 +249,7 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder120
     {
       RecordKeeper records;
-      IRecorder recorder(records);
+      detail::IRecorder recorder(records);
 
       recorder.makeRecordFor(ScopeManager::Id0);
       recorder.makeRecordFor(ScopeManager::Id1);
@@ -269,7 +270,7 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder102
     {
       RecordKeeper records;
-      IRecorder recorder(records);
+      detail::IRecorder recorder(records);
 
       recorder.makeRecordFor(ScopeManager::Id0);
       recorder.makeRecordFor(ScopeManager::Id1);
@@ -290,7 +291,7 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder021
     {
       RecordKeeper records;
-      IRecorder recorder(records);
+      detail::IRecorder recorder(records);
 
       recorder.makeRecordFor(ScopeManager::Id0);
       recorder.makeRecordFor(ScopeManager::Id1);
@@ -311,7 +312,7 @@ TEST(wg_lclcontext_utils_RecordKeeper, VerifyCallOrderForThreeRecords)
     // CallOrder012
     {
       RecordKeeper records;
-      IRecorder recorder(records);
+      detail::IRecorder recorder(records);
 
       recorder.makeRecordFor(ScopeManager::Id0);
       recorder.makeRecordFor(ScopeManager::Id1);
@@ -338,7 +339,7 @@ TEST(
   // VerifyCorrectCallOrder
   {
     RecordKeeper records;
-    IRecorder recorder(records);
+    detail::IRecorder recorder(records);
 
     recorder.makeRecordFor(ScopeManager::Id0);
     recorder.makeRecordFor(ScopeManager::Id1);
@@ -358,7 +359,7 @@ TEST(
   // VerifyIncorrectEntryCallOrder
   {
     RecordKeeper records;
-    IRecorder recorder(records);
+    detail::IRecorder recorder(records);
 
     recorder.makeRecordFor(ScopeManager::Id0);
     recorder.makeRecordFor(ScopeManager::Id1);
@@ -373,7 +374,7 @@ TEST(
   // VerifyIncorrectExitCallOrder
   {
     RecordKeeper records;
-    IRecorder recorder(records);
+    detail::IRecorder recorder(records);
 
     recorder.makeRecordFor(ScopeManager::Id0);
     recorder.makeRecordFor(ScopeManager::Id1);
