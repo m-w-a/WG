@@ -21,20 +21,20 @@ public:
   : m_Id(id),
     m_Recorder(records)
   {
-    m_Recorder.makeRecordFor(m_Id);
+    WG_LCLCONTEXT_EXPECT_SUCCESS( m_Recorder.makeRecordFor(m_Id) );
   }
 
   void enter() const
   {
-    m_Recorder.markEntryCallFor(m_Id);
+    WG_LCLCONTEXT_EXPECT_SUCCESS( m_Recorder.markEntryCallFor(m_Id) );
   }
 
   void exit(bool const scope_completed) const
   {
-    m_Recorder.markExitCallFor(m_Id);
+    WG_LCLCONTEXT_EXPECT_SUCCESS( m_Recorder.markExitCallFor(m_Id) );
     if(scope_completed)
     {
-      m_Recorder.markScopeCompletionFor(m_Id);
+      WG_LCLCONTEXT_EXPECT_SUCCESS( m_Recorder.markScopeCompletionFor(m_Id) );
     }
   }
 

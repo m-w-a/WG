@@ -11,8 +11,12 @@ using namespace ::wg::lclcontext::detail::test;
 TEST(wg_lclcontext_extant_capturedentry, ExplicitByValue)
 {
   RecordKeeper records;
+
   ByRefEntryScopeMngr scpmngr(ScopeManager::Id0, records);
-  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+  std::pair<Record const *, Result::Kind> queryRetVal =
+    records.getRecordFor(ScopeManager::Id0);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd = *queryRetVal.first;
 
   EXPECT_FALSE(rcd.didCallEnter());
   WG_LCLCONTEXT( with(scpmngr) enter_as(type(EmptyCntr) entryObj) )
@@ -37,8 +41,12 @@ TEST(wg_lclcontext_extant_capturedentry, ExplicitByValue)
 TEST(wg_lclcontext_extant_capturedentry, ExplicitByRef)
 {
   RecordKeeper records;
+
   ByRefEntryScopeMngr scpmngr(ScopeManager::Id0, records);
-  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+  std::pair<Record const *, Result::Kind> queryRetVal =
+    records.getRecordFor(ScopeManager::Id0);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd = *queryRetVal.first;
 
   EXPECT_FALSE(rcd.didCallEnter());
   WG_LCLCONTEXT( with(scpmngr) enter_as(type(EmptyCntr &) entryObj) )
@@ -63,8 +71,12 @@ TEST(wg_lclcontext_extant_capturedentry, ExplicitByRef)
 TEST(wg_lclcontext_extant_capturedentry, ImplicitByValue)
 {
   RecordKeeper records;
+
   ByRefEntryScopeMngr scpmngr(ScopeManager::Id0, records);
-  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+  std::pair<Record const *, Result::Kind> queryRetVal =
+    records.getRecordFor(ScopeManager::Id0);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd = *queryRetVal.first;
 
   EXPECT_FALSE(rcd.didCallEnter());
   WG_LCLCONTEXT( with(scpmngr) enter_as(entryObj) )
@@ -89,8 +101,12 @@ TEST(wg_lclcontext_extant_capturedentry, ImplicitByValue)
 TEST(wg_lclcontext_extant_capturedentry, ImplicitByConstValue)
 {
   RecordKeeper records;
+
   ByRefEntryScopeMngr scpmngr(ScopeManager::Id0, records);
-  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+  std::pair<Record const *, Result::Kind> queryRetVal =
+    records.getRecordFor(ScopeManager::Id0);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd = *queryRetVal.first;
 
   EXPECT_FALSE(rcd.didCallEnter());
   WG_LCLCONTEXT( with(scpmngr) enter_as(const entryObj) )
@@ -115,8 +131,12 @@ TEST(wg_lclcontext_extant_capturedentry, ImplicitByConstValue)
 TEST(wg_lclcontext_extant_capturedentry, ImplicitByRef)
 {
   RecordKeeper records;
+
   ByRefEntryScopeMngr scpmngr(ScopeManager::Id0, records);
-  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+  std::pair<Record const *, Result::Kind> queryRetVal =
+    records.getRecordFor(ScopeManager::Id0);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd = *queryRetVal.first;
 
   EXPECT_FALSE(rcd.didCallEnter());
   WG_LCLCONTEXT( with(scpmngr) enter_as(ref entryObj) )
@@ -141,8 +161,12 @@ TEST(wg_lclcontext_extant_capturedentry, ImplicitByRef)
 TEST(wg_lclcontext_extant_capturedentry, ImplicitByConstRef)
 {
   RecordKeeper records;
+
   ByRefEntryScopeMngr scpmngr(ScopeManager::Id0, records);
-  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+  std::pair<Record const *, Result::Kind> queryRetVal =
+    records.getRecordFor(ScopeManager::Id0);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd = *queryRetVal.first;
 
   EXPECT_FALSE(rcd.didCallEnter());
   WG_LCLCONTEXT( with(scpmngr) enter_as(const ref entryObj) )
@@ -173,8 +197,12 @@ struct InTemplateExplicitByValue
   static void run()
   {
     RecordKeeper records;
+
     T scpmngr(ScopeManager::Id0, records);
-    Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+    std::pair<Record const *, Result::Kind> queryRetVal =
+      records.getRecordFor(ScopeManager::Id0);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd = *queryRetVal.first;
 
     EXPECT_FALSE(rcd.didCallEnter());
     WG_LCLCONTEXT_TPL( with(scpmngr) enter_as(type(EmptyCntr) entryObj) )
@@ -212,8 +240,12 @@ struct InTemplateImplicitByConstRef
   static void run()
   {
     RecordKeeper records;
+
     T scpmngr(ScopeManager::Id0, records);
-    Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+    std::pair<Record const *, Result::Kind> queryRetVal =
+      records.getRecordFor(ScopeManager::Id0);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd = *queryRetVal.first;
 
     EXPECT_FALSE(rcd.didCallEnter());
     WG_LCLCONTEXT_TPL( with(scpmngr) enter_as(const ref entryObj) )
@@ -253,9 +285,19 @@ TEST(wg_lclcontext_extant_capturedentry, ExplicitMultiDclnContext)
     with(scpmngr1) enter_as(type(EmptyCntr &) entryObj1)
     with(SimpleScopeMngr(ScopeManager::Id2, records)) )
   {
-    Record const & rcd0 = records.getRecordFor(ScopeManager::Id0);
-    Record const & rcd1 = records.getRecordFor(ScopeManager::Id1);
-    Record const & rcd2 = records.getRecordFor(ScopeManager::Id2);
+    std::pair<Record const *, Result::Kind> queryRetVal;
+
+    queryRetVal = records.getRecordFor(ScopeManager::Id0);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd0 = *queryRetVal.first;
+
+    queryRetVal = records.getRecordFor(ScopeManager::Id1);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd1 = *queryRetVal.first;
+
+    queryRetVal = records.getRecordFor(ScopeManager::Id2);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd2 = *queryRetVal.first;
 
     EXPECT_TRUE(rcd0.didCallEnter());
     EXPECT_FALSE(rcd0.didCallExit());
@@ -279,9 +321,19 @@ TEST(wg_lclcontext_extant_capturedentry, ExplicitMultiDclnContext)
   }
   WG_LCLCONTEXT_END3
 
-  Record const & rcd0 = records.getRecordFor(ScopeManager::Id0);
-  Record const & rcd1 = records.getRecordFor(ScopeManager::Id1);
-  Record const & rcd2 = records.getRecordFor(ScopeManager::Id2);
+  std::pair<Record const *, Result::Kind> queryRetVal;
+
+  queryRetVal = records.getRecordFor(ScopeManager::Id0);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd0 = *queryRetVal.first;
+
+  queryRetVal = records.getRecordFor(ScopeManager::Id1);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd1 = *queryRetVal.first;
+
+  queryRetVal = records.getRecordFor(ScopeManager::Id2);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd2 = *queryRetVal.first;
 
   EXPECT_TRUE(rcd0.didCallExit());
   EXPECT_TRUE(rcd0.wasScopeCompleted());
@@ -307,9 +359,19 @@ TEST(wg_lclcontext_extant_capturedentry, ImplicitMultiDclnContext)
     with(scpmngr1) enter_as(ref entryObj1)
     with(SimpleScopeMngr(ScopeManager::Id2, records)) )
   {
-    Record const & rcd0 = records.getRecordFor(ScopeManager::Id0);
-    Record const & rcd1 = records.getRecordFor(ScopeManager::Id1);
-    Record const & rcd2 = records.getRecordFor(ScopeManager::Id2);
+    std::pair<Record const *, Result::Kind> queryRetVal;
+
+    queryRetVal = records.getRecordFor(ScopeManager::Id0);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd0 = *queryRetVal.first;
+
+    queryRetVal = records.getRecordFor(ScopeManager::Id1);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd1 = *queryRetVal.first;
+
+    queryRetVal = records.getRecordFor(ScopeManager::Id2);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd2 = *queryRetVal.first;
 
     EXPECT_TRUE(rcd0.didCallEnter());
     EXPECT_FALSE(rcd0.didCallExit());
@@ -333,9 +395,19 @@ TEST(wg_lclcontext_extant_capturedentry, ImplicitMultiDclnContext)
   }
   WG_LCLCONTEXT_END3
 
-  Record const & rcd0 = records.getRecordFor(ScopeManager::Id0);
-  Record const & rcd1 = records.getRecordFor(ScopeManager::Id1);
-  Record const & rcd2 = records.getRecordFor(ScopeManager::Id2);
+  std::pair<Record const *, Result::Kind> queryRetVal;
+
+  queryRetVal = records.getRecordFor(ScopeManager::Id0);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd0 = *queryRetVal.first;
+
+  queryRetVal = records.getRecordFor(ScopeManager::Id1);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd1 = *queryRetVal.first;
+
+  queryRetVal = records.getRecordFor(ScopeManager::Id2);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd2 = *queryRetVal.first;
 
   EXPECT_TRUE(rcd0.didCallExit());
   EXPECT_TRUE(rcd0.wasScopeCompleted());

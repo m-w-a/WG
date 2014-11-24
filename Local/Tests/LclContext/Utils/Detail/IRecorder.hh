@@ -23,23 +23,18 @@ class IRecorder
 public:
   explicit IRecorder(RecordKeeper & impl);
 
-  // Throws std::invalid_argument if duplicate "id" entered.
-  void makeRecordFor(ScopeManager::Id const id);
-
-  // Throws std::invalid_argument if duplicate "id" entered.
-  void makeRecordFor(ScopeManager::Id const id, std::size_t const position);
-
-  // Throws std::invalid_argument if record not found.
-  void markEntryCallFor(ScopeManager::Id const id);
-
-  // Throws std::invalid_argument if record not found.
-  void markEntryWillThrowFor(ScopeManager::Id const id);
-
-  // Throws std::invalid_argument if record not found.
-  void markExitCallFor(ScopeManager::Id const id);
-
-  // Throws std::invalid_argument if record not found.
-  void markScopeCompletionFor(ScopeManager::Id const id);
+  // Returns Result::Error if duplicate "id" entered.
+  Result::Kind makeRecordFor(ScopeManager::Id const id);
+  // Returns Result::Error if duplicate "id" entered.
+  Result::Kind makeRecordFor(ScopeManager::Id const id, std::size_t const position);
+  // Returns Result::Error if record not found.
+  Result::Kind markEntryCallFor(ScopeManager::Id const id);
+  // Returns Result::Error if record not found.
+  Result::Kind markEntryWillThrowFor(ScopeManager::Id const id);
+  // Returns Result::Error if record not found.
+  Result::Kind markExitCallFor(ScopeManager::Id const id);
+  // Returns Result::Error if record not found.
+  Result::Kind markScopeCompletionFor(ScopeManager::Id const id);
 
 private:
   RecordKeeper * /* const */ m_pImpl;

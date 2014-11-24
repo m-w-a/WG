@@ -11,7 +11,10 @@ TEST(wg_lclcontext_utils_SimpleScopeMngr, VerifyStartState)
   RecordKeeper records;
   SimpleScopeMngr scopemngr(ScopeManager::Id0, records);
 
-  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+  std::pair<Record const *, Result::Kind> queryRetVal =
+    records.getRecordFor(ScopeManager::Id0);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd = *queryRetVal.first;
 
   EXPECT_FALSE(rcd.didCallEnter());
   EXPECT_FALSE(rcd.didCallExit());
@@ -27,7 +30,10 @@ TEST(wg_lclcontext_utils_SimpleScopeMngr, VerifyMutatorsForOneObject)
     RecordKeeper records;
     SimpleScopeMngr scopemngr(ScopeManager::Id0, records);
 
-    Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+    std::pair<Record const *, Result::Kind> queryRetVal =
+      records.getRecordFor(ScopeManager::Id0);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd = *queryRetVal.first;
 
     scopemngr.enter();
     EXPECT_TRUE(rcd.didCallEnter());
@@ -45,7 +51,10 @@ TEST(wg_lclcontext_utils_SimpleScopeMngr, VerifyMutatorsForOneObject)
     RecordKeeper records;
     SimpleScopeMngr scopemngr(ScopeManager::Id0, records);
 
-    Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+    std::pair<Record const *, Result::Kind> queryRetVal =
+      records.getRecordFor(ScopeManager::Id0);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd = *queryRetVal.first;
 
     scopemngr.enter();
     EXPECT_TRUE(rcd.didCallEnter());
@@ -68,9 +77,19 @@ TEST(wg_lclcontext_utils_SimpleScopeMngr, VerifyMutatorsForThreeObjects)
     SimpleScopeMngr scpmngr1(ScopeManager::Id1, records);
     SimpleScopeMngr scpmngr2(ScopeManager::Id2, records);
 
-    Record const & rcd0 = records.getRecordFor(ScopeManager::Id0);
-    Record const & rcd1 = records.getRecordFor(ScopeManager::Id1);
-    Record const & rcd2 = records.getRecordFor(ScopeManager::Id2);
+    std::pair<Record const *, Result::Kind> queryRetVal;
+
+    queryRetVal = records.getRecordFor(ScopeManager::Id0);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd0 = *queryRetVal.first;
+
+    queryRetVal = records.getRecordFor(ScopeManager::Id1);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd1 = *queryRetVal.first;
+
+    queryRetVal = records.getRecordFor(ScopeManager::Id2);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd2 = *queryRetVal.first;
 
     scpmngr0.enter();
     scpmngr1.enter();
@@ -272,7 +291,10 @@ TEST(wg_lclcontext_utils_EnterThrowsScopeMngr, VerifyEnterThrows)
   RecordKeeper records;
   EnterThrowsScopeMngr scpmngr(ScopeManager::Id0, records);
 
-  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+  std::pair<Record const *, Result::Kind> queryRetVal =
+    records.getRecordFor(ScopeManager::Id0);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd = *queryRetVal.first;
 
   EXPECT_THROW(scpmngr.enter(), EnterException);
   EXPECT_TRUE(rcd.didCallEnter());
@@ -290,7 +312,10 @@ TEST(wg_lclcontext_utils_EnterThrowsScopeMngr, VerifyExitThrows)
   RecordKeeper records;
   ExitThrowsScopeMngr scpmngr(ScopeManager::Id0, records);
 
-  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+  std::pair<Record const *, Result::Kind> queryRetVal =
+    records.getRecordFor(ScopeManager::Id0);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd = *queryRetVal.first;
 
   scpmngr.enter();
   EXPECT_TRUE(rcd.didCallEnter());
@@ -308,7 +333,10 @@ TEST(wg_lclcontext_utils_EnterThrowsScopeMngr, VerifyEnterAndExitThrow)
   RecordKeeper records;
   EnterAndExitThrowScopeMngr scpmngr(ScopeManager::Id0, records);
 
-  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+  std::pair<Record const *, Result::Kind> queryRetVal =
+    records.getRecordFor(ScopeManager::Id0);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd = *queryRetVal.first;
 
   EXPECT_THROW(scpmngr.enter(), EnterException);
   EXPECT_TRUE(rcd.didCallEnter());

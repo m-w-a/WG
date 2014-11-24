@@ -57,8 +57,8 @@ class RecordKeeper
 public:
   RecordKeeper();
 
-  // Throws std::invalid_argument if record not found.
-  Record const & getRecordFor(ScopeManager::Id const id);
+  // Returns std::pair<some-undefined-obj, Result::Error> if record not found.
+  std::pair<Record const *, Result::Kind> getRecordFor(ScopeManager::Id const id);
   // Returns true only if enter calls were made for each registered scope manager
   // id in the order in which those ids where registered, but only up to and
   // including the id, if any, of the first throwing scope manager.
@@ -73,18 +73,18 @@ private:
   RecordKeeper & operator=(RecordKeeper);
 private:
   friend class detail::IRecorder;
-  // Throws std::invalid_argument if duplicate "id" entered.
-  void makeRecordFor(ScopeManager::Id const id);
-  // Throws std::invalid_argument if duplicate "id" entered.
-  void makeRecordFor(ScopeManager::Id const id, std::size_t const position);
-  // Throws std::invalid_argument if record not found.
-  void markEntryCallFor(ScopeManager::Id const id);
-  // Throws std::invalid_argument if record not found.
-  void markEntryWillThrowFor(ScopeManager::Id const id);
-  // Throws std::invalid_argument if record not found.
-  void markExitCallFor(ScopeManager::Id const id);
-  // Throws std::invalid_argument if record not found.
-  void markScopeCompletionFor(ScopeManager::Id const id);
+  // Returns Result::Error if duplicate "id" entered.
+  Result::Kind makeRecordFor(ScopeManager::Id const id);
+  // Returns Result::Error if duplicate "id" entered.
+  Result::Kind makeRecordFor(ScopeManager::Id const id, std::size_t const position);
+  // Returns Result::Error if record not found.
+  Result::Kind markEntryCallFor(ScopeManager::Id const id);
+  // Returns Result::Error if record not found.
+  Result::Kind markEntryWillThrowFor(ScopeManager::Id const id);
+  // Returns Result::Error if record not found.
+  Result::Kind markExitCallFor(ScopeManager::Id const id);
+  // Returns Result::Error if record not found.
+  Result::Kind markScopeCompletionFor(ScopeManager::Id const id);
 private:
   struct by_dcln_order {};
   struct by_id {};
@@ -111,7 +111,8 @@ private:
 
   typedef std::vector<ScopeManager::Id /*const*/> IdVector;
 private:
-  RecordsIndexedById::iterator getMutableRecordFor(ScopeManager::Id const id);
+  std::pair<RecordsIndexedById::iterator, Result::Kind>
+    getMutableRecordFor(ScopeManager::Id const id);
 private:
   RecordCntr m_Records;
   ::boost::optional<ScopeManager::Id> m_EnterMethodThatThrew;

@@ -1,6 +1,6 @@
 #include <WG/Local/Tests/LclContext/Utils/Records.hh>
 #include <utility>
-#include <stdexcept>
+#include <boost/utility/addressof.hpp>
 
 namespace wg
 {
@@ -20,7 +20,7 @@ RecordKeeper::RecordKeeper()
 {
 }
 
-void RecordKeeper::makeRecordFor(
+Result::Kind RecordKeeper::makeRecordFor(
   ScopeManager::Id const id,
   std::size_t const position)
 {
@@ -35,27 +35,26 @@ void RecordKeeper::makeRecordFor(
 
   if( ! result.second )
   {
-    throw std::invalid_argument("Duplicate ScopeManager ID.");
+    return Result::Failure;
   }
+
+  return Result::Success;
 }
 
-void RecordKeeper::makeRecordFor(ScopeManager::Id const id)
+Result::Kind RecordKeeper::makeRecordFor(ScopeManager::Id const id)
 {
   std::pair<RecordsIndexedByDclnOrder::iterator, bool> result =
     m_Records.get<by_dcln_order>().push_back(Record(id));
 
   if( ! result.second )
   {
-    throw std::invalid_argument("Duplicate ScopeManager ID.");
+    return Result::Failure;
   }
+
+  return Result::Success;
 }
 
-Record const & RecordKeeper::getRecordFor(ScopeManager::Id const id)
-{
-  return *this->getMutableRecordFor(id);
-}
-
-void RecordKeeper::markEntryCallFor(ScopeManager::Id const id)
+Result::Kind RecordKeeper::markEntryCallFor(ScopeManager::Id const id)
 {
   struct MarkEntryCall
   {
@@ -65,27 +64,41 @@ void RecordKeeper::markEntryCallFor(ScopeManager::Id const id)
     }
   };
 
-  RecordsIndexedById::iterator itRcd = this->getMutableRecordFor(id);
+  std::pair<RecordsIndexedById::iterator, Result::Kind> rcdResult =
+    this->getMutableRecordFor(id);
+  if(rcdResult.second == Result::Failure)
+  {
+    return Result::Failure;
+  }
+
   bool const didModify =
-    m_Records.get<by_id>().modify(itRcd, MarkEntryCall::apply);
+    m_Records.get<by_id>().modify(rcdResult.first, MarkEntryCall::apply);
   if( ! didModify )
   {
-    throw std::logic_error("Unexpected internal error.");
+    return Result::Failure;
   }
 
   this->m_EntryCalls.push_back(id);
+
+  return Result::Success;
 }
 
-void RecordKeeper::markEntryWillThrowFor(ScopeManager::Id const id)
+Result::Kind RecordKeeper::markEntryWillThrowFor(ScopeManager::Id const id)
 {
-  // Ensure record exists.
-  RecordsIndexedById::iterator itRcd = this->getMutableRecordFor(id);
-  (void)itRcd;
+  // Ensure id exists.
+  std::pair<RecordsIndexedById::iterator, Result::Kind> rcdResult =
+    this->getMutableRecordFor(id);
+  if(rcdResult.second == Result::Failure)
+  {
+    return Result::Failure;
+  }
 
   m_EnterMethodThatThrew = id;
+
+  return Result::Success;
 }
 
-void RecordKeeper::markExitCallFor(ScopeManager::Id const id)
+Result::Kind RecordKeeper::markExitCallFor(ScopeManager::Id const id)
 {
   struct MarkExitCall
   {
@@ -95,18 +108,26 @@ void RecordKeeper::markExitCallFor(ScopeManager::Id const id)
     }
   };
 
-  RecordsIndexedById::iterator itRcd = this->getMutableRecordFor(id);
+  std::pair<RecordsIndexedById::iterator, bool> rcdResult =
+    this->getMutableRecordFor(id);
+  if(rcdResult.second == Result::Failure)
+  {
+    return Result::Failure;
+  }
+
   bool const didModify =
-    m_Records.get<by_id>().modify(itRcd, MarkExitCall::apply);
+    m_Records.get<by_id>().modify(rcdResult.first, MarkExitCall::apply);
   if( ! didModify )
   {
-    throw std::logic_error("Unexpected internal error.");
+    return Result::Failure;
   }
 
   this->m_ExitCalls.push_back(id);
+
+  return Result::Success;
 }
 
-void RecordKeeper::markScopeCompletionFor(ScopeManager::Id const id)
+Result::Kind RecordKeeper::markScopeCompletionFor(ScopeManager::Id const id)
 {
   struct MarkScopeCompletion
   {
@@ -116,13 +137,32 @@ void RecordKeeper::markScopeCompletionFor(ScopeManager::Id const id)
     }
   };
 
-  RecordsIndexedById::iterator itRcd = this->getMutableRecordFor(id);
+  std::pair<RecordsIndexedById::iterator, Result::Kind> rcdResult =
+    this->getMutableRecordFor(id);
+  if(rcdResult.second == Result::Failure)
+  {
+    return Result::Failure;
+  }
+
   bool const didModify =
-    m_Records.get<by_id>().modify(itRcd, MarkScopeCompletion::apply);
+    m_Records.get<by_id>().modify(rcdResult.first, MarkScopeCompletion::apply);
   if( ! didModify )
   {
-    throw std::logic_error("Unexpected internal error.");
+    return Result::Failure;
   }
+
+  return Result::Success;
+}
+
+std::pair<Record const *, Result::Kind>
+  RecordKeeper::getRecordFor(ScopeManager::Id const id)
+{
+  std::pair<RecordsIndexedById::iterator, Result::Kind> rcdResult =
+    this->getMutableRecordFor(id);
+
+  Record const * pRcd =
+    (rcdResult.second == Result::Success) ? ::boost::addressof(*rcdResult.first) : 0;
+  return std::make_pair(pRcd, rcdResult.second);
 }
 
 bool RecordKeeper::isEntryCallOrderCorrect() const
@@ -180,7 +220,7 @@ bool RecordKeeper::isExitCallOrderCorrect() const
   return true;
 }
 
-RecordKeeper::RecordsIndexedById::iterator
+std::pair<RecordKeeper::RecordsIndexedById::iterator, Result::Kind>
   RecordKeeper::getMutableRecordFor(ScopeManager::Id const id)
 {
   RecordsIndexedById & recordsById = m_Records.get<by_id>();
@@ -188,10 +228,10 @@ RecordKeeper::RecordsIndexedById::iterator
 
   if(it == recordsById.end())
   {
-    throw std::invalid_argument("Uknown ScopeManager ID.");
+    return std::make_pair(it, Result::Failure);
   }
 
-  return it;
+  return std::make_pair(it, Result::Success);
 }
 
 }

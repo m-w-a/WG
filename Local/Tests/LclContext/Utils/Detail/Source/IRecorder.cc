@@ -16,35 +16,35 @@ IRecorder::IRecorder(RecordKeeper & impl)
 : m_pImpl(::boost::addressof(impl))
 {}
 
-void IRecorder::makeRecordFor(ScopeManager::Id const id)
+Result::Kind IRecorder::makeRecordFor(ScopeManager::Id const id)
 {
-  m_pImpl->makeRecordFor(id);
+  return m_pImpl->makeRecordFor(id);
 }
 
-void IRecorder::makeRecordFor(
+Result::Kind IRecorder::makeRecordFor(
   ScopeManager::Id const id, std::size_t const position)
 {
-  m_pImpl->makeRecordFor(id, position);
+  return m_pImpl->makeRecordFor(id, position);
 }
 
-void IRecorder::markEntryCallFor(ScopeManager::Id const id)
+Result::Kind IRecorder::markEntryCallFor(ScopeManager::Id const id)
 {
-  m_pImpl->markEntryCallFor(id);
+  return m_pImpl->markEntryCallFor(id);
 }
 
-void IRecorder::markEntryWillThrowFor(ScopeManager::Id const id)
+Result::Kind IRecorder::markEntryWillThrowFor(ScopeManager::Id const id)
 {
-  m_pImpl->markEntryWillThrowFor(id);
+  return m_pImpl->markEntryWillThrowFor(id);
 }
 
-void IRecorder::markExitCallFor(ScopeManager::Id const id)
+Result::Kind IRecorder::markExitCallFor(ScopeManager::Id const id)
 {
-  m_pImpl->markExitCallFor(id);
+  return m_pImpl->markExitCallFor(id);
 }
 
-void IRecorder::markScopeCompletionFor(ScopeManager::Id const id)
+Result::Kind IRecorder::markScopeCompletionFor(ScopeManager::Id const id)
 {
-  m_pImpl->markScopeCompletionFor(id);
+  return m_pImpl->markScopeCompletionFor(id);
 }
 
 }

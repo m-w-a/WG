@@ -10,8 +10,12 @@ using namespace ::wg::lclcontext::detail::test;
 TEST(wg_lclcontext_adhoc, EnterAndExitSpecifiedCompletedScope)
 {
   RecordKeeper records;
+
   SimpleScopeMngr scpmngr(ScopeManager::Id0, records);
-  Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+  std::pair<Record const *, Result::Kind> queryRetVal =
+    records.getRecordFor(ScopeManager::Id0);
+  WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+  Record const & rcd = *queryRetVal.first;
 
   EXPECT_FALSE(rcd.didCallEnter());
   WG_LCLCONTEXT(
@@ -60,8 +64,12 @@ TEST(wg_lclcontext_adhoc, EnterAndExitSpecifiedIncompletedScope)
   // GoToInducedIncompletedScope
   {
     RecordKeeper records;
+
     SimpleScopeMngr scpmngr(ScopeManager::Id0, records);
-    Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+    std::pair<Record const *, Result::Kind> queryRetVal =
+      records.getRecordFor(ScopeManager::Id0);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd = *queryRetVal.first;
 
     EXPECT_FALSE(rcd.didCallEnter());
     WG_LCLCONTEXT(
@@ -89,8 +97,12 @@ TEST(wg_lclcontext_adhoc, EnterAndExitSpecifiedIncompletedScope)
   // ReturnInducedIncompletedScope
   {
     RecordKeeper records;
+
     SimpleScopeMngr scpmngr(ScopeManager::Id0, records);
-    Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+    std::pair<Record const *, Result::Kind> queryRetVal =
+      records.getRecordFor(ScopeManager::Id0);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd = *queryRetVal.first;
 
     returnInducedIncompletedScope(scpmngr, rcd);
 
@@ -104,8 +116,12 @@ TEST(wg_lclcontext_adhoc, EnterAndExitSpecifiedIncompletedScope)
   // BreakInducedIncompletedScope
   {
     RecordKeeper records;
+
     SimpleScopeMngr scpmngr(ScopeManager::Id0, records);
-    Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+    std::pair<Record const *, Result::Kind> queryRetVal =
+      records.getRecordFor(ScopeManager::Id0);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd = *queryRetVal.first;
 
     int counter = 1;
     while(counter > 0)
@@ -139,8 +155,12 @@ TEST(wg_lclcontext_adhoc, EnterAndExitSpecifiedIncompletedScope)
   // ContinueInducedIncompletedScope
   {
     RecordKeeper records;
+
     SimpleScopeMngr scpmngr(ScopeManager::Id0, records);
-    Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+    std::pair<Record const *, Result::Kind> queryRetVal =
+      records.getRecordFor(ScopeManager::Id0);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd = *queryRetVal.first;
 
     int counter = 1;
     while(counter > 0)
@@ -175,8 +195,12 @@ TEST(wg_lclcontext_adhoc, EnterAndExitSpecifiedIncompletedScope)
   // ThrowInducedIncompletedScope
   {
     RecordKeeper records;
+
     SimpleScopeMngr scpmngr(ScopeManager::Id0, records);
-    Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+    std::pair<Record const *, Result::Kind> queryRetVal =
+      records.getRecordFor(ScopeManager::Id0);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd = *queryRetVal.first;
 
     struct Exception1 {};
 
@@ -222,8 +246,12 @@ struct EnterAndExitSpecifiedInTemplate
   static void run()
   {
     RecordKeeper records;
+
     T scpmngr(ScopeManager::Id0, records);
-    Record const & rcd = records.getRecordFor(ScopeManager::Id0);
+    std::pair<Record const *, Result::Kind> queryRetVal =
+      records.getRecordFor(ScopeManager::Id0);
+    WG_LCLCONTEXT_EXPECT_SUCCESS(queryRetVal.second);
+    Record const & rcd = *queryRetVal.first;
 
     EXPECT_FALSE(rcd.didCallEnter());
     WG_LCLCONTEXT_TPL(

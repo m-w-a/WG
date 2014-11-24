@@ -75,7 +75,7 @@ public:
   : m_Id(id),
     m_Recorder(records)
   {
-    m_Recorder.makeRecordFor(m_Id);
+    WG_LCLCONTEXT_EXPECT_SUCCESS( m_Recorder.makeRecordFor(m_Id) );
   }
 
   explicit ScopeMngrTemplate(
@@ -85,12 +85,12 @@ public:
   : m_Id(id),
     m_Recorder(records)
   {
-    m_Recorder.makeRecordFor(m_Id, position);
+    WG_LCLCONTEXT_EXPECT_SUCCESS( m_Recorder.makeRecordFor(m_Id, position) );
   }
 
   EntryReturnType enter()
   {
-    m_Recorder.markEntryCallFor(m_Id);
+    WG_LCLCONTEXT_EXPECT_SUCCESS( m_Recorder.markEntryCallFor(m_Id) );
 
     this->enterThrows(static_cast<EnterThrowsT *>(0));
 
@@ -99,10 +99,10 @@ public:
 
   void exit(bool const scope_completed)
   {
-    m_Recorder.markExitCallFor(m_Id);
+    WG_LCLCONTEXT_EXPECT_SUCCESS( m_Recorder.markExitCallFor(m_Id) );
     if(scope_completed)
     {
-      m_Recorder.markScopeCompletionFor(m_Id);
+      WG_LCLCONTEXT_EXPECT_SUCCESS( m_Recorder.markScopeCompletionFor(m_Id) );
     }
 
     this->exitThrows(static_cast<ExitThrowsT *>(0));
@@ -130,7 +130,7 @@ private:
 #ifndef BOOST_NO_EXCEPTIONS
   void enterThrows(EnterThrows *)
   {
-    m_Recorder.markEntryWillThrowFor(m_Id);
+    WG_LCLCONTEXT_EXPECT_SUCCESS( m_Recorder.markEntryWillThrowFor(m_Id) );
     throw EnterException();
   }
 
