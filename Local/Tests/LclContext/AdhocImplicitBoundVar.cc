@@ -90,7 +90,7 @@ namespace
 {
 
 template <typename T>
-struct VarInTemplate
+struct InTemplate
 {
   static void run()
   {
@@ -111,5 +111,5 @@ struct VarInTemplate
 }
 TEST(wg_lclcontext_adhoc_varbindimplicit, InTemplate)
 {
-  VarInTemplate<bool>::run();
+  InTemplate<bool>::run();
 }

@@ -12,11 +12,13 @@ ExpandN:
 
 LclClass:
   SpecNormalizeUnitTest.cc
+  Tests name change underscore.
 
 LclFunction:
   Binder: local namespace to lclfunction namespace?
   Implementation outline.
   Boost.LocalFunction array bugs.
+  Tests name change underscore.
 
 BOOST_NO_CXX11_* -> WG_*
 

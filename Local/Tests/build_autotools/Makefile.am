@@ -547,6 +547,7 @@ LCLCONTEXT_SRC = \
     ../LclContext/ExtantUncapturedEntry.cc \
     ../LclContext/ExtantCapturedEntry.cc \
     ../LclContext/AdhocImplicitBoundVar.cc \
+    ../LclContext/AdhocExplicitBoundVar.cc \
     ../LclContext/AdhocEnterSpecified.cc \
     ../LclContext/AdhocExitSpecified.cc \
     ../LclContext/AdhocEnterAndExitSpecified.cc \
