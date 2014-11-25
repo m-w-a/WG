@@ -35,6 +35,29 @@ TEST(wg_lclcontext_adhoc_varbindimplicit, BindThisU)
   b.run();
 }
 
+namespace
+{
+
+struct BindConstThisU
+{
+  void run()
+  {
+    WG_LCLCONTEXT(
+      with_adhoc (const this_)
+      on_enter(WG_TEST_ASSERT_ISCONST(*this_)) )
+    {
+    }
+    WG_LCLCONTEXT_END1
+  }
+};
+
+}
+TEST(wg_lclcontext_adhoc_varbindimplicit, BindConstThisU)
+{
+  BindConstThisU b;
+  b.run();
+}
+
 TEST(wg_lclcontext_adhoc_varbindimplicit, BindByValue)
 {
   bool var = false;

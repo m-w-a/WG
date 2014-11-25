@@ -19,6 +19,9 @@ LclFunction:
   Implementation outline.
   Boost.LocalFunction array bugs.
   Tests name change underscore.
+  WG_PP_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY ->
+    WG_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY, and default to 5, plus change 
+    unit tests accordingly.
 
 BOOST_NO_CXX11_* -> WG_*
 
@@ -33,3 +36,4 @@ AutoSimulator:
 
 LclContext:
   Test tpls.
+  Have Ref section Cite Tutorial?
