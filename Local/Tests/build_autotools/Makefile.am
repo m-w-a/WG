@@ -551,7 +551,8 @@ LCLCONTEXT_SRC = \
     ../LclContext/AdhocEnterSpecified.cc \
     ../LclContext/AdhocExitSpecified.cc \
     ../LclContext/AdhocEnterAndExitSpecified.cc \
-    ../LclContext/ExtantAndAdhoc.cc
+    ../LclContext/ExtantAndAdhoc.cc \
+    ../LclContext/Nested.cc
 
 test_lclcontext_cpp03_SOURCES = $(LCLCONTEXT_SRC)
 test_lclcontext_cpp11_SOURCES = $(LCLCONTEXT_SRC)
