@@ -7,7 +7,7 @@
 
 using namespace ::wg::lclcontext::detail::test;
 
-TEST(wg_lclcontext_adhoc, EnterAndExitSpecifiedCompletedScope)
+TEST(wg_lclcontext_adhoc_enterandexitspecified, CompletedScope)
 {
   RecordKeeper records;
 
@@ -59,7 +59,7 @@ void returnInducedIncompletedScope(
 }
 
 }
-TEST(wg_lclcontext_adhoc, EnterAndExitSpecifiedIncompletedScope)
+TEST(wg_lclcontext_adhoc_enterandexitspecified, IncompletedScope)
 {
   // GoToInducedIncompletedScope
   {
@@ -241,7 +241,7 @@ namespace
 {
 
 template <typename T>
-struct EnterAndExitSpecifiedInTemplate
+struct InTemplate
 {
   static void run()
   {
@@ -274,7 +274,7 @@ struct EnterAndExitSpecifiedInTemplate
 };
 
 }
-TEST(wg_lclcontext_adhoc, EnterAndExitSpecifiedInTemplate)
+TEST(wg_lclcontext_adhoc_enterandexitspecified, InTemplate)
 {
-  EnterAndExitSpecifiedInTemplate<SimpleScopeMngr>::run();
+  InTemplate<SimpleScopeMngr>::run();
 }

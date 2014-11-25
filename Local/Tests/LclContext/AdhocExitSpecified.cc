@@ -2,7 +2,7 @@
 #include <boost/config.hpp>
 #include <WG/Local/LclContext.hh>
 
-TEST(wg_lclcontext_adhoc, ExitSpecifiedCompletedScope)
+TEST(wg_lclcontext_adhoc_exitspecified, CompletedScope)
 {
   bool wasScopeExecuted = false;
   bool didCallExit = false;
@@ -40,7 +40,7 @@ void returnInducedIncompletedScope(
 }
 
 }
-TEST(wg_lclcontext_adhoc, ExitSpecifiedIncompletedScope)
+TEST(wg_lclcontext_adhoc_exitspecified, IncompletedScope)
 {
   // GoToInducedIncompletedScope
   {
@@ -173,7 +173,7 @@ namespace
 {
 
 template <typename T>
-struct ExitSpecifiedInTemplate
+struct InTemplate
 {
   static void run()
   {
@@ -196,7 +196,7 @@ struct ExitSpecifiedInTemplate
 };
 
 }
-TEST(wg_lclcontext_adhoc, ExitSpecifiedInTemplate)
+TEST(wg_lclcontext_adhoc_exitspecified, InTemplate)
 {
-  ExitSpecifiedInTemplate<bool>::run();
+  InTemplate<bool>::run();
 }

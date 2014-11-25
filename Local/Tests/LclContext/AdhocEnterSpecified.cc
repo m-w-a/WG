@@ -2,7 +2,7 @@
 #include <boost/config.hpp>
 #include <WG/Local/LclContext.hh>
 
-TEST(wg_lclcontext_adhoc, EnterSpecifiedCompletedScope)
+TEST(wg_lclcontext_adhoc_enterspecified, CompletedScope)
 {
   bool didCallEnter = false;
   bool wasScopeCompleted = false;
@@ -23,7 +23,7 @@ namespace
 {
 
 template <typename T>
-struct EnterSpecifiedInTemplate
+struct InTemplate
 {
   static void run()
   {
@@ -44,7 +44,7 @@ struct EnterSpecifiedInTemplate
 };
 
 }
-TEST(wg_lclcontext_adhoc, EnterSpecifiedInTemplate)
+TEST(wg_lclcontext_adhoc_enterspecified, InTemplate)
 {
-  EnterSpecifiedInTemplate<bool>::run();
+  InTemplate<bool>::run();
 }

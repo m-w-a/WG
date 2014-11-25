@@ -3,7 +3,39 @@
 #include <WG/Local/LclContext.hh>
 #include <WG/Local/Tests/Utils/Utils.hh>
 
-TEST(wg_lclcontext_adhoc, BindVarByValue)
+namespace
+{
+
+struct BindThisU
+{
+  void run()
+  {
+    Id = 10;
+    WG_LCLCONTEXT(
+      with_adhoc (this_)
+        on_enter(this_->Id = 11)
+        on_exit(this_->Id = 12) )
+    {
+      EXPECT_EQ(11, Id);
+    }
+    WG_LCLCONTEXT_END1
+
+    EXPECT_EQ(12, Id);
+  }
+
+private:
+  int Id;
+};
+
+}
+
+TEST(wg_lclcontext_adhoc_varbindimplicit, BindThisU)
+{
+  BindThisU b;
+  b.run();
+}
+
+TEST(wg_lclcontext_adhoc_varbindimplicit, BindByValue)
 {
   bool var = false;
 
@@ -15,7 +47,7 @@ TEST(wg_lclcontext_adhoc, BindVarByValue)
   EXPECT_FALSE(var);
 }
 
-TEST(wg_lclcontext_adhoc, BindVarByConstValue)
+TEST(wg_lclcontext_adhoc_varbindimplicit, BindByConstValue)
 {
   bool var = false;
 
@@ -27,7 +59,7 @@ TEST(wg_lclcontext_adhoc, BindVarByConstValue)
   WG_LCLCONTEXT_END1
 }
 
-TEST(wg_lclcontext_adhoc, BindVarByRef)
+TEST(wg_lclcontext_adhoc_varbindimplicit, BindByRef)
 {
   bool var = false;
 
@@ -39,7 +71,7 @@ TEST(wg_lclcontext_adhoc, BindVarByRef)
   EXPECT_TRUE(var);
 }
 
-TEST(wg_lclcontext_adhoc, BindVarByConstRef)
+TEST(wg_lclcontext_adhoc_varbindimplicit, BindByConstRef)
 {
   bool var = false;
   void const * boundVarAddress = 0;
@@ -58,7 +90,7 @@ namespace
 {
 
 template <typename T>
-struct BindVarInTemplate
+struct VarInTemplate
 {
   static void run()
   {
@@ -77,7 +109,7 @@ struct BindVarInTemplate
 };
 
 }
-TEST(wg_lclcontext_adhoc, BindVarInTemplate)
+TEST(wg_lclcontext_adhoc_varbindimplicit, InTemplate)
 {
-  BindVarInTemplate<bool>::run();
+  VarInTemplate<bool>::run();
 }

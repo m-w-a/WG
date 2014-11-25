@@ -19,6 +19,9 @@
 #define WG_LCLCONTEXT_TPL(spec) \
   WG_PP_LCLCONTEXT_IMPL(1, spec)
 
+#define WG_LCLCONTEXT_END \
+  WG_LCLCONTEXT_Error_illegal_closing_macro
+
 #define WG_LCLCONTEXT_END1 \
   WG_PP_LCLCONTEXT_CODEGEN_END(1)
 
