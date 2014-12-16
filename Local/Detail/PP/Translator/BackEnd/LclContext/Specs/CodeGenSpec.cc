@@ -1,66 +1,97 @@
-int main()
-{
-}
-
+/*
 WG_LCLCONTEXT(
-  with(cntxtmngr1) entered_as(enter_result_obj1)
-  with_adhoc(boundvar1) on_enter(enterstmts) on_exit(exitstmts) )
-// Expands To:
+  with(employee.timecard()) entered_as(const starttime)
+  with_adhoc (employee)
+    on_enter(employee.zone_out();) on_exit(employee.zone_in();)
+)
 {
-  /* "with" context managers. */
-  LOCALOPERANDSYNTAXCHECKER(cntxtmngr_dclns)
-  TYPEALIASOR(cntxtmngr_dclns)
-
-  LOCALOPERANDSYNTAXCHECKER(enteredas_dclns)
-  TYPEALIASOR(enteredas_dclns)
-
-  /* Iterator over with_adhoc context managers. */
-  LCLCLASS(adhoc_ctxtmngr1, memext(boundvar1) )
-    void enter() { enterstmts }
-    void exit() { exitstmts }
-  LCLCLASS_END;
-  adhoc_ctxtmngr1 adhoc_obj1(boundvar1);
-
-  ContextMngrGroup
+  if(starttime > current_shift.start_time())
   {
-    /* Iterate over "with" context managers and associated objs. */
-    CntxMngr1 cntxtmngr1;
+    assign_potatoe_peeling_duty(employee);
+  }
+}
+WG_LCLCONTEXT_END2
+*/
 
-    /* Iterate over with_adhoc context managers and associated objs. */
-    adhoc_ctxtmngr1 & adhoc_obj1;
+{
+  bool autosimflag = false;
 
-    void exit(bool const exception_is_active)
-    {
-      /* Reverse iterate context managers obj seq. */
-      adhoc_obj1 . exit(exception_is_active);
-      cntxtmngr1 . exit(exception_is_active);
-    }
-  } cntxtMngrGrpObj = {cntxtmngr1, adhoc_obj1};
+  bool did_scope_complete = false;
+
+#define EXPR employee.timecard()
+  ::wg::lclcontext::detail::extant_scopemngr_proxy_t wgXXXlclcontextXXXscopemngr0 =
+    WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_MAKE(
+      EXPR,
+      autosimflag);
 
 #ifndef NOEX
   try
   {
-#endif NOEX
-    /* Iterate context managers obj-ordinal seq. */
-    ALIASEDTYPE(1) enter_result_obj1 = cntxtmngr1.enter();
-    adhoc_obj1.enter();
+#endif
+    wg_lclcontext_enteredas_typealiases::type0 starttime =
+      WG_LCLCONTEXT_DETAIL_EXTANTSCOPEMNGRPROXY_ENTER(
+        wgXXXlclcontextXXXscpmngrproxy0,
+        EXPR,
+        wg_lclcontext_enteredas_typealiases::type0) ;
 
-    //User code starts.
+    customentryhandler( starttime )
+
+    WG_LCLCLASS(
+      wgXXXlclcontextXXXadhoc_scopemngr0_t,
+      memext (employee) memint (type(bool) m_didcallexit, false)
+    )
+      void enter()
+      {
+        employee.zone_out();
+      }
+
+      void exit(bool const scope_completed)
+      {
+        m_didcallexit = true;
+        (void)scope_completed;
+        employee.zone_in();
+      }
+
+      ~wgXXXlclcontextXXXadhoc_scopemngr0_t()
+      {
+        if( ! m_didcallexit )
+        {
+          this->exit(false);
+        }
+      }
+    WG_LCLCLASS_END;
+
+    wgXXXlclcontextXXXadhoc_scopemngr0_t
+      wgXXXlclcontextXXXscopemngr1(employee);
+
+  #ifndef NOEX
+    try
     {
+  #endif
+      wgXXXlclcontextXXXscopemngr1.enter();
 
+      {
+        // User code goes here.
+      }
+
+      did_scope_complete = true;
+
+    #ifndef NOEX
     }
-    //User code ends.
-
-#ifndef NOEX
+    catch(...)
+    {
+      wgXXXlclcontextXXXscopemngr1.exit(did_scope_complete);
+      throw;
+    }
+    #endif
+    wgXXXlclcontextXXXscopemngr1.exit(true);
+  #ifndef NOEX
   }
   catch(...)
   {
-    mgrs.exit(true);
+    wgXXXlclcontextXXXscopemngr0.exit(did_scope_complete);
     throw;
   }
-#endif
-
-  /* Outside of try-catch clause since this may itself throw and we don't want
-   * context exitS to be called twice.
-   */
-  mgrs.exit(false);
+  #endif
+  wgXXXlclcontextXXXscopemngr0.exit(true);
+}

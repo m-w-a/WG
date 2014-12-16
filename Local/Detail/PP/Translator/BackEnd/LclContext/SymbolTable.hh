@@ -14,7 +14,10 @@
 
 // Returns: { 0 | 1 }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_ISTPL(symbtbl) \
-  WG_PP_LCLCONTEXT_ST_GET(symbtbl, ISPTL)
+  WG_PP_LCLCONTEXT_ST_GET(symbtbl, ISTPL)
+
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_CUSTOMENTRYHANDLER(symbtbl) \
+  WG_PP_MAPTO_NOTHING_ARG1
 
 // Returns: { unsigned integer }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOLCOUNT_EXTANT(symbtbl) \
@@ -68,11 +71,15 @@
 
 // Returns: { 0 | 1 }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_ISENTRYCAPTURED(symbol) \
-  WG_PP_SEQ_ISNIL( BOOST_PP_SEQ_ELEM(4, symbol) )
+  BOOST_PP_COMPL( WG_PP_SEQ_ISNIL( BOOST_PP_SEQ_ELEM(4, symbol) ) )
 
 // Returns: { parsed-nlt-set-var-dcln }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY(symbol) \
   BOOST_PP_SEQ_ELEM(4, symbol)
+
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY_REPLACE( \
+  symbol, newentry) \
+    BOOST_PP_SEQ_REPLACE(symbol, 4, newentry)
 
 // Returns: { marked-parsed-explicit-non-local-type-or-deduced-type }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY_MARKEDTYPE(symbol) \
@@ -98,13 +105,15 @@
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_VARBINDSEQ(symbol) \
   BOOST_PP_SEQ_ELEM(3, symbol)
 
-// Returns: { compound-statement }
+// Returns: { empty-string | compound-statement }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_ONENTERSEQ(symbol) \
-  BOOST_PP_SEQ_ELEM(4, symbol)
+  WG_PP_SEQ_NOTHING_FLATTEN( \
+    BOOST_PP_SEQ_ELEM(4, symbol) )
 
-// Returns: { compound-statement }
+// Returns: { empty-string | compound-statement }
 #define WG_PP_LCLCONTEXT_SYMBOLTABLE_ADHOCSYMBOL_ONEXITSEQ(symbol) \
-  BOOST_PP_SEQ_ELEM(5, symbol)
+  WG_PP_SEQ_NOTHING_FLATTEN( \
+    BOOST_PP_SEQ_ELEM(5, symbol) )
 
 //-----
 //NOTE:
@@ -155,15 +164,15 @@
 //
 // parsed-nlt-set-var-dcln:
 //   {
-//     ( WG_PP_MARKER_<NOOP | DEDUCED> parsed-explicit-non-local-type-or-deduced-type )
+//     ( marked-parsed-explicit-non-local-type-or-deduced-type )
 //     ( var-name )
 //     ( value-expr )
 //   }
 // marked-parsed-explicit-non-local-type-or-deduced-type :=
 //   WG_PP_MARKER_<NOOP | DEDUCED> parsed-explicit-non-local-type-or-deduced-type )
 // parsed-explicit-non-local-type-or-deduced-type :=
-//    WG_PP_MARKER_NOOP parsed-explicit-non-local-type
-//  | WG_PP_MARKER_DEDUCEDTYPE parsed-deduced-type
+//    parsed-explicit-non-local-type
+//  | parsed-deduced-type
 // parsed-explicit-non-local-type := type explicit-non-local-type
 // parsed-deduced-type :=
 //   type( { BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> > } )

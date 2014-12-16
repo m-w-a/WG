@@ -72,6 +72,14 @@ struct expr_category_mutable_rvalue : public expr_category_rvalue {};
   struct expr_category_const_nonarray_lvalue_or_const_rvalue {};
 #endif
 
+template
+<
+  typename ExprCategory,
+  typename CapturedType,
+  typename EnableIfDummyArg = void
+>
+struct auto_any_impl;
+
 }
 }
 }
@@ -86,22 +94,40 @@ struct expr_category_mutable_rvalue : public expr_category_rvalue {};
 //     1) expr_category_mutable_rvalue, or
 //     2) expr_category_array_or_mutable_lvalue, or
 //     3) expr_category_const_nonarray_lvalue_or_const_rvalue.
+//
+// This macro does not evaluate expr.
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY_IMPL(expr)
 
+// captured_obj: an object of type auto_any_t
+// Expands to the object specified by expr.
+// This macro does not evaluate expr.
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_VALUE(captured_obj, expr) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_VALUE_IMPL(captured_obj, expr)
 
+// captured_obj: an object of type auto_any_t
+// Determines whether expr is an rvalue or not.
+// This macro does not evaluate expr.
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE(captured_obj, expr) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_ISRVALUE_IMPL(captured_obj, expr)
 
 // This is runtime deduction, not compile-time deduction.
+// This macro expands to "auto_any_impl<...> *"
+// This macro does not evaluate expr.
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_DEDUCEDPTRTYPE(expr) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_DEDUCEDPTRTYPE_IMPL(expr)
 
+// captured_obj: an object of type auto_any_t
+// Expands to an object of type "auto_any_impl<...> const &"
+// This macro does not evaluate expr.
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST(captured_obj, expr) \
+  WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST_IMPL(captured_obj, expr)
+
+// obj: an object of type "auto_any_impl<...>".
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE(obj) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE_IMPL(obj)
 
+// obj: an object of type "auto_any_impl<...>".
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_ISRVALUE(obj) \
   WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_ISRVALUE_IMPL(obj)
 
@@ -130,7 +156,8 @@ struct auto_any
 
 protected:
   auto_any() {}
-  auto_any(BOOST_RV_REF(auto_any) rhs) {}
+  auto_any(auto_any const &) {}
+  auto_any(BOOST_RV_REF(auto_any) ) {}
 
 private:
   //Declared and purposefully not defined.
@@ -142,14 +169,6 @@ private:
 //-------------
 //auto_any_impl
 //-------------
-
-template
-<
-  typename ExprCategory,
-  typename CapturedType,
-  typename EnableIfDummyArg = void
->
-struct auto_any_impl;
 
 //expr_category_rvalue
 
@@ -848,6 +867,12 @@ inline auto_any_impl
     captured_obj, \
     WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
     WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr)).is_rvalue()
+
+#define WG_AUTOSIMULATOR_DETAIL_AUTOANY_DOWNCAST_IMPL(captured_obj, expr) \
+  ::wg::autosimulator::detail::auto_any_impl_cast( \
+    captured_obj, \
+    WG_AUTOSIMULATOR_DETAIL_AUTOANY_EXPR_CATEGORY(expr), \
+    WG_AUTOSIMULATOR_DETAIL_ENCODEDTYPEOF(expr))
 
 #define WG_AUTOSIMULATOR_DETAIL_AUTOANY_AUTOANYIMPL_VALUE_IMPL(obj) \
   obj.value()

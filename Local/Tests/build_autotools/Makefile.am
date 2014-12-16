@@ -31,7 +31,12 @@ noinst_PROGRAMS = \
     test_lclclass_cpp11 \
     test_pp_lclcontext_keywords \
     test_autosimulator_cpp03 \
-    test_autosimulator_cpp11
+    test_autosimulator_cpp11 \
+    test_lclcontext_testutils \
+    test_lclcontext_cpp03 \
+    test_lclcontext_cpp11 \
+    test_lclcontext_cpp03_noex \
+    test_lclcontext_cpp11_noex
 
 # Don't auto build test_autofunctor_cf_* since they're compile-failure tests.
 if DO_NOT_BUILD
@@ -102,18 +107,53 @@ TEST_WG_LCLFUNCTION_CPP11_APPBUILDLOC = \
     $(abs_builddir)/$(TEST_WG_LCLFUNCTION_CPP11_APPNAME)
 
 TEST_WG_AUTOSIMULATOR_CPP03_APPNAME = \
-    test_lclcontext_cpp03$(EXEEXT)
+    test_autosimulator_cpp03$(EXEEXT)
 TEST_WG_AUTOSIMULATOR_CPP03_APPALTPATH = \
     $(TEST_BIN_DIR)/$(TEST_WG_AUTOSIMULATOR_CPP03_APPNAME)
 TEST_WG_AUTOSIMULATOR_CPP03_APPBUILDLOC = \
     $(abs_builddir)/$(TEST_WG_AUTOSIMULATOR_CPP03_APPNAME)
 
 TEST_WG_AUTOSIMULATOR_CPP11_APPNAME = \
-    test_lclcontext_cpp11$(EXEEXT)
+    test_autosimulator_cpp11$(EXEEXT)
 TEST_WG_AUTOSIMULATOR_CPP11_APPALTPATH = \
     $(TEST_BIN_DIR)/$(TEST_WG_AUTOSIMULATOR_CPP11_APPNAME)
 TEST_WG_AUTOSIMULATOR_CPP11_APPBUILDLOC = \
     $(abs_builddir)/$(TEST_WG_AUTOSIMULATOR_CPP11_APPNAME)
+
+TEST_WG_LCLCONTEXT_TESTUTILS_APPNAME = \
+    test_lclcontext_testutils$(EXEEXT)
+TEST_WG_LCLCONTEXT_TESTUTILS_APPALTPATH = \
+    $(TEST_BIN_DIR)/$(TEST_WG_LCLCONTEXT_TESTUTILS_APPNAME)
+TEST_WG_LCLCONTEXT_TESTUTILS_APPBUILDLOC = \
+    $(abs_builddir)/$(TEST_WG_LCLCONTEXT_TESTUTILS_APPNAME)
+
+TEST_WG_LCLCONTEXT_CPP03_APPNAME = \
+    test_lclcontext_cpp03$(EXEEXT)
+TEST_WG_LCLCONTEXT_CPP03_APPALTPATH = \
+    $(TEST_BIN_DIR)/$(TEST_WG_LCLCONTEXT_CPP03_APPNAME)
+TEST_WG_LCLCONTEXT_CPP03_APPBUILDLOC = \
+    $(abs_builddir)/$(TEST_WG_LCLCONTEXT_CPP03_APPNAME)
+
+TEST_WG_LCLCONTEXT_CPP03_NOEX_APPNAME = \
+    test_LCLCONTEXT_CPP03_NOEX$(EXEEXT)
+TEST_WG_LCLCONTEXT_CPP03_NOEX_APPALTPATH = \
+    $(TEST_BIN_DIR)/$(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPNAME)
+TEST_WG_LCLCONTEXT_CPP03_NOEX_APPBUILDLOC = \
+    $(abs_builddir)/$(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPNAME)
+
+TEST_WG_LCLCONTEXT_CPP11_APPNAME = \
+    test_lclcontext_cpp11$(EXEEXT)
+TEST_WG_LCLCONTEXT_CPP11_APPALTPATH = \
+    $(TEST_BIN_DIR)/$(TEST_WG_LCLCONTEXT_CPP11_APPNAME)
+TEST_WG_LCLCONTEXT_CPP11_APPBUILDLOC = \
+    $(abs_builddir)/$(TEST_WG_LCLCONTEXT_CPP11_APPNAME)
+
+TEST_WG_LCLCONTEXT_CPP11_NOEX_APPNAME = \
+    test_LCLCONTEXT_CPP11_NOEX$(EXEEXT)
+TEST_WG_LCLCONTEXT_CPP11_NOEX_APPALTPATH = \
+    $(TEST_BIN_DIR)/$(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPNAME)
+TEST_WG_LCLCONTEXT_CPP11_NOEX_APPBUILDLOC = \
+    $(abs_builddir)/$(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPNAME)
 
 #Custom init.
 all-local : \
@@ -122,13 +162,18 @@ all-local : \
     $(TEST_WG_LCLCLASS_CPP03_APPALTPATH) \
     $(TEST_WG_LCLCLASS_CPP11_APPALTPATH) \
     $(TEST_WG_AUTOFUNCTOR_APPALTPATH) \
-    $(TEST_WG_LCLFUNCTION_TESTUTILS_APPNAME) \
+    $(TEST_WG_LCLFUNCTION_TESTUTILS_APPALTPATH) \
     $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPALTPATH) \
     $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP11_APPALTPATH) \
     $(TEST_WG_LCLFUNCTION_CPP03_APPALTPATH) \
     $(TEST_WG_LCLFUNCTION_CPP11_APPALTPATH) \
     $(TEST_WG_AUTOSIMULATOR_CPP03_APPALTPATH) \
-    $(TEST_WG_AUTOSIMULATOR_CPP11_APPALTPATH)
+    $(TEST_WG_AUTOSIMULATOR_CPP11_APPALTPATH) \
+    $(TEST_WG_LCLCONTEXT_TESTUTILS_APPALTPATH) \
+    $(TEST_WG_LCLCONTEXT_CPP03_APPALTPATH) \
+    $(TEST_WG_LCLCONTEXT_CPP11_APPALTPATH) \
+    $(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPALTPATH) \
+    $(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPALTPATH)
     
 $(TEST_BIN_DIR) :
 	$(MKDIR_P) $(TEST_BIN_DIR)
@@ -199,6 +244,36 @@ $(TEST_WG_AUTOSIMULATOR_CPP11_APPALTPATH) : $(TEST_WG_AUTOSIMULATOR_CPP11_APPBUI
 	      $(TEST_WG_AUTOSIMULATOR_CPP11_APPBUILDLOC) \
 	      $(TEST_WG_AUTOSIMULATOR_CPP11_APPNAME); )
 
+$(TEST_WG_LCLCONTEXT_TESTUTILS_APPALTPATH) : $(TEST_WG_LCLCONTEXT_TESTUTILS_APPBUILDLOC)
+	( cd $(TEST_BIN_DIR); \
+	  $(LN_S) -f \
+	      $(TEST_WG_LCLCONTEXT_TESTUTILS_APPBUILDLOC) \
+	      $(TEST_WG_LCLCONTEXT_TESTUTILS_APPNAME); )
+
+$(TEST_WG_LCLCONTEXT_CPP03_APPALTPATH) : $(TEST_WG_LCLCONTEXT_CPP03_APPBUILDLOC)
+	( cd $(TEST_BIN_DIR); \
+	  $(LN_S) -f \
+	      $(TEST_WG_LCLCONTEXT_CPP03_APPBUILDLOC) \
+	      $(TEST_WG_LCLCONTEXT_CPP03_APPNAME); )
+
+$(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPALTPATH) : $(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPBUILDLOC)
+	( cd $(TEST_BIN_DIR); \
+	  $(LN_S) -f \
+	      $(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPBUILDLOC) \
+	      $(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPNAME); )
+
+$(TEST_WG_LCLCONTEXT_CPP11_APPALTPATH) : $(TEST_WG_LCLCONTEXT_CPP11_APPBUILDLOC)
+	( cd $(TEST_BIN_DIR); \
+	  $(LN_S) -f \
+	      $(TEST_WG_LCLCONTEXT_CPP11_APPBUILDLOC) \
+	      $(TEST_WG_LCLCONTEXT_CPP11_APPNAME); )
+
+$(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPALTPATH) : $(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPBUILDLOC)
+	( cd $(TEST_BIN_DIR); \
+	  $(LN_S) -f \
+	      $(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPBUILDLOC) \
+	      $(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPNAME); )
+
 #Custom finalize.
 clean-local : \
     rm -rf $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTOR_APPNAME) \
@@ -211,7 +286,12 @@ clean-local : \
     rm -rf $(TEST_WG_LCLFUNCTION_CPP03_APPNAME) \
     rm -rf $(TEST_WG_LCLFUNCTION_CPP11_APPNAME) \
     rm -rf $(TEST_WG_AUTOSIMULATOR_CPP03_APPNAME) \
-    rm -rf $(TEST_WG_AUTOSIMULATOR_CPP11_APPNAME)
+    rm -rf $(TEST_WG_AUTOSIMULATOR_CPP11_APPNAME) \
+    rm -rf $(TEST_WG_LCLCONTEXT_TESTUTILS_APPNAME) \
+    rm -rf $(TEST_WG_LCLCONTEXT_CPP03_APPNAME) \
+    rm -rf $(TEST_WG_LCLCONTEXT_CPP11_APPNAME) \
+    rm -rf $(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPNAME) \
+    rm -rf $(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPNAME)
 
 ##############################
 #Automatically executed tests.
@@ -227,11 +307,17 @@ TESTS = \
     $(TEST_WG_LCLFUNCTION_CPP03_APPNAME) \
     $(TEST_WG_LCLFUNCTION_CPP11_APPNAME) \
     $(TEST_WG_AUTOSIMULATOR_CPP03_APPNAME) \
-    $(TEST_WG_AUTOSIMULATOR_CPP11_APPNAME) 
+    $(TEST_WG_AUTOSIMULATOR_CPP11_APPNAME) \
+    $(TEST_WG_LCLCONTEXT_TESTUTILS_APPNAME) \
+    $(TEST_WG_LCLCONTEXT_CPP03_APPNAME) \
+    $(TEST_WG_LCLCONTEXT_CPP11_APPNAME) \
+    $(TEST_WG_LCLCONTEXT_CPP03_NOEX_APPNAME) \
+    $(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPNAME)
 
 test_testutils_SOURCES = \
     ../Utils/Tests/TestMain.cc \
-    ../Utils/Tests/UtilsUnitTest.cc
+    ../Utils/Tests/UtilsUnitTest.cc \
+    ../Utils/Tests/TrileanUnitTest.cc
 
 test_pp_pp_SOURCES = ../../Detail/PP/Tests/PPUnitTest.cc
 test_pp_wgseq_SOURCES = ../../Detail/PP/Tests/SeqUnitTest.cc
@@ -429,27 +515,50 @@ test_lclfunction_codegenspec_cpp03_SOURCES = \
 test_lclfunction_codegenspec_cpp11_SOURCES = \
     ../../Detail/PP/Translator/BackEnd/LclFunction/Specs/C++11Spec.cc
 
-test_autosimulator_cpp03_SOURCES = \
+AUTOSIMULATOR_SRC = \
     ../../Detail/AutoSimulator/Tests/TestMain.cc \
     ../../Detail/AutoSimulator/Tests/UtilsUnitTest.cc \
     ../../Detail/AutoSimulator/Detail/Tests/TypeTraitsUnitTest.cc \
-    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyUnitTest03.cc \
-    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyGroupUnitTest.cc \
     ../../Detail/AutoSimulator/Tests/AutoAnyNonArrayExpr.cc \
-    ../../Detail/AutoSimulator/Tests/AutoAnyArrayExpr.cc \
-    ../../Detail/AutoSimulator/Tests/AutoAnyGroup.cc \
-    ../../Detail/AutoSimulator/Tests/AutoAnyGroupCustomBaseClass.cc
+    ../../Detail/AutoSimulator/Tests/AutoAnyArrayExpr.cc
+
+test_autosimulator_cpp03_SOURCES = \
+    $(AUTOSIMULATOR_SRC) \
+    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyUnitTest03.cc
 
 test_autosimulator_cpp11_SOURCES = \
-    ../../Detail/AutoSimulator/Tests/TestMain.cc \
-    ../../Detail/AutoSimulator/Tests/UtilsUnitTest.cc \
-    ../../Detail/AutoSimulator/Detail/Tests/TypeTraitsUnitTest.cc \
-    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyUnitTest11.cc \
-    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyGroupUnitTest.cc \
-    ../../Detail/AutoSimulator/Tests/AutoAnyNonArrayExpr.cc \
-    ../../Detail/AutoSimulator/Tests/AutoAnyArrayExpr.cc \
-    ../../Detail/AutoSimulator/Tests/AutoAnyGroup.cc \
-    ../../Detail/AutoSimulator/Tests/AutoAnyGroupCustomBaseClass.cc
+    $(AUTOSIMULATOR_SRC) \
+    ../../Detail/AutoSimulator/Detail/Tests/AutoAnyUnitTest11.cc
+
+test_lclcontext_testutils_SOURCES = \
+    ../LclContext/Utils/Source/Utils.cc \
+    ../LclContext/Utils/Source/Records.cc \
+    ../LclContext/Utils/Detail/Source/IRecorder.cc \
+    ../LclContext/Utils/Tests/TestMain.cc \
+    ../LclContext/Utils/Tests/UtilsUnitTest.cc \
+    ../LclContext/Utils/Tests/RecordsUnitTest.cc \
+    ../LclContext/Utils/Tests/ScopeMngrTemplateUnitTest.cc
+
+LCLCONTEXT_SRC = \
+    ../LclContext/Utils/Source/Utils.cc \
+    ../LclContext/Utils/Source/Records.cc \
+    ../LclContext/Utils/Detail/Source/IRecorder.cc \
+    ../LclContext/TestMain.cc \
+    ../LclContext/ExtantUncapturedEntry.cc \
+    ../LclContext/ExtantCapturedEntry.cc \
+    ../LclContext/AdhocImplicitBoundVar.cc \
+    ../LclContext/AdhocExplicitBoundVar.cc \
+    ../LclContext/AdhocEnterSpecified.cc \
+    ../LclContext/AdhocExitSpecified.cc \
+    ../LclContext/AdhocEnterAndExitSpecified.cc \
+    ../LclContext/ExtantAndAdhoc.cc \
+    ../LclContext/Nested.cc \
+    ../LclContext/MultipleUseInSameMacro.cc
+
+test_lclcontext_cpp03_SOURCES = $(LCLCONTEXT_SRC)
+test_lclcontext_cpp11_SOURCES = $(LCLCONTEXT_SRC)
+test_lclcontext_cpp03_noex_SOURCES = $(LCLCONTEXT_SRC)
+test_lclcontext_cpp11_noex_SOURCES = $(LCLCONTEXT_SRC)
 
 EXTRA_DIST = 
 
@@ -504,6 +613,28 @@ test_autosimulator_cpp11_CPPFLAGS = \
     $(AM_CPPFLAGS) \
     $(GTEST_CPPFLAGS)
 
+test_lclcontext_testutils_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
+    $(GTEST_CPPFLAGS)
+
+test_lclcontext_cpp03_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
+    $(GTEST_CPPFLAGS)
+
+test_lclcontext_cpp11_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
+    $(GTEST_CPPFLAGS)
+
+test_lclcontext_cpp03_noex_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
+    $(GTEST_CPPFLAGS) \
+    -DBOOST_NO_EXCEPTIONS
+
+test_lclcontext_cpp11_noex_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
+    $(GTEST_CPPFLAGS) \
+    -DBOOST_NO_EXCEPTIONS
+
 ################
 #Compiler Flags.
 ################
@@ -556,6 +687,27 @@ test_autosimulator_cpp11_CXXFLAGS = \
     $(AM_CXXFLAGS) \
     -std=gnu++11
 
+test_lclcontext_testutils_CXXFLAGS = \
+    $(AM_CXXFLAGS)
+
+test_lclcontext_cpp03_CXXFLAGS = \
+    $(AM_CXXFLAGS) \
+    -std=gnu++98
+    
+test_lclcontext_cpp11_CXXFLAGS = \
+    $(AM_CXXFLAGS) \
+    -std=gnu++11
+
+test_lclcontext_cpp03_noex_CXXFLAGS = \
+    $(AM_CXXFLAGS) \
+    -std=gnu++98 \
+    -fno-exceptions
+    
+test_lclcontext_cpp11_noex_CXXFLAGS = \
+    $(AM_CXXFLAGS) \
+    -std=gnu++11 \
+    -fno-exceptions
+
 ##############
 #Linker Flags.
 ##############
@@ -574,3 +726,8 @@ test_lclfunction_codegenspec_cpp03_LDADD = $(GTEST_LTLIB)
 test_lclfunction_codegenspec_cpp11_LDADD = $(GTEST_LTLIB)
 test_autosimulator_cpp03_LDADD = $(GTEST_LTLIB)
 test_autosimulator_cpp11_LDADD = $(GTEST_LTLIB)
+test_lclcontext_testutils_LDADD = $(GTEST_LTLIB)
+test_lclcontext_cpp03_LDADD = $(GTEST_LTLIB)
+test_lclcontext_cpp11_LDADD = $(GTEST_LTLIB)
+test_lclcontext_cpp03_noex_LDADD = $(GTEST_LTLIB)
+test_lclcontext_cpp11_noex_LDADD = $(GTEST_LTLIB)
