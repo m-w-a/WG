@@ -89,6 +89,12 @@
 #define WG_PP_ISNEXTTOKEN_A_TUPLE(tuplearity, tokens) \
   WG_PP_ISNEXTTOKEN_A_TUPLE_IMPL(tuplearity, tokens)
 
+#if BOOST_PP_VARIADICS
+  #define WG_PP_ISNEXTTOKEN_A_NTUPLE(tokens) \
+    WG_PP_STARTSWITH_WG_PP_TRUE( \
+      WG_PP_ISNEXTTOKEN_A_NTUPLE_IMPL tokens)
+#endif
+
 #define WG_PP_ADDCOMMA_AFTERTOKENS(tokens) tokens ,
 
 // tokens:
@@ -157,6 +163,10 @@
 #define WG_PP_ISNEXTTOKEN_A_TUPLE_IMPL(tuplearity, tokens) \
   WG_PP_STARTSWITH_WG_PP_TRUE( \
     BOOST_PP_CAT(WG_PP_MAP_TO_WG_PP_TRUE_ARG, tuplearity) tokens)
+
+#if BOOST_PP_VARIADICS
+  #define WG_PP_ISNEXTTOKEN_A_NTUPLE_IMPL(...) WG_PP_TRUE
+#endif
 
 // Usage:
 // WG_PP_ADDCOMMA_AFTERTUPLE_IMPL? tokens-with-leading-tuple

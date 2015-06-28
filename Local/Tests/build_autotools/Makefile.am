@@ -555,10 +555,14 @@ LCLCONTEXT_SRC = \
     ../LclContext/Nested.cc \
     ../LclContext/MultipleUseInSameMacro.cc
 
+LCLCONTEXT_SRC_CPP11 = \
+    $(LCLCONTEXT_SRC) \
+	../LclContext/AdhocVariadic.cc
+
 test_lclcontext_cpp03_SOURCES = $(LCLCONTEXT_SRC)
-test_lclcontext_cpp11_SOURCES = $(LCLCONTEXT_SRC)
+test_lclcontext_cpp11_SOURCES = $(LCLCONTEXT_SRC_CPP11)
 test_lclcontext_cpp03_noex_SOURCES = $(LCLCONTEXT_SRC)
-test_lclcontext_cpp11_noex_SOURCES = $(LCLCONTEXT_SRC)
+test_lclcontext_cpp11_noex_SOURCES = $(LCLCONTEXT_SRC_CPP11)
 
 EXTRA_DIST = 
 
