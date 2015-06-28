@@ -506,8 +506,12 @@ LCLFUNCTION_SRC = \
     ../LclFunction/LclFunctionConfigParamsMaxArityDefault.cc \
     ../LclFunction/LclFunctionConfigParamsMaxArityCustom.cc
 
-test_lclfunction_cpp03_SOURCES = $(LCLFUNCTION_SRC)
-test_lclfunction_cpp11_SOURCES = $(LCLFUNCTION_SRC)
+test_lclfunction_cpp03_SOURCES = \
+    $(LCLFUNCTION_SRC)
+
+test_lclfunction_cpp11_SOURCES = \
+    $(LCLFUNCTION_SRC) \
+    ../LclFunction/VarBindVariadic.cc
 
 test_lclfunction_codegenspec_cpp03_SOURCES = \
     ../../Detail/PP/Translator/BackEnd/LclFunction/Specs/C++03Spec.cc
