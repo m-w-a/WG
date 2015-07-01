@@ -42,6 +42,8 @@
 #define WG_PP_LCLFUNCTION_SPEC_NORMALIZE_EXPAND2(x) x
 #define WG_PP_LCLFUNCTION_SPEC_NORMALIZE_EXPAND3(x) x
 #define WG_PP_LCLFUNCTION_SPEC_NORMALIZE_EXPAND4(x) x
+#define WG_PP_LCLFUNCTION_SPEC_NORMALIZE_EXPAND5(x) x
+#define WG_PP_LCLFUNCTION_SPEC_NORMALIZE_EXPAND6(x) x
 
 #define WG_PP_LCLFUNCTION_SPEC_OPTIONS_MAKE(istpl) istpl
 #define WG_PP_LCLFUNCTION_SPEC_OPTIONS_ISTPL(specoptions) specoptions
@@ -117,18 +119,35 @@
       spec, specoptions, PARAMS, VARBIND) )
 #define WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_NOTFOUND_PARAMS() \
   (BOOST_PP_NIL)
-#define WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_FOUND_PARAMS( \
-  spec, specoptions, nexttransform) \
-    WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_FOUND_PARAMS2( \
-      WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
-        1, \
-        WG_PP_LCLFUNCTION_KEYWORDS_EAT_HEADKEYWORD(spec), \
-        WG_PP_LCLFUNCTION_SPEC_CHOOSE_TPL( \
-          WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE, specoptions), \
-        WG_PP_TUPLIZE_ARG1, \
-        WG_PP_TUPLIZE_ARG1), \
-      nexttransform, \
-      specoptions)
+#if ! BOOST_PP_VARIADICS
+  #define WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_FOUND_PARAMS( \
+    spec, specoptions, nexttransform) \
+      WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_FOUND_PARAMS2( \
+        WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
+          1, \
+          WG_PP_LCLFUNCTION_KEYWORDS_EAT_HEADKEYWORD(spec), \
+          WG_PP_LCLFUNCTION_SPEC_CHOOSE_TPL( \
+            WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE, specoptions), \
+          WG_PP_TUPLIZE_ARG1, \
+          WG_PP_TUPLIZE_ARG1), \
+        nexttransform, \
+        specoptions)
+#else
+  #define WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_FOUND_PARAMS( \
+    spec, specoptions, nexttransform) \
+      WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_FOUND_PARAMS2( \
+        WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
+          1, \
+          WG_PP_LCLFUNCTION_SPEC_NORMALIZE_EXPAND5( \
+            BOOST_PP_VARIADIC_TO_SEQ \
+              WG_PP_LCLFUNCTION_KEYWORDS_EAT_HEADKEYWORD(spec)), \
+          WG_PP_LCLFUNCTION_SPEC_CHOOSE_TPL( \
+            WG_PP_LCLFUNCTION_PARAMDCLN_NORMALIZE, specoptions), \
+          WG_PP_TUPLIZE_ARG1, \
+          WG_PP_TUPLIZE_ARG1), \
+        nexttransform, \
+        specoptions)
+#endif
 #define WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_FOUND_PARAMS2( \
   head_rest_tuple, nexttransform, specoptions) \
     ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
@@ -143,18 +162,35 @@
       spec, specoptions, VARBIND, VARSET) )
 #define WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_NOTFOUND_VARBIND() \
   (BOOST_PP_NIL)
-#define WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_FOUND_VARBIND( \
-  spec, specoptions, nexttransform) \
-    WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_FOUND_VARBIND2( \
-      WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
-        1, \
-        WG_PP_LCLFUNCTION_KEYWORDS_EAT_HEADKEYWORD(spec), \
-        WG_PP_LCLFUNCTION_SPEC_CHOOSE_TPL( \
-          WG_PP_BOUNDVARDCLN_NLT_NORMALIZE, specoptions), \
-        WG_PP_TUPLIZE_ARG1, \
-        WG_PP_TUPLIZE_ARG1), \
-      nexttransform, \
-      specoptions)
+#if ! BOOST_PP_VARIADICS
+  #define WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_FOUND_VARBIND( \
+    spec, specoptions, nexttransform) \
+      WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_FOUND_VARBIND2( \
+        WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
+          1, \
+          WG_PP_LCLFUNCTION_KEYWORDS_EAT_HEADKEYWORD(spec), \
+          WG_PP_LCLFUNCTION_SPEC_CHOOSE_TPL( \
+            WG_PP_BOUNDVARDCLN_NLT_NORMALIZE, specoptions), \
+          WG_PP_TUPLIZE_ARG1, \
+          WG_PP_TUPLIZE_ARG1), \
+        nexttransform, \
+        specoptions)
+#else
+  #define WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_FOUND_VARBIND( \
+    spec, specoptions, nexttransform) \
+      WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_FOUND_VARBIND2( \
+        WG_PP_SPLITHEADTUPLESEQFROMTOKENS( \
+          1, \
+          WG_PP_LCLFUNCTION_SPEC_NORMALIZE_EXPAND6( \
+            BOOST_PP_VARIADIC_TO_SEQ \
+              WG_PP_LCLFUNCTION_KEYWORDS_EAT_HEADKEYWORD(spec)), \
+          WG_PP_LCLFUNCTION_SPEC_CHOOSE_TPL( \
+            WG_PP_BOUNDVARDCLN_NLT_NORMALIZE, specoptions), \
+          WG_PP_TUPLIZE_ARG1, \
+          WG_PP_TUPLIZE_ARG1), \
+        nexttransform, \
+        specoptions)
+#endif
 #define WG_PP_LCLFUNCTION_SPEC_NORMALIZE_PARSE_FOUND_VARBIND2( \
   head_rest_tuple, nexttransform, specoptions) \
     ( BOOST_PP_SEQ_ELEM(0, head_rest_tuple) ) \
