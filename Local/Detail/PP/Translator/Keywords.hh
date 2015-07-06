@@ -172,19 +172,10 @@
   WG_PP_KEYWORDS_NAMEDTUPLE_OPERAND( \
     lcltypetuple, WG_PP_KEYWORDS_EATHEAD_LCLTYPE)
 
-#if ! BOOST_PP_VARIADICS
+#define WG_PP_KEYWORDS_NAMEDTUPLE_OPERAND(namedtuple, eatnamemacro) \
+  WG_PP_KEYWORDS_EXPAND1( \
+    WG_PP_IDENTITY_ARG1 eatnamemacro(namedtuple) )
 
-  #define WG_PP_KEYWORDS_NAMEDTUPLE_OPERAND(namedtuple, eatnamemacro) \
-    WG_PP_KEYWORDS_EXPAND1( \
-      WG_PP_IDENTITY_ARG1 eatnamemacro(namedtuple) )
-
-#else
-
-  #define WG_PP_KEYWORDS_NAMEDTUPLE_OPERAND(namedtuple, eatnamemacro) \
-    WG_PP_KEYWORDS_EXPAND1( \
-      WG_PP_IDENTITY_ARGN eatnamemacro(namedtuple) )
-
-#endif
 
 //-------------
 //AddCommaAfter
