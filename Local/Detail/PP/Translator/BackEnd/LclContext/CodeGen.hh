@@ -160,7 +160,7 @@
     BOOST_PP_IIF( \
       WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOL_CATEGORY_ISEXTANT(symbol), \
       WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_EXTANT, \
-      WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ADHOC) \
+      WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ENTRY3) \
     ( \
       symbol, \
       indx, \
@@ -168,6 +168,14 @@
       BOOST_PP_SEQ_ELEM(1, autosimflag_istpl_customentryhandler), \
       BOOST_PP_SEQ_ELEM(2, autosimflag_istpl_customentryhandler) \
     )
+
+#define WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ENTRY3( \
+  symbol, indx, autosimflag, istpl, customentryhandler) \
+    BOOST_PP_IIF( \
+      WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOL_CATEGORY_ISADHOC(symbol), \
+      WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_ADHOC, \
+      WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_RAII) \
+    (symbol, indx, autosimflag, istpl, customentryhandler)
 
 //-----------------------
 //SCOPEENTERDCLNS::EXTANT
@@ -217,6 +225,17 @@
   symbol, customentryhandler) \
     customentryhandler ( \
       WG_PP_LCLCONTEXT_SYMBOLTABLE_EXTANTSYMBOL_CAPTUREDENTRY_OBJ(symbol) )
+
+//---------------------
+//SCOPEENTERDCLNS::RAII
+//---------------------
+
+#define WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_RAII( \
+  symbol, indx, autosimflag, istpl, customentryhandler) \
+    WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_TRYSTART() \
+    \
+    WG_PP_SEQ_FLATTEN( \
+      WG_PP_LCLCONTEXT_SYMBOLTABLE_RAIISYMBOL_RAIISTMNTTUPLE(symbol) ) ;
 
 //----------------------
 //SCOPEENTERDCLNS::ADHOC
