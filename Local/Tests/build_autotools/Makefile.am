@@ -511,6 +511,7 @@ test_lclfunction_cpp03_SOURCES = \
 
 test_lclfunction_cpp11_SOURCES = \
     $(LCLFUNCTION_SRC) \
+    ../LclFunction/ParamsVariadic.cc \
     ../LclFunction/VarBindVariadic.cc
 
 test_lclfunction_codegenspec_cpp03_SOURCES = \
