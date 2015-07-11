@@ -1,10 +1,11 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
+#include <boost/tuple/tuple.hpp>
 
 namespace
 {
-typedef float ignore_type;
+typedef float ignored_type;
 }
 
 namespace
@@ -55,6 +56,35 @@ TEST(wg_autofunctor_membindexplicittpl, OkIf1ArgBound)
   try
   {
     OkIf1ArgBound<bool>::run();
+  }
+  WG_GTEST_CATCH
+}
+
+namespace
+{
+template <typename T1>
+struct OkIfGloballyScoped1ArgBound
+{
+  static void run()
+  {
+    ::boost::tuple<T1> didArgumentBind = ::boost::make_tuple(false);
+    WG_AUTOFUNCTOR_TPL
+    (oneArgAutoFunctor,
+      membind ((::boost::tuple<T1> &) didArgumentBind) )
+    {
+      this->didArgumentBind = ::boost::make_tuple(true);
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_TRUE(didArgumentBind.template get<0>());
+  }
+};
+}
+TEST(wg_autofunctor_membindexplicittpl, OkIfGloballyScoped1ArgBound)
+{
+  try
+  {
+    OkIfGloballyScoped1ArgBound<bool>::run();
   }
   WG_GTEST_CATCH
 }
@@ -150,7 +180,7 @@ TEST(wg_autofunctor_membindexplicittpl, OkIfLocalTypeNoQualBound)
 {
   try
   {
-    OkIfLocalTypeNoQualBound<ignore_type>::run();
+    OkIfLocalTypeNoQualBound<ignored_type>::run();
   }
   WG_GTEST_CATCH
 }
@@ -182,7 +212,7 @@ TEST(wg_autofunctor_membindexplicittpl, OkIfLocalRefTypeBound)
 {
   try
   {
-    OkIfLocalRefTypeBound<ignore_type>::run();
+    OkIfLocalRefTypeBound<ignored_type>::run();
   }
   WG_GTEST_CATCH
 }
@@ -212,7 +242,7 @@ TEST(wg_autofunctor_membindexplicittpl, OkIfLocalConstTypeBound)
 {
   try
   {
-    OkIfLocalConstTypeBound<ignore_type>::run();
+    OkIfLocalConstTypeBound<ignored_type>::run();
   }
   WG_GTEST_CATCH
 }
@@ -242,7 +272,7 @@ TEST(wg_autofunctor_membindexplicittpl, OkIfLocalConstRefTypeBound)
 {
   try
   {
-    OkIfLocalConstRefTypeBound<ignore_type>::run();
+    OkIfLocalConstRefTypeBound<ignored_type>::run();
   }
   WG_GTEST_CATCH
 }

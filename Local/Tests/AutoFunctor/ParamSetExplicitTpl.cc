@@ -1,8 +1,9 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 #include <boost/typeof/typeof.hpp>
+#include <boost/tuple/tuple.hpp>
 
 namespace
 {
@@ -13,7 +14,7 @@ struct EnsureTypeOfNotUsed
   {
     WG_AUTOFUNCTOR_TPL(setToDiffType, paramset ((T) value, 1.2f) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int, BOOST_TYPEOF_TPL(value));
       EXPECT_EQ(1, value);
     }
@@ -46,7 +47,7 @@ struct OkIf1ArgSet
     (oneArgAutoFunctor,
       paramset ((bool &) didAssign, proxy.didAssign) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(bool &, BOOST_TYPEOF_TPL(didAssign) &);
+      WG_PP_TEST_IS_SAME_TYPE(bool &, BOOST_TYPEOF_TPL(didAssign) &);
       didAssign = true;
     }
     WG_AUTOFUNCTOR_END;
@@ -60,6 +61,39 @@ TEST(wg_autofunctor_paramsetexplicittpl, OkIf1ArgSet)
   try
   {
     OkIf1ArgSet<bool>::run();
+  }
+  WG_GTEST_CATCH
+}
+
+namespace
+{
+template <typename T1>
+struct OkIfGloballyScoped1ArgSet
+{
+  static void run()
+  {
+    ::boost::tuple<T1> didAssign = ::boost::make_tuple(false);
+
+    WG_AUTOFUNCTOR_TPL
+    (oneArgAutoFunctor,
+      paramset ((::boost::tuple<bool> &) assigner, didAssign) )
+    {
+      WG_PP_TEST_IS_SAME_TYPE(
+        typename BOOST_IDENTITY_TYPE((::boost::tuple<bool> &)),
+        BOOST_TYPEOF_TPL(assigner) &);
+      assigner.template get<0>() = true;
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_TRUE(didAssign.template get<0>());
+  }
+};
+}
+TEST(wg_autofunctor_paramsetexplicittpl, OkIfGloballyScoped1ArgSet)
+{
+  try
+  {
+    OkIfGloballyScoped1ArgSet<bool>::run();
   }
   WG_GTEST_CATCH
 }
@@ -84,11 +118,11 @@ struct OkIf3ArgsOfVaryingMutabilitySet
         ((int const) height, cylinder.height)
         ((int &) volume, cylinder.volume) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const, BOOST_TYPEOF_TPL(radius) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const, BOOST_TYPEOF_TPL(height) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int &, BOOST_TYPEOF_TPL(volume) &);
 
       volume = radius * height;

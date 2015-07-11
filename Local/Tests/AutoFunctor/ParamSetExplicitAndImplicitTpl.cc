@@ -2,7 +2,7 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
 #include <boost/typeof/typeof.hpp>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
 {
@@ -19,11 +19,11 @@ struct OkIf3ArgsOfVaryingMutabilityBound
     (calculateForce,
       paramset (ref force, force) ((int const) mass, mass) (velocity, velocity) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int &, BOOST_TYPEOF_TPL(force) &);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const, BOOST_TYPEOF_TPL(mass) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int, BOOST_TYPEOF_TPL(velocity));
 
       force = mass * velocity;

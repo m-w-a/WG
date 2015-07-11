@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
+#include <boost/tuple/tuple.hpp>
 
 TEST(wg_autofunctor_memsetexplicit, EnsureTypeOfNotUsed)
 {
@@ -33,6 +34,25 @@ TEST(wg_autofunctor_memsetexplicit, OkIf1ArgSet)
     WG_AUTOFUNCTOR_END;
 
     EXPECT_TRUE(proxy.didAssign);
+  }
+  WG_GTEST_CATCH
+}
+
+TEST(wg_autofunctor_memsetexplicit, OkIfGloballyScopedArgSet)
+{
+  try
+  {
+    ::boost::tuple<bool> didAssign = ::boost::make_tuple(true);
+
+    WG_AUTOFUNCTOR
+    (oneArgAutoFunctor,
+      memset ((::boost::tuple<bool> &) assigner, didAssign) )
+    {
+      this->assigner.get<0>() = true;
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_TRUE(didAssign.get<0>());
   }
   WG_GTEST_CATCH
 }

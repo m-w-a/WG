@@ -1,6 +1,20 @@
 WG_AUTOFUNCTOR_TYPE(name)
-  Expands to the implementation dependent type name of the autofunctor named
-  "name".
+  Expands to the implementation dependent type of the autofunctor named "name".
+
+Purpose:
+  1) A tool for conveying and enforcing the intent of block scopes.
+    Some Background: 
+    Block scopes
+    are used in C++ to enforce temporal constrains on automatic variables or to
+    partition code into logical units. Commented block scopes certainly do 
+    convey the intent of such logical units of code, but at times it's desirable
+    to also convey and enforce how these units interact with their enclosing 
+    scope. Autofunctor allows the programmer to do that with top most declarations
+    documenting and enforcing what and how enclosing scope(s) variables are 
+    accessed.
+  2) Many times local functions are only needed to be called once, yet this is 
+    often forgotten by programmers. With autofunctor, there is no need to call
+    the local function after it has been defined since it's auto-called.
 
 //----------
 //Semantics:
@@ -10,6 +24,10 @@ assignto:
   1) if obj type is qualified const then a compiler error will result.
     Rationale:
     It's impossible to assign to an object of a const qualified type.
+  2) obj type ref qualification is redundant.
+    Rationale:
+    The assignee should always be captured by reference, else no assignment 
+    would take place.
 
 return:
   1) If present then indicates the return type of the functor,
@@ -18,7 +36,48 @@ return:
   3) else if not present and assignto is not present then the return type of the
     functor is void.
 
-local()
+parambind:
+  1) parameters that are auto-passed to the functor when and only when
+     it's auto-called.
+  2) For more info see bound-variables section.
+
+paramset:
+  1) parameters that are auto-passed to the functor when and only when
+     it's auto-called.
+  2) For more info see set-variables section.
+
+membind:
+memset:
+  1) Member variables of the functor.
+  2) For more info see bound-variables and set-variables sections.
+
+// DONE.
+bound-variables:
+  1) Variables whose values are bound to variables of the same name from 
+    the enclosing scope(s).
+  2) If implicitly typed, the types of such variables are determined by the
+    type of the variables they are bound to via BOOST_TYPEOF. Hence, this will
+    always be remove_reference<remove_const<type-of-boundee>::type>::type.
+    (*) Therefore, if you want something bound by reference always use the ref
+    keyword and if you want something bound by const always use the const 
+    keyword.
+  3) If explicitly typed, the types of such variables must be "implicitly
+    convertible to" from the type of the variable that they respectively bind in
+    their outer scope.
+
+// DONE.
+set-variables:
+  1) Variables whose values are determined by user specified expressions.
+  2) If implicitly typed, the types of such variables are determined by the
+    type of the expression they are set to via BOOST_TYPEOF. Such an expression 
+    may contain identifiers from the enclosing scope(s). If such an 
+    expression is a variable, then the caveats of b-v 2) apply.
+  3) In C++03, the set-to expressions may not be array initializers. 
+    (This restriction may be worked around, but the extra work was not deemed 
+    worth the effort, especially given the existence of better alternative 
+    data types such as std::vector or ::boost::array.)
+
+local():
   Rationale:
   bound vars need to be forwarded to their destination via a temporary cntnr,
   for purposes of efficiency this is done using the add_reference metafunction. 
@@ -31,11 +90,16 @@ local()
   may then be qualified via the keywords const, ref, or const ref as demonstrated
   in the BNF section.
   
-  IMPL detail: in C++11 treat such types as regular types for the purposes of codegen?
+  IMPL detail: in C++11 treat such types as regular types for the purposes of 
+    codegen? (TODO.)
 
+// DONE.
 this_:
   1) If encountered as a bound variable name, then it will bind to the "this" 
     keyword.
+  ---------
+  Note: -->
+  ---------
   2) If encountered as a bound variable and implicitly typed and explicitly
     qualified with the keyword const, then the constness will apply to the
     pointed-to-type.
@@ -45,33 +109,25 @@ this_:
       type". The above semantics are provided as an alternative shortcut 
       to explicitly typing "this_" and const qualifying the pointed-to-type.
 
-bound-variables:
-  1) variables designated as such are bound to variables of the same name from 
-    the enclosing scope.
-  2) If implicitly typed, the types of such variables are determined by the
-    type of the variables they are bound to via BOOST_TYPEOF. Hence, this will
-    always be remove_reference<remove_const<type-of-boundee>::type>::type.
-    (*) Therefore, if you want something bound by reference always use the ref
-    keyword and if you want something bound by const always use the const 
-    keyword.
-  3) If explicitly typed, the types of such variables must be "implicitly
-    convertible to" from the type of the variable that they respectively bind in
-    their outer scope.
-
-set-variables:
-  1) If implicitly typed, the types of such variables are determined by the
-    type of the expression they are set to via BOOST_TYPEOF. If such an 
-    expression is a variable, then the caveats of b-v 2) apply.
-
 //---
 //BNF
 //---
 
 special symbols:
   [...] specifies an optional BNF expression.
-terminals : assignto return parambind paramset membind memset const ref
+terminals: assignto return parambind paramset membind memset const ref
 
-autofunction-spec :=
+autofunctor-usage := 
+  autofunctor-start-macro ( name, autofunctor-spec ) 
+  cv-qualifier-seq exception-specification
+  function-body
+  WG_AUTOFUNCTOR_END [;]
+
+autofunctor-start-macro :=
+    WG_AUTOFUNCTOR
+  | WG_AUTOFUNCTOR_TPL
+
+autofunctor-spec :=
     void
   | [assignto assignto-tuple]
     [return return-tuple]
@@ -83,8 +139,7 @@ autofunction-spec :=
 assignto-tuple := bound-tuple
 
 return-tuple := 
-    (non-local-type)
-  | (local-type)
+    ( type-specifier )
 
 parambind-seq := bound-tuple-seq
 paramset-seq := set-tuple-seq
@@ -123,17 +178,24 @@ implicit-type := lib-type-qualifiers | empty-string
 
 lib-type-qualifiers := const | ref | const ref
 
-explicit-type := 
-    local-type
-  | ( non-local-type )
+explicit-type :=
+    explicit-non-local-type
+  | explicit-local-type
 
-local-type :=
+explicit-non-local-type := 
+    ( non-local-type-specifier )
+
+explicit-local-type :=
     local(local-nonconst-nonref-type)
   | local(local-nonconst-nonref-type) lib-type-qualifiers
 
-type := A C++ type.
+cv-qualifier-seq := See C++ standard.
+exception-specification := See C++ standard.
+function-body := See C++ standard.
+type-specifier := See C++ standard.
 var-name := A C++ variable name.
 local-nonconst-nonref-type := 
   A C++ type declaration specifying a non-const, non-reference local type.
-non-local-type := A C++ type declaration specifying a non-local type.
+non-local-type-specifier :=
+  A type-specifier that specifies a non-local type.
 value-expr := A C++ expression evaluating to some value.

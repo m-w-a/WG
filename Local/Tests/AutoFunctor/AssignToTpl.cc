@@ -1,10 +1,11 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
+#include <boost/tuple/tuple.hpp>
 
 namespace
 {
-typedef float ignore_type;
+typedef float ignored_type;
 }
 
 namespace
@@ -15,7 +16,7 @@ struct OkIfNonLocalExplicit
   static void run()
   {
     T1 didAssign = 0;
-    WG_AUTOFUNCTOR(assign, assignto ((bool) didAssign) )
+    WG_AUTOFUNCTOR_TPL(assign, assignto ((bool) didAssign) )
     {
       return true;
     }
@@ -30,6 +31,35 @@ TEST(wg_autofunctor_assigntotpl, OkIfNonLocalExplicit)
   try
   {
     OkIfNonLocalExplicit<bool>::run();
+  }
+  WG_GTEST_CATCH
+}
+
+namespace
+{
+template <typename T1>
+struct OkIfNonLocalExplicitAndGloballyScoped
+{
+  static void run()
+  {
+    ::boost::tuple<T1> didAssign = ::boost::make_tuple(false);
+    WG_AUTOFUNCTOR_TPL
+    (assign,
+      assignto ((::boost::tuple<T1>) didAssign) )
+    {
+      return ::boost::make_tuple(true);
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_TRUE(didAssign.template get<0>());
+  }
+};
+}
+TEST(wg_autofunctor_assigntotpl, OkIfNonLocalExplicitAndGloballyScoped)
+{
+  try
+  {
+    OkIfNonLocalExplicitAndGloballyScoped<bool>::run();
   }
   WG_GTEST_CATCH
 }
@@ -89,7 +119,7 @@ TEST(wg_autofunctor_assigntotpl, OkIfLocal)
 {
   try
   {
-    OkIfLocal<ignore_type>::run();
+    OkIfLocal<ignored_type>::run();
   }
   WG_GTEST_CATCH
 }
@@ -122,7 +152,7 @@ TEST(wg_autofunctor_assigntotpl, OkIfLocalRef)
 {
   try
   {
-    OkIfLocalRef<ignore_type>::run();
+    OkIfLocalRef<ignored_type>::run();
   }
   WG_GTEST_CATCH
 }

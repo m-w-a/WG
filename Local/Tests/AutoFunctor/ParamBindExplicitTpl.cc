@@ -2,7 +2,9 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
 #include <boost/typeof/typeof.hpp>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
+#include <utility>
+#include <boost/tuple/tuple.hpp>
 
 namespace
 {
@@ -14,7 +16,7 @@ struct EnsureTypeOfNotUsed
     T value = 1.2f;
     WG_AUTOFUNCTOR_TPL(bindByDiffType, parambind ((int const) value) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const, BOOST_TYPEOF_TPL(value) const);
       EXPECT_EQ(1, value);
     }
@@ -42,7 +44,7 @@ struct OkIf1ArgBound
 
     WG_AUTOFUNCTOR_TPL(oneArgAutoFunctor, parambind ((bool &) didArgumentBind) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         bool &, BOOST_TYPEOF_TPL(didArgumentBind) &);
 
       didArgumentBind = true;
@@ -64,6 +66,40 @@ TEST(wg_autofunctor_parambindexplicittpl, OkIf1ArgBound)
 
 namespace
 {
+template <typename T1>
+struct OkIfGloballyScoped1ArgBound
+{
+  static void run()
+  {
+    ::boost::tuple<T1> didArgumentBind = ::boost::make_tuple(false);
+
+    WG_AUTOFUNCTOR_TPL
+    (oneArgAutoFunctor,
+      parambind ((::boost::tuple<bool> &) didArgumentBind) )
+    {
+      WG_PP_TEST_IS_SAME_TYPE(
+        typename BOOST_IDENTITY_TYPE((::boost::tuple<bool> &)),
+        BOOST_TYPEOF_TPL(didArgumentBind) &);
+
+      didArgumentBind.template get<0>() = true;
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_TRUE(didArgumentBind.template get<0>());
+  }
+};
+}
+TEST(wg_autofunctor_parambindexplicittpl, OkIfGloballyScoped1ArgBound)
+{
+  try
+  {
+    OkIfGloballyScoped1ArgBound<bool>::run();
+  }
+  WG_GTEST_CATCH
+}
+
+namespace
+{
 template <typename T1, typename T2, typename T3>
 struct OkIf3ArgsOfVaryingMutabilityBound
 {
@@ -77,11 +113,11 @@ struct OkIf3ArgsOfVaryingMutabilityBound
     (calculateForce,
       parambind ((int &) force) ((int const) mass) ((int const) velocity) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int &, BOOST_TYPEOF_TPL(force) &);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const, BOOST_TYPEOF_TPL(mass) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const, BOOST_TYPEOF_TPL(velocity) const);
 
       force = mass * velocity;

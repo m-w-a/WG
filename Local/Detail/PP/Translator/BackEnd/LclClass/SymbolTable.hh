@@ -1,0 +1,242 @@
+#ifndef WG_PP_LCLCLASS_SYMBOLTABLE_HH_
+#define WG_PP_LCLCLASS_SYMBOLTABLE_HH_
+
+#include <boost/preprocessor.hpp>
+#include <WG/Local/Detail/PP/Seq.hh>
+#include <WG/Local/Detail/PP/PP.hh>
+#include <WG/Local/Detail/PP/Translator/BackEnd/SymbolTableUtil.hh>
+
+//###########
+//Public APIs
+//###########
+
+#define WG_PP_LCLCLASS_SYMBOLTABLE_MODULEID(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, MODULEID)
+
+#define WG_PP_LCLCLASS_SYMBOLTABLE_ISTPL(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, ISTPL)
+
+// Returns: { BOOST_PP_NIL | derives-tuple-seq }
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DERIVESSEQ(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, DERIVESSEQ)
+
+// Returns: { BOOST_PP_NIL | baseinit-tuple-seq }
+#define WG_PP_LCLCLASS_SYMBOLTABLE_BASEINITSEQ(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, BASEINITSEQ)
+
+//------
+//MemExt
+//------
+
+// dcln: parsed-bound-var-dcln
+// Returns: parsed-explicit-or-deduced-type
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_GETTYPE_MEMEXT(dcln) \
+  WG_PP_SEQ_ELEM(0, dcln)
+
+// dcln: parsed-bound-var-dcln
+// type: the replacement type for dcln.
+// Returns: parsed-bound-var-dcln
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_SETTYPE_MEMEXT(dcln, type) \
+  WG_PP_SEQ_REPLACE(dcln, 0, type)
+
+// Returns: var-name
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_OBJ_MEMEXT(dcln) \
+  WG_PP_SEQ_ELEM(1, dcln)
+
+// Returns: { BOOST_PP_NIL | { parsed-bound-var-seq }
+#define WG_PP_LCLCLASS_SYMBOLTABLE_GETDCLNS_MEMEXT(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, DCLNS_MEMEXT)
+
+#define WG_PP_LCLCLASS_SYMBOLTABLE_SETDCLNS_MEMEXT(symbtbl, dclns) \
+  WG_PP_STUTIL_SYMBOLTABLE_REPLACE( \
+    symbtbl, WG_PP_LCLCLASS_SYMBOLTABLE_INDX(DCLNS_MEMEXT), dclns)
+
+// Returns: { integer }
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_SIZE_MEMEXT(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, DCLNS_SIZE_MEMEXT)
+
+// Returns: { BOOST_PP_NIL | integer }
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_THISU_MARKER_MEMEXT(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, DCLNS_THISU_MARKER_MEMEXT)
+
+//------
+//MemInt
+//------
+
+// dcln: parsed-set-var-dcln
+// Returns: parsed-explicit-type-or-deduced-type
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_GETTYPE_MEMINT(dcln) \
+  WG_PP_SEQ_ELEM(0, dcln)
+
+// dcln: parsed-set-var-dcln
+// type: the replacement type for dcln.
+// Returns: parsed-set-var-dcln
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_SETTYPE_MEMINT(dcln, type) \
+  WG_PP_SEQ_REPLACE(dcln, 0, type)
+
+// dcln: parsed-set-var-dcln
+// Returns: var-name
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_OBJ_MEMINT(dcln) \
+  WG_PP_SEQ_ELEM(1, dcln)
+
+// dcln: parsed-set-var-dcln
+// Returns: value-expr
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_VALUE_MEMINT(dcln) \
+  WG_PP_SEQ_ELEM(2, dcln)
+
+// Returns: { BOOST_PP_NIL | parsed-set-var-seq }
+#define WG_PP_LCLCLASS_SYMBOLTABLE_GETDCLNS_MEMINT(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, DCLNS_MEMINT)
+
+#define WG_PP_LCLCLASS_SYMBOLTABLE_SETDCLNS_MEMINT(symbtbl, dclns) \
+  WG_PP_STUTIL_SYMBOLTABLE_REPLACE( \
+    symbtbl, WG_PP_LCLCLASS_SYMBOLTABLE_INDX(DCLNS_MEMINT), dclns)
+
+// Returns: { integer }
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_SIZE_MEMINT(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, DCLNS_SIZE_MEMINT)
+
+//-----
+//Misc.
+//-----
+
+//Returns: { integer }
+#define WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_TOTALSIZE(symbtbl) \
+  WG_PP_LCLCLASS_ST_GET(symbtbl, DCLNS_TOTALSIZE)
+
+//-----
+//NOTE:
+//-----
+//
+//What ever terms not defined here are defined in the respective BNF.
+//------
+//INPUT:
+//------
+// derives_nrmlzd_tuple: { BOOST_PP_NIL | derives-tuple-seq }
+// baseinit_nrmlzd_tupleseq: { BOOST_PP_NIL | baseinit-tuple-seq }
+// parsed_memext_seq: { BOOST_PP_NIL | parsed-bound-var-seq }
+// parsed_memint_seq: { BOOST_PP_NIL | parsed-set-var-seq }
+//
+// parsed-bound-var-seq:
+//   { ( parsed-bound-var-dcln ) }+
+// parsed-bound-var-dcln:
+//   {
+//     ( WG_PP_MARKER_<NOOP | DEDUCED> parsed-explicit-or-deduced-type )
+//     ( var-name )
+//   }
+//
+// parsed-set-var-seq:
+//   { ( parsed-set-var-dcln ) }+
+// parsed-set-var-dcln:
+//   {
+//     ( WG_PP_MARKER_<NOOP | DEDUCED> parsed-explicit-or-deduced-type )
+//     ( var-name )
+//     ( value-expr )
+//   }
+//
+// parsed-explicit-or-deduced-type :=
+//     WG_PP_MARKER_NOOP parsed-explicit-type
+//   | WG_PP_MARKER_DEDUCEDTYPE parsed-deduced-type
+// parsed-explicit-type := parsed-local-type | type explicit-non-local-type
+// parsed-local-type := local(some-token) lib-type-qualifier-seq
+// lib-type-qualifier-seq := (const) | (ref) | (const)(ref)
+// parsed-deduced-type :=
+//   type( { BT | add_const<BT> | add_ref<BT> | add_ref< add_const<BT> > } )
+// BT := BOOST_TYPEOF(some-token)
+//
+//-------
+//OUTPUT:
+//-------
+// A SymbolTable whose values are accessible using the public API.
+#define WG_PP_LCLCLASS_SYMBOLTABLE_CREATE( \
+  istpl, \
+  derives_nrmlzd_tuple, \
+  parsed_memext_seq, \
+  parsed_memint_seq, \
+  baseinit_nrmlzd_tupleseq) \
+    WG_PP_LCLCLASS_SYMBOLTABLE_CREATE_IMPL1( \
+      istpl, \
+      derives_nrmlzd_tuple, \
+      parsed_memext_seq, \
+      parsed_memint_seq, \
+      baseinit_nrmlzd_tupleseq)
+
+//###########
+//Impl Macros
+//###########
+
+// suffix: must match one of the following: WG_PP_LCLCLASS_ST_INDX_<suffix>
+#define WG_PP_LCLCLASS_SYMBOLTABLE_INDX(suffix) \
+  BOOST_PP_CAT(WG_PP_LCLCLASS_ST_INDX_, suffix)
+
+#define WG_PP_LCLCLASS_ST_INDX_MODULEID 0
+
+#define WG_PP_LCLCLASS_ST_INDX_ISTPL 1
+
+#define WG_PP_LCLCLASS_ST_INDX_DERIVESSEQ 2
+
+#define WG_PP_LCLCLASS_ST_INDX_BASEINITSEQ 3
+
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_MEMEXT 4
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_THISU_MARKER_MEMEXT 5
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_SIZE_MEMEXT 6
+
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_MEMINT 7
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_SIZE_MEMINT 8
+
+#define WG_PP_LCLCLASS_ST_INDX_DCLNS_TOTALSIZE 9
+
+// suffix: must match one of the following: WG_PP_LCLCLASS_ST_INDX_<suffix>
+#define WG_PP_LCLCLASS_ST_GET(symbtbl, suffix) \
+  BOOST_PP_ARRAY_ELEM( \
+    BOOST_PP_CAT(WG_PP_LCLCLASS_ST_INDX_, suffix), \
+    symbtbl)
+
+//---------------
+//Creation Macros
+//---------------
+
+#define WG_PP_LCLCLASS_SYMBOLTABLE_CREATE_IMPL1( \
+  istpl, \
+  derives_nrmlzd_tuple, \
+  parsed_memext_seq, \
+  parsed_memint_seq, \
+  baseinit_nrmlzd_tupleseq) \
+    WG_PP_LCLCLASS_SYMBOLTABLE_CREATE_IMPL2( \
+      istpl, \
+      derives_nrmlzd_tuple, \
+      parsed_memext_seq, \
+      parsed_memint_seq, \
+      baseinit_nrmlzd_tupleseq )
+
+#define WG_PP_LCLCLASS_SYMBOLTABLE_CREATE_IMPL2( \
+  istpl, \
+  derives_nrmlzd_tuple, \
+  memext_dcln_seq, \
+  memint_dcln_seq, \
+  baseinit_nrmlzd_tupleseq) \
+    WG_PP_LCLCLASS_SYMBOLTABLE_CREATE_IMPL3( \
+      (9, \
+        (WG_PP_LCLCLASS_SYMBOLTABLE, \
+        istpl, \
+        derives_nrmlzd_tuple, \
+        baseinit_nrmlzd_tupleseq, \
+        memext_dcln_seq, \
+        WG_PP_STUTIL_THISU_INDX( \
+          memext_dcln_seq, WG_PP_LCLCLASS_SYMBOLTABLE_DCLN_OBJ_MEMEXT), \
+        WG_PP_SEQ_SIZE(memext_dcln_seq), \
+        memint_dcln_seq, \
+        WG_PP_SEQ_SIZE(memint_dcln_seq) )) \
+    )
+
+#define WG_PP_LCLCLASS_SYMBOLTABLE_CREATE_IMPL3(wiparray) \
+  BOOST_PP_ARRAY_PUSH_BACK( \
+    wiparray, \
+    BOOST_PP_ADD( \
+      BOOST_PP_ADD( \
+        WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_SIZE_MEMEXT(wiparray), \
+        WG_PP_LCLCLASS_SYMBOLTABLE_DCLNS_SIZE_MEMINT(wiparray) ), \
+      WG_PP_SEQ_SIZE( \
+        WG_PP_LCLCLASS_SYMBOLTABLE_BASEINITSEQ(wiparray)) ) )
+
+#endif /* WG_PP_LCLCLASS_SYMBOLTABLE_HH_ */

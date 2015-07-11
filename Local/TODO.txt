@@ -2,17 +2,70 @@ AutoFunctor
 -----------
 granularize pp includes ??
 
-x) optimize IIF -> by splitting branches
-x) finish pp unit tests.
-  do SetVarDclnNormalize.hh - do compile time array comparisons exist?
-x) simplify LOCALOPERANDSYNTAXCHECK error msg.
+Misc.
+-----
+LocalOperandsSyntaxCheck tests.
 
-x) Better Syntax Error Checking/Reporting:
-  x) BOOST_PP_ASSERT_MSG
-  x) empty spec
-  x) ref thisu
-  missing type in explicit-type-var-dcln
-  missing var in "..."
-  missing type in implicit-type-var-dcln
-  missing var in "..."
+ExpandN:
+  test
+  AUTOFUNCTOR -> ...
 
+LclClass:
+  SpecNormalizeUnitTest.cc
+  Tests name change underscore.
+
+LclFunction:
+  Binder: local namespace to lclfunction namespace?
+  Implementation outline.
+  Boost.LocalFunction array bugs.
+  Tests name change underscore.
+  WG_PP_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY ->
+    WG_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY, and default to 5, plus change 
+    unit tests accordingly.
+
+BOOST_NO_CXX11_* -> WG_*
+
+Remove support for local types in C++03?
+
+AutoSimulator:  
+  How to test:
+    defined(WG_AUTOSIMULATOR_DETAIL_CONFIG_CONSTRVALUEDETECTION_COMPILETIME) &&
+    defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+    
+    x) Remove AutoAnyGroup + tests.
+
+LclContext:
+  Test tpls?
+  Have Ref section Cite Tutorial?
+  x) Impl outline.
+  
+
+AutoFunctor
+-----------
+granularize pp includes ??
+
+Misc.
+-----
+LocalOperandsSyntaxCheck tests.
+
+ExpandN:
+  test
+  AUTOFUNCTOR -> ...
+  
+
+LclClass:
+  SPecNormalizeUnitTest.cc
+  Tests name change underscore.
+  
+LclFunction:
+  Binder: local namespace to lclfunction namespace?
+  Implementation outline.
+  Boost.LocalFunction array bugs
+  Tests name change underscore.
+  WG_PP_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY ->
+    WG_LCLFUNCTION_CONFIG_PARAMS_MAX_ARITY, and default to 5, plus change
+    unit tests accordingly.
+    
+BOOST_NO_CXX11_* -> WG_*
+
+Remove support for local types in C++03?

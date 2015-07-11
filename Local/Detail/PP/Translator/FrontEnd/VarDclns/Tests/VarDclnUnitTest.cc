@@ -1,0 +1,40 @@
+#include <WG/Local/Tests/Utils/PreprocessorUnitTester.hh>
+#include "../VarDcln.hh"
+
+//Unit Tests.
+#define S1 type(Foo *) var
+#define S2 lcltype(Foo) var
+#define S2_1 lcltype(Foo *) const var
+#define S2_2 lcltype(Foo *) ref var
+#define S2_3 lcltype(Foo *) const ref var
+#define S4 const var
+#define S5 ref var
+#define S6 const ref var
+
+/*
+WG_PP_VARDCLN_ISEXPLICIT(S1)
+WG_PP_VARDCLN_ISEXPLICIT(S2_1)
+WG_PP_VARDCLN_ISEXPLICIT(S2_2)
+WG_PP_VARDCLN_ISEXPLICIT(S2_3)
+WG_PP_VARDCLN_ISEXPLICIT(S4)
+WG_PP_VARDCLN_ISEXPLICIT(S5)
+WG_PP_VARDCLN_ISEXPLICIT(S6)
+
+//EXPECTED:
+//1
+//1
+//1
+//0
+//0
+//0
+*/
+
+BEGIN WG_PP_VARDCLN_ISEXPLICIT(S1) == 1 END
+BEGIN WG_PP_VARDCLN_ISEXPLICIT(S2_1) == 1 END
+BEGIN WG_PP_VARDCLN_ISEXPLICIT(S2_2) == 1 END
+BEGIN WG_PP_VARDCLN_ISEXPLICIT(S2_3) == 1 END
+BEGIN WG_PP_VARDCLN_ISEXPLICIT(S4) == 0 END
+BEGIN WG_PP_VARDCLN_ISEXPLICIT(S5) == 0 END
+BEGIN WG_PP_VARDCLN_ISEXPLICIT(S6) == 0 END
+
+BEGIN WG_PP_VARDCLN_ISEXPLICIT_NLT(S1) == 1 END

@@ -2,7 +2,7 @@
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
 #include <boost/typeof/typeof.hpp>
-#include <WG/Local/Tests/TestHelper.hh>
+#include <WG/Local/Tests/Utils/Utils.hh>
 
 namespace
 {
@@ -15,7 +15,7 @@ struct OkIf1ArgBound
 
     WG_AUTOFUNCTOR_TPL(oneArgAutoFunctor, parambind (ref didArgumentBind) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         bool &, BOOST_TYPEOF_TPL(didArgumentBind) &);
 
       didArgumentBind = true;
@@ -49,11 +49,11 @@ struct OkIf3ArgsOfVaryingMutabilityBound
     WG_AUTOFUNCTOR_TPL
     (calculateForce, parambind (ref force) (const mass) (const velocity) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int &, BOOST_TYPEOF_TPL(force) &);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const, BOOST_TYPEOF_TPL(mass) const);
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         int const, BOOST_TYPEOF_TPL(velocity) const);
 
       force = mass * velocity;
@@ -85,7 +85,7 @@ struct OkIfKeywordThisUBound
   {
     WG_AUTOFUNCTOR_TPL(bindThisU, parambind (this_) )
     {
-      WG_PP_TESTHELPER_IS_SAME_TYPE(
+      WG_PP_TEST_IS_SAME_TYPE(
         OkIfKeywordThisUBound * const, BOOST_TYPEOF_TPL(this_) const);
 
       this_->didBindThis = true;

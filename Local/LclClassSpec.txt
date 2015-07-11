@@ -1,0 +1,82 @@
+The client-fill portion is by default private.
+
+A hook for the generated constructor maybe specified via a method with the 
+following signature: "void init()".
+
+//----------
+//Semantics:
+//----------
+
+Note: All terms not defined here should be referenced in AutoFunctorSpec.txt
+
+memext:
+  1) Member variables initialized with external values via ctor parameters.
+  2) Said member variables will be declared in the 
+    order that they appeared in the user specified macro
+  3) Will generate parameters for the public constructor necessary to initialize  
+    said member variables.
+  4) Said parameters will be declared in the same order as their corresponding
+    member variables.
+  5) If the type of a variable is omitted, it will be deduced from the type of 
+    the variable with the same name in the enclosing scope(s) using 
+    BOOST_TYPEOF.
+
+memint:
+  1) Member variables initialized with internal values.
+    Such expressions may reference previously declared member variables.
+  2) Said member variables will be declared in the order that they appeared in  
+    the user specified macro.
+  3) If implicitly typed, the types of the member variables are deduced from
+    the types of the user specified expressions via BOOST_TYPEOF.
+
+//---
+//BNF
+//---
+
+special symbols:
+  [...] specifies an optional BNF expression.
+terminals: derives memlike memset
+
+lclclass-usage :=
+  lclclass-start-macro ( name , lclclass-spec )
+  member-specification
+  WG_LCLCLASS_END [;]
+  
+lclclass-start-macro :=
+    WG_LCLCLASS
+  | WG_LCLCLASS_TPL
+
+lclclass-spec :=
+  [derives derives-seq]
+  [memext memext-tuple-seq]
+  [memint memint-tuple-seq]
+  [baseinit baseinit-tuple-seq]
+
+derives-seq := derives-tuple-seq
+
+derives-tuple-seq :=
+    derives-tuple
+  | derives-tuple-seq derives-tuple
+
+derives-tuple :=
+  ( base-specifier )
+
+memext-tuple-seq :=
+    memext-tuple
+  | memext-tuple-seq memext-tuple
+
+memext-tuple :=
+    ( implicit-type-var-dcln ) /* Mimic a variable with the same name in scope. */
+  | ( explicit-type-var-dcln ) /* Declare a normal variable, ignoring scope info. */
+
+memint-tuple-seq := set-tuple-seq
+
+baseinit-tuple-seq :=
+    baseinit-tuple
+  | baseinit-tuple-seq baseinit-tuple
+
+baseinit-tuple := ( mem-initializer )
+
+base-specifier := See C++ standard.
+member-specification := See C++ standard.
+mem-initializer := See C++ standard.

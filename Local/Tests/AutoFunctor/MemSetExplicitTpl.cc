@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <WG/Local/AutoFunctor.hh>
 #include <WG/GTest/Exceptions.hh>
+#include <boost/tuple/tuple.hpp>
 
 namespace
 {
@@ -55,6 +56,36 @@ TEST(wg_autofunctor_memsetexplicittpl, OkIf1ArgSet)
   try
   {
     OkIf1ArgSet<bool>::run();
+  }
+  WG_GTEST_CATCH
+}
+
+namespace
+{
+template <typename T1>
+struct OkIfGloballyScoped1ArgSet
+{
+  static void run()
+  {
+    ::boost::tuple<T1> didAssign = ::boost::make_tuple(false);
+
+    WG_AUTOFUNCTOR_TPL
+    (oneArgAutoFunctor,
+      memset ((::boost::tuple<bool> &) assigner, didAssign) )
+    {
+      this->assigner.template get<0>() = true;
+    }
+    WG_AUTOFUNCTOR_END;
+
+    EXPECT_TRUE(didAssign.template get<0>());
+  }
+};
+}
+TEST(wg_autofunctor_memsetexplicittpl, OkIfGloballyScoped1ArgSet)
+{
+  try
+  {
+    OkIfGloballyScoped1ArgSet<bool>::run();
   }
   WG_GTEST_CATCH
 }
