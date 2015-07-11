@@ -232,7 +232,10 @@ private:
   // Temporaries of type auto_any_impl will be bound to const auto_any
   // references, but we may still want to be able to mutate the stored
   // data, so declare it as mutable.
-  mutable CapturedType item;
+  typedef
+    BOOST_DEDUCED_TYPENAME ::boost::remove_const<CapturedType>::type
+      item_type;
+  mutable item_type item;
 };
 
 //expr_category_lvalue
