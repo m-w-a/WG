@@ -2,7 +2,6 @@
 #define WG_AUTOSIMULATOR_HH_
 
 #include <WG/Local/Detail/AutoSimulator/Detail/AutoAny.hh>
-#include <WG/Local/Detail/AutoSimulator/Detail/AutoAnyGroup.hh>
 
 //###########
 //Public APIs

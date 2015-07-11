@@ -17,9 +17,6 @@ noinst_PROGRAMS = \
     test_pp_trnsltr_vardcln_explicit \
     test_pp_trnsltr_parsedtype_cpp03 \
     test_pp_trnsltr_parsedtype_cpp11 \
-    test_autofunctor \
-    test_autofunctor_errorreporting_invalidnamedparameters \
-    test_autofunctor_errorreporting_refthisu \
     test_pp_lclfunction_keywords \
     test_lclfunction_testutils \
     test_lclfunction_cpp03 \
@@ -38,21 +35,7 @@ noinst_PROGRAMS = \
     test_lclcontext_cpp03_noex \
     test_lclcontext_cpp11_noex
 
-# Don't auto build test_autofunctor_cf_* since they're compile-failure tests.
-if DO_NOT_BUILD
-    noinst_PROGRAMS += \
-        test_autofunctor_cf_localoperandssyntax_ref \
-        test_autofunctor_cf_localoperandssyntax_const \
-        test_autofunctor_cf_localoperandssyntax_const_ref
-endif
-
 TEST_BIN_DIR = $(abs_top_builddir)/bin/
-
-TEST_WG_AUTOFUNCTOR_APPNAME = test_autofunctor$(EXEEXT)
-TEST_WG_AUTOFUNCTOR_APPALTPATH = \
-    $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTOR_APPNAME)
-TEST_WG_AUTOFUNCTOR_APPBUILDLOC = \
-    $(abs_builddir)/$(TEST_WG_AUTOFUNCTOR_APPNAME)
 
 TEST_WG_TESTUTILS_APPNAME = test_testutils$(EXEEXT)
 TEST_WG_TESTUTILS_APPALTPATH = \
@@ -161,7 +144,6 @@ all-local : \
     $(TEST_WG_TESTUTILS_APPALTPATH) \
     $(TEST_WG_LCLCLASS_CPP03_APPALTPATH) \
     $(TEST_WG_LCLCLASS_CPP11_APPALTPATH) \
-    $(TEST_WG_AUTOFUNCTOR_APPALTPATH) \
     $(TEST_WG_LCLFUNCTION_TESTUTILS_APPALTPATH) \
     $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP03_APPALTPATH) \
     $(TEST_WG_LCLFUNCTION_CODEGENSPEC_CPP11_APPALTPATH) \
@@ -177,12 +159,6 @@ all-local : \
     
 $(TEST_BIN_DIR) :
 	$(MKDIR_P) $(TEST_BIN_DIR)
-
-$(TEST_WG_AUTOFUNCTOR_APPALTPATH) : $(TEST_WG_AUTOFUNCTOR_APPBUILDLOC)
-	( cd $(TEST_BIN_DIR); \
-      $(LN_S) -f \
-          $(TEST_WG_AUTOFUNCTOR_APPBUILDLOC) \
-          $(TEST_WG_AUTOFUNCTOR_APPNAME); )
 
 $(TEST_WG_TESTUTILS_APPALTPATH) : $(TEST_WG_TESTUTILS_APPBUILDLOC)
 	( cd $(TEST_BIN_DIR); \
@@ -276,7 +252,6 @@ $(TEST_WG_LCLCONTEXT_CPP11_NOEX_APPALTPATH) : $(TEST_WG_LCLCONTEXT_CPP11_NOEX_AP
 
 #Custom finalize.
 clean-local : \
-    rm -rf $(TEST_BIN_DIR)/$(TEST_WG_AUTOFUNCTOR_APPNAME) \
     rm -rf $(TEST_BIN_DIR)$(TEST_WG_TESTUTILS_APPNAME) \
     rm -rf $(TEST_BIN_DIR)/$(TEST_WG_LCLCLASS_CPP03_APPNAME) \
     rm -rf $(TEST_BIN_DIR)/$(TEST_WG_LCLCLASS_CPP11_APPNAME) \
@@ -297,9 +272,7 @@ clean-local : \
 #Automatically executed tests.
 ##############################
 # Don't add test_pp_* to TESTS since they're preprocessor compile-only tests.
-# Don't add test_autofunctor_cf_* to TESTS since they're compile-failure tests.
 TESTS = \
-    $(TEST_WG_AUTOFUNCTOR_APPNAME) \
     $(TEST_WG_TESTUTILS_APPNAME) \
     $(TEST_WG_LCLCLASS_CPP03_APPNAME) \
     $(TEST_WG_LCLCLASS_CPP11_APPNAME) \
@@ -329,17 +302,6 @@ test_pp_trnsltr_vardcln_implicit_SOURCES = ../../Detail/PP/Translator/FrontEnd/V
 test_pp_trnsltr_vardcln_explicit_SOURCES = ../../Detail/PP/Translator/FrontEnd/VarDclns/Tests/VarDclnExplicitUnitTest.cc
 test_pp_trnsltr_parsedtype_cpp03_SOURCES = ../../Detail/PP/Translator/BackEnd/Tests/TypeExtractorUnitTest.cc
 test_pp_trnsltr_parsedtype_cpp11_SOURCES = ../../Detail/PP/Translator/BackEnd/Tests/TypeExtractorUnitTest.cc
-test_autofunctor_errorreporting_invalidnamedparameters_SOURCES = \
-    ../../Tests/AutoFunctor/ErrorReporting/InvalidNamedParameters.cc
-test_autofunctor_errorreporting_refthisu_SOURCES = \
-    ../../Tests/AutoFunctor/ErrorReporting/RefThisU.cc
-
-test_autofunctor_cf_localoperandssyntax_ref_SOURCES = \
-    ../../Tests/AutoFunctor/LocalOperandsSyntaxCheck/RefQualifiedLocalType.cc
-test_autofunctor_cf_localoperandssyntax_const_SOURCES = \
-    ../../Tests/AutoFunctor/LocalOperandsSyntaxCheck/ConstQualifiedLocalType.cc
-test_autofunctor_cf_localoperandssyntax_const_ref_SOURCES = \
-    ../../Tests/AutoFunctor/LocalOperandsSyntaxCheck/ConstRefQualifiedLocalType.cc
 
 test_pp_lclfunction_keywords_SOURCES = \
     ../../Detail/PP/Translator/FrontEnd/LclFunction/Tests/KeywordsUnitTest.cc
@@ -349,65 +311,6 @@ test_pp_lclclass_keywords_SOURCES = \
 
 test_pp_lclcontext_keywords_SOURCES = \
     ../../Detail/PP/Translator/FrontEnd/LclContext/Tests/KeywordsUnitTest.cc
-
-test_autofunctor_SOURCES = \
-    ../AutoFunctor/TestMain.cc \
-    ../AutoFunctor/AllCombo.cc \
-    ../AutoFunctor/AllComboTpl.cc \
-    ../AutoFunctor/AssignTo.cc \
-    ../AutoFunctor/AssignToTpl.cc \
-    ../AutoFunctor/Qualifiers.cc \
-    ../AutoFunctor/QualifiersTpl.cc \
-    ../AutoFunctor/ParamBindExplicit.cc \
-    ../AutoFunctor/ParamBindExplicitTpl.cc \
-    ../AutoFunctor/ParamBindImplicit.cc \
-    ../AutoFunctor/ParamBindImplicitTpl.cc \
-    ../AutoFunctor/ParamBindExplicitAndImplicit.cc \
-    ../AutoFunctor/ParamBindExplicitAndImplicitTpl.cc \
-    ../AutoFunctor/ParamSetExplicit.cc \
-    ../AutoFunctor/ParamSetExplicitTpl.cc \
-    ../AutoFunctor/ParamSetImplicit.cc \
-    ../AutoFunctor/ParamSetImplicitTpl.cc \
-    ../AutoFunctor/ParamSetExplicitAndImplicit.cc \
-    ../AutoFunctor/ParamSetExplicitAndImplicitTpl.cc \
-    ../AutoFunctor/ParamBindExplicitAndParamSetExplicit.cc \
-    ../AutoFunctor/ParamBindExplicitAndParamSetExplicitTpl.cc \
-    ../AutoFunctor/ParamBindExplicitAndParamSetImplicit.cc \
-    ../AutoFunctor/ParamBindExplicitAndParamSetImplicitTpl.cc \
-    ../AutoFunctor/ParamBindImplicitAndParamSetExplicit.cc \
-    ../AutoFunctor/ParamBindImplicitAndParamSetExplicitTpl.cc \
-    ../AutoFunctor/ParamBindImplicitAndParamSetImplicit.cc \
-    ../AutoFunctor/ParamBindImplicitAndParamSetImplicitTpl.cc \
-    ../AutoFunctor/MemBindExplicit.cc \
-    ../AutoFunctor/MemBindExplicitTpl.cc \
-    ../AutoFunctor/MemBindImplicit.cc \
-    ../AutoFunctor/MemBindImplicitTpl.cc \
-    ../AutoFunctor/MemBindExplicitAndImplicit.cc \
-    ../AutoFunctor/MemBindExplicitAndImplicitTpl.cc \
-    ../AutoFunctor/MemSetExplicit.cc \
-    ../AutoFunctor/MemSetExplicitTpl.cc \
-    ../AutoFunctor/MemSetImplicit.cc \
-    ../AutoFunctor/MemSetImplicitTpl.cc \
-    ../AutoFunctor/MemSetExplicitAndImplicit.cc \
-    ../AutoFunctor/MemSetExplicitAndImplicitTpl.cc \
-    ../AutoFunctor/MemBindExplicitAndMemSetExplicit.cc \
-    ../AutoFunctor/MemBindExplicitAndMemSetExplicitTpl.cc \
-    ../AutoFunctor/MemBindExplicitAndMemSetImplicit.cc \
-    ../AutoFunctor/MemBindExplicitAndMemSetImplicitTpl.cc \
-    ../AutoFunctor/MemBindImplicitAndMemSetExplicit.cc \
-    ../AutoFunctor/MemBindImplicitAndMemSetExplicitTpl.cc \
-    ../AutoFunctor/MemBindImplicitAndMemSetImplicit.cc \
-    ../AutoFunctor/MemBindImplicitAndMemSetImplicitTpl.cc \
-    ../AutoFunctor/NoSpec.cc \
-    ../AutoFunctor/NoSpecTpl.cc \
-    ../AutoFunctor/Nested.cc \
-    ../AutoFunctor/NestedTpl.cc \
-    ../AutoFunctor/Recursive.cc \
-    ../AutoFunctor/RecursiveTpl.cc \
-    ../AutoFunctor/Return.cc \
-    ../AutoFunctor/ReturnTpl.cc \
-    ../AutoFunctor/SelfType.cc \
-    ../AutoFunctor/SelfTypeTpl.cc
 
 LCLCLASS_SRC = \
     ../LclClass/TestMain.cc \
@@ -579,10 +482,6 @@ EXTRA_DIST =
 AM_CPPFLAGS += \
     -ftrack-macro-expansion=0
 
-test_autofunctor_CPPFLAGS = \
-    $(AM_CPPFLAGS) \
-    $(GTEST_CPPFLAGS)
-
 test_testutils_CPPFLAGS = \
     $(AM_CPPFLAGS) \
     $(GTEST_CPPFLAGS)
@@ -656,9 +555,6 @@ AM_CXXFLAGS += \
     -pedantic \
     -Wno-unused-local-typedefs
 
-test_autofunctor_CXXFLAGS = \
-    $(AM_CXXFLAGS)
-
 test_testutils_CXXFLAGS = \
     $(AM_CXXFLAGS)
 
@@ -725,7 +621,6 @@ test_lclcontext_cpp11_noex_CXXFLAGS = \
 GTEST_LTLIB = \
     $(top_builddir)/WG/ExternalLibsNoInstall/build_autotools/libgtest.la
 
-test_autofunctor_LDADD = $(GTEST_LTLIB)
 test_testutils_LDADD = $(GTEST_LTLIB)
 test_lclclass_cpp03_LDADD = $(GTEST_LTLIB)
 test_lclclass_cpp11_LDADD = $(GTEST_LTLIB)
