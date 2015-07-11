@@ -71,6 +71,8 @@ WG_LCLCONTEXT_END2
   #endif
       wgXXXlclcontextXXXscopemngr1.enter();
 
+      wgXXXlclcontextXXXnoop_scopemngr wgXXXlclcontextXXXscopemngr2;
+
       #ifndef NOEX
         try
         {
@@ -87,7 +89,7 @@ WG_LCLCONTEXT_END2
       }
       catch(...)
       {
-        wgXXXlclcontextXXXscopemngr1.exit(did_scope_complete);
+        wgXXXlclcontextXXXscopemngr2.exit(did_scope_complete);
         throw;
       }
       #endif

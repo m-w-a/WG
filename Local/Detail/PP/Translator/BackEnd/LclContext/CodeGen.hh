@@ -12,6 +12,7 @@
 #include <WG/Local/LclClass.hh>
 #include <WG/Local/Detail/PP/Translator/Markers.hh>
 #include <WG/Local/Detail/LclContext/ExtantScopeMngrProxy.hh>
+#include <WG/Local/Detail/LclContext/NoopScopeManager.hh>
 
 //###########
 //Public APIs
@@ -232,6 +233,10 @@
 
 #define WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_RAII( \
   symbol, indx, autosimflag, istpl, customentryhandler) \
+    \
+    ::wg::lclcontext::detail::noop_scope_mngr \
+       WG_PP_LCLCONTEXT_NAMES_SCOPEMNGR_OBJNAME(indx) ; \
+    \
     WG_PP_LCLCONTEXT_CG_SCOPEENTERDCLNS_TRYSTART() \
     \
     WG_PP_SEQ_FLATTEN( \
