@@ -3,6 +3,7 @@ WG_LCLCONTEXT(
   with(employee.timecard()) entered_as(const starttime)
   with_adhoc (employee)
     on_enter(employee.zone_out();) on_exit(employee.zone_in();)
+  with_raii(filemngr_t filemngr("../tmp.txt") )
 )
 {
   if(starttime > current_shift.start_time())
@@ -70,12 +71,28 @@ WG_LCLCONTEXT_END2
   #endif
       wgXXXlclcontextXXXscopemngr1.enter();
 
-      {
-        // User code goes here.
-      }
+      wgXXXlclcontextXXXnoop_scopemngr wgXXXlclcontextXXXscopemngr2;
+
+      #ifndef NOEX
+        try
+        {
+      #endif
+        filemngr_t filemngr("../tmp.txt") ;
+
+        {
+          // User code goes here.
+        }
 
       did_scope_complete = true;
 
+      #ifndef NOEX
+      }
+      catch(...)
+      {
+        wgXXXlclcontextXXXscopemngr2.exit(did_scope_complete);
+        throw;
+      }
+      #endif
     #ifndef NOEX
     }
     catch(...)

@@ -50,6 +50,7 @@
 #define WG_PP_LCLCONTEXT_SPECPARSER_EXPAND6(x) x
 #define WG_PP_LCLCONTEXT_SPECPARSER_EXPAND7(x) x
 #define WG_PP_LCLCONTEXT_SPECPARSER_EXPAND8(x) x
+#define WG_PP_LCLCONTEXT_SPECPARSER_EXPAND9(x) x
 
 #define WG_PP_LCLCONTEXT_SPECPARSER_SPECOPTIONS_MAKE(istpl) \
   (istpl)
@@ -124,6 +125,20 @@
       restspec \
     )
 
+// raiisymbol:
+//   See SymbolTable.
+#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_ADD_RAIISYMBOL( \
+  state, raiisymbol, restspec) \
+    ( \
+      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_SPECOPTIONS(state), \
+      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_EXTANTCOUNT(state), \
+      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_ADHOCCOUNT(state), \
+      WG_PP_SEQ_JOIN_ARG2( \
+        WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_PARSEDSEQ(state), \
+        ( raiisymbol ) ), \
+      restspec \
+    )
+
 // adhocsymbol:
 //   See SymbolTable.
 #define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_ADD_ADHOCSYMBOL( \
@@ -177,6 +192,13 @@
   BOOST_PP_IIF( \
     WG_PP_LCLCONTEXT_KEYWORDS_STARTSWITH_WITHADHOC(spec), \
     WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ADHOC, \
+    WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP4 ) \
+  (state, spec)
+
+#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP4(state, spec) \
+  BOOST_PP_IIF( \
+    WG_PP_LCLCONTEXT_KEYWORDS_STARTSWITH_WITHRAII(spec), \
+    WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_RAII, \
     WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_ERROR_UNRECOGNIZEDNAMEDPARAMETER ) \
   (state, spec)
 
@@ -304,6 +326,44 @@
     ( WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_EXTANTCOUNT(state) ) \
     scopemngrtuple \
     ( optionalparsedsetvardcln )
+
+//~~~~~~~~~~~~~~~~~~~~
+//Parser::Op::WithRAII
+//~~~~~~~~~~~~~~~~~~~~
+
+#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_RAII(state, spec) \
+  WG_PP_LCLCONTEXT_SPECPARSER_EXPAND9( \
+      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_RAII2 \
+      BOOST_PP_LPAREN() \
+        state BOOST_PP_COMMA() \
+        WG_PP_SPLITHEADTUPLEFROMTOKENS( \
+          1, \
+          WG_PP_LCLCONTEXT_KEYWORDS_EAT_HEADKEYWORD(spec), \
+          WG_PP_TUPLIZE_ARG1, \
+          WG_PP_ADDCOMMA_AFTERTOKENS, \
+          WG_PP_IDENTITY_ARG1) \
+      BOOST_PP_RPAREN() \
+    )
+
+#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_RAII2( \
+  state, raiistmttuple, spec) \
+    WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_RAII_SAVESYMBOL( \
+      state, raiistmttuple, spec)
+
+#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_RAII_SAVESYMBOL( \
+  state, raiistmttuple, spec) \
+    WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_STATE_ADD_RAIISYMBOL( \
+      state, \
+      WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_RAII_MAKESYMBOL( \
+        state, raiistmttuple), \
+      spec)
+
+#define WG_PP_LCLCONTEXT_SPECPARSER_WHILELOOP_OP_RAII_MAKESYMBOL( \
+  state, raiistmttuple) \
+    WG_PP_MARKER_NOOP \
+    ( WG_PP_LCLCONTEXT_SYMBOL_CATEGORY_RAII ) \
+    ( 2 ) \
+    ( raiistmttuple )
 
 //~~~~~~~~~~~~~~~~~~~~~
 //Parser::Op::WithAdhoc

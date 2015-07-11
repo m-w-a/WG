@@ -558,7 +558,8 @@ LCLCONTEXT_SRC = \
     ../LclContext/AdhocEnterAndExitSpecified.cc \
     ../LclContext/ExtantAndAdhoc.cc \
     ../LclContext/Nested.cc \
-    ../LclContext/MultipleUseInSameMacro.cc
+    ../LclContext/MultipleUseInSameMacro.cc \
+    ../LclContext/RaiiAdaptor.cc
 
 LCLCONTEXT_SRC_CPP11 = \
     $(LCLCONTEXT_SRC) \

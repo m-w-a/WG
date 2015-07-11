@@ -57,6 +57,12 @@
     1, \
     BOOST_PP_SEQ_ELEM(1,symbol) )
 
+// Returns: { 0 | 1 }
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_SYMBOL_CATEGORY_ISRAII(symbol) \
+  BOOST_PP_EQUAL( \
+    2, \
+    BOOST_PP_SEQ_ELEM(1,symbol) )
+
 //------------
 //ExtantSymbol
 //------------
@@ -115,6 +121,14 @@
   WG_PP_SEQ_NOTHING_FLATTEN( \
     BOOST_PP_SEQ_ELEM(5, symbol) )
 
+//----------
+//RAIISymbol
+//----------
+
+#define WG_PP_LCLCONTEXT_SYMBOLTABLE_RAIISYMBOL_RAIISTMNTTUPLE(symbol) \
+  BOOST_PP_SEQ_ELEM(2, symbol)
+
+
 //-----
 //NOTE:
 //-----
@@ -143,17 +157,22 @@
 // extantsymbol :=
 //   ( WG_PP_LCLCONTEXT_SYMBOL_CATEGORY_EXTANT )
 //   ( categoryid )
-//   ( symbolid )
+//   ( symbolordinalid )
 //   ( scopemngr )
 //   ( parsedasseq )
 //
 // adhocsymbol :=
 //   ( WG_PP_LCLCONTEXT_SYMBOL_CATEGORY_ADHOC )
 //   ( categoryid )
-//   ( symbolid )
+//   ( symbolordinalid )
 //   ( varbindseq )
 //   ( onenterseq )
 //   ( onexitseq )
+//
+// raiisymbol :=
+//   ( WG_PP_LCLCONTEXT_SYMBOL_CATEGORY_RAII )
+//   ( categoryid )
+//   ( compound-statement )
 //
 // symbolid := int
 // scopemngr := { ( scope-manager-expr ) }
