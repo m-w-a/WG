@@ -7,11 +7,18 @@ namespace
 struct FileMngrT
 {
   FileMngrT()
-  : m_Filename(0)
+  : m_Filename(0),
+    m_Type(0)
   {}
 
   FileMngrT(char const * filename)
-  : m_Filename(filename)
+  : m_Filename(filename),
+    m_Type(0)
+  {}
+
+  FileMngrT(char const * filename, int const type)
+  : m_Filename(filename),
+    m_Type(type)
   {}
 
   bool isFilenameSet() const
@@ -21,13 +28,23 @@ struct FileMngrT
 
 private:
   char const * const m_Filename;
+  int const m_Type;
 };
 
 }
 
-TEST(wg_lclcontext_raii, Adaptor)
+TEST(wg_lclcontext_raii, NoEmbeddedCommas)
 {
   WG_LCLCONTEXT( with_raii(FileMngrT filemngr("../tmp.txt"); ) )
+  {
+    EXPECT_TRUE(filemngr.isFilenameSet());
+  }
+  WG_LCLCONTEXT_END1
+}
+
+TEST(wg_lclcontext_raii, OneEmbeddedComma)
+{
+  WG_LCLCONTEXT( with_raii(FileMngrT filemngr("../tmp.txt", 1); ) )
   {
     EXPECT_TRUE(filemngr.isFilenameSet());
   }
