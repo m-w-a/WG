@@ -1,0 +1,22 @@
+#******************************************************************************#
+# This file must be included in, and only in, the top-level Makefile.am
+#******************************************************************************#
+
+distcheck-hook :
+	(cd $(top_distdir); \
+      chmod a+w ./; \
+      chmod a+w ./build-m4; \
+      chmod a+w ./build-aux; \
+      find . -name "Makefile.am" -execdir chmod a+w ./ ";"; \
+      sh ./autogen.sh; \
+      chmod a-w ./; \
+      chmod a-w ./build-m4; \
+      chmod a-w ./build-aux; \
+      find . -name "Makefile.am" -execdir chmod a-w ./ ";";)
+
+dist-hook:
+	rm -f $(top_distdir)/{acconfig.h,ansi2knr.1,ansi2knr.c,config.h,config.h.bot,config.h.top,config.rpath,config.sub,configure,elisp-comp,libversion.in,ltcf-c.sh,ltcf-cxx.sh,ltcf-gcj.sh,ltconfig,mdate-sh,mkinstalldirs,py-compile,stamp-vti,texinfo.tex,ylwrap}
+	rm -rf $(top_distdir)/{configure,aclocal.m4,autom4te.cache}
+	rm -f $(top_distdir)/build-aux/*
+	rm -f $(top_distdir)/build-m4/*
+	find $(top_distdir) -name Makefile.in -print0 | xargs -0 rm -f
