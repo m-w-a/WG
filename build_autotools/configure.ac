@@ -65,11 +65,6 @@ AC_CONFIG_FILES([
     Makefile 
     WG/ExternalLibsPkg/build_autotools/Makefile
     WG/ExternalLibsNoInstall/build_autotools/Makefile
-    WG/Utils/build_autotools/Makefile
-    WG/Utils/Tests/build_autotools/Makefile
-    WG/Utils/Tests/ClassMethodDisablers/test_classmethoddisablers.sh
-    WG/GTest/build_autotools/Makefile
-    WG/GTest/Tests/build_autotools/Makefile
     WG/Local/build_autotools/Makefile
     WG/Local/Tests/build_autotools/Makefile
 ])
