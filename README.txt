@@ -5,3 +5,5 @@
 5) ../../configure CXXFLAGS="-O0 -ggdb" --with-boost-headers=<absolute-path-to-boost-headers> --enable-gtest
 6) make
 7) cd "WG/Local/Tests/build_autotools" for test executables.
+
+Documentation can be found in Local/Docs.
