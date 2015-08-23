@@ -1,3 +1,5 @@
+To run unit tests:
+
 1) cd build_autotools
 2) ./autogen.sh
 3) mkdir -p builds/debug;
