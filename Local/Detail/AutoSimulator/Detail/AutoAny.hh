@@ -19,6 +19,7 @@
 //  Stefan Slapeta    - For help porting to Intel
 //  David Jenkins     - For help finding a Microsoft Code Analysis bug
 //  mimomorin@...     - For a patch to use rvalue refs on supporting compilers
+//  Mostafa           - Refactor for clarity. Remove support for older compilers.
 
 #include <new>
 #include <cassert>
