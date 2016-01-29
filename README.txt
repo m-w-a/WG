@@ -2,9 +2,9 @@ Summary
 -------
 This project contains two libraries. One is LclContext and the other LclFunction. 
 
-LclContext is an adaptation of Python's "with" statement in C++. The reasons to use this over RAII or Boost.ScopeExit are 1) the scope of the managed resource lifetime is explicit rather than implicit, 2) it is clearly identified which resource is being managed as opposed to the RAII idiom where it's not clear whether a declaration is RAII or not, and 3) this library automatically detects whether a scope exited prematurely or not and that fact is conveyed to the user via "scope_completed" variable.
+LclContext is an adaptation of Python's "with" statement in C++. The reasons to use this over RAII or Boost.ScopeExit are 1) the scope of a resource's lifetime is explicit rather than implicit, 2) it is clearly identified which resource is being managed as opposed to the RAII idiom where it's not clear whether a declaration is RAII or not, and 3) this library automatically detects whether a scope exited prematurely or not and that fact is conveyed to the user via "scope_completed" variable.
 
-LclFunction is a library inspired by Boost.LocalFunction that allows function definition at block scope. However, there are important differences between LclFunction and Boost.LocalFunction, my version allows C++14-like generalized lambda captures, allows binding array types, and allows the use of globally scoped macro parameters, whereas Boost.LocalFunction lacks these features.
+LclFunction is a library inspired by Boost.LocalFunction that allows function definition at block scope. However, there are important differences between LclFunction and Boost.LocalFunction, my version allows C++14-like generalized lambda captures, allows binding array types, and allows the use of globally scoped macro parameters, whereas Boost.LocalFunction lacks these features. One last "feature" is that the local function's name is only required in the beginning macro.
 
 Unit Tests
 ----------
