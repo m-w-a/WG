@@ -1,4 +1,10 @@
-A) To run unit tests:
+Summary
+-------
+This project contains two libraries. One is LclContext and the other LclFunction. LclContext is an adaptation of Python's "with" statement in C++. LclFunction is a library inspired by Boost.LocalFunction that allows function definition at block scope. However, there are important differences between LclFunction and Boost.LocalFunction, my version allows C++14-like generalized lambda captures, allows binding array types, and allows the use of globally scoped macro parameters, whereas Boost.LocalFunction lacks these features.
+
+Unit Tests
+----------
+To run unit tests:
 
   1) cd WG/build_autotools
   2) autoconf
@@ -10,9 +16,12 @@ A) To run unit tests:
   6) make
   7) cd "<build-directory>/WG/Local/Tests/build_autotools" for test executables.
 
-B) Documentation can be found in WG/Local/Docs.
+Documentation
+-------------
+Can be found in WG/Local/Docs.
 
-C)LclFunction Sample Usage:
+LclFunction Sample Usage
+------------------------
 
   #include <iostream>
   #include <WG/Local/LclFunction.hh>
@@ -38,7 +47,8 @@ C)LclFunction Sample Usage:
     return 0;
   }
 
-D) LclContext Sample Usage
+LclContext Sample Usage
+-----------------------
 
   #include <WG/Local/LclContext.hh>
 
