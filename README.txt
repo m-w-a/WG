@@ -1,6 +1,10 @@
 Summary
 -------
-This project contains two libraries. One is LclContext and the other LclFunction. LclContext is an adaptation of Python's "with" statement in C++. LclFunction is a library inspired by Boost.LocalFunction that allows function definition at block scope. However, there are important differences between LclFunction and Boost.LocalFunction, my version allows C++14-like generalized lambda captures, allows binding array types, and allows the use of globally scoped macro parameters, whereas Boost.LocalFunction lacks these features.
+This project contains two libraries. One is LclContext and the other LclFunction. 
+
+LclContext is an adaptation of Python's "with" statement in C++. The reasons to use this over RAII or Boost.ScopeExit are 1) the scope of the managed resource lifetime is explicit rather than implicit, 2) it is clearly identified which resource is being managed as opposed to the RAII idiom where it's not clear whether a declaration is RAII or not, and 3) this library automatically detects whether a scope exited prematurely or not and that fact is conveyed to the user via "scope_completed" variable.
+
+LclFunction is a library inspired by Boost.LocalFunction that allows function definition at block scope. However, there are important differences between LclFunction and Boost.LocalFunction, my version allows C++14-like generalized lambda captures, allows binding array types, and allows the use of globally scoped macro parameters, whereas Boost.LocalFunction lacks these features.
 
 Unit Tests
 ----------
@@ -20,35 +24,60 @@ Documentation
 -------------
 Can be found in WG/Local/Docs.
 
-LclFunction Sample Usage
-------------------------
+LclContext Extant Sample Usage
+------------------------------
+  #include <WG/Local/LclContext.hh>
 
-  #include <iostream>
-  #include <WG/Local/LclFunction.hh>
+  struct Transaction
+  {
+    void start() {}
+    void record(int) {}
+    void commit() {}
+    void rollback() {};
+  };
+
+  struct TransactionScopeMngr
+  {
+    TransactionScopeMngr(Transaction & transaction)
+    : m_Transaction(transaction)
+    {}
+    
+    void enter()
+    {
+      m_Transaction.start();
+    }
+    
+    void exit(bool const scope_completed)
+    {
+      if( ! scope_completed )
+      {
+        m_Transaction.rollback();
+      }
+      
+      m_Transaction.commit();
+    }
+    
+  private:
+    Transaction & m_Transaction;
+  };
 
   int main()
   {
-    int const mass = 10;
-    int const velocity = 2;
+    Transaction t;
     
-    WG_LCLFUNCTION
-    (calculateForce,
-    return (int)
-    params (int const mass)
-    varbind (const velocity) )
+    WG_LCLCONTEXT( with(TransactionScopeMngr(t)) )
     {
-      return mass * velocity;
+      t.record(1);
+      t.record(2);
+      // etc...
     }
-    WG_LCLFUNCTION_END
-    
-    int force = calculateForce(mass);
-    std::cout << force << '\n';
+    WG_LCLCONTEXT_END1
     
     return 0;
   }
 
-LclContext Sample Usage
------------------------
+LclContext Adhoc Sample Usage
+-----------------------------
 
   #include <WG/Local/LclContext.hh>
 
@@ -77,6 +106,33 @@ LclContext Sample Usage
       // etc...
     }
     WG_LCLCONTEXT_END1
+    
+    return 0;
+  }
+  
+LclFunction Sample Usage
+------------------------
+
+  #include <iostream>
+  #include <WG/Local/LclFunction.hh>
+
+  int main()
+  {
+    int const mass = 10;
+    int const velocity = 2;
+    
+    WG_LCLFUNCTION
+    (calculateForce,
+    return (int)
+    params (int const mass)
+    varbind (const velocity) )
+    {
+      return mass * velocity;
+    }
+    WG_LCLFUNCTION_END
+    
+    int force = calculateForce(mass);
+    std::cout << force << '\n';
     
     return 0;
   }
