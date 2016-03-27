@@ -6,6 +6,10 @@ LclFunction is a library inspired by Boost.LocalFunction that allows function de
 
 LclContext is an adaptation of Python's "with" statement in C++. The reasons to use this over RAII or Boost.ScopeExit are 1) the scope of a resource's lifetime is explicit rather than implicit, 2) it is clearly identified which resource is being managed as opposed to the RAII idiom where it's not clear whether a declaration is RAII or not, and 3) this library automatically detects whether a scope exited prematurely or not and that fact is conveyed to the user via "scope_completed" variable.
 
+Documentation
+-------------
+Can be found in "./Local/Docs".
+
 Unit Tests
 ----------
 To run unit tests:
@@ -19,10 +23,6 @@ To run unit tests:
   5) ../../configure CXXFLAGS="-O0 -ggdb" --with-boost-headers=<absolute-path-to-boost-headers> --enable-gtest
   6) make
   7) cd "<build-directory>/WG/Local/Tests/build_autotools" for test executables.
-
-Documentation
--------------
-Can be found in WG/Local/Docs.
 
 LclFunction Sample Usage
 ------------------------
