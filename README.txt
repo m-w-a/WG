@@ -1,10 +1,10 @@
 Summary
 -------
-This project contains two libraries. One is LclContext and the other LclFunction. 
-
-LclContext is an adaptation of Python's "with" statement in C++. The reasons to use this over RAII or Boost.ScopeExit are 1) the scope of a resource's lifetime is explicit rather than implicit, 2) it is clearly identified which resource is being managed as opposed to the RAII idiom where it's not clear whether a declaration is RAII or not, and 3) this library automatically detects whether a scope exited prematurely or not and that fact is conveyed to the user via "scope_completed" variable.
+This project contains two libraries. One is LclFunction and the other LclContext. 
 
 LclFunction is a library inspired by Boost.LocalFunction that allows function definition at block scope. However, there are important differences between LclFunction and Boost.LocalFunction, my version allows C++14-like generalized lambda captures, allows binding array types, and allows the use of globally scoped macro parameters, whereas Boost.LocalFunction lacks these features. One last "feature" is that the local function's name is only required in the beginning macro.
+
+LclContext is an adaptation of Python's "with" statement in C++. The reasons to use this over RAII or Boost.ScopeExit are 1) the scope of a resource's lifetime is explicit rather than implicit, 2) it is clearly identified which resource is being managed as opposed to the RAII idiom where it's not clear whether a declaration is RAII or not, and 3) this library automatically detects whether a scope exited prematurely or not and that fact is conveyed to the user via "scope_completed" variable.
 
 Unit Tests
 ----------
@@ -23,6 +23,33 @@ To run unit tests:
 Documentation
 -------------
 Can be found in WG/Local/Docs.
+
+LclFunction Sample Usage
+------------------------
+
+  #include <iostream>
+  #include <WG/Local/LclFunction.hh>
+
+  int main()
+  {
+    int const mass = 10;
+    int const velocity = 2;
+    
+    WG_LCLFUNCTION
+    (calculateForce,
+    return (int)
+    params (int const mass)
+    varbind (const velocity) )
+    {
+      return mass * velocity;
+    }
+    WG_LCLFUNCTION_END
+    
+    int force = calculateForce(mass);
+    std::cout << force << '\n';
+    
+    return 0;
+  }
 
 LclContext Extant Sample Usage
 ------------------------------
@@ -106,33 +133,6 @@ LclContext Adhoc Sample Usage
       // etc...
     }
     WG_LCLCONTEXT_END1
-    
-    return 0;
-  }
-  
-LclFunction Sample Usage
-------------------------
-
-  #include <iostream>
-  #include <WG/Local/LclFunction.hh>
-
-  int main()
-  {
-    int const mass = 10;
-    int const velocity = 2;
-    
-    WG_LCLFUNCTION
-    (calculateForce,
-    return (int)
-    params (int const mass)
-    varbind (const velocity) )
-    {
-      return mass * velocity;
-    }
-    WG_LCLFUNCTION_END
-    
-    int force = calculateForce(mass);
-    std::cout << force << '\n';
     
     return 0;
   }
