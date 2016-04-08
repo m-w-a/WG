@@ -80,8 +80,10 @@ LclContext Extant Sample Usage
       {
         m_Transaction.rollback();
       }
-      
-      m_Transaction.commit();
+      else
+      {
+        m_Transaction.commit();
+      }
     }
     
   private:
