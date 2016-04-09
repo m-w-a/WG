@@ -12,6 +12,7 @@ Can be found in "./Local/Docs".
 
 Unit Tests
 ----------
+Can be found in "./Local/Tests".
 To run unit tests:
 
   1) cd WG/build_autotools
